@@ -1,61 +1,61 @@
-Return-Path: <linux-spi+bounces-11710-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11711-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0C24C9A974
-	for <lists+linux-spi@lfdr.de>; Tue, 02 Dec 2025 08:57:16 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 833D3C9A965
+	for <lists+linux-spi@lfdr.de>; Tue, 02 Dec 2025 08:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 467C83A7D41
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 07:56:27 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2B90C347B87
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 07:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984A83054EB;
-	Tue,  2 Dec 2025 07:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB3D304BC9;
+	Tue,  2 Dec 2025 07:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="nh7uEM9E"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="efXaUAZE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011044.outbound.protection.outlook.com [40.107.130.44])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011022.outbound.protection.outlook.com [40.107.130.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65B23054C2;
-	Tue,  2 Dec 2025 07:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A77A3043C7;
+	Tue,  2 Dec 2025 07:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.22
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764662172; cv=fail; b=j+K03fbarE/G7BDGpQh2JARAoZU56BHTbb1lTV7TgGOF61UbLE+EnDpt9OB4ahyg38c/Cb9SkdnFZea02dzBxhTeoSuaBdH+49E8BUwDlsedH3PX0MYjIK/zk2C83BNHZyVvMJrdrO8IwPh1Y4NFen5+auYp2CFLyKW3VGP0vAQ=
+	t=1764662177; cv=fail; b=CuZOMEIgSC3aMOSJssb6MtY9m2SysRPPYfA8KvhsynHaQoxLMM81QgFYZaQWJOlaKQw4K5H0wT+1S7F8wEAuScfpDw3E6hHTDbCvYVu4YD5+lbGjZDfbR85DDASvTifUU19hcaJ8jHs6jV3j59LN4HJXQE7yhgIPuzEp/I4Yf/o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764662172; c=relaxed/simple;
-	bh=H25pw5D5zL6skjChnyxfweuc79CQ/ylSxbjW+YJVPF4=;
+	s=arc-20240116; t=1764662177; c=relaxed/simple;
+	bh=26efR4r7+INRTYbFvb1eOsKW1iF7qtT0z3rx9VzhLeo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=stHQAf0+cnLg0fA8kCf11MRcv8qoCCxvsVKI26M86ZAt2Mn7oPxxCMePIZqaqIj7TLoru+dyiTlCtgMf31VhZPnkySHttLT6gAlz8Y2CUpJ8VJAQrDJiFWQTbrtWaGU1hmAE28mVkeXAfJRtvUajxE4R7NTpE/DO6ZIF6o3weSI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=nh7uEM9E; arc=fail smtp.client-ip=40.107.130.44
+	 Content-Type:MIME-Version; b=oViouxDhweOV2gVVWDoymoxbMWVcsYhXTtzerJvSeQe/Nyt0ucp0oGN01pvJo+srgGPhTral8eT91ApMtCXrYRONKF7cloiaVuCBMTebpeAfrgNNl/8IINYPtvSoWf2BIB64GnV8SATWlHa9wfStg2GlPfFojEGnSe1zYDDbJLw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=efXaUAZE; arc=fail smtp.client-ip=40.107.130.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AcykNRM1u88ERGifNwy5a53SigRcqYcDuZXqMnJuzy5mCnAco4fUvid3VHE1mHE0ROowQEFXsFfAokE16yAk80KwH8fRmIexMiMuVW9RpFrLW62FY1HmbOYWhkLioTreKyQga8aUtOL8mk+8854383L0SfmEQv/cTKvcPKAC0AVbu//Vs4QVSqNfFLYupsdQYZ+zmlFGV4p3GSiWOTFN3cnv3Df4GSHN8ugIXV4u7JX66cjoxyOv3alEhzKEVMpd7YmK7VXqUoBdVQj1m9uxnlWQpPE6YD8FcOmgfMR+SuSRNONrMGGOw0AkqapKUsP5sdDUQ3FIFYKGFQx9NaSlRg==
+ b=KyJeiVWaxr7q6ie7Tx2/vK7mjpKYogD2DKj3ApAYfeM4T0S0sAs8rZUZbSTHNrFzxcC3HnR7WoTISrmlMX8f5pOT3RGgOFvtYP66t5ziY6Y1SlhLemy+xRl+4MJyiRrLpuy6/afRwNbxKDNT7Kikul0cVdt3LR3epKkIIXuM82NBz/4Mn+I2isE+6fT5EyuUOfozssHK1caM29s3I7yddOanbiqgjznXlifKNi2S00VhOhpsnRPa2hsxeQdINJZLHjLOsGVmviq7FjFrcq1/OyN8EeZMbGtEcmK+ywQjS9s2r39DvIMUTbKqg1YrPuPP76xviKRbNE33WHYNS+MC5A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9sPjGfJ4KUeawhjCFNtgrNytcqNmzSFeWPen5MoTn6Y=;
- b=khJuFKgCObFfmM3Und63yI45MfmDJyE87WSbVzq3Jyjihfoz69TqOFgESKM35IJSF2vNt+sZ0IQyD4Z/doNlTjog/NGptu87So12MabLaUB6FymOGvGPWS8XFpLph2ktMnq1rs/IWJIf4RZFKAMBTF96ak3bzg2GwubXch7+eVHVCZLAmfSSqRCbDJAD3etgCQ7vmlk08Qa/4jlIfXG/vYZej8opWUi7wvK4MeAqjS2YK8aUdXLO/ocClbVX5rnFqoo9eJK21pzKX9weYLjKKEGPtu1iI4EeR+HFTOuA9cOECJYMVkoGeYc+xT/BDlluS3cbLMp5Ts6ziXfYR1OGEw==
+ bh=vCf5DGLSVMOgyMPlycX7/E855RsBu7Nslul2Wob88dU=;
+ b=OqYFH3KQCmRzMefm2Sarr+AJa2xyUW7zr3mae34BU7xHebafefWe01C6teUjylxW6S/BPyit9+Mk7g3LGQAc1RLtRG+1ApUzcefabJOhYRDuVZdWx++A+I0JtsVzst8TS8T0wSDSKctsuTVynRcCdzMoReRAdPiHYsFXkVC1hsAPFXI/ClByOT5lQ8ig0gPkQRkiOHzV1EM17TcVqXSNcRTz9haXs0/3DnnTazX+fjEpmDZA7tjkyHri4LKbNV+qB6O2DZslcpbvpLQvPrwU6O2gW2HpkiW7KWJgMzJ/wA1/87B0dGTPo+je6B4ASh2DSw7Wiwadz94AyOPYYyJRtw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9sPjGfJ4KUeawhjCFNtgrNytcqNmzSFeWPen5MoTn6Y=;
- b=nh7uEM9Esw8qmJLOIAMCJOGvjl7NDJxYEwZnnVN88qFcjVQ7nFzi2mHfaqM6qaeV74t3vfYaD7XlLNzBNk+044OqZLSATLacGaPktimkOoIp3RcM9DJdBi9BQ4A0s9P7IWTsnd0GaEsrQxp/KEX1xeDH/BWRuOfp/txTrCqI29qUt18gmOU10lvFkJ8Ty59JfdT7bZJHlPz7Nj3fDKB0NGk3Cu+jDyfiiOCBWhHA8W37QUOAEGQ8CqusofP7JKPRdu+UGp4mhZ2vGoN20H0orL4YEE8/1uUMlKAVvEXihWRR+PCQrT8uVC1U8qq//7+73zcbIoGWkMCx72sd7Qrxnw==
+ bh=vCf5DGLSVMOgyMPlycX7/E855RsBu7Nslul2Wob88dU=;
+ b=efXaUAZEkO26IUbrwkNLy6uPNORChz22xRqd6A3MgzYmlE86vcCDCU9gGpiPQzJuRgLCRhctzs+QBYJFs29zdA+vaNBUTa2sPMtSK8GVKOj+K9q7HAETrxgz9NT/Wfmc5MnBrlU7vnFgw0UWv1cVVcM174ISGBTG0oKKD9DEOkQRogGD7mAPp4GHIyJKQaDghnPKVz6lpa7j3PMzUm0xgw3MTYn2ZI5fmacr0W4RqRgAitGSdBTm3GVCfSz6NTPnXdYxx39nNe4A0qffVUMtpPUP7pT1mBvQjSWfelLZoXEY0Gt/RAKXb05SHb64xjSvzslyB1VKy4Di+z0VBDRGog==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
  (2603:10a6:800:293::14) by VI2PR04MB11171.eurprd04.prod.outlook.com
  (2603:10a6:800:29a::13) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Tue, 2 Dec
- 2025 07:56:03 +0000
+ 2025 07:56:11 +0000
 Received: from VI2PR04MB11147.eurprd04.prod.outlook.com
  ([fe80::75ad:fac7:cfe7:b687]) by VI2PR04MB11147.eurprd04.prod.outlook.com
  ([fe80::75ad:fac7:cfe7:b687%6]) with mapi id 15.20.9366.012; Tue, 2 Dec 2025
- 07:56:03 +0000
+ 07:56:11 +0000
 From: Carlos Song <carlos.song@nxp.com>
 To: frank.li@nxp.com,
 	mkl@pengutronix.de,
@@ -71,11 +71,10 @@ Cc: linux-spi@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-hardening@vger.kernel.org,
-	Carlos Song <carlos.song@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>
-Subject: [PATCH v2 4/6] spi: imx: handle DMA submission errors with dma_submit_error()
-Date: Tue,  2 Dec 2025 15:55:01 +0800
-Message-Id: <20251202075503.2448339-5-carlos.song@nxp.com>
+	Carlos Song <carlos.song@nxp.com>
+Subject: [PATCH v2 5/6] spi: imx: support dynamic burst length for ECSPI DMA mode
+Date: Tue,  2 Dec 2025 15:55:02 +0800
+Message-Id: <20251202075503.2448339-6-carlos.song@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251202075503.2448339-1-carlos.song@nxp.com>
 References: <20251202075503.2448339-1-carlos.song@nxp.com>
@@ -92,154 +91,657 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VI2PR04MB11147:EE_|VI2PR04MB11171:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d862eb7-2eb8-4de9-9326-08de31783d6a
+X-MS-Office365-Filtering-Correlation-Id: b1e6cff4-e3e6-4431-42c7-08de317841e5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|19092799006|7416014|376014|52116014|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?9f7tv1k3h9dP159jJSbcVIqbX8gvlvf3QVt52Yhq/9a7b4zsyauwL7eiz/G0?=
- =?us-ascii?Q?p9Asx8oTlFHFaS7VgcqzZjYq4xYrZzKKJoMBCAoxImBNI0DeiBToMHWa7nQe?=
- =?us-ascii?Q?kVz5UmZRDyjtNgUeOPq345xyG8TaUv34Lv9DIxlmLfxG5tSy1cIpfOk82PZR?=
- =?us-ascii?Q?X+oUj+Bf/Y2AFtXPAu3sj8bfYWLGwO9/hPLuPr4T1dybnRFvuP132iopIyrb?=
- =?us-ascii?Q?MwJb+AqHeQo9WoCOYJfKDiP6hz8654cLsGuyrTL4Jn4axAvS6JFUw/QYlkWa?=
- =?us-ascii?Q?q978EQqRvVE1oLlnJvd9LXK7mQjXQMzhX7jF2SyyPjHEWoeoD6x0EUs7Kbt1?=
- =?us-ascii?Q?0v/WzAJHruanqjEYiYrjCuDCSXE1fvQL2LazYLo5XZ/ghMlFsu2AgazCXDh3?=
- =?us-ascii?Q?Au4dGz8+A9cRx7jHlC780EXhcZBshRtA8SU6gj+7ZnAaPYGqQT8IyKHvMIKr?=
- =?us-ascii?Q?sLKpeHAGbCmK7zR9FA+rilHyv3DaaW95aBYNqKAtlsqkbdbJksG0/HbLzEmW?=
- =?us-ascii?Q?TEoGfsoS0UQFCcjH1zvj23p3vvYVt9zrLNaztxX76n6s8twHkKdbINW4Qvgl?=
- =?us-ascii?Q?52AYSkOVvZR4uVRgEevumTMnK6u/XNPjCAzSawVfeepmtc3OSvup64z0b9yF?=
- =?us-ascii?Q?FmmdBblgXAM7U+1PRkzTjd53DvtvB6h8g/1O65RLWBcA9ZJQmJQuJijIXMr7?=
- =?us-ascii?Q?KRkYD+Wv/AMJmz96kXwyK8W1hTHHoq3bOKYEweq+ZyZuUC1sw5V3pZ5Al3oO?=
- =?us-ascii?Q?AzXzYQTB9r9FB7bHvp8ng5trwmAzpu7ztxK8TIAXDdHzoin/RkyOuYZZHsfX?=
- =?us-ascii?Q?8fa9pwRTCgUBJf9ALCXpHw0/u+hvuSZCoHDWD8xEDIWEjvBrum9ItcwfPlGC?=
- =?us-ascii?Q?GfnAKXmL5qqCjCJHsJLQRdFNOyJOox1TBAcAtkxsIyTYN0eOVkFo2lGXnpqY?=
- =?us-ascii?Q?KBB04P+JS+KpY8iMZb8Z85LwNDTKhWG/xKq/PcQDXofm9Hwm0nGJAOWgkMpv?=
- =?us-ascii?Q?Yptf/sqg8JxDY9ngC3K6ZlY6iuZzOmrstZc/I99/Hf7wrlLwsF4ZbZTbIZsr?=
- =?us-ascii?Q?Fj6T8HfLU89PDIMPIGgf3ZZX4hp5YxihIdltqshWj5QbJtwxrj9KDczN1xPZ?=
- =?us-ascii?Q?Q2LfftF0xGFKg246FlLc+zZ/i/scBvkX34vNmMYOW7S4OVO7Tp4HZKPJWqV7?=
- =?us-ascii?Q?fvqbc9VvmFF5iwNvQqj/XjmcNr9uJQZAaUp4yn7fpBHJCIt3wIyNjH+G/Sns?=
- =?us-ascii?Q?XLMtNjC3hmkRF58TGCSThZ4N7q3naXCMkbEPdnHFXpIMwpsZfY1kVDD1pGWL?=
- =?us-ascii?Q?74aL9cdepfup+mR1YdNx5HVQqCDD/6AZEjigDmZ13QzIP1C5JpoHS6RW1Cp1?=
- =?us-ascii?Q?z+HAuyTcR3gn+4vpvydsrpfE4vH5YUt/glouvr5VgjVGrr/IVYGCvaoTt1sx?=
- =?us-ascii?Q?gdEPk7jwPV/SbQectolvWcs+K+4gwoN0G1ADzUQOCuhw/gwXL4Cy+KranSFt?=
- =?us-ascii?Q?lRCGl+fwq1ZAqpZ+tb14EHrBuxxw9lljqOnF?=
+	=?us-ascii?Q?scicniEKvv00pkEt5Rjja0XrIHxmJh4FnMW6ddFSJB7ttB/DhoaLQ6Q8GxQ8?=
+ =?us-ascii?Q?dsg0pd79qkffpzEVb2VdYctkCNkY1gDwrJC3eYd/4eTisn0rx6EjF5yzuDn5?=
+ =?us-ascii?Q?/nC6OHEBd1kAomEabejPBfHBAcIUk9frdqc2xcTxSwAOPSNpPRAGRyFDmkUW?=
+ =?us-ascii?Q?eg9VnApRx4VjEePQbAGUjRTVOV3ph4XkXaJOMsAHQBrSZDBnFYsTPiZRHHAX?=
+ =?us-ascii?Q?wCRer+/CbhL6Wg0VRGX3wFW4bQQe5ac8Xbzi80ABvsqZpj9bzjGRP2ozLyrH?=
+ =?us-ascii?Q?xND5Twe7elnzfCzYzzaxkMHWn149kTWzR0iVNeLwGXxYc9/0vcBJT3Msc8L0?=
+ =?us-ascii?Q?CsveYHTaaDao+AmOn2fx6l8RaVnWXAZvp0ec/o42gJsTlUZXYJzLQI2jNM0Z?=
+ =?us-ascii?Q?xI/YEY+eQKWwyyG4NLc9CKFAK2tclWcyPaxLJMF/iXEB7dd7mphymbJIzIeo?=
+ =?us-ascii?Q?RWr76rMzmu2yLEJJ5Bl9om83gUu8MIgZ9eHVCBp6UAAGhbz6XZc8MBp2DzSm?=
+ =?us-ascii?Q?V2o1ZCqceUamP9s8k8I2HhC+v1YFbfUIdbVtyBr3j/pSXctr+e00QUD9jjIe?=
+ =?us-ascii?Q?gkha4p9cBAeH5JW+SQ7hqojHHYfjK2lNSLJ4gp3n39i92T75R9RVLbAUeoIG?=
+ =?us-ascii?Q?Lv05sIDjECpJdEwBWj8TYTifjS93hIWiC1CXXS6ytrNjsdpu2cBRrKKh+GS/?=
+ =?us-ascii?Q?mUXIjlcSpd5QFH7/PONyY/CKjP2hbX4B2qe/qaoIBCC4v76UV2MMAKVumzXt?=
+ =?us-ascii?Q?ZJnqetP+pLS/WrP4yI5n3uqgaiIKfJijdBfGwkFZVBzp4QXN/1mpZIo8WlXf?=
+ =?us-ascii?Q?EKPCxeXK9f5VFYB/lkpAIWKASbwBt2DQNLtvmX8hg2g5h+vCM6Hc4GCzotAn?=
+ =?us-ascii?Q?BvnwyrfB1ZXxz97qrYi69HzZt7iiJopOQ2fyorxznWECefM+GbFd7s4kNG3E?=
+ =?us-ascii?Q?WmJPUQlaKQFOth731wK53GO7oJP+Gw1uRY99fEbeL01FZoKN3+gsjv1VLPB2?=
+ =?us-ascii?Q?QfZb/ZXWlkUOJMpEvbg4DJzXElEwpDe1yDo9bKsSDVbE/ccV8bXovJzy/iZK?=
+ =?us-ascii?Q?l6/67ohVJ+Q8E/sZaijn2Wvx5LWhK+bC3i8iydcAwserSM0/Vn6TlBFWdH3r?=
+ =?us-ascii?Q?4MRKA/aKppt2rCnWwFiGcrMAPGRg8WdS5mvu4I/XUdXhDUjfacIdkwplYW5w?=
+ =?us-ascii?Q?AFlvTxM9Y38W5LmZrzrCg1LrAN8EB8j1QGtKBEslmShkZkSjmqXapap99v/R?=
+ =?us-ascii?Q?M+3nA0DzAgGJprl4NfXGz7CIEVIc3TWZOOgNZUq3u9O1esfkGX03tNYw8bt2?=
+ =?us-ascii?Q?NJKOuzBbpgYktUDQSub8Jwo11tdVToq9lI3p+6+8dH7lEpJnYmQUmPsgptoz?=
+ =?us-ascii?Q?ZK2abmKykI7S5y6iIeZsy+9STjsnua9BNDThpnx3PT6goOekyKVYLH29C2WE?=
+ =?us-ascii?Q?1a+WAAfCrAnbVh6e8RASaEOoTKdO2BzGdP3Ns08Fvek5kJpCjEv3RaUKncPK?=
+ =?us-ascii?Q?Jmd3h1XAHzJ/lJVbRAvX19qtsMq7BfcA7OE5?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI2PR04MB11147.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(7416014)(376014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0HqVSVjPsyRjK9i+P2NkF++yjoV8RlCu4DB7oKgJSJQABs0QLJlN6l+/raNu?=
- =?us-ascii?Q?/eTrk0jdRzNE7Cnuq6H/JXHsgTyFoHoydcVlE8E5WHTNn9DQdq5aUylzf3FF?=
- =?us-ascii?Q?yoOJVULJaLuQtoidm3ok9XM00CyuYqzGs2uT1gNQzKnuQqt3XlcS2Xbrg3IZ?=
- =?us-ascii?Q?qzQv7gomD38zSvDPFUgshhe5fjf0I6uhaEdF13ozsFwVeuuWTq6Xri/gcGBE?=
- =?us-ascii?Q?FO0QXYhr3Y/Hr7ebd4ZgHl05Vop791tP16SVoUHraLvanNRSB2MWwBKtcTel?=
- =?us-ascii?Q?rNyYNNejpruRAlgRMvseJr19VOd1VrjkKRNrtTXXxk7ucLzmXrkOACB6Za7J?=
- =?us-ascii?Q?WAsBpzlO5OzmVlxI7H+otzLgpfnkPZmGkzccwp7UGfJiHvFHQLNJUf05GaeI?=
- =?us-ascii?Q?M4XOzIsltC0oHWPYLIYfjAf003jySKbi0P53WnhGAtjmbKMEviv6x6yAyzmL?=
- =?us-ascii?Q?5UO3b5JDpCpaPrzsaLg5W0zNukbxH5/4yDJrJYj5Q06vXtn1aihSwR6gS1rj?=
- =?us-ascii?Q?/BmS5Kf6eJeDfqLibqo+26xNopL6pR0S6b0l57mDPVcK7JNqu+AVBAOwN1JP?=
- =?us-ascii?Q?zm/RTuQ7nZ3/3ZkYRS1e1FM4mkCnt92vL0wusxIv6uLa96TQX0v25z+HQhi2?=
- =?us-ascii?Q?pKxyYoc/AVJi9lykvu1heByFB3VFTUq3IgdBwosDiQbL9y2qO3cVNHmjFlOD?=
- =?us-ascii?Q?jMowZ2KcNHOV+OFcFhNqwlF+SGMvKPsRV1g+mpJsQUDPaoosdomx5EiQ2Dqm?=
- =?us-ascii?Q?FrHyZu6vB7IK7Y4ohLlGPCVePUhsOyjRtuX0kYmdkpw7VWlS3Sw5bZbq6Cud?=
- =?us-ascii?Q?aKDN3Al5L9NT/VO/nX0DbYS3JpYiCoP10ycVLl1Q5/FB/kgq+8HLuTL8Z7Pl?=
- =?us-ascii?Q?KxYbGOeTDCZWGgDTKsgbJic+1mtIt0gEmNrbBs5SeDQ11q7VG94otjWBzFbe?=
- =?us-ascii?Q?FI7IZ8hoxG0Vb/1rS+6m0Drsacpa8u/dBUtxe1AFzEqj9kuF8OeAuQMkGJ4O?=
- =?us-ascii?Q?epDQY1VniuLvV7fSl/UPFObCimf9kloHzFe747FKKVgEZc8Js/Xhvl+Hbvi9?=
- =?us-ascii?Q?Om/2S1chb1eQJe8Zi6INeZYb8PQRNDejonTO1AE+wPqHK/JZ2W4eaB3YRExf?=
- =?us-ascii?Q?lbGmB4rzpRd+cXnY2+IfLcbFdfep0SqRBlln3G0gAeznmQc4IIaergB6YqW0?=
- =?us-ascii?Q?TFmOQ2aoB4K0RN0BXuWuZuytP7fITqtMQgd0NOwx3GQTMUBsILg8oclbvPUn?=
- =?us-ascii?Q?DTI9xCSj9SlRDfYKI7JPLQ6vvZ3tbPxel8/KCu1kz3LfntF7HVN5rom9F/41?=
- =?us-ascii?Q?VtRbMRVnCjWQ0gm8Ek1sYbTjZBmWNcfB3qRpR8OSq07TWMEOzunKl37ZzsP8?=
- =?us-ascii?Q?VL0d88nJxCNgGlrfPuLEJN3wax43pGnrdPKUQx+nQ9jRfgbXSKsmI6zLKbOo?=
- =?us-ascii?Q?aKqoW/ANwn+Hk6refJASnHPewZXb/lQwDSxH9w2kZqPTjZXA6cyBMluGB1I6?=
- =?us-ascii?Q?1e7Uh7LGebC7+HIA9lHug7Zq9YjBgj8e0tV4BZ6Duj7Hm/I63jgzLfxj5wOv?=
- =?us-ascii?Q?Ggcvsgc9cqRm8BwfvjfymoUQO9EfndVO55wxs/o6?=
+	=?us-ascii?Q?gE39pjusLPF07/HoXetDgvmhAZ6TtPYmXHh1xGnyvkrBv+KUWUjlZk4twXO8?=
+ =?us-ascii?Q?YGCYc82izD6Phl7EilE6KsnJ6JZntU3YhNwJnmpsM9ef5gSdbukKxF6eDrlZ?=
+ =?us-ascii?Q?B1c7nRZDqtYsjOVOpye+EMIMJEPEYoDf8QWrwFV7Ce3aR8HuVSAcOGKqI6cP?=
+ =?us-ascii?Q?gbpWNcNFtZFrsr5+beB2XXSoKqNK6xs+o/QwGh7L0augnD1ojJbOUUmshLGE?=
+ =?us-ascii?Q?giDrrIMcsPNRlJoO3MzL76Qb1yyDytoirUtIN5zR3bjjr6U0Fg6f3uPMhNZM?=
+ =?us-ascii?Q?xqPp6DAHlsBsPMZCMFO7Y1ieMaPjf3tRHOtJtLLV9fh9q3kpajY0Bwa9q6dS?=
+ =?us-ascii?Q?iJ9SONIOiG70ltU8lByRMfckMV3HQlcNlh5rkP/r+rmvER9h+yH/mgRmXuqw?=
+ =?us-ascii?Q?MKffP008PR8+0wPUu2TUVFm8aQB7d5ty5svRxXaHK/A6LKdy7IBc+d7sxcEo?=
+ =?us-ascii?Q?zol1inxeVw6Jn2BEl69SV1SRh5V/w8tV9qh3/DphcuyuIgTLVh+9Nmnu5djz?=
+ =?us-ascii?Q?2+0MaKc+511vKYgkD6nkJVRNpmYcakT0c+yGaGO/Sjeh4mqd5xCuJDjBTRDV?=
+ =?us-ascii?Q?FESxL3f4ywIDfyUrT8RsVERmEU+GvJdgrcgXrs8nui6wKxyDX3XRUhBX5a1x?=
+ =?us-ascii?Q?ubQe1kPjo70CWfRG4pz9H7jZAHwpMbrANoDXrDOzHc28QsIURnA6w3tr22Nb?=
+ =?us-ascii?Q?UeyKlqOKWcBXjn2tILcAl2E9whl5096buy1n+LhNM6kJkRX7xvjBf0q56vzI?=
+ =?us-ascii?Q?+N/eGX/s6iDYhOQRrP4YZ38wUtC5b0xOSkZzDMQKDOQ9fx9itewz4+tnJ2Y4?=
+ =?us-ascii?Q?h7ebCKTmlQajWk4PFcofBV6cW1GSDM+1cIyn+GvMPqNwNQvhNfNX6tDTQTWU?=
+ =?us-ascii?Q?SHK6RW4S5MarMeVTjSfAhQw+9wZl17FN1FQfNboQm0n99UOY0KtU3WO8mL7n?=
+ =?us-ascii?Q?k8htEkjQXOD15zgnBe2IBPvi1mW8zUeGznu6G90eSNj/cV85ieN3xZmuGfSg?=
+ =?us-ascii?Q?Id1dvxQijNoweAZFwwLRE6TKBf15JHcDk+/fX2YH/slYWp8xzKOfkGYy6vvG?=
+ =?us-ascii?Q?zxHupDyYnQ3gQtv5gJ1XlhDyomzqGu6iU2hZVQZJERjnCw23JJ21SLSk7IB5?=
+ =?us-ascii?Q?3Q9d3MQEjwv/hggOqRfKXAPT7Nab7pzKJqxe1GbRHICqUWR4i4QQyVI2h8sg?=
+ =?us-ascii?Q?GllfMKVfDRXzlwrtGDymYnQPnkY4nhDU0aZ+FyV9yvIONzUBs9BVZecbub3D?=
+ =?us-ascii?Q?+veydeUbd5NJQr3Kaiq1esB3glr2ETWKNHYhQ3vLZ1Yp0I9+256PcmGUJ+3G?=
+ =?us-ascii?Q?Wt6YTSpVARvYtJRAiEqbKXQNukwGC+CX0V1LyaGSJaqVvXi+swT2B4jk46cU?=
+ =?us-ascii?Q?7bdnEEKMW041v4b9tq2GmnZ1xPcNbMh7iBAEGJWn7WysWeuuruamUtW3Bode?=
+ =?us-ascii?Q?T2nQOnJvtun1zRhvZfO48H2uE5mO1T7AmocmUqLM4X6u8oaRAEmqkeuQuqDi?=
+ =?us-ascii?Q?6I/1sGvwf6cXJzVsWpNyLYYC1kpn2aWweKCm9vz3x0wEztyyYyUCXMCKWDgT?=
+ =?us-ascii?Q?5FVbKLJYCIawNRruf068BfF7ii7zxQhuu6Vjdh3n?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d862eb7-2eb8-4de9-9326-08de31783d6a
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1e6cff4-e3e6-4431-42c7-08de317841e5
 X-MS-Exchange-CrossTenant-AuthSource: VI2PR04MB11147.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 07:56:03.3267
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 07:56:11.1337
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XT8I7QMRTs5f3TzY5bOaPqpYvZ/fr1Wb0A80TnkK9H1k0o+VC18g+lDnJi8qG5LAp3xSvQMKk9Np9llTlwsHHw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: /bAx9XT6edqAr2gE2PzN07YwxnLwgQq2BduT4TuiM9SpQSoNM7S79aiPgcZFi2pvPSIYLR/Cm1Xn0YauByrGdQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB11171
 
-Add error handling for DMA request submission by checking the return
-cookie with dma_submit_error(). This prevents propagating submission
-failures through the DMA transfer process, which could lead to
-unexpected behavior.
+ECSPI transfers only one word per frame in DMA mode, causing SCLK stalls
+between words due to BURST_LENGTH updates, which significantly impacts
+performance.
+
+To improve throughput, configure BURST_LENGTH as large as possible (up to
+512 bytes per frame) instead of word length. This avoids delays between
+words. When transfer length is not 4-byte aligned, use bounce buffers to
+align data for DMA. TX uses aligned words for TXFIFO, while RX trims DMA
+buffer data after transfer completion.
+
+Introduce a new dma_package structure to store:
+  1. BURST_LENGTH values for each DMA request
+  2. Variables for DMA submission
+  3. DMA transmission length and actual data length
+
+Handle three cases:
+  - len <= 512 bytes: one package, BURST_LENGTH = len * 8 - 1
+  - len > 512 and aligned: one package, BURST_LENGTH = max (512 bytes)
+  - len > 512 and unaligned: two packages, second for tail data
+
+Performance test (spidev_test @10MHz, 4KB):
+  Before: tx/rx ~6651.9 kbps
+  After:  tx/rx ~9922.2 kbps (~50% improvement)
+
+For compatibility with slow SPI devices, add configurable word delay in
+DMA mode. When word delay is set, dynamic burst is disabled and
+BURST_LENGTH equals word length.
 
 Signed-off-by: Carlos Song <carlos.song@nxp.com>
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
 ---
- drivers/spi/spi-imx.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ drivers/spi/spi-imx.c | 413 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 377 insertions(+), 36 deletions(-)
 
 diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 186963d3d2e0..42f64d9535c9 100644
+index 42f64d9535c9..045f4ffd680a 100644
 --- a/drivers/spi/spi-imx.c
 +++ b/drivers/spi/spi-imx.c
-@@ -1445,6 +1445,7 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
- 	struct dma_async_tx_descriptor *desc_tx, *desc_rx;
- 	unsigned long transfer_timeout;
- 	unsigned long time_left;
-+	dma_cookie_t cookie;
+@@ -60,6 +60,7 @@ MODULE_PARM_DESC(polling_limit_us,
+ #define MX51_ECSPI_CTRL_MAX_BURST	512
+ /* The maximum bytes that IMX53_ECSPI can transfer in target mode.*/
+ #define MX53_MAX_TRANSFER_BYTES		512
++#define BYTES_PER_32BITS_WORD		4
  
- 	/*
- 	 * The TX DMA setup starts the transfer, so make sure RX is configured
-@@ -1460,21 +1461,29 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
+ enum spi_imx_devtype {
+ 	IMX1_CSPI,
+@@ -95,6 +96,16 @@ struct spi_imx_devtype_data {
+ 	enum spi_imx_devtype devtype;
+ };
  
- 	desc_rx->callback = spi_imx_dma_rx_callback;
- 	desc_rx->callback_param = (void *)spi_imx;
--	dmaengine_submit(desc_rx);
-+	cookie = dmaengine_submit(desc_rx);
-+	if (dma_submit_error(cookie)) {
-+		dev_err(spi_imx->dev, "submitting DMA RX failed\n");
-+		transfer->error |= SPI_TRANS_FAIL_NO_START;
-+		goto dmaengine_terminate_rx;
++struct dma_data_package {
++	u32 cmd_word;
++	void *dma_rx_buf;
++	void *dma_tx_buf;
++	dma_addr_t dma_tx_addr;
++	dma_addr_t dma_rx_addr;
++	int dma_len;
++	int data_len;
++};
++
+ struct spi_imx_data {
+ 	struct spi_controller *controller;
+ 	struct device *dev;
+@@ -130,6 +141,9 @@ struct spi_imx_data {
+ 	u32 wml;
+ 	struct completion dma_rx_completion;
+ 	struct completion dma_tx_completion;
++	size_t dma_package_num;
++	struct dma_data_package *dma_data __counted_by(dma_package_num);
++	int rx_offset;
+ 
+ 	const struct spi_imx_devtype_data *devtype_data;
+ };
+@@ -189,6 +203,9 @@ MXC_SPI_BUF_TX(u16)
+ MXC_SPI_BUF_RX(u32)
+ MXC_SPI_BUF_TX(u32)
+ 
++/* Align to cache line to avoid swiotlo bounce */
++#define DMA_CACHE_ALIGNED_LEN(x) ALIGN((x), dma_get_cache_alignment())
++
+ /* First entry is reserved, second entry is valid only if SDHC_SPIEN is set
+  * (which is currently not the case in this driver)
+  */
+@@ -253,6 +270,14 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ 	if (transfer->len < spi_imx->devtype_data->fifo_size)
+ 		return false;
+ 
++	/* DMA only can transmit data in bytes */
++	if (spi_imx->bits_per_word != 8 && spi_imx->bits_per_word != 16 &&
++	    spi_imx->bits_per_word != 32)
++		return false;
++
++	if (transfer->len >= MAX_SDMA_BD_BYTES)
++		return false;
++
+ 	spi_imx->dynamic_burst = 0;
+ 
+ 	return true;
+@@ -1398,8 +1423,6 @@ static int spi_imx_sdma_init(struct device *dev, struct spi_imx_data *spi_imx,
+ 
+ 	init_completion(&spi_imx->dma_rx_completion);
+ 	init_completion(&spi_imx->dma_tx_completion);
+-	controller->can_dma = spi_imx_can_dma;
+-	controller->max_dma_len = MAX_SDMA_BD_BYTES;
+ 	spi_imx->controller->flags = SPI_CONTROLLER_MUST_RX |
+ 					 SPI_CONTROLLER_MUST_TX;
+ 
+@@ -1437,10 +1460,259 @@ static int spi_imx_calculate_timeout(struct spi_imx_data *spi_imx, int size)
+ 	return secs_to_jiffies(2 * timeout);
+ }
+ 
++static void spi_imx_dma_unmap(struct spi_imx_data *spi_imx,
++			      struct dma_data_package *dma_data)
++{
++	struct device *tx_dev = spi_imx->controller->dma_tx->device->dev;
++	struct device *rx_dev = spi_imx->controller->dma_rx->device->dev;
++
++	dma_unmap_single(tx_dev, dma_data->dma_tx_addr,
++			 DMA_CACHE_ALIGNED_LEN(dma_data->dma_len),
++			 DMA_TO_DEVICE);
++	dma_unmap_single(rx_dev, dma_data->dma_rx_addr,
++			 DMA_CACHE_ALIGNED_LEN(dma_data->dma_len),
++			 DMA_FROM_DEVICE);
++}
++
++static void spi_imx_dma_rx_data_handle(struct spi_imx_data *spi_imx,
++				       struct dma_data_package *dma_data, void *rx_buf,
++				       bool word_delay)
++{
++	void *copy_ptr;
++	int unaligned;
++
++	/*
++	 * On little-endian CPUs, adjust byte order:
++	 * - Swap bytes when bpw = 8
++	 * - Swap half-words when bpw = 16
++	 * This ensures correct data ordering for DMA transfers.
++	 */
++#ifdef __LITTLE_ENDIAN
++	if (!word_delay) {
++		unsigned int bytes_per_word = spi_imx_bytes_per_word(spi_imx->bits_per_word);
++		u32 *temp = dma_data->dma_rx_buf;
++
++		for (int i = 0; i < DIV_ROUND_UP(dma_data->dma_len, sizeof(*temp)); i++) {
++			if (bytes_per_word == 1)
++				swab32s(temp + i);
++			else if (bytes_per_word == 2)
++				swahw32s(temp + i);
++		}
++	}
++#endif
++
++	/*
++	 * When dynamic burst enabled, DMA RX always receives 32-bit words from RXFIFO with
++	 * buswidth = 4, but when data_len is not 4-bytes alignment, the RM shows when
++	 * burst length = 32*n + m bits, a SPI burst contains the m LSB in first word and all
++	 * 32 bits in other n words. So if garbage bytes in the first word, trim first word then
++	 * copy the actual data to rx_buf.
++	 */
++	if (dma_data->data_len % BYTES_PER_32BITS_WORD && !word_delay) {
++		unaligned = dma_data->data_len % BYTES_PER_32BITS_WORD;
++		copy_ptr = (u8 *)dma_data->dma_rx_buf + BYTES_PER_32BITS_WORD - unaligned;
++	} else {
++		copy_ptr = dma_data->dma_rx_buf;
 +	}
 +
++	memcpy(rx_buf, copy_ptr, dma_data->data_len);
++}
++
++static int spi_imx_dma_map(struct spi_imx_data *spi_imx,
++			   struct dma_data_package *dma_data)
++{
++	struct spi_controller *controller = spi_imx->controller;
++	struct device *tx_dev = controller->dma_tx->device->dev;
++	struct device *rx_dev = controller->dma_rx->device->dev;
++	int ret;
++
++	dma_data->dma_tx_addr = dma_map_single(tx_dev, dma_data->dma_tx_buf,
++					       DMA_CACHE_ALIGNED_LEN(dma_data->dma_len),
++					       DMA_TO_DEVICE);
++	ret = dma_mapping_error(tx_dev, dma_data->dma_tx_addr);
++	if (ret < 0) {
++		dev_err(spi_imx->dev, "DMA TX map failed %d\n", ret);
++		return ret;
++	}
++
++	dma_data->dma_rx_addr = dma_map_single(rx_dev, dma_data->dma_rx_buf,
++					       DMA_CACHE_ALIGNED_LEN(dma_data->dma_len),
++					       DMA_FROM_DEVICE);
++	ret = dma_mapping_error(rx_dev, dma_data->dma_rx_addr);
++	if (ret < 0) {
++		dev_err(spi_imx->dev, "DMA RX map failed %d\n", ret);
++		dma_unmap_single(tx_dev, dma_data->dma_tx_addr,
++				 DMA_CACHE_ALIGNED_LEN(dma_data->dma_len),
++				 DMA_TO_DEVICE);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int spi_imx_dma_tx_data_handle(struct spi_imx_data *spi_imx,
++				      struct dma_data_package *dma_data,
++				      const void *tx_buf,
++				      bool word_delay)
++{
++	void *copy_ptr;
++	int unaligned;
++
++	if (word_delay) {
++		dma_data->dma_len = dma_data->data_len;
++	} else {
++		/*
++		 * As per the reference manual, when burst length = 32*n + m bits, ECSPI
++		 * sends m LSB bits in the first word, followed by n full 32-bit words.
++		 * Since actual data may not be 4-byte aligned, allocate DMA TX/RX buffers
++		 * to ensure alignment. For TX, DMA pushes 4-byte aligned words to TXFIFO,
++		 * while ECSPI uses BURST_LENGTH settings to maintain correct bit count.
++		 * For RX, DMA always receives 32-bit words from RXFIFO, when data len is
++		 * not 4-byte aligned, trim the first word to drop garbage bytes, then group
++		 * all transfer DMA bounse buffer and copy all valid data to rx_buf.
++		 */
++		dma_data->dma_len = ALIGN(dma_data->data_len, BYTES_PER_32BITS_WORD);
++	}
++
++	dma_data->dma_tx_buf = kzalloc(dma_data->dma_len, GFP_KERNEL);
++	if (!dma_data->dma_tx_buf)
++		return -ENOMEM;
++
++	dma_data->dma_rx_buf = kzalloc(dma_data->dma_len, GFP_KERNEL);
++	if (!dma_data->dma_rx_buf) {
++		kfree(dma_data->dma_tx_buf);
++		return -ENOMEM;
++	}
++
++	if (dma_data->data_len % BYTES_PER_32BITS_WORD && !word_delay) {
++		unaligned = dma_data->data_len % BYTES_PER_32BITS_WORD;
++		copy_ptr = (u8 *)dma_data->dma_tx_buf + BYTES_PER_32BITS_WORD - unaligned;
++	} else {
++		copy_ptr = dma_data->dma_tx_buf;
++	}
++
++	memcpy(copy_ptr, tx_buf, dma_data->data_len);
++
++	/*
++	 * When word_delay is enabled, DMA transfers an entire word in one minor loop.
++	 * In this case, no data requires additional handling.
++	 */
++	if (word_delay)
++		return 0;
++
++#ifdef __LITTLE_ENDIAN
++	/*
++	 * On little-endian CPUs, adjust byte order:
++	 * - Swap bytes when bpw = 8
++	 * - Swap half-words when bpw = 16
++	 * This ensures correct data ordering for DMA transfers.
++	 */
++	unsigned int bytes_per_word = spi_imx_bytes_per_word(spi_imx->bits_per_word);
++	u32 *temp = dma_data->dma_tx_buf;
++
++	for (int i = 0; i < DIV_ROUND_UP(dma_data->dma_len, sizeof(*temp)); i++) {
++		if (bytes_per_word == 1)
++			swab32s(temp + i);
++		else if (bytes_per_word == 2)
++			swahw32s(temp + i);
++	}
++#endif
++
++	return 0;
++}
++
++static int spi_imx_dma_data_prepare(struct spi_imx_data *spi_imx,
++				    struct spi_transfer *transfer,
++				    bool word_delay)
++{
++	u32 pre_bl, tail_bl;
++	u32 ctrl;
++	int ret;
++
++	/*
++	 * ECSPI supports a maximum burst of 512 bytes. When xfer->len exceeds 512
++	 * and is not a multiple of 512, a tail transfer is required. BURST_LEGTH
++	 * is used for SPI HW to maintain correct bit count. BURST_LENGTH should
++	 * update with data length. After DMA request submit, SPI can not update the
++	 * BURST_LENGTH, in this case, we must split two package, update the register
++	 * then setup second DMA transfer.
++	 */
++	ctrl = readl(spi_imx->base + MX51_ECSPI_CTRL);
++	if (word_delay) {
++		/*
++		 * When SPI IMX need to support word delay, according to "Sample Period Control
++		 * Register" shows, The Sample Period Control Register (ECSPI_PERIODREG)
++		 * provides software a way to insert delays (wait states) between consecutive
++		 * SPI transfers. As a result, ECSPI can only transfer one word per frame, and
++		 * the delay occurs between frames.
++		 */
++		spi_imx->dma_package_num = 1;
++		pre_bl = spi_imx->bits_per_word - 1;
++	} else if (transfer->len <= MX51_ECSPI_CTRL_MAX_BURST) {
++		spi_imx->dma_package_num = 1;
++		pre_bl = transfer->len * BITS_PER_BYTE - 1;
++	} else if (!(transfer->len % MX51_ECSPI_CTRL_MAX_BURST)) {
++		spi_imx->dma_package_num = 1;
++		pre_bl = MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1;
++	} else {
++		spi_imx->dma_package_num = 2;
++		pre_bl = MX51_ECSPI_CTRL_MAX_BURST * BITS_PER_BYTE - 1;
++		tail_bl = (transfer->len % MX51_ECSPI_CTRL_MAX_BURST) * BITS_PER_BYTE - 1;
++	}
++
++	spi_imx->dma_data = kmalloc_array(spi_imx->dma_package_num,
++					  sizeof(struct dma_data_package),
++					  GFP_KERNEL | __GFP_ZERO);
++	if (!spi_imx->dma_data) {
++		dev_err(spi_imx->dev, "Failed to allocate DMA package buffer!\n");
++		return -ENOMEM;
++	}
++
++	if (spi_imx->dma_package_num == 1) {
++		ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
++		ctrl |= pre_bl << MX51_ECSPI_CTRL_BL_OFFSET;
++		spi_imx->dma_data[0].cmd_word = ctrl;
++		spi_imx->dma_data[0].data_len = transfer->len;
++		ret = spi_imx_dma_tx_data_handle(spi_imx, &spi_imx->dma_data[0], transfer->tx_buf,
++						 word_delay);
++		if (ret) {
++			kfree(spi_imx->dma_data);
++			return ret;
++		}
++	} else {
++		ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
++		ctrl |= pre_bl << MX51_ECSPI_CTRL_BL_OFFSET;
++		spi_imx->dma_data[0].cmd_word = ctrl;
++		spi_imx->dma_data[0].data_len = round_down(transfer->len,
++							   MX51_ECSPI_CTRL_MAX_BURST);
++		ret = spi_imx_dma_tx_data_handle(spi_imx, &spi_imx->dma_data[0], transfer->tx_buf,
++						 false);
++		if (ret) {
++			kfree(spi_imx->dma_data);
++			return ret;
++		}
++
++		ctrl &= ~MX51_ECSPI_CTRL_BL_MASK;
++		ctrl |= tail_bl << MX51_ECSPI_CTRL_BL_OFFSET;
++		spi_imx->dma_data[1].cmd_word = ctrl;
++		spi_imx->dma_data[1].data_len = transfer->len % MX51_ECSPI_CTRL_MAX_BURST;
++		ret = spi_imx_dma_tx_data_handle(spi_imx, &spi_imx->dma_data[1],
++						 transfer->tx_buf + spi_imx->dma_data[0].data_len,
++						 false);
++		if (ret) {
++			kfree(spi_imx->dma_data[0].dma_tx_buf);
++			kfree(spi_imx->dma_data[0].dma_rx_buf);
++			kfree(spi_imx->dma_data);
++		}
++	}
++
++	return 0;
++}
++
+ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
++			      struct dma_data_package *dma_data,
+ 			      struct spi_transfer *transfer)
+ {
+-	struct sg_table *tx = &transfer->tx_sg, *rx = &transfer->rx_sg;
+ 	struct spi_controller *controller = spi_imx->controller;
+ 	struct dma_async_tx_descriptor *desc_tx, *desc_rx;
+ 	unsigned long transfer_timeout;
+@@ -1451,9 +1723,9 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
+ 	 * The TX DMA setup starts the transfer, so make sure RX is configured
+ 	 * before TX.
+ 	 */
+-	desc_rx = dmaengine_prep_slave_sg(controller->dma_rx,
+-					  rx->sgl, rx->nents, DMA_DEV_TO_MEM,
+-					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	desc_rx = dmaengine_prep_slave_single(controller->dma_rx, dma_data->dma_rx_addr,
++					      dma_data->dma_len, DMA_DEV_TO_MEM,
++					      DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!desc_rx) {
+ 		transfer->error |= SPI_TRANS_FAIL_NO_START;
+ 		return -EINVAL;
+@@ -1471,9 +1743,9 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
  	reinit_completion(&spi_imx->dma_rx_completion);
  	dma_async_issue_pending(controller->dma_rx);
  
- 	desc_tx = dmaengine_prep_slave_sg(controller->dma_tx,
- 					  tx->sgl, tx->nents, DMA_MEM_TO_DEV,
- 					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
--	if (!desc_tx) {
--		dmaengine_terminate_all(controller->dma_rx);
--		return -EINVAL;
--	}
-+	if (!desc_tx)
-+		goto dmaengine_terminate_rx;
+-	desc_tx = dmaengine_prep_slave_sg(controller->dma_tx,
+-					  tx->sgl, tx->nents, DMA_MEM_TO_DEV,
+-					  DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	desc_tx = dmaengine_prep_slave_single(controller->dma_tx, dma_data->dma_tx_addr,
++					      dma_data->dma_len, DMA_MEM_TO_DEV,
++					      DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!desc_tx)
+ 		goto dmaengine_terminate_rx;
  
- 	desc_tx->callback = spi_imx_dma_tx_callback;
- 	desc_tx->callback_param = (void *)spi_imx;
--	dmaengine_submit(desc_tx);
-+	cookie = dmaengine_submit(desc_tx);
-+	if (dma_submit_error(cookie)) {
-+		dev_err(spi_imx->dev, "submitting DMA TX failed\n");
-+		goto dmaengine_terminate_tx;
-+	}
- 	reinit_completion(&spi_imx->dma_tx_completion);
- 	dma_async_issue_pending(controller->dma_tx);
- 
-@@ -1502,6 +1511,13 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
- 	}
- 
- 	return 0;
-+
-+dmaengine_terminate_tx:
-+	dmaengine_terminate_all(controller->dma_tx);
-+dmaengine_terminate_rx:
-+	dmaengine_terminate_all(controller->dma_rx);
-+
-+	return -EINVAL;
+@@ -1521,16 +1793,16 @@ static int spi_imx_dma_submit(struct spi_imx_data *spi_imx,
  }
  
  static void spi_imx_dma_max_wml_find(struct spi_imx_data *spi_imx,
+-				     struct spi_transfer *transfer)
++				     struct dma_data_package *dma_data,
++				     bool word_delay)
+ {
+-	struct sg_table *rx = &transfer->rx_sg;
+-	struct scatterlist *last_sg = sg_last(rx->sgl, rx->nents);
+-	unsigned int bytes_per_word, i;
++	unsigned int bytes_per_word = word_delay ?
++				      spi_imx_bytes_per_word(spi_imx->bits_per_word) :
++				      BYTES_PER_32BITS_WORD;
++	unsigned int i;
+ 
+-	/* Get the right burst length from the last sg to ensure no tail data */
+-	bytes_per_word = spi_imx_bytes_per_word(transfer->bits_per_word);
+ 	for (i = spi_imx->devtype_data->fifo_size / 2; i > 0; i--) {
+-		if (!(sg_dma_len(last_sg) % (i * bytes_per_word)))
++		if (!dma_data->dma_len % (i * bytes_per_word))
+ 			break;
+ 	}
+ 	/* Use 1 as wml in case no available burst length got */
+@@ -1540,25 +1812,29 @@ static void spi_imx_dma_max_wml_find(struct spi_imx_data *spi_imx,
+ 	spi_imx->wml = i;
+ }
+ 
+-static int spi_imx_dma_configure(struct spi_controller *controller)
++static int spi_imx_dma_configure(struct spi_controller *controller, bool word_delay)
+ {
+ 	int ret;
+ 	enum dma_slave_buswidth buswidth;
+ 	struct dma_slave_config rx = {}, tx = {};
+ 	struct spi_imx_data *spi_imx = spi_controller_get_devdata(controller);
+ 
+-	switch (spi_imx_bytes_per_word(spi_imx->bits_per_word)) {
+-	case 4:
++	if (word_delay) {
++		switch (spi_imx_bytes_per_word(spi_imx->bits_per_word)) {
++		case 4:
++			buswidth = DMA_SLAVE_BUSWIDTH_4_BYTES;
++			break;
++		case 2:
++			buswidth = DMA_SLAVE_BUSWIDTH_2_BYTES;
++			break;
++		case 1:
++			buswidth = DMA_SLAVE_BUSWIDTH_1_BYTE;
++			break;
++		default:
++			return -EINVAL;
++		}
++	} else {
+ 		buswidth = DMA_SLAVE_BUSWIDTH_4_BYTES;
+-		break;
+-	case 2:
+-		buswidth = DMA_SLAVE_BUSWIDTH_2_BYTES;
+-		break;
+-	case 1:
+-		buswidth = DMA_SLAVE_BUSWIDTH_1_BYTE;
+-		break;
+-	default:
+-		return -EINVAL;
+ 	}
+ 
+ 	tx.direction = DMA_MEM_TO_DEV;
+@@ -1584,15 +1860,17 @@ static int spi_imx_dma_configure(struct spi_controller *controller)
+ 	return 0;
+ }
+ 
+-static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
+-				struct spi_transfer *transfer)
++static int spi_imx_dma_package_transfer(struct spi_imx_data *spi_imx,
++					struct dma_data_package *dma_data,
++					struct spi_transfer *transfer,
++					bool word_delay)
+ {
+ 	struct spi_controller *controller = spi_imx->controller;
+ 	int ret;
+ 
+-	spi_imx_dma_max_wml_find(spi_imx, transfer);
++	spi_imx_dma_max_wml_find(spi_imx, dma_data, word_delay);
+ 
+-	ret = spi_imx_dma_configure(controller);
++	ret = spi_imx_dma_configure(controller, word_delay);
+ 	if (ret)
+ 		goto dma_failure_no_start;
+ 
+@@ -1603,10 +1881,17 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
+ 	}
+ 	spi_imx->devtype_data->setup_wml(spi_imx);
+ 
+-	ret = spi_imx_dma_submit(spi_imx, transfer);
++	ret = spi_imx_dma_submit(spi_imx, dma_data, transfer);
+ 	if (ret)
+ 		return ret;
+ 
++	/* Trim the DMA RX buffer and copy the actual data to rx_buf */
++	dma_sync_single_for_cpu(controller->dma_rx->device->dev, dma_data->dma_rx_addr,
++				dma_data->dma_len, DMA_FROM_DEVICE);
++	spi_imx_dma_rx_data_handle(spi_imx, dma_data, transfer->rx_buf + spi_imx->rx_offset,
++				   word_delay);
++	spi_imx->rx_offset += dma_data->data_len;
++
+ 	return 0;
+ /* fallback to pio */
+ dma_failure_no_start:
+@@ -1614,6 +1899,57 @@ static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
+ 	return ret;
+ }
+ 
++static int spi_imx_dma_transfer(struct spi_imx_data *spi_imx,
++				struct spi_transfer *transfer)
++{
++	bool word_delay = transfer->word_delay.value != 0;
++	int ret;
++	int i;
++
++	ret = spi_imx_dma_data_prepare(spi_imx, transfer, word_delay);
++	if (ret < 0) {
++		transfer->error |= SPI_TRANS_FAIL_NO_START;
++		dev_err(spi_imx->dev, "DMA data prepare fail\n");
++		goto fallback_pio;
++	}
++
++	spi_imx->rx_offset = 0;
++
++	/* Each dma_package performs a separate DMA transfer once */
++	for (i = 0; i < spi_imx->dma_package_num; i++) {
++		ret = spi_imx_dma_map(spi_imx, &spi_imx->dma_data[i]);
++		if (ret < 0) {
++			if (i == 0)
++				transfer->error |= SPI_TRANS_FAIL_NO_START;
++			dev_err(spi_imx->dev, "DMA map fail\n");
++			break;
++		}
++
++		/* Update the CTRL register BL field */
++		writel(spi_imx->dma_data[i].cmd_word, spi_imx->base + MX51_ECSPI_CTRL);
++
++		ret = spi_imx_dma_package_transfer(spi_imx, &spi_imx->dma_data[i],
++						   transfer, word_delay);
++
++		/* Whether the dma transmission is successful or not, dma unmap is necessary */
++		spi_imx_dma_unmap(spi_imx, &spi_imx->dma_data[i]);
++
++		if (ret < 0) {
++			dev_dbg(spi_imx->dev, "DMA %d transfer not really finish\n", i);
++			break;
++		}
++	}
++
++	for (int j = 0; j < spi_imx->dma_package_num; j++) {
++		kfree(spi_imx->dma_data[j].dma_tx_buf);
++		kfree(spi_imx->dma_data[j].dma_rx_buf);
++	}
++	kfree(spi_imx->dma_data);
++
++fallback_pio:
++	return ret;
++}
++
+ static int spi_imx_pio_transfer(struct spi_device *spi,
+ 				struct spi_transfer *transfer)
+ {
+@@ -1780,9 +2116,14 @@ static int spi_imx_transfer_one(struct spi_controller *controller,
+ 	 * transfer, the SPI transfer has already been mapped, so we
+ 	 * have to do the DMA transfer here.
+ 	 */
+-	if (spi_imx->usedma)
+-		return spi_imx_dma_transfer(spi_imx, transfer);
+-
++	if (spi_imx->usedma) {
++		ret = spi_imx_dma_transfer(spi_imx, transfer);
++		if (transfer->error & SPI_TRANS_FAIL_NO_START) {
++			spi_imx->usedma = false;
++			return spi_imx_pio_transfer(spi, transfer);
++		}
++		return ret;
++	}
+ 	/* run in polling mode for short transfers */
+ 	if (transfer->len == 1 || (polling_limit_us &&
+ 				   spi_imx_transfer_estimate_time_us(transfer) < polling_limit_us))
 -- 
 2.34.1
 
