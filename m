@@ -1,154 +1,223 @@
-Return-Path: <linux-spi+bounces-11722-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11724-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7669FC9C332
-	for <lists+linux-spi@lfdr.de>; Tue, 02 Dec 2025 17:28:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8C42C9C44D
+	for <lists+linux-spi@lfdr.de>; Tue, 02 Dec 2025 17:43:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 737FF4E417F
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 16:28:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 777433A9B16
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 16:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00ED283FC5;
-	Tue,  2 Dec 2025 16:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YTeaHskc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF0129AB02;
+	Tue,  2 Dec 2025 16:41:46 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6003270557;
-	Tue,  2 Dec 2025 16:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C231299AA9
+	for <linux-spi@vger.kernel.org>; Tue,  2 Dec 2025 16:41:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764692910; cv=none; b=PLYqTcoxGK4850qLhRNp1V/d35n/oiNldGUuFLXn6+UONHLtvNrEY40/DwKTc5gCtefi7NEz1Ya9tI6E88appZbTRu+HWKiRs5JdRvWXT/21yst4qIFsTXGsKjbEZxVoKF0Lp8vVtSxnYBMNBtjusL6y/SEIJ//sFrtpy7bIbvg=
+	t=1764693705; cv=none; b=K0YMjNJ9VKT/YZOVevzxVcuXDzApySan8cGU6twNrizkUIKfkSQMfphGyv1WccJaX1zdbqSbMODtL+sp/oTteb/mZgTcmFYJlR05O7V+SQOL+bcvE5JBEPEsULAKfnZufZ3EqCD+/o41dy3Oqgg18+UH6/vgvNeDI/eJTPM42zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764692910; c=relaxed/simple;
-	bh=bMdsKnyhcJs9VfP6ltjW1PuLp0n8+YA6JBJWKjztIQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ktpky5KOx3jaG3Gff9eswqWVk5YhMhX2McgRYYq9xZXOeTLYXBquRRIicRmzzUPF0traOM9WPbezU/GynmPZ7XFGxQFcg8TqijMUoZLc3/uJiGgfG3NIKaMgNVNMtTcnBc8tHbYLaTOUODsY1D843Qa9+I0NfJfi0p7aQGpeko8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YTeaHskc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF294C4CEF1;
-	Tue,  2 Dec 2025 16:28:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764692910;
-	bh=bMdsKnyhcJs9VfP6ltjW1PuLp0n8+YA6JBJWKjztIQE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YTeaHskcMr7V4e4oRUflCmsQK79rRG0s4+sy/HW0MYk+5wuws6jJk/nX1K4ZNUal8
-	 sX2gRP/K6zrkRdU3qW0AdVk2NCCGwePDaOfXFmQbzNozXcVJ1C6e/cIE3NvDwyn2Fk
-	 PRFF7H7wg/8QGBIi2vWIb2ndLyujNNrfRWyFdpn0l61LgVsTEcabQyE7cX8lS2GaEN
-	 48Gp+JnsKznxNE0pXVF5j+mYwDOcOoBLCIeZvD5y9pTEE2Dhg2jAnDmNAv7R46lW8T
-	 yq73BGj+Naw8v1nyx+EgMFZvdlEuUZV7taJNh5y8ySmV/P7zW2RxXj2MTge1dMZq9m
-	 4lWSxj3PEdzCw==
-Date: Tue, 2 Dec 2025 16:28:25 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>, a-dutta@ti.com,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, srk@ti.com
-Subject: Re: [PATCH] spi: cadence-quadspi: Fix cqspi_probe() error handling
- for runtime pm
-Message-ID: <5f288d65-4209-41cd-8f1a-3690f38da7ef@sirena.org.uk>
-References: <20251119152545.2591651-1-s-vadapalli@ti.com>
- <20251201072844.GA6785@francesco-nb>
- <20251201074320.GA8737@francesco-nb>
- <dfbbd5ce209fac9a556c200748d8c521d0d4f450.camel@ti.com>
+	s=arc-20240116; t=1764693705; c=relaxed/simple;
+	bh=7JWQpNMMWls0pEOEbb/qFxvVCdKg8LNQq2xwgx7Zjik=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=txCar4T7w/DFTb/Mo07E3yD3J//le+pE3nDg6trgprmO8iavqucVnSj7jL0r+cVPPrbx7mVVsDSJowQvp3ZK2RQh2u+sIyzhpiN4WHokmBAXk4ZjJNsGtK9I9WFJSzCBBe764Kq+SrbbG28VHu/ZZ4x5hUobDpPdvQRCJ29u+D4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-88249766055so64822516d6.1
+        for <linux-spi@vger.kernel.org>; Tue, 02 Dec 2025 08:41:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764693703; x=1765298503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=yo/Q77iM2dxCsDJX0wSMsdkdBK/3CM2tnqmsgemQ55M=;
+        b=t+4Qo5uo4Ks19XGI36FvJjfLyN1+VeViswcYncQs6qaZ2XxZEqYzO4cBNLn7R/xNPj
+         rFMTNZRZoTVSDUK5a7+pPDrf0nEL5KPw6cU1Wgk6Kluo5lN2kANHfGrMzTiNQXrHhoO0
+         KcJ/yXgwUdqXOVNXIt9M2VXI7C8rkhS6VArk9Honlhr5BI0qGYlvBY92RfDvsVlPcZ2t
+         6+eIT6XE6ahOXKNNtlUcuYZomMGYWnVgfyIDAXthAN4BAuCfTBUouaL/QDKt1VmDyJ7u
+         27pQjfFKVzeNbrKP1g4uo1T6bxHYtAkOMBBDhLVbSf8leKMcgpFTLUKVgsRHfDHSMWV2
+         T1pw==
+X-Forwarded-Encrypted: i=1; AJvYcCXtgd3GE5PkdoiGL6saQAU5eAytNqOzLvao80TyIDocPnKdMwUJvOnIpwhhdaFdvvGx6NgtxDM8JCc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMLx4/EbsE25BOMjtpppmo0jZOetV9CnL/UdRx21Xd/Gkm1n2z
+	38bft6PXbmzaPSXvRKb5bEaxIoD1r57UbdN+vJf7FEaqFiwOreY0s/XVVuK7o2WA
+X-Gm-Gg: ASbGncuhFqe0uevuxLsyeNEJLwZXxkjeKYRM3ctond8DifPQ+iaImhgOYeqibNrTd/D
+	0Nzan4g0h8NH8Ckw+kjjVC9j9XzYwPduHPt7n4Uw9FFGyPQhSjXGPyNdphQgs7ghtqqCCgecuLz
+	EiYGIUAMmWGFSY2bnPxP6Pi88LyLTH9akCHoDxxJfFNMU1J+mVMuuwXtrqo/Hsd6fYuGMeZoxsk
+	QnDfbxQObyyRKXWsJB8/gug12gp24Lc/UL1u+jJRjj7YC57njZ68Ln2rBZ8bEFPaLjWVpCKlHUt
+	lyLR/eeUWJ6mLXU2o1+xRkCG4wJaLWwBveuwNvfu0itcxR7DF7nbri1UUaMCgexotGQeL9zLuhb
+	cuycnVwPAXqyID4mL8JlXLqUYb24ZaTNEyT4UU3P+5fa2oJFtlsU+ia2wHuMZVItK9DHCQAthPf
+	hfNN9WyYYwJEKyOw+F46PLf7vx7CP7YNiG0D+58Pap3JV3IeuB
+X-Google-Smtp-Source: AGHT+IG0nEzF637yxr5+OA7ch6i/xXaBZ25A10JNyCQOgqnSVdZLyO4yhghbSudUXovCI4MpgUBUBA==
+X-Received: by 2002:a05:6214:cca:b0:880:626a:b129 with SMTP id 6a1803df08f44-8847c4c6cf3mr589811636d6.24.1764693702774;
+        Tue, 02 Dec 2025 08:41:42 -0800 (PST)
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com. [209.85.219.47])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4efd344a188sm100000701cf.33.2025.12.02.08.41.42
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Dec 2025 08:41:42 -0800 (PST)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-880503ab181so59523416d6.2
+        for <linux-spi@vger.kernel.org>; Tue, 02 Dec 2025 08:41:42 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU1RZNimeg/j/D+bPAeThlCiQksJ1idZEYk4os//CA4d7Gec/zZbBE0yCnlQ5EoEJDGnsNDppVbHf8=@vger.kernel.org
+X-Received: by 2002:a05:6102:3048:b0:5db:20ea:2329 with SMTP id
+ ada2fe7eead31-5e1de370617mr15734527137.35.1764693347428; Tue, 02 Dec 2025
+ 08:35:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aG5bUVWmZOfsZcU4"
-Content-Disposition: inline
-In-Reply-To: <dfbbd5ce209fac9a556c200748d8c521d0d4f450.camel@ti.com>
-X-Cookie: Beware the new TTY code!
-
-
---aG5bUVWmZOfsZcU4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+ <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+ <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com> <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+ <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com> <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+ <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com> <20251202102619.5cd971cc@bootlin.com>
+In-Reply-To: <20251202102619.5cd971cc@bootlin.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 2 Dec 2025 17:35:35 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com>
+X-Gm-Features: AWmQ_blh_df1oI4YfJoUHGn7ADOVOwmOm5bT6QJUN9usi3sbU4oWN1R6RdMkuuY
+Message-ID: <CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 01, 2025 at 06:08:07PM +0530, Siddharth Vadapalli wrote:
-> On Mon, 2025-12-01 at 08:43 +0100, Francesco Dolcini wrote:
-> > On Mon, Dec 01, 2025 at 08:28:44AM +0100, Francesco Dolcini wrote:
+Hi Herv=C3=A9,
 
-> > > > The error is due to the second invocation of 'clk_disable_unprepare=
-()' on
-> > > > 'cqspi->clk' in the error handling within 'cqspi_probe()', with the=
- first
-> > > > invocation being within 'cqspi_runtime_suspend()'.
+On Tue, 2 Dec 2025 at 10:26, Herve Codina <herve.codina@bootlin.com> wrote:
+> On Fri, 28 Nov 2025 10:34:57 +0200
+> Kalle Niemi <kaleposti@gmail.com> wrote:
+> > >>>>>> Test system testing drivers for ROHM ICs bisected this commit to=
+ cause
+> > >>>>>> BD71847 drivers probe to not be called.
+> > >>>>> This driver (and overlay support) is in linux-next or something o=
+ut of
+> > >>>>> tree on top of linux-next?
+> > >>>>>
+> > >>>>> Rob
+> > >>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
+> > >>> I don't see any support to apply overlays in that driver.
+> > >> Ah. Sorry for the confusion peeps. I asked Kalle to report this with=
+out
+> > >> proper consideration. 100% my bad.
+> > >>
+> > >> While the bd718x7 drive indeed is mainline (and tested), the actual
+> > >> 'glue-code' doing the overlay is part of the downstream test
+> > >> infrastructure. So yes, this is not a bug in upstream kernel - this
+> > >> falls in the category of an upstream change causing downstream thing=
+s to
+> > >> break. So, feel free to say: "Go fix your code" :)
+> > >>
+> > >> Now that this is sorted, if someone is still interested in helping u=
+s to
+> > >> get our upstream drivers tested - the downstream piece is just takin=
+g
+> > >> the compiled device-tree overlay at runtime (via bin-attribute file)=
+,
+> > >> and applying it using the of_overlay_fdt_apply(). The approach is
+> > >> working for our testing purposes when the device is added to I2C/SPI
+> > >> node which is already enabled. However, in case where we have the I2=
+C
+> > >> disabled, and enable it in the same overlay where we add the new dev=
+ice
+> > >> - then the new device does not get probed.
+> > >>
+> > >> I would be really grateful if someone had a pointer for us.
+> > > Seems to be fw_devlink related. I suppose if you turn it off it works=
+?
+> > > There's info about the dependencies in sysfs or maybe debugfs. I don'=
+t
+> > > remember the details, but that should help to tell you why things
+> > > aren't probing.
+>
+> Rob reverted patches but I plan to continue my work on it.
+> On my side, I need the reverted patches but I fully understand that, on
+> your side, you need a working system.
+>
+> In order to move forward and find a solution for my next iteration, can y=
+ou
+> send your overlay (dtso) used in your working and non working cases?
 
-> > > [    8.648915] cadence-qspi fc40000.spi: No flash device declared
-> > > [    8.675671] cadence-qspi fc40000.spi: failed to setup flash parame=
-ters -19
+Hmm, I must have missed when Rob applied (part of) this series, as I
+do an overlay test (using the out-of-tree configfs) on top of every
+(bi-weekly) renesas-drivers release, and saw no issues during the last
+few months.
 
-> Could you please check if the driver's suspend callback has executed befo=
-re
-> the above? The patch intended to fix the very issue being reported.
-> Therefore, the commit corresponding to the current patch might still
-> trigger the issue. Ideally, reverting the commit for the current patch and
-> the commit under Fixes (f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm
-> runtime earlier to avoid imbalance"))
-> should prevent the issue.
+So I applied this series and tested loading my SPI EEPROM overlay.
+And it indeed breaks, with the culprit being this particular patch.
 
-Given the above log we've failed at cqspi_setup_flash() so we shouldn't
-have got as far as the code you changed for handling direct mode - I
-think the actual issue is likely Anurag's earlier change f1eb4e792bb1
-(spi: spi-cadence-quadspi: Enable pm runtime earlier to avoid imbalance)
-that you mention, it means we've done a pm_runtime_get_noresume()
-previously.  That shouldn't have done a clock enable due to the
-noresume, but the get() being there will confuse pm_runtime_disable()
-and cause it to invoke the suspend callback as Francesco identified.
-This will have been failing previously if controller registration
-failed, but it's now happening in more situations.
+Interestingly, quoting from this patch:
 
-This is all very annoying since runtime PM can be configured off so we
-can't rely on it's callbacks actually happening.  I *think* something
-like the below ought to DTRT (I'd expect it should avoid the reported
-error at least):
+   "While the commit fixed fw_devlink overlay handling for one case, it
+    broke it for another case. So revert it and redo the fix in a separate
+    patch."
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-qu=
-adspi.c
-index af6d050da1c8..0833b6f666d0 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1985,7 +1985,6 @@ static int cqspi_probe(struct platform_device *pdev)
- 		pm_runtime_enable(dev);
- 		pm_runtime_set_autosuspend_delay(dev, CQSPI_AUTOSUSPEND_TIMEOUT);
- 		pm_runtime_use_autosuspend(dev);
--		pm_runtime_get_noresume(dev);
- 	}
-=20
- 	ret =3D cqspi_setup_flash(cqspi);
-@@ -2012,6 +2011,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	}
-=20
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
-+		pm_runtime_get_noresume(dev);
- 		pm_runtime_mark_last_busy(dev);
- 		pm_runtime_put_autosuspend(dev);
- 	}
+Where is the separate patch that redid the fix? I assume it is "[PATCH
+v4 03/29] of: dynamic: Fix overlayed devices not probing because
+of fw_devlink"?  Unfortunately that doesn't fix the issue for me.
 
-Unfortunately none of my testing appears to show the issue.
+Quoting more from this patch:
 
---aG5bUVWmZOfsZcU4
-Content-Type: application/pgp-signature; name="signature.asc"
+   "Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgy=
+o8x6=3D9F9rZ+-KzjOg@mail.gmail.com/"
 
------BEGIN PGP SIGNATURE-----
+Strange that it claims to fix the issue reported there, as the failure
+mode I am seeing is exactly the same as documented in that report?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkvE6kACgkQJNaLcl1U
-h9BD0wf/SeW9/3pIxTUbxozYkm7XeHw06XMSrVru1LRh53CJqmPp/CK3yLWHXDZD
-tBkYtKDcyYERihgoqLGUdk3HfETJDoRsnlScHMXeXIiB9ARKkv4CJZ9vS2BE7qYo
-LB6QvkLLyZ4HYM80g3Ty/S/xMoAZwaLK2k5ZQ8eJvf6XP4oDdl2YY9gzeGjydY3U
-bAeF8w1wUsTeaPMLn5wusn6q8hq+taSyjFChkt7HTMImDl8OePN3hURwpi65xX8S
-GIF5nKlxvnHAwifLa6WKXJ+CoRTTs+ZcZ/nL7Yu9RtRciW3vj9hVn1wv7l54GPUL
-SRgRfILunELe5SLkPZGeJ5GL1gFqjw==
-=K6gR
------END PGP SIGNATURE-----
+Do you know what is wrong? The overlay I am using is referenced in
+the bug report linked above.
 
---aG5bUVWmZOfsZcU4--
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
