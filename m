@@ -1,223 +1,120 @@
-Return-Path: <linux-spi+bounces-11724-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11723-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8C42C9C44D
-	for <lists+linux-spi@lfdr.de>; Tue, 02 Dec 2025 17:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3693BC9C3B6
+	for <lists+linux-spi@lfdr.de>; Tue, 02 Dec 2025 17:37:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 777433A9B16
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 16:42:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BEA03A585A
+	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 16:37:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF0129AB02;
-	Tue,  2 Dec 2025 16:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A3F29898B;
+	Tue,  2 Dec 2025 16:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dAoFrGeV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C231299AA9
-	for <linux-spi@vger.kernel.org>; Tue,  2 Dec 2025 16:41:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D76EA293C4E;
+	Tue,  2 Dec 2025 16:36:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764693705; cv=none; b=K0YMjNJ9VKT/YZOVevzxVcuXDzApySan8cGU6twNrizkUIKfkSQMfphGyv1WccJaX1zdbqSbMODtL+sp/oTteb/mZgTcmFYJlR05O7V+SQOL+bcvE5JBEPEsULAKfnZufZ3EqCD+/o41dy3Oqgg18+UH6/vgvNeDI/eJTPM42zY=
+	t=1764693413; cv=none; b=Qenrw5+ivwwK0PpEgMylUyMzJc8pV4/9/GVFEaL5Mmu/gdOQ+LXFf6FIlZzx0W9TGyTUR97wOoB828uVxlEIghuCP48b4TmegYuYEwkvKF/fKrSqJvRV8ENPpnOBAiGC8r5QRTVyf8e2LiorNDpWjh97CIlHNS9sXKoezASxjUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764693705; c=relaxed/simple;
-	bh=7JWQpNMMWls0pEOEbb/qFxvVCdKg8LNQq2xwgx7Zjik=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=txCar4T7w/DFTb/Mo07E3yD3J//le+pE3nDg6trgprmO8iavqucVnSj7jL0r+cVPPrbx7mVVsDSJowQvp3ZK2RQh2u+sIyzhpiN4WHokmBAXk4ZjJNsGtK9I9WFJSzCBBe764Kq+SrbbG28VHu/ZZ4x5hUobDpPdvQRCJ29u+D4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-88249766055so64822516d6.1
-        for <linux-spi@vger.kernel.org>; Tue, 02 Dec 2025 08:41:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764693703; x=1765298503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=yo/Q77iM2dxCsDJX0wSMsdkdBK/3CM2tnqmsgemQ55M=;
-        b=t+4Qo5uo4Ks19XGI36FvJjfLyN1+VeViswcYncQs6qaZ2XxZEqYzO4cBNLn7R/xNPj
-         rFMTNZRZoTVSDUK5a7+pPDrf0nEL5KPw6cU1Wgk6Kluo5lN2kANHfGrMzTiNQXrHhoO0
-         KcJ/yXgwUdqXOVNXIt9M2VXI7C8rkhS6VArk9Honlhr5BI0qGYlvBY92RfDvsVlPcZ2t
-         6+eIT6XE6ahOXKNNtlUcuYZomMGYWnVgfyIDAXthAN4BAuCfTBUouaL/QDKt1VmDyJ7u
-         27pQjfFKVzeNbrKP1g4uo1T6bxHYtAkOMBBDhLVbSf8leKMcgpFTLUKVgsRHfDHSMWV2
-         T1pw==
-X-Forwarded-Encrypted: i=1; AJvYcCXtgd3GE5PkdoiGL6saQAU5eAytNqOzLvao80TyIDocPnKdMwUJvOnIpwhhdaFdvvGx6NgtxDM8JCc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMLx4/EbsE25BOMjtpppmo0jZOetV9CnL/UdRx21Xd/Gkm1n2z
-	38bft6PXbmzaPSXvRKb5bEaxIoD1r57UbdN+vJf7FEaqFiwOreY0s/XVVuK7o2WA
-X-Gm-Gg: ASbGncuhFqe0uevuxLsyeNEJLwZXxkjeKYRM3ctond8DifPQ+iaImhgOYeqibNrTd/D
-	0Nzan4g0h8NH8Ckw+kjjVC9j9XzYwPduHPt7n4Uw9FFGyPQhSjXGPyNdphQgs7ghtqqCCgecuLz
-	EiYGIUAMmWGFSY2bnPxP6Pi88LyLTH9akCHoDxxJfFNMU1J+mVMuuwXtrqo/Hsd6fYuGMeZoxsk
-	QnDfbxQObyyRKXWsJB8/gug12gp24Lc/UL1u+jJRjj7YC57njZ68Ln2rBZ8bEFPaLjWVpCKlHUt
-	lyLR/eeUWJ6mLXU2o1+xRkCG4wJaLWwBveuwNvfu0itcxR7DF7nbri1UUaMCgexotGQeL9zLuhb
-	cuycnVwPAXqyID4mL8JlXLqUYb24ZaTNEyT4UU3P+5fa2oJFtlsU+ia2wHuMZVItK9DHCQAthPf
-	hfNN9WyYYwJEKyOw+F46PLf7vx7CP7YNiG0D+58Pap3JV3IeuB
-X-Google-Smtp-Source: AGHT+IG0nEzF637yxr5+OA7ch6i/xXaBZ25A10JNyCQOgqnSVdZLyO4yhghbSudUXovCI4MpgUBUBA==
-X-Received: by 2002:a05:6214:cca:b0:880:626a:b129 with SMTP id 6a1803df08f44-8847c4c6cf3mr589811636d6.24.1764693702774;
-        Tue, 02 Dec 2025 08:41:42 -0800 (PST)
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com. [209.85.219.47])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4efd344a188sm100000701cf.33.2025.12.02.08.41.42
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Dec 2025 08:41:42 -0800 (PST)
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-880503ab181so59523416d6.2
-        for <linux-spi@vger.kernel.org>; Tue, 02 Dec 2025 08:41:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU1RZNimeg/j/D+bPAeThlCiQksJ1idZEYk4os//CA4d7Gec/zZbBE0yCnlQ5EoEJDGnsNDppVbHf8=@vger.kernel.org
-X-Received: by 2002:a05:6102:3048:b0:5db:20ea:2329 with SMTP id
- ada2fe7eead31-5e1de370617mr15734527137.35.1764693347428; Tue, 02 Dec 2025
- 08:35:47 -0800 (PST)
+	s=arc-20240116; t=1764693413; c=relaxed/simple;
+	bh=83GFMtXEDYJO/Zm4n1Zxl4KGegW2MOstk7NxnWv3J1I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t/HMEerR0j3AeZTE9nF/o7nqe3/EaGzLHSKY2aSO8ttoCvHC1g2jfAJi+t/3O6tRRR86JCMI7pTZmV9LiJxt5zivB077YD2sLRoT6/ygNq6qVF8FF1LtZ7eyoBT6pLc+09Xm4atqIKeXLc4eQjlKz08SVoJhIajQ9TI+zWftBTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dAoFrGeV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0D1BC116B1;
+	Tue,  2 Dec 2025 16:36:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764693412;
+	bh=83GFMtXEDYJO/Zm4n1Zxl4KGegW2MOstk7NxnWv3J1I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dAoFrGeVtYJbHrr+45DEpeJsjpFtcRh3hpTT8UcGAld18NrWGF/hf8Xu2/mZY6RgJ
+	 LgSBATGoq+e4307aEGN6nI2PWs3SLKf++NKSTjbHHZPVW6PtE/0ipYCaNkMG605+Fm
+	 VP/mxmYMH6MfbtRtVWHeob/8UOEdvK7eo4hVBAtGkw6wfa46U4RZeX0vkdfa0B4otf
+	 6mxpfxST+FSEOcjO56Ei2tX9ox0Ru+A6ApIvvJqb6OACPOp22SYAd9AAAz/v7gVdR1
+	 ifGjLPEkp2HIgzqrm0ygv3Ldgs1cwwmLRmgVNsdewWYwNW5NmsTDfq/ILRxDdzJe5d
+	 Ham+e9XH3lxoA==
+Date: Tue, 2 Dec 2025 16:36:47 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: David Lechner <dlechner@baylibre.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 4/7] spi: axi-spi-engine: support
+ SPI_MULTI_LANE_MODE_STRIPE
+Message-ID: <eb36242b-ac82-412c-b14b-648d541dcec1@sirena.org.uk>
+References: <20251201-spi-add-multi-bus-support-v3-0-34e05791de83@baylibre.com>
+ <20251201-spi-add-multi-bus-support-v3-4-34e05791de83@baylibre.com>
+ <aS79ex5Konr_EeMA@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
- <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com> <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com> <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
- <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com> <20251202102619.5cd971cc@bootlin.com>
-In-Reply-To: <20251202102619.5cd971cc@bootlin.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 2 Dec 2025 17:35:35 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com>
-X-Gm-Features: AWmQ_blh_df1oI4YfJoUHGn7ADOVOwmOm5bT6QJUN9usi3sbU4oWN1R6RdMkuuY
-Message-ID: <CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
-To: Herve Codina <herve.codina@bootlin.com>
-Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
-	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
-	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
-	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
-	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="FPtsYwuTnMFr+BO8"
+Content-Disposition: inline
+In-Reply-To: <aS79ex5Konr_EeMA@smile.fi.intel.com>
+X-Cookie: Beware the new TTY code!
+
+
+--FPtsYwuTnMFr+BO8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Herv=C3=A9,
+On Tue, Dec 02, 2025 at 04:53:47PM +0200, Andy Shevchenko wrote:
+> On Mon, Dec 01, 2025 at 08:20:42PM -0600, David Lechner wrote:
+> > Add support for SPI_MULTI_LANE_MODE_STRIPE to the AXI SPI engine driver.
 
-On Tue, 2 Dec 2025 at 10:26, Herve Codina <herve.codina@bootlin.com> wrote:
-> On Fri, 28 Nov 2025 10:34:57 +0200
-> Kalle Niemi <kaleposti@gmail.com> wrote:
-> > >>>>>> Test system testing drivers for ROHM ICs bisected this commit to=
- cause
-> > >>>>>> BD71847 drivers probe to not be called.
-> > >>>>> This driver (and overlay support) is in linux-next or something o=
-ut of
-> > >>>>> tree on top of linux-next?
-> > >>>>>
-> > >>>>> Rob
-> > >>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
-> > >>> I don't see any support to apply overlays in that driver.
-> > >> Ah. Sorry for the confusion peeps. I asked Kalle to report this with=
-out
-> > >> proper consideration. 100% my bad.
-> > >>
-> > >> While the bd718x7 drive indeed is mainline (and tested), the actual
-> > >> 'glue-code' doing the overlay is part of the downstream test
-> > >> infrastructure. So yes, this is not a bug in upstream kernel - this
-> > >> falls in the category of an upstream change causing downstream thing=
-s to
-> > >> break. So, feel free to say: "Go fix your code" :)
-> > >>
-> > >> Now that this is sorted, if someone is still interested in helping u=
-s to
-> > >> get our upstream drivers tested - the downstream piece is just takin=
-g
-> > >> the compiled device-tree overlay at runtime (via bin-attribute file)=
-,
-> > >> and applying it using the of_overlay_fdt_apply(). The approach is
-> > >> working for our testing purposes when the device is added to I2C/SPI
-> > >> node which is already enabled. However, in case where we have the I2=
-C
-> > >> disabled, and enable it in the same overlay where we add the new dev=
-ice
-> > >> - then the new device does not get probed.
-> > >>
-> > >> I would be really grateful if someone had a pointer for us.
-> > > Seems to be fw_devlink related. I suppose if you turn it off it works=
-?
-> > > There's info about the dependencies in sysfs or maybe debugfs. I don'=
-t
-> > > remember the details, but that should help to tell you why things
-> > > aren't probing.
->
-> Rob reverted patches but I plan to continue my work on it.
-> On my side, I need the reverted patches but I fully understand that, on
-> your side, you need a working system.
->
-> In order to move forward and find a solution for my next iteration, can y=
-ou
-> send your overlay (dtso) used in your working and non working cases?
+> > +static u8 spi_engine_all_lane_flags(struct spi_device *spi)
+> > +{
+> > +	u8 flags =3D 0;
 
-Hmm, I must have missed when Rob applied (part of) this series, as I
-do an overlay test (using the out-of-tree configfs) on top of every
-(bi-weekly) renesas-drivers release, and saw no issues during the last
-few months.
+> > +	int i;
 
-So I applied this series and tested loading my SPI EEPROM overlay.
-And it indeed breaks, with the culprit being this particular patch.
+> Why signed?
+>=20
+> > +	for (i =3D 0; i < spi->num_data_lanes; i++)
+> > +		flags |=3D BIT(spi->data_lanes[i]);
+> > +
+> > +	return flags;
 
-Interestingly, quoting from this patch:
+Variables called i used for iteration are typically declared signed even
+if they never cover negative values; IIRC there used to be some
+compiler interaction reasons to do so although I expect those aren't so
+relevant any more.  Using a signed type here is perfectly normal.
 
-   "While the commit fixed fw_devlink overlay handling for one case, it
-    broke it for another case. So revert it and redo the fix in a separate
-    patch."
+--FPtsYwuTnMFr+BO8
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Where is the separate patch that redid the fix? I assume it is "[PATCH
-v4 03/29] of: dynamic: Fix overlayed devices not probing because
-of fw_devlink"?  Unfortunately that doesn't fix the issue for me.
+-----BEGIN PGP SIGNATURE-----
 
-Quoting more from this patch:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkvFZ4ACgkQJNaLcl1U
+h9CGMAf/Z9tgkpoIquZVmlc/mWB7nE71/dWFqZPhVZukwXHsaH6elH+9y4X02z7r
+i8YUfkohYtoIB8wVJwb2B1zgWGV2eHz408B1ukimCf1mw2DFiBgig8E9XmWbIOIj
+RZqc3+I/6YLq4C4ElD/XRDiv5irAiErRKkJdCH7Ffl8eFzUx3Lb2TZHG2RFY7N04
+GQKeByyB2+99v7Xmq+tUyZBR3v6fG7E6ajqkvM488VUx3Bbx75OXWmMvCSZBeiyZ
+vnenKsxUD+Q8BBGMfA/iuAenIQsRjJRVgxY8dTegmOWUkHgmujipLk2y6ePGnqY3
+mxAz2/OS4jfcQl+YEJeksBq44m/HKw==
+=DHFJ
+-----END PGP SIGNATURE-----
 
-   "Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgy=
-o8x6=3D9F9rZ+-KzjOg@mail.gmail.com/"
-
-Strange that it claims to fix the issue reported there, as the failure
-mode I am seeing is exactly the same as documented in that report?
-
-Do you know what is wrong? The overlay I am using is referenced in
-the bug report linked above.
-
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+--FPtsYwuTnMFr+BO8--
 
