@@ -1,139 +1,125 @@
-Return-Path: <linux-spi+bounces-11751-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11752-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 330BDC9F3EE
-	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 15:12:25 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A4EA3A35E8
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 14:12:19 +0000 (UTC)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F233CCA1366
+	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 20:01:13 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by sea.lore.kernel.org (Postfix) with ESMTP id E28623140B4A
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 18:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20DE2D63F8;
-	Wed,  3 Dec 2025 14:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79898309DC0;
+	Wed,  3 Dec 2025 18:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sqed4hwi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CV7aHWaY"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6B825FA10;
-	Wed,  3 Dec 2025 14:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921853064A0
+	for <linux-spi@vger.kernel.org>; Wed,  3 Dec 2025 18:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764771136; cv=none; b=laN6PCUAzE1Qysb2JlqKoylislQQXARee13PD3YvJtIVoQNWgnlsAgY/Rq1dvnq/I+envpVxOmCjyfYF4h/xxEI75xpT2VMMjhacoOQQErGCaQzLLThU2/nIBCxnjP35XCha1LVxlnz6+QDwDhSITLkEdNmF6Ogoqs3pkcYXIg8=
+	t=1764786002; cv=none; b=PaVOq5dweui5QsZuFaeLUEBXG5P8b/l3CPg28c10k/jZyIQdGAI/y9BBGAK+Qv7V7Tw7rLU5NzUNB+2C/jkpXotv4lROY+B1jQ3qZEXRxRXGLYDdWAoA8NcQgPFyqItrMRaJxuoGpsYYkalAaFrUeC1JGZRmSHBu5ZBZFm08LrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764771136; c=relaxed/simple;
-	bh=smbaWDGg/XgShh3qJ1kJgBiM9HCBn2o9QjOA/nMQgHA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=ea0UmrsRIoQYEON07MJi0cbCuMDimLlOLwejDmmm+HKZffxXN8ewWkl/5AGs5KttjLJEGzeYaA/vpI75scoM15mtpmkJSHpNlOfYln8NmfFK3gqKO08D3qEXlmcsny2b0u2H1k2vOmDl31udVEUjYUOJItaa+Orl+vI2HOipqXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sqed4hwi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0173C4CEF5;
-	Wed,  3 Dec 2025 14:12:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764771136;
-	bh=smbaWDGg/XgShh3qJ1kJgBiM9HCBn2o9QjOA/nMQgHA=;
-	h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
-	b=sqed4hwiCoFNaVTddXS0Qs7ceF/63n7aHJob0t6Y95d271Z+o6SF8Ttg/KZ02HLts
-	 SiEnV9cgctW2gz+IGkWqoLx6cp4XDjCBSb0b6YB+7drw3s/+7UGYYQxVnaPjWoMrAI
-	 ohZOQSzJ6pIixCgAD3YHjsXj1XSv4tUgJNoFd52MiuN4AVM3z6RuiSVy66iPZ5/efa
-	 VmRgAu0hG6pyWOyYNSC2lvn9edlrvyGkDUDpYXH36QS1meks8SZ+vuuCIe+CL2Pyr1
-	 4mhgIanOKcPJGHjhEbvbQsxa/8aDtx8XMrFkLU4CkGeD+Wsk2AzaOjI52YyqL/7SvU
-	 ZwHNED+xh2rCg==
+	s=arc-20240116; t=1764786002; c=relaxed/simple;
+	bh=H8AwiHRnq/MCnVsoklQdec+4YNyo2HGWFkIhf2lY4gM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HFQCGtCoYU+BfDYVGsLVwhcQChk2Sb3bXZjhPfhoM44oXdSkXlz1y/222xJD0resBKKgldOEX2Hv3GHNNwz7O6HURC5zVHjnbbs8vdE8z+YkdtYM4rsXM6YGUJJTiatdEJ5Ts9OGvESQUaP56ixkxcHsx4piNqVGrDg0Kd+whSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CV7aHWaY; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47118259fd8so602875e9.3
+        for <linux-spi@vger.kernel.org>; Wed, 03 Dec 2025 10:20:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764785999; x=1765390799; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v9ZHiU1o0pJELuts86Z685yYz9R3gCIIvwtPmT4YfOM=;
+        b=CV7aHWaYoUutndKZ6ZKahT/7buLw5+eS5p8gaDQTvzfbK9uewq+dp1vsnCbPqAVXov
+         BvffHkLXZJqzqPPbLPZ3Sx8E4gZVSdPKBtVn6jpss32F1xMyN2Hv5ZiFlsB1XNIJb/Op
+         UMjgsc1MT7Y5fm4sOKTFnSp8qA26TsDGXGT3xj1umJflgVVQ+k9xhLtzAnqegXZNfY6i
+         OXEnku6uch+gAjiIyVBjwfTF98VYcWGKF6V90wNXEtg/1ZXgtH3KFVFy9LmIXTpKb4u0
+         UuNjOpDBeRbjA5ZRCIQih9Hepi1XnFxnl9Mv71iaUcOe5p6g05Y+xfimrt+vea9lIXhI
+         hl7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764785999; x=1765390799;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v9ZHiU1o0pJELuts86Z685yYz9R3gCIIvwtPmT4YfOM=;
+        b=JOfcoUbUGJgAv3OiaV5I6K03shsvHkXT70hV8DnGuiXImC7fhJeZ12nystB9RuUld0
+         fv77FMRr1MGmvyuJVOWjESZe4YUkbzp0XefVJY7DDxmTte6G5xiGs9Fha2algG0yUVJB
+         mFCpWAlMC7ghD4yRmwgH+cD3fg3Hq+H6ymAg4rEEtgvZtb9q4ZbnPKRC1QgVgmVPNg7M
+         kDIaqgiis7sjrvKx2ZBM43UUzZ2YTnnJNcDp0OXNqcqaqIvUTBAJEHyehkv5C3Bm9I1B
+         ovetfQzGdwa6e5CRvAJ7Q0lBplCxl1/2iHg1ne+YVVJUpF7PzQ2cz8/Bat44JhIVFj0U
+         RZqQ==
+X-Gm-Message-State: AOJu0YyokOdfDlPBmFj3L0sKkOzhCDzATU7EJEMRLCy8eONYjXaJK7jb
+	dDwY0g/wjjmLJJWNP+tGd36l4+LRgPK1+xzMF9Q9kuByL5PsDFx8NoyG
+X-Gm-Gg: ASbGncsH1McyZHrVI1JodZoQNZOszEgZiOSeMbRGbAPQLMUNUUN0Wt9eDGA1gzoGPQT
+	E4DTpVu5u4jDAQr44hrTySADSSQkCLLMEtbWxkwwiNNzp/7umXneFwlq8Y6+TOtyyciIWpfQvVx
+	W/LIVExMxRLe3RDN8tlb7KgSzJ9lsNT2lbQyS83GHlWM9bXl0dyBwSINypnzzXyAyucx0pbA8wN
+	7jDWnNf0atgkbT/SUjwUgzCQ+4N3Y1j1zhQwQBdroH65Bs7ks3Ys0nhl4AOB+lVwpIHf1jnjLis
+	AftAP++HV62aO82T92o+RyRkZWdzJU7RY1sQq8RaogMwQxlE3p5QdwIbLkEr1DIru27S07el2ZV
+	gHDg8ygIhLfTOOmUzTpengI529F8sIKGFBosZw6tvp0/Jvc+utahvkuIP+6CNxmOE1UHCl2m/Je
+	YR8h4CdxnLumK2aIEqxx+n17rq9WIorQ8/xfB5h4bEyE010+WIoDDy9Q==
+X-Google-Smtp-Source: AGHT+IHZKgnW9x4VKIYpwKAtdK+00D4dW5+LduzrrHUqeHH4B0Fqr8ROUycf8i6Wv6Rqr/yc41RSiQ==
+X-Received: by 2002:a05:600c:1d0c:b0:477:9c73:268b with SMTP id 5b1f17b1804b1-4792f39cc97mr171025e9.33.1764785998691;
+        Wed, 03 Dec 2025 10:19:58 -0800 (PST)
+Received: from akif10xe.. ([2400:adc5:14f:4100:f44c:7909:c68a:ff47])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4792a7975c8sm68766565e9.1.2025.12.03.10.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 10:19:58 -0800 (PST)
+From: Akif Ejaz <akifejaz40@gmail.com>
+To: broonie@kernel.org
+Cc: linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	alitariq45892@gmail.com,
+	Akif Ejaz <akifejaz40@gmail.com>
+Subject: [PATCH] spi: cadence-qspi: Remove redundant pm_runtime_mark_last_busy call
+Date: Wed,  3 Dec 2025 23:19:21 +0500
+Message-Id: <20251203181921.97171-1-akifejaz40@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed;
- boundary=6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54;
- micalg=pgp-sha384; protocol="application/pgp-signature"
-Date: Wed, 03 Dec 2025 15:12:11 +0100
-Message-Id: <DEON5LMMZLWG.21BQCPB0YE904@kernel.org>
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-Cc: "Santhosh Kumar K" <s-k6@ti.com>, "Pratyush Yadav"
- <pratyush@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
- <broonie@kernel.org>, <tudor.ambarus@linaro.org>, <p-mantena@ti.com>,
- <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <a-dutta@ti.com>, <u-kumar1@ti.com>,
- <praneeth@ti.com>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Miquel Raynal" <miquel.raynal@bootlin.com>
-X-Mailer: aerc 0.20.0
-References: <20250811193219.731851-1-s-k6@ti.com>
- <20250811193219.731851-2-s-k6@ti.com> <87seguemzu.fsf@bootlin.com>
- <cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com>
- <mafs0ikf74fja.fsf@kernel.org>
- <fe103265-7a68-41b8-b168-15a5e19abb3f@ti.com>
- <DEOH4AUI33SQ.DGKJ4W258658@kernel.org> <87jyz3ao8b.fsf@bootlin.com>
-In-Reply-To: <87jyz3ao8b.fsf@bootlin.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
---6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
+The pm_runtime_mark_last_busy() call is redundant in probe function
+as pm_runtime_put_autosuspend() already calls pm_runtime_mark_last_busy()
+internally to update the last access time of the device before queuing
+autosuspend.
 
-On Wed Dec 3, 2025 at 10:50 AM CET, Miquel Raynal wrote:
->
->>>> I think we should start with the requirement to have the pattern flash=
-ed
->>>> already and figure out how SPI NOR or SPI NAND can discover that
->>>> (perhaps via NVMEM?).
->>
->> But we should also keep in mind that certain flashes might return
->> tuning data during the dummy cycles. I.e. the PHY might probably be
->> tuned on each read and there is no need for any pre-programmed
->> pattern.
->>
->> I'm not saying it should be implemented, but the current
->> implementation should be that flexible that it will be easy to add
->> that later.
->
-> Conceptually, yes, but in practice, I know no controller capable of
-> using just a few cycles every transfer to calibrate themselves
-> automatically and reaching such an optimized speed state as the cadence
-> controller is capable of ATM.
+Remove the pm_runtime_mark_last_busy() call from the probe function.
 
-Then have a look at the flexspi controller. I.e. look at the LS1028A
-reference manual "18.5.15.1 Data Learning with Flash providing
-preamble bit".  The sequence is a follows:
+Tested on StarFive VisionFive 2 v1.2A board.
 
-<CMD> <ADDR> <MODE> <DUMMY> <LEARN> <READ>
+Fixes: e1f2e77624db ("spi: cadence-qspi: Fix runtime PM imbalance in probe")
 
-There's an example with the learning pattern as short as 8 bit, or
-- I guess - 8 clock cycles.
+Signed-off-by: Akif Ejaz <akifejaz40@gmail.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-> Despite the end result being close, I would still consider this other
-> way to optimize the I/Os somewhat orthogonal. If someone has some
-> knowledge to share about the training patterns sent during the dummy
-> cycles, I am all ears though.
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 638edca3805a..bf0677949ba8 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -2011,10 +2011,8 @@ static int cqspi_probe(struct platform_device *pdev)
+ 		goto probe_setup_failed;
+ 	}
+ 
+-	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
+-		pm_runtime_mark_last_busy(dev);
++	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM)))
+ 		pm_runtime_put_autosuspend(dev);
+-	}
+ 
+ 	return 0;
+ probe_setup_failed:
+-- 
+2.34.1
 
-There's also a short chapter about the training. Basically, it will
-just compare the read bits with a predefined value (which is max
-32 bit long) of 16 different clock phases. Which one is chosen is
-not answered though (ideally it should be the one at the center of
-all matching clock phases).
-
-Now how good that tuning actually is, I don't know. But the
-procedure sounds sane. I'm also not sure whether this (any?) tuning
-will account for different I/O trace lengths of if it is assumed
-that they have to be trace length matched for multi IO flashes.
-
--michael
-
---6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCaTBFPBIcbXdhbGxlQGtl
-cm5lbC5vcmcACgkQEic87j4CH/gFxAGA345hIX5hVf+9gNV8VQGZ/W8e18oDeiPO
-ouutCQKJYiK9yVJt7BxAwxMeRd06U7AmAYDZ6LvqZBAFmTXZ0Laz9hafCPqdLrsF
-bGpFhMoP+zwdx97ipbv3m1PmbCS/nvLEEbQ=
-=0tUN
------END PGP SIGNATURE-----
-
---6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54--
 
