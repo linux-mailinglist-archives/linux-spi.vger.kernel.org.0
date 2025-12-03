@@ -1,137 +1,169 @@
-Return-Path: <linux-spi+bounces-11732-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11733-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E386CC9D4DE
-	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 00:13:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C155C9E02A
+	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 08:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 21C544E59EE
-	for <lists+linux-spi@lfdr.de>; Tue,  2 Dec 2025 23:10:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79B713AC3BC
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 07:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7503F2FB0AE;
-	Tue,  2 Dec 2025 23:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE34429AAEA;
+	Wed,  3 Dec 2025 07:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMbVQzm7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FiMwlDkU"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 459D02F1FFE;
-	Tue,  2 Dec 2025 23:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE7A2550D7;
+	Wed,  3 Dec 2025 07:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764716713; cv=none; b=JvD3OKnlYBT8zUEXiEyxs6oS9oNOy4CspVhuOSMrcIFbaaixX6T7pAR7+QRQZLTsufkuyxikyUkyDQkgdnVxj0e7mwD3Od2C0N60YsW6HZWTd1VgmK3ZRrZ+XEgvV5XyqgnF8fXIRVS0lVujZk1k44mOtYBy24JWcrjJeNti+w8=
+	t=1764745225; cv=none; b=CMktSyqAuR7l63D3kqUHepCCvx9sXsfmKQsurqG8SiwD5zjPLAq/zeHBREJaQI9SL3BX9vYeTqP1TLhABUBbokoeCu+LA1SOQpLauhossqVhMITUqtN4WlClnMUfDxzM3Mkf/jvbF1XQKfOghtC7TUliKcvoUMZyzAnUCmLnUsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764716713; c=relaxed/simple;
-	bh=sXGJFPecuGDhj7hiVvBRtRIF2Bg/VeaQrC0i27OaD68=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=t1hFJqW/YEMS9zLWFugSqmhirZRfG/ekGFa8mnV4nUmCpDl31T7Kf4rdFJEwVOdEF//2GQxDBQUR47iCkotbeUqD2DknHbDtSSW2bKzzpYXgbq+/ts3v6u0PHi9mnikVzGBg1xrACiEeL8GFusCYWj720P3aSmBCnzXS2qw5xfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMbVQzm7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF45C4CEF1;
-	Tue,  2 Dec 2025 23:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764716712;
-	bh=sXGJFPecuGDhj7hiVvBRtRIF2Bg/VeaQrC0i27OaD68=;
-	h=From:Date:Subject:To:Cc:From;
-	b=dMbVQzm7l9kksjqSAJ34pE7HbYodq5ONOFzmyrhBquwDx2xz0ZsVBGuAGcQuJqOio
-	 NaSkVMGRTOZ+K0ajk/9HyUpHsRXk6GUYDUInIbCnIaIVNBu8y+87x2jX1rzoL6VmNp
-	 YuzdJrHJz+F6rpD8EDFj25k49jgq0PGkVV+cYuoDtinFjcqUqaubVjOrVXlIYjuho1
-	 t1aLg9DlAaBdhBM7rzya79HJefpapXCmsXSbiueESrBq8JhNJCOsXuOhgHZEbg6TQq
-	 fJaqzRmrC1wQBxgFiHGPmkfp5f/EBhUiX4UyFaXbNfj5QzreSXgPDZNT2v2Lb8CnBK
-	 VktIE/E01xWXw==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 02 Dec 2025 22:53:44 +0000
-Subject: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
- runtime PM
+	s=arc-20240116; t=1764745225; c=relaxed/simple;
+	bh=BbpnT+nHAKfc3yROfFOj29+WeIOEVrl1j2gKJu3ZWdA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QMvf4mIb6+8BryWuwj0Os7IDHnPw17PBOAoI5PXqOqNID13/ivpWH55mOvIr843U2WQSS9cI9D01HL8Qk9QBIQfm2sLcE3rDwTUaw9yCi+atJhLK0+6tCl81ZTVATmwbHDyCqtapoZAcsBBSRVU60t6Au3P0kWyY4kHYznXXsbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FiMwlDkU; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764745224; x=1796281224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BbpnT+nHAKfc3yROfFOj29+WeIOEVrl1j2gKJu3ZWdA=;
+  b=FiMwlDkUwhkBoQt34Zabt4xvJYpI10lgZfipJ6xLAEqsVZtFD95f0Jae
+   d4uH8fpdNlIgq0+0nN8dk920Il/rUspmCQfV6T3aHC79iln7lSg7pvTbS
+   blEAlogItBdm894ZhQjNbYn+2MC5rfq/SdYs0imjSQK82y2tNJfMTDkEs
+   VfH34gmT2yCMV1fociq9MSJcNsJzIiMrQ4GmvTGxaHAPhU6sOpwar1q+T
+   CNZwdwkXnofnStHOO9fPo3EjuB1p+ad6n9huBLsSUOMJa1E6IXaFZZfir
+   5Jm5aLkZZMATeAFpqk4PS72qc9nrKXbKIbfP+GcX/LbYnV4sFbKanJqD6
+   Q==;
+X-CSE-ConnectionGUID: NN0SNnsHRKuSnbuAAB44Ow==
+X-CSE-MsgGUID: Q7UkRWLbRV+WIcBlglvU1g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="54280047"
+X-IronPort-AV: E=Sophos;i="6.20,245,1758610800"; 
+   d="scan'208";a="54280047"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 23:00:23 -0800
+X-CSE-ConnectionGUID: vttOtOV4SHi8K8SNjtneyg==
+X-CSE-MsgGUID: 8k+m/DnYQPiasvfEOKvb7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,245,1758610800"; 
+   d="scan'208";a="225271918"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 02 Dec 2025 23:00:20 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vQgqX-00000000AgD-22Pq;
+	Wed, 03 Dec 2025 07:00:17 +0000
+Date: Wed, 3 Dec 2025 14:59:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Carlos Song <carlos.song@nxp.com>, frank.li@nxp.com, mkl@pengutronix.de,
+	broonie@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, kees@kernel.org,
+	gustavoars@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
+	imx@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-hardening@vger.kernel.org, Carlos Song <carlos.song@nxp.com>
+Subject: Re: [PATCH v2 5/6] spi: imx: support dynamic burst length for ECSPI
+ DMA mode
+Message-ID: <202512031425.cmBJXuXy-lkp@intel.com>
+References: <20251202075503.2448339-6-carlos.song@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAPdtL2kC/x3NwQqDMBAE0F+RPXdBRQ34K6WHNY52oYlpoiKI/
- 97Yy8BjYOakhKhI1BcnReyadPEZ1aMg+xY/g3XMprqs2yoHp6BsZYS34O+NuPlVHTg4VjfIR+6
- ma41pSjsZCChvhYhJj//P83VdPzbNt4t3AAAA
-X-Change-ID: 20251202-spi-cadence-qspi-runtime-pm-imbalance-657740cf7eae
-To: Francesco Dolcini <francesco@dolcini.it>, 
- Siddharth Vadapalli <s-vadapalli@ti.com>, Anurag Dutta <a-dutta@ti.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>, stable@vger.kernel.org
-X-Mailer: b4 0.15-dev-88d78
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2491; i=broonie@kernel.org;
- h=from:subject:message-id; bh=sXGJFPecuGDhj7hiVvBRtRIF2Bg/VeaQrC0i27OaD68=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpL3Cm5CJl5jjvUJAHekdzbU2IMj4IyIBN2H6yF
- sM/y5HaGauJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaS9wpgAKCRAk1otyXVSH
- 0KpIB/48WNjTLaX30mMnoGCj9QB/FKrv5PsRWt9Isqf9IEM5NKA5C+cL3l4VWc7z1UD12qARfZL
- Jh0GkP9o+69xpxpEj2HJd41/VF9edA/9xx+uO1ycW4soLkA1gz9aFWDc6AopMCaZyoC4F66dU7X
- J+AOC2PwTgSAn2SR02n7Bns0PM/PdOVDU9oN+iIt146SeQpOHQkRhdgMeceToMyBuz8y7/9eqyX
- f5MRNt9zpDfUZiRJSpWvlHMml+YBD2rxU0xiGIgZKYirqD7H1R+WVEZkqruqvuanDr7qaqVqdlT
- YiTzCgJnFzdJTK7vIMxJ0ZnwqSgaNCUctobstcWo+BRCdn5C
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251202075503.2448339-6-carlos.song@nxp.com>
 
-The recent refactoring of where runtime PM is enabled done in commit
-f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm runtime earlier to
-avoid imbalance") made the fact that when we do a pm_runtime_disable()
-in the error paths of probe() we can trigger a runtime disable which in
-turn results in duplicate clock disables. Early on in the probe function
-we do a pm_runtime_get_noresume() since the probe function leaves the
-device in a powered up state but in the error path we can't assume that PM
-is enabled so we also manually disable everything, including clocks. This
-means that when runtime PM is active both it and the probe function release
-the same reference to the main clock for the IP, triggering warnings from
-the clock subsystem:
+Hi Carlos,
 
-[    8.693719] clk:75:7 already disabled
-[    8.693791] WARNING: CPU: 1 PID: 185 at /usr/src/kernel/drivers/clk/clk.c:1188 clk_core_disable+0xa0/0xb
-...
-[    8.694261]  clk_core_disable+0xa0/0xb4 (P)
-[    8.694272]  clk_disable+0x38/0x60
-[    8.694283]  cqspi_probe+0x7c8/0xc5c [spi_cadence_quadspi]
-[    8.694309]  platform_probe+0x5c/0xa4
+kernel test robot noticed the following build errors:
 
-Avoid this confused ownership by moving the pm_runtime_get_noresume() to
-after the last point at which the probe() function can fail.
+[auto build test ERROR on v6.18]
+[also build test ERROR on linus/master next-20251202]
+[cannot apply to shawnguo/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reported-by: Francesco Dolcini <francesco@dolcini.it>
-Closes: https://lore.kernel.org/r/20251201072844.GA6785@francesco-nb
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Cc: stable@vger.kernel.org
----
- drivers/spi/spi-cadence-quadspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Carlos-Song/spi-imx-group-spi_imx_dma_configure-with-spi_imx_dma_transfer/20251202-160030
+base:   v6.18
+patch link:    https://lore.kernel.org/r/20251202075503.2448339-6-carlos.song%40nxp.com
+patch subject: [PATCH v2 5/6] spi: imx: support dynamic burst length for ECSPI DMA mode
+config: csky-allmodconfig (https://download.01.org/0day-ci/archive/20251203/202512031425.cmBJXuXy-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251203/202512031425.cmBJXuXy-lkp@intel.com/reproduce)
 
-diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index af6d050da1c8..0833b6f666d0 100644
---- a/drivers/spi/spi-cadence-quadspi.c
-+++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -1985,7 +1985,6 @@ static int cqspi_probe(struct platform_device *pdev)
- 		pm_runtime_enable(dev);
- 		pm_runtime_set_autosuspend_delay(dev, CQSPI_AUTOSUSPEND_TIMEOUT);
- 		pm_runtime_use_autosuspend(dev);
--		pm_runtime_get_noresume(dev);
- 	}
- 
- 	ret = cqspi_setup_flash(cqspi);
-@@ -2012,6 +2011,7 @@ static int cqspi_probe(struct platform_device *pdev)
- 	}
- 
- 	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
-+		pm_runtime_get_noresume(dev);
- 		pm_runtime_mark_last_busy(dev);
- 		pm_runtime_put_autosuspend(dev);
- 	}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512031425.cmBJXuXy-lkp@intel.com/
 
----
-base-commit: 7d0a66e4bb9081d75c82ec4957c50034cb0ea449
-change-id: 20251202-spi-cadence-qspi-runtime-pm-imbalance-657740cf7eae
+All errors (new ones prefixed by >>):
 
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+>> drivers/spi/spi-imx.c:144:34: error: 'counted_by' attribute is not allowed for a non-array field
+     144 |         struct dma_data_package *dma_data __counted_by(dma_package_num);
+         |                                  ^~~~~~~~
 
+
+vim +/counted_by +144 drivers/spi/spi-imx.c
+
+   107	
+   108	struct spi_imx_data {
+   109		struct spi_controller *controller;
+   110		struct device *dev;
+   111	
+   112		struct completion xfer_done;
+   113		void __iomem *base;
+   114		unsigned long base_phys;
+   115	
+   116		struct clk *clk_per;
+   117		struct clk *clk_ipg;
+   118		unsigned long spi_clk;
+   119		unsigned int spi_bus_clk;
+   120	
+   121		unsigned int bits_per_word;
+   122		unsigned int spi_drctl;
+   123	
+   124		unsigned int count, remainder;
+   125		void (*tx)(struct spi_imx_data *spi_imx);
+   126		void (*rx)(struct spi_imx_data *spi_imx);
+   127		void *rx_buf;
+   128		const void *tx_buf;
+   129		unsigned int txfifo; /* number of words pushed in tx FIFO */
+   130		unsigned int dynamic_burst;
+   131		bool rx_only;
+   132	
+   133		/* Target mode */
+   134		bool target_mode;
+   135		bool target_aborted;
+   136		unsigned int target_burst;
+   137	
+   138		/* DMA */
+   139		bool usedma;
+   140		u32 wml;
+   141		struct completion dma_rx_completion;
+   142		struct completion dma_tx_completion;
+   143		size_t dma_package_num;
+ > 144		struct dma_data_package *dma_data __counted_by(dma_package_num);
+   145		int rx_offset;
+   146	
+   147		const struct spi_imx_devtype_data *devtype_data;
+   148	};
+   149	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
