@@ -1,106 +1,139 @@
-Return-Path: <linux-spi+bounces-11750-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11751-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8264AC9EEC5
-	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 12:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 330BDC9F3EE
+	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 15:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 652443A7761
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 11:58:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A4EA3A35E8
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 14:12:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE5F2F618F;
-	Wed,  3 Dec 2025 11:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20DE2D63F8;
+	Wed,  3 Dec 2025 14:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCnIW6Jd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sqed4hwi"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9DB2F6173;
-	Wed,  3 Dec 2025 11:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A6B825FA10;
+	Wed,  3 Dec 2025 14:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764763115; cv=none; b=JAXFzAF2GRpAYC182CbTOgpznH3YoVhijfnthH9xQ87jzfwaqr2jARGLrI7qCJ5aYf53lWr4ZMmol00iZdMXIkVsVTjfkIziCXOcAyVSPt4IvRGO1qpJDD87cO7kpXOtg6CEdvCgToizHM4A/iGkc7ntYVNIGyRfdRNDR1IRfFg=
+	t=1764771136; cv=none; b=laN6PCUAzE1Qysb2JlqKoylislQQXARee13PD3YvJtIVoQNWgnlsAgY/Rq1dvnq/I+envpVxOmCjyfYF4h/xxEI75xpT2VMMjhacoOQQErGCaQzLLThU2/nIBCxnjP35XCha1LVxlnz6+QDwDhSITLkEdNmF6Ogoqs3pkcYXIg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764763115; c=relaxed/simple;
-	bh=UTyWH5ewlKa1kF4ff8wnEKITBqENzCxrbE3dAd6HxYU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KFn1TA8Beyn957SnBysEGciLrufNQvfGS0MZuFt62x88A0wDi1OMY7wdtCqoGfI7gRFOgsBqdhlq3W8zr9Z2reBXSthcY0wJQuEcaq2PDIftgafCn2zTmnJhv76CeNkdCIpGoxc6KMGKFMLyHIJe4atbWBvZadSd/MIHRyKTHm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCnIW6Jd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8686DC116B1;
-	Wed,  3 Dec 2025 11:58:33 +0000 (UTC)
+	s=arc-20240116; t=1764771136; c=relaxed/simple;
+	bh=smbaWDGg/XgShh3qJ1kJgBiM9HCBn2o9QjOA/nMQgHA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=ea0UmrsRIoQYEON07MJi0cbCuMDimLlOLwejDmmm+HKZffxXN8ewWkl/5AGs5KttjLJEGzeYaA/vpI75scoM15mtpmkJSHpNlOfYln8NmfFK3gqKO08D3qEXlmcsny2b0u2H1k2vOmDl31udVEUjYUOJItaa+Orl+vI2HOipqXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sqed4hwi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0173C4CEF5;
+	Wed,  3 Dec 2025 14:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764763114;
-	bh=UTyWH5ewlKa1kF4ff8wnEKITBqENzCxrbE3dAd6HxYU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eCnIW6JdeLNjG8oXPYDymHCbu4EQw2YnYyF/hwe6+5F4WldR485Au9CayIRKrMg7i
-	 uUm06o6W3yo301/6fFa7dPl+uHyZKC5vv8qcHr8R6sk1pb0OZVGG3Y+9/n4zO1Gto6
-	 NUs3t9pZWIqm4KqA11mduFDx6Cg8888Gfupy/LzU8ojUAg4jVGJ9zaff9fcDupWyJw
-	 sD6p9ByDS8+XOKrxIuOqsyW5gtWUY3zFwwzlO91Y4LVAw1VSFloVU7/UO6jJ9ZpW3m
-	 V5nwiREISQGinEQa2MMFNl3I77sE2W84xz1kVzoH8p8IdpjU3KucdZ2FpR5yabSDY8
-	 yfjBqKEdAQTxA==
-Date: Wed, 3 Dec 2025 11:58:30 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>, Anurag Dutta <a-dutta@ti.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
- runtime PM
-Message-ID: <e95bb125-6b73-4991-acce-a964854da0a1@sirena.org.uk>
-References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
- <b2c0f5b38ed01836c025f2672a883484765d91f5.camel@ti.com>
+	s=k20201202; t=1764771136;
+	bh=smbaWDGg/XgShh3qJ1kJgBiM9HCBn2o9QjOA/nMQgHA=;
+	h=Date:Subject:Cc:From:To:References:In-Reply-To:From;
+	b=sqed4hwiCoFNaVTddXS0Qs7ceF/63n7aHJob0t6Y95d271Z+o6SF8Ttg/KZ02HLts
+	 SiEnV9cgctW2gz+IGkWqoLx6cp4XDjCBSb0b6YB+7drw3s/+7UGYYQxVnaPjWoMrAI
+	 ohZOQSzJ6pIixCgAD3YHjsXj1XSv4tUgJNoFd52MiuN4AVM3z6RuiSVy66iPZ5/efa
+	 VmRgAu0hG6pyWOyYNSC2lvn9edlrvyGkDUDpYXH36QS1meks8SZ+vuuCIe+CL2Pyr1
+	 4mhgIanOKcPJGHjhEbvbQsxa/8aDtx8XMrFkLU4CkGeD+Wsk2AzaOjI52YyqL/7SvU
+	 ZwHNED+xh2rCg==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qWIYdQJDeHZwOpxx"
-Content-Disposition: inline
-In-Reply-To: <b2c0f5b38ed01836c025f2672a883484765d91f5.camel@ti.com>
-X-Cookie: Close cover before striking.
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54;
+ micalg=pgp-sha384; protocol="application/pgp-signature"
+Date: Wed, 03 Dec 2025 15:12:11 +0100
+Message-Id: <DEON5LMMZLWG.21BQCPB0YE904@kernel.org>
+Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
+ controller
+Cc: "Santhosh Kumar K" <s-k6@ti.com>, "Pratyush Yadav"
+ <pratyush@kernel.org>, <richard@nod.at>, <vigneshr@ti.com>,
+ <broonie@kernel.org>, <tudor.ambarus@linaro.org>, <p-mantena@ti.com>,
+ <linux-spi@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <a-dutta@ti.com>, <u-kumar1@ti.com>,
+ <praneeth@ti.com>
+From: "Michael Walle" <mwalle@kernel.org>
+To: "Miquel Raynal" <miquel.raynal@bootlin.com>
+X-Mailer: aerc 0.20.0
+References: <20250811193219.731851-1-s-k6@ti.com>
+ <20250811193219.731851-2-s-k6@ti.com> <87seguemzu.fsf@bootlin.com>
+ <cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com>
+ <mafs0ikf74fja.fsf@kernel.org>
+ <fe103265-7a68-41b8-b168-15a5e19abb3f@ti.com>
+ <DEOH4AUI33SQ.DGKJ4W258658@kernel.org> <87jyz3ao8b.fsf@bootlin.com>
+In-Reply-To: <87jyz3ao8b.fsf@bootlin.com>
 
-
---qWIYdQJDeHZwOpxx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
 
-On Wed, Dec 03, 2025 at 04:12:04PM +0530, Siddharth Vadapalli wrote:
-> On Tue, 2025-12-02 at 22:53 +0000, Mark Brown wrote:
+On Wed Dec 3, 2025 at 10:50 AM CET, Miquel Raynal wrote:
+>
+>>>> I think we should start with the requirement to have the pattern flash=
+ed
+>>>> already and figure out how SPI NOR or SPI NAND can discover that
+>>>> (perhaps via NVMEM?).
+>>
+>> But we should also keep in mind that certain flashes might return
+>> tuning data during the dummy cycles. I.e. the PHY might probably be
+>> tuned on each read and there is no need for any pre-programmed
+>> pattern.
+>>
+>> I'm not saying it should be implemented, but the current
+>> implementation should be that flexible that it will be easy to add
+>> that later.
+>
+> Conceptually, yes, but in practice, I know no controller capable of
+> using just a few cycles every transfer to calibrate themselves
+> automatically and reaching such an optimized speed state as the cadence
+> controller is capable of ATM.
 
-> > Avoid this confused ownership by moving the pm_runtime_get_noresume() to
-> > after the last point at which the probe() function can fail.
+Then have a look at the flexspi controller. I.e. look at the LS1028A
+reference manual "18.5.15.1 Data Learning with Flash providing
+preamble bit".  The sequence is a follows:
 
-> Thank you for the patch. The 'clock already disabled' issue persists on
-> J721E SoC with the patch applied:
+<CMD> <ADDR> <MODE> <DUMMY> <LEARN> <READ>
 
-Do you mean it reappears rather than persists? =20
+There's an example with the learning pattern as short as 8 bit, or
+- I guess - 8 clock cycles.
 
-> https://gist.github.com/Siddharth-Vadapalli-at-TI/a664f59366ad681856b862d=
-621487b7f
+> Despite the end result being close, I would still consider this other
+> way to optimize the I/Os somewhat orthogonal. If someone has some
+> knowledge to share about the training patterns sent during the dummy
+> cycles, I am all ears though.
 
-Interesting, I can't see any logging that indicates we should be
-reaching the error handling paths in that log...
+There's also a short chapter about the training. Basically, it will
+just compare the read bits with a predefined value (which is max
+32 bit long) of 16 different clock phases. Which one is chosen is
+not answered though (ideally it should be the one at the center of
+all matching clock phases).
 
---qWIYdQJDeHZwOpxx
+Now how good that tuning actually is, I don't know. But the
+procedure sounds sane. I'm also not sure whether this (any?) tuning
+will account for different I/O trace lengths of if it is assumed
+that they have to be trace length matched for multi IO flashes.
+
+-michael
+
+--6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkwJeYACgkQJNaLcl1U
-h9DslQf/fPc5wiCXOyCyoZBN/wMFXUvlVu1M/sdRkSlcX25weOXE1pRqtX7/YHKx
-u6ByK3OAMEain4aVhpufPCTPuD8MnAjB+fFN/FzHRXYWXpDEtrFoie5z4HY4EyCK
-zEr6L90UXYrru3e8uJaFZVWeBHBQT6sEOO/AC/tSdx0mw6CEClnM0a45BQjKGrnl
-q80eZKCA6tRa1tp+S8FGoAcnxuIuNVNETMZNFGvB8ZH9+Z9qZUsJpZe9WbqAKOfq
-g1CVAjG7oyGxysujLrQlEc/Csdm1p5kPprINlI4tP1gErmH3yNO+6oFisLMk9LMO
-FWhrmg3rNMalhrPz6t68TSipAMtjwQ==
-=ezhc
+iKgEABMJADAWIQTIVZIcOo5wfU/AngkSJzzuPgIf+AUCaTBFPBIcbXdhbGxlQGtl
+cm5lbC5vcmcACgkQEic87j4CH/gFxAGA345hIX5hVf+9gNV8VQGZ/W8e18oDeiPO
+ouutCQKJYiK9yVJt7BxAwxMeRd06U7AmAYDZ6LvqZBAFmTXZ0Laz9hafCPqdLrsF
+bGpFhMoP+zwdx97ipbv3m1PmbCS/nvLEEbQ=
+=0tUN
 -----END PGP SIGNATURE-----
 
---qWIYdQJDeHZwOpxx--
+--6941430842e239d7e819f952f573a6859b1df98f21af7b294888dab18d54--
 
