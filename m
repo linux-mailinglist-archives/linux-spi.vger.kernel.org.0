@@ -1,75 +1,299 @@
-Return-Path: <linux-spi+bounces-11746-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11748-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3206EC9E9D8
-	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 11:00:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B4B6C9EAA5
+	for <lists+linux-spi@lfdr.de>; Wed, 03 Dec 2025 11:13:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D0B2C347EBB
-	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 10:00:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D6ED3A2609
+	for <lists+linux-spi@lfdr.de>; Wed,  3 Dec 2025 10:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FCD22E2840;
-	Wed,  3 Dec 2025 10:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cx1r8ER2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC6F2E88B0;
+	Wed,  3 Dec 2025 10:13:56 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3B72E11BC
-	for <linux-spi@vger.kernel.org>; Wed,  3 Dec 2025 10:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD4B2E7F14
+	for <linux-spi@vger.kernel.org>; Wed,  3 Dec 2025 10:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764756008; cv=none; b=hd4kZrx9N/g+h4Qln7qoYZZOGgM0E3NDgsS/jqV4kXRRAYDW/muEWGut352+LjyCGZK30oklUxOtgH6tQyW5EgDClfrG3RdEgiPjrHJzgu7go/GxeuMDxSem5Vdn2KKCi6n72LYl7/VzYUoq/rBYIiu5hzxoZnTlA14ullLgI7k=
+	t=1764756836; cv=none; b=V+gFd3bpxqrKFfpjIP4g4l4NdRCqxiYVDLQm+4ymTG4VKYLVAnnad7dWpLY41GaIYPaZhL/WCB3EeMsAC85qi+UK0Ymh+U6KEO+IFjtdf0NiR0c0Ti3Zfo4rK1FtCAoBCcJ1T6y0msP8pfbupD3bBN3yhoejsh74f10BMdr/EoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764756008; c=relaxed/simple;
-	bh=QmaKFVhBQiQzNlVCCt7yiAN9GeZGGLPzGFBlpaWziso=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=XKIZbDzbnxwWEQ6FA5doo0Tgd70zxfevhmVQ1onU6ZiOmSZaiEU4D/OI70tViW1HRDDwirzMD4jF3qv453CTNveU5tQhVxQg2pf0M9YRJZNZGEEwzPZyuSlwOr0WF91jzqsY0+Y1Y4A+nXel3N4rGpsJOzC60S6+X31UgxWH29c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cx1r8ER2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03610C4CEFB;
-	Wed,  3 Dec 2025 10:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764756008;
-	bh=QmaKFVhBQiQzNlVCCt7yiAN9GeZGGLPzGFBlpaWziso=;
-	h=Subject:From:Date:To:From;
-	b=Cx1r8ER2JsTzlvvqAvC7P3BAf2PzGEcxCrUEHtY1v7chZ6hdrLkSV9kmOSTZ2A2G5
-	 C/Z9jV2ABQY5xUS9ryjwhq2uXcg/CAL+g92MHzAFtrusZmU0osELuJEITwKkAxITjO
-	 AigAx50ojUtJjKDfqoy5DVg7psCGB4+nEss1+ec5FcZ4gAUytu3sS7GfzmEwFfUGgl
-	 IbBtXXUbTHOaxA24LbQ44BswEbjiIgGI6oxEuX7lafLDt/v8GVZJLRua2gkgscZdbe
-	 tzp57LWZHJi23CN1z3ADPfEH7prsoUK2wVeGy5hGnn8zqOb/MyHn+O1RCgJi9zW6GT
-	 ah5F4TwoB3ySw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BBFA3AA940E;
-	Wed,  3 Dec 2025 09:57:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1764756836; c=relaxed/simple;
+	bh=7ykrGGwCG5UVuu6S46Y+mkYJETdoJx86HhNwtYYoBJs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GxNd1nM9an0s0iDBycw63IDf9bwL3jSMRzk3IycOgnmDcjtj2xgJy7yOOYBz0FjaF3EVe3qRCKqsqHgrK+MfCEci75FqO3k2Jrl8Ke4AKntrCrPhEdbzWrZtmGT5uuD095gh0UF28mdhlUzn8tc/IPyJ2XW4IlcT9XWJ6JVMYUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-5dfa9e34adbso5076914137.0
+        for <linux-spi@vger.kernel.org>; Wed, 03 Dec 2025 02:13:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764756833; x=1765361633;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=08y1I8cftAKXa2ZRDPk1QAbO3eRq2UKMz/WOuMZJTrE=;
+        b=qgeEwAawqoE7qTZv5D8Vy6m63Bv+Ofwnopxpemh6w7LJZvP2+KXVX8TOIDigy9EYzj
+         IUghu+yfKr7nhPEgF7W7dVq2VUfOtHtupTkeipPv4c3h9tK7SOWoBRB4vEWAhR7hUY7M
+         pAecHaixSom09vnw6KFB1lpoknsNUlesiNmNZm9VC0gXUMUzjUpBQDKZ35xIFjE6GN8q
+         N2q/9TPPpbAFhc94VYEWq6piJ8m6jGW+ZNNccVxt/t9r413VbSk3E+u0OB3Egm1sHR8S
+         /6jx5PV8si5wqM0BWn7H7EbtelI7N5bL6qE1Zm526Se8LSCa5O1ZI2t2JFV3Zv0Eiyf1
+         5AkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWumi0/QDXRPEN3LY1GdZITphKztECjwlOq/C8f3ko2FDDWQTiFDjLjky8t/P2oQ84rYVAu1x1srlQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRipIioj7RqZ7gUm+BuZqOTV1aL6dTyWw1M1Wk0vuwo+j0+PLK
+	CUohJqq/f/bQjNsFhi3+cbL5ZwODiowcqeWMj63rWgXREPER4n1wtNJggqxYN+yX
+X-Gm-Gg: ASbGnctyQPEhYgY52cjTNdueeZSgeOylv0R+FeLV+ml0CyL40PD9yQFhpTPSBSKAqOs
+	/+hWMy1u86hym+i1kmfLBf5s3rOV0v5EhJRtk1wGPpuQtC5ROmwkm5FzCp1Q/GM4qsY55QtVXVm
+	0p4gQhGpOWvFoI+3Gu4ZNCZRjmhwaHWN9KKL9gfQeq5ghY50F76IWKkTm9suBuc/aDGpkR1xP+B
+	WsHAJjjxHOvCcE1rjkOxumUwGRuUTF7aNKhjlFBKwUJuYROMdV18Wj9vvDB1X+ZCrjbadU9Acai
+	vJec2Ab7BcvBXkFhIIz4yFfUYdk0ZqJde80q84pmCUoba8IT6gN4sikJMCPSY1x060bl4ZINZ9X
+	hlFoJmPKp/9enPbJiTFPl6lzRPj/XAn+yf9JsEBZUeO+le7X5WSWtOE6ouAF5wnUOYYGjMEcNpa
+	VBthCgdzOErX1mUi24DWsNx1KAzeAhWEnLokouoFw1KardnyRu
+X-Google-Smtp-Source: AGHT+IGinYt77jYn0bu6F1cb4Yy++9BRF4mcuaUoX0ecKzsWB3XYXv9dvDsxMMiDNPntRR2KFs582w==
+X-Received: by 2002:a05:6102:f0c:b0:5db:28ef:3dfb with SMTP id ada2fe7eead31-5e48e3bb57cmr485334137.34.1764756833108;
+        Wed, 03 Dec 2025 02:13:53 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-93cd7661ae8sm7583739241.12.2025.12.03.02.13.52
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Dec 2025 02:13:52 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-9374ecdccb4so3505666241.3
+        for <linux-spi@vger.kernel.org>; Wed, 03 Dec 2025 02:13:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVwU6QLMOane5d2AYt6v9PU3XPbwxN8GOA3OGbQtGAL5oN9Ur8afbfYvXVHtMVwntdKP4NFi7q4w6I=@vger.kernel.org
+X-Received: by 2002:a05:6102:579a:b0:5df:c1ac:8ad4 with SMTP id
+ ada2fe7eead31-5e48e01012fmr426535137.0.1764756375911; Wed, 03 Dec 2025
+ 02:06:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176475582686.3988481.874786683025469544.git-patchwork-housekeeping@kernel.org>
-Date: Wed, 03 Dec 2025 09:57:06 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+ <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+ <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com> <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+ <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com> <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+ <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com> <20251202102619.5cd971cc@bootlin.com>
+ <CAMuHMdXogrkTAm=4pC0B+Sybr=PR3XovnBgmiEyTvUMmJHvBRA@mail.gmail.com> <20251202182834.65d7f0a1@bootlin.com>
+In-Reply-To: <20251202182834.65d7f0a1@bootlin.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 3 Dec 2025 11:06:04 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU4y3Faz1nJo5CeYdPY9dgetWrLE9bMdba_QeWwXX41CQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bm_vwtlSlkiVojLd-rzxo_k4pikXV0aLj6bs5bAdLDXgMj28SXkaqQFKI0
+Message-ID: <CAMuHMdU4y3Faz1nJo5CeYdPY9dgetWrLE9bMdba_QeWwXX41CQ@mail.gmail.com>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Latest series: [v3] Support ECSPI dynamic burst feature for DMA mode (2025-12-03T08:59:43)
-  Superseding: [v2] Support ECSPI dynamic burst feature for DMA mode (2025-12-02T07:54:57):
-    [v2,1/6] spi: imx: group spi_imx_dma_configure() with spi_imx_dma_transfer()
-    [v2,2/6] spi: imx: introduce helper to clear DMA mode logic
-    [v2,3/6] spi: imx: avoid dmaengine_terminate_all() on TX prep failure
-    [v2,4/6] spi: imx: handle DMA submission errors with dma_submit_error()
-    [v2,5/6] spi: imx: support dynamic burst length for ECSPI DMA mode
-    [v2,6/6] spi: imx: enable DMA mode for target operation
+Hi Herv=C3=A9,
 
+On Tue, 2 Dec 2025 at 18:29, Herve Codina <herve.codina@bootlin.com> wrote:
+> On Tue, 2 Dec 2025 17:35:35 +0100
+> Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Tue, 2 Dec 2025 at 10:26, Herve Codina <herve.codina@bootlin.com> wr=
+ote:
+> > > On Fri, 28 Nov 2025 10:34:57 +0200
+> > > Kalle Niemi <kaleposti@gmail.com> wrote:
+> > > > >>>>>> Test system testing drivers for ROHM ICs bisected this commi=
+t to cause
+> > > > >>>>>> BD71847 drivers probe to not be called.
+> > > > >>>>> This driver (and overlay support) is in linux-next or somethi=
+ng out of
+> > > > >>>>> tree on top of linux-next?
+> > > > >>>>>
+> > > > >>>>> Rob
+> > > > >>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7=
+.c
+> > > > >>> I don't see any support to apply overlays in that driver.
+> > > > >> Ah. Sorry for the confusion peeps. I asked Kalle to report this =
+without
+> > > > >> proper consideration. 100% my bad.
+> > > > >>
+> > > > >> While the bd718x7 drive indeed is mainline (and tested), the act=
+ual
+> > > > >> 'glue-code' doing the overlay is part of the downstream test
+> > > > >> infrastructure. So yes, this is not a bug in upstream kernel - t=
+his
+> > > > >> falls in the category of an upstream change causing downstream t=
+hings to
+> > > > >> break. So, feel free to say: "Go fix your code" :)
+> > > > >>
+> > > > >> Now that this is sorted, if someone is still interested in helpi=
+ng us to
+> > > > >> get our upstream drivers tested - the downstream piece is just t=
+aking
+> > > > >> the compiled device-tree overlay at runtime (via bin-attribute f=
+ile),
+> > > > >> and applying it using the of_overlay_fdt_apply(). The approach i=
+s
+> > > > >> working for our testing purposes when the device is added to I2C=
+/SPI
+> > > > >> node which is already enabled. However, in case where we have th=
+e I2C
+> > > > >> disabled, and enable it in the same overlay where we add the new=
+ device
+> > > > >> - then the new device does not get probed.
+> > > > >>
+> > > > >> I would be really grateful if someone had a pointer for us.
+> > > > > Seems to be fw_devlink related. I suppose if you turn it off it w=
+orks?
+> > > > > There's info about the dependencies in sysfs or maybe debugfs. I =
+don't
+> > > > > remember the details, but that should help to tell you why things
+> > > > > aren't probing.
+> > >
+> > > Rob reverted patches but I plan to continue my work on it.
+> > > On my side, I need the reverted patches but I fully understand that, =
+on
+> > > your side, you need a working system.
+> > >
+> > > In order to move forward and find a solution for my next iteration, c=
+an you
+> > > send your overlay (dtso) used in your working and non working cases?
+> >
+> > Hmm, I must have missed when Rob applied (part of) this series, as I
+> > do an overlay test (using the out-of-tree configfs) on top of every
+> > (bi-weekly) renesas-drivers release, and saw no issues during the last
+> > few months.
+> >
+> > So I applied this series and tested loading my SPI EEPROM overlay.
+> > And it indeed breaks, with the culprit being this particular patch.
+> >
+> > Interestingly, quoting from this patch:
+> >
+> >    "While the commit fixed fw_devlink overlay handling for one case, it
+> >     broke it for another case. So revert it and redo the fix in a separ=
+ate
+> >     patch."
+> >
+> > Where is the separate patch that redid the fix? I assume it is "[PATCH
+> > v4 03/29] of: dynamic: Fix overlayed devices not probing because
+> > of fw_devlink"?  Unfortunately that doesn't fix the issue for me.
+> >
+> > Quoting more from this patch:
+> >
+> >    "Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_=
+rJgyo8x6=3D9F9rZ+-KzjOg@mail.gmail.com/"
+> >
+> > Strange that it claims to fix the issue reported there, as the failure
+> > mode I am seeing is exactly the same as documented in that report?
+> >
+> > Do you know what is wrong? The overlay I am using is referenced in
+> > the bug report linked above.
+>
+> The first patch "Fix probing of devices in DT overlays" didn't fix all ca=
+ses
+> and so Saravana reverted this patch and proposed "of: dynamic: Fix overla=
+yed
+> devices not probing because of fw_devlink".
+>
+> This second patch was needed to fix my use case even if more modification=
+ were
+> needed to have my use case fully fixed (other patches in my series).
+>
+> Rob applied those first patches from my series and some systems were brok=
+en.
+> The breakage has been reported my Kalle and Matti and led to a revert of =
+culprit
+> patches.
+>
+> I tried to understand what was wrong. I am pretty convinced that modifica=
+tion
+> done in "of: dynamic: Fix overlayed devices not probing because of fw_dev=
+link"
+> are really better than modification available in "treewide: Fix probing o=
+f
+> devices in DT overlays".
+>
+> I proposed an update [0] and I will be glad if you can also test this upd=
+ate
+> on your side and give me your feedback.
+>
+> [0] https://lore.kernel.org/lkml/20251202175836.747593c0@bootlin.com/
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thank you!
 
+Unfortunately this does not fix the problem: I still need to do an extra
+overlay rm/add cycle to make the SPI EEPROM work.
+
+In addition, it triggers a bunch of new scary error messages:
+
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
+[...]
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,src/src-9
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,ssi/ssi-0
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,ssi/ssi-1
+[...]
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,ssi/ssi-9
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
+[...]
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,src/src-9
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,ssi/ssi-0
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,ssi/ssi-1
+[...]
+rcar_sound ec500000.sound: Failed to create device link (0x180) with
+supplier soc for /soc/sound@ec500000/rcar_sound,ssi/ssi-9
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
