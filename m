@@ -1,217 +1,212 @@
-Return-Path: <linux-spi+bounces-11755-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11756-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3D96CA2F50
-	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 10:22:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A041CCA3507
+	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 11:52:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0B0A0302D6EF
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 09:22:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 176EF30DF492
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 10:49:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD7733C1BE;
-	Thu,  4 Dec 2025 09:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="b/1v/zaS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F54339B24;
+	Thu,  4 Dec 2025 10:49:30 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4732D33C1B9;
-	Thu,  4 Dec 2025 09:13:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AF92DEA74
+	for <linux-spi@vger.kernel.org>; Thu,  4 Dec 2025 10:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764839628; cv=none; b=j6+/UHfl2pnMkbRIrsLcoR+bS40uKLP6JoJMQPM86wSeYdIIBEW3d6dp9Ehtov974nAcK1T6g/gQk6Kve+ePID7x16MxlMTpERJRLdIF5M8dHfVVY25vzMDglW2YGHVzYxDG3dKLW7miNK6wH1Dz5hQluaPoxaOHdvw18b7ceGU=
+	t=1764845369; cv=none; b=DnXa1pd8vvbGS2UqEtLU73pNNN+95xqhKkptRGIHF1d/DtXUaRBPpx816tomK01jdgl8cTW5jAUsRtWfIQHOwmXG36ePijA2UpHbc38p/UTTI2SEP2eWmYqWC3d5obQqNbAQ58zdIQIDX73wCXZDAnUZGbp9AYUemlg8J4CUwmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764839628; c=relaxed/simple;
-	bh=wfbSbaWyFFBGRDhQAIbjUUHVQuhqP/UeP0JJDwjJiWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Br2CM/I4Aydo/OE1RssHidEaKfr5DKjWOm+OoFbRRPvcChpFhirwzyvsQd+kVpTCALH5wW9TxOclEbPfmGdyGn/NfZD5y/Yca8DWlIRBi6ta9+3oJ/6gYUgIPEUxULQQlyK8Qi4LqQBONmvddsXj907l730n+e7v0KshRBEYkxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=b/1v/zaS; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 920C21FB70;
-	Thu,  4 Dec 2025 10:13:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1764839615;
-	bh=FCvm8NB2mjkwoFh/137wbYHLyhq16Db2hwU6duYeg6U=;
-	h=Received:From:To:Subject;
-	b=b/1v/zaSyY7KoLQLKkAH0+IJLeyvgCUfoQiQlRxcxtmE/CFrU2pN7kjdadk2oZL8G
-	 arjyIJvhCrchmb/3ON1ObO1ovvJWzbjH7ZAKPVNM84xNDUSOtI7uKRPeR820JaPfiK
-	 ij4j++PZRqHgwF/PCCvMaN87YhXPfyq7mXeTZFfr7ln+od18T+rFsUM6GTM33yFsWp
-	 OMSP881uRV8+f0iP4rE9+1LoAYgzUf0/4U/ecRkFf9BYl4hLIkA/fhk0j8bjN7QuTI
-	 vB5XGO5XPreTUWTFhjQ6yH8NuadknYvfn3F358Lf8QXW3JU3AjFPopJEDbPp0CiV/b
-	 hG6mBVOFB2gIQ==
-Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
-	id 4C9507FA27; Thu,  4 Dec 2025 10:13:35 +0100 (CET)
-Date: Thu, 4 Dec 2025 10:13:35 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Mark Brown <broonie@kernel.org>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Siddharth Vadapalli <s-vadapalli@ti.com>,
-	Anurag Dutta <a-dutta@ti.com>, linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
- runtime PM
-Message-ID: <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
-References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+	s=arc-20240116; t=1764845369; c=relaxed/simple;
+	bh=6slcK3EQrAXupPVJr9jM3Pcmh+QTUwh+iVFWsaKxXWo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a26lR1wqPN7s76weAaGq3opAwKGfEtGCbZlSRSOquid5QkAnA/jGbQrK5bDrFm882PH0xyPsBcrxuSCbz6GDdvGIubSt7/94peFPJnVFsW3cPxEPLKEX+5dQw2SdULYKMubsZ/IG7AvzYNYYS8uEvjmLG0LTAZ140KidrhSEuyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-5599b119b4aso201155e0c.0
+        for <linux-spi@vger.kernel.org>; Thu, 04 Dec 2025 02:49:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764845367; x=1765450167;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gfnzYJnOAkS7SHNqKKzIeFzoFbDZmoEYIAPmuyxm7j4=;
+        b=uqiXQBnZNH0lAoj2Oawk0M6WL2wgokXiatcrUBiuHYAe+IpyyX0UWxfehTbjrlevVe
+         cuaaZKmvKtY4//xdHr7SbG/pJO0M0I7P0e+3W5/iCVXCNU0uFaxaAM3SBNolrIp1eQ1a
+         l34bJB6QEmfUuFXHVPPf0ev224bL49Ioc/TXIdYOP0oIb+4I9s8q2+fr2+VxHWiWma9P
+         90HM4bJL6EEFG1BcJG65IjKdWZ7gRg6Wkk5qY3+hvXv0atoiIlm7xDXaQj94gm5+pF0Q
+         19YGPQVfVNVRVQSzKNHir+yCluAu8SXQ1ZNX+x5oM4mNySl+NqZMIh2p6pNJImgZPEqw
+         eTkw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8IosoDKYQel7XZNoSGZMI0Ndz/fJqLVJR3EZVqVryPSgoPfX/HqokOONYG9KTkaGqTz8FkqY4SzU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkUjfpnZeejOws7vc78rM7txmy0ip6Upo8nNa3W1+PKaeg5Gzr
+	rAlyoedEowLWMnazXB4cgCZKXHV/+qfH51QTj9FNF0A+V0LLo+Z07iv/+m6Qaqt4
+X-Gm-Gg: ASbGncswrOfY01RxBW7+wiZNGPUzfHXDwDtgk9vOeKpmuPFaC2Znn6UVdSGBVLjmo0v
+	WSDprCN367RCmYvQBtOrDblMjfBM2FY9dHLu+QxFFGJscUDbghCGFc9R8Rdz9x9BPdLfDfxX8FT
+	/+GciEB/DuP4g6Ke3XmMWyCLSJbP1eB0mP5vGeBc+2THc7WfdQv0uAHWTmD85WI5yPurykKJfzE
+	3Qb43aOPInrXDowxDoJR6qQG00JAJgWOiplKmJeIKQ9aExCyg5L+MmLdpCH+9nH3uryGOUobEh0
+	VZN1iOYSLrCnW8An6ZtlUwk8sRTjXeqWbViBpi/QBsQR6Q1iD+ZksWbhYkaPWPrNICh+d3H9b7a
+	A2S1TrehocFrOY0AHlkHgewb3l69KtB7CZ9mO1lZLy2XKLgkavSeR2Xx5rji4BvibDSI0K25dTh
+	wFLdb1xrDmv4c20mxDOJbpMOMPeLZMH7+elAPCWQZNRMfpg1Lg
+X-Google-Smtp-Source: AGHT+IFXqFWoZ/rYw1tZncj+ZgH1xJOv/vS7QNpvR+jXn2P6Ne3m7zdE3zLK2dekh5IZFXJ99mkH4g==
+X-Received: by 2002:a05:6122:4689:b0:55b:305b:4e38 with SMTP id 71dfb90a1353d-55e5bfd3b38mr2048227e0c.19.1764845366859;
+        Thu, 04 Dec 2025 02:49:26 -0800 (PST)
+Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com. [209.85.217.42])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55e6c58d38asm390098e0c.6.2025.12.04.02.49.24
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 04 Dec 2025 02:49:25 -0800 (PST)
+Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-5dbe6304b79so303993137.3
+        for <linux-spi@vger.kernel.org>; Thu, 04 Dec 2025 02:49:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXiAccBF2tFMW85uOFvHO41xvc2K471fjeNOCQ7KpLNG8b9dNVW1n+QrcBPzRRoDoZn9AergImIcZE=@vger.kernel.org
+X-Received: by 2002:a05:6102:6889:b0:5dd:b69a:cdce with SMTP id
+ ada2fe7eead31-5e48e28ea62mr1665640137.1.1764845364523; Thu, 04 Dec 2025
+ 02:49:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+ <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+ <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com> <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+ <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com> <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+ <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com> <20251202102619.5cd971cc@bootlin.com>
+ <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com> <20251202175836.747593c0@bootlin.com>
+ <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com> <20251204083839.4fb8a4b1@bootlin.com>
+In-Reply-To: <20251204083839.4fb8a4b1@bootlin.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 4 Dec 2025 11:49:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
+X-Gm-Features: AWmQ_blMXTXWTKLb__jRgM2vj510G0Mh23mSqsI1Cojt34ffki3w4wmdXTg_pQg
+Message-ID: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, linux-arm-kernel@lists.infradead.org, 
+	Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, linux-clk@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-sound@vger.kernel.org, patches@opensource.cirrus.com, 
+	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-cxl@vger.kernel.org, Allan Nielsen <allan.nielsen@microchip.com>, 
+	Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Mark,
+Hi Herv=C3=A9,
 
-On Tue, Dec 02, 2025 at 10:53:44PM +0000, Mark Brown wrote:
-> The recent refactoring of where runtime PM is enabled done in commit
-> f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm runtime earlier to
-> avoid imbalance") made the fact that when we do a pm_runtime_disable()
-> in the error paths of probe() we can trigger a runtime disable which in
-> turn results in duplicate clock disables. Early on in the probe function
-> we do a pm_runtime_get_noresume() since the probe function leaves the
-> device in a powered up state but in the error path we can't assume that PM
-> is enabled so we also manually disable everything, including clocks. This
-> means that when runtime PM is active both it and the probe function release
-> the same reference to the main clock for the IP, triggering warnings from
-> the clock subsystem:
-> 
-> [    8.693719] clk:75:7 already disabled
-> [    8.693791] WARNING: CPU: 1 PID: 185 at /usr/src/kernel/drivers/clk/clk.c:1188 clk_core_disable+0xa0/0xb
-> ...
-> [    8.694261]  clk_core_disable+0xa0/0xb4 (P)
-> [    8.694272]  clk_disable+0x38/0x60
-> [    8.694283]  cqspi_probe+0x7c8/0xc5c [spi_cadence_quadspi]
-> [    8.694309]  platform_probe+0x5c/0xa4
-> 
-> Avoid this confused ownership by moving the pm_runtime_get_noresume() to
-> after the last point at which the probe() function can fail.
-> 
-> Reported-by: Francesco Dolcini <francesco@dolcini.it>
-> Closes: https://lore.kernel.org/r/20251201072844.GA6785@francesco-nb
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Cc: stable@vger.kernel.org
+On Thu, 4 Dec 2025 at 08:39, Herve Codina <herve.codina@bootlin.com> wrote:
+> Indeed, Kalle, Geert, I don't have your hardware, your related overlay or
+> a similar one that could be used for test and also I don't have your out =
+of
+> tree code used to handle this overlay.
+>
+> I know overlays and fw_devlink have issues. Links created by fw_devlink
+> when an overlay is applied were not correct on my side.
+>
+> Can you check your <supplier>--<consumer> links with 'ls /sys/class/devli=
+nks'
+>
+> On my side, without my patches some links were not correct.
+> They linked to the parent of the supplier instead of the supplier itself.
+> The consequence is a kernel crash, use after free, refcounting failure, .=
+..
+> when the supplier device is removed.
+>
+> Indeed, with wrong links consumers were not removed before suppliers they
+> used.
+>
+> Looking at Geert traces:
+> --- 8< ---
+> rcar_sound ec500000.sound: Failed to create device link (0x180) with
+> supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
+> rcar_sound ec500000.sound: Failed to create device link (0x180) with
+> supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
+> [...]
+> --- 8< ---
+>
+> Even if it is not correct, why the soc device cannot be a provider?
+> I don't have the answer to this question yet.
 
-Unless I did some stupid mistake testing the patch, it does not fix the issue.
-Here the log with v6.18 + this patch
+I have no idea. These failures (sound) are also not related to the
+device I am adding through the overlay (SPI EEPROM).
+Note that these failures appear only with your suggested fix, and are
+not seen with just the patch in the subject of this email thread.
 
+> Without having the exact tree structure of the base device-tree, the over=
+lay
+> and the way it is applied, and so without been able to reproduce the issu=
+e
+> on my side, investigating the issue is going to be difficult.
+>
+> I hope to find some help to move forward and fix the issue.
 
-[    6.347380] ------------[ cut here ]------------
-[    6.352025] clk:75:7 already disabled
-[    6.355727] WARNING: CPU: 2 PID: 180 at drivers/clk/clk.c:1188 clk_core_disable+0xa4/0xac
-[    6.363921] Modules linked in: aes_ce_blk aes_ce_cipher ghash_ce gf128mul snd_soc_simple_card(+) 
-snd_soc_simple_card_utils spi_cadence_quadspi(+) optee(+) display_connector tee tps65219_pwrbutton u
-sb_conn_gpio gpio_keys dwc3_am62 roles k3_j72xx_bandgap ti_ads1015 industrialio_triggered_buffer kfi
-fo_buf sa2ul hci_uart sha512 bluetooth rtc_ti_k3 ecdh_generic libsha512 sha256 ecc snd_soc_davinci_m
-casp snd_soc_ti_udma rfkill sha1 authenc snd_soc_ti_edma wave5 libaes snd_soc_ti_sdma cdns_dsi cdns_
-dphy omap_hwspinlock lm75 omap_mailbox snd_soc_nau8822 i3c ina2xx lontium_lt8912b m_can_platform m_c
-an can_dev pwm_tiehrpwm spi_omap2_mcspi fuse ipv6 libsha1 autofs4
-[    6.421984] CPU: 2 UID: 0 PID: 180 Comm: (udev-worker) Not tainted 6.18.0+ #2 PREEMPT 
-[    6.429902] Hardware name: Toradex Verdin AM62P WB on Verdin Development Board (DT)
-[    6.437555] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    6.444515] pc : clk_core_disable+0xa4/0xac
-[    6.448708] lr : clk_core_disable+0xa4/0xac
-[    6.452896] sp : ffff800080bd37f0
-[    6.456234] x29: ffff800080bd37f0 x28: 0000000000000000 x27: ffff000001924810
-[    6.463406] x26: ffff000001924810 x25: ffffd9bd273e0408 x24: ffff000001924800
-[    6.470554] x23: 0000000000000000 x22: ffff000001439800 x21: 00000000ffffffed
-[    6.477693] x20: ffff000002476c00 x19: ffff000002476c00 x18: 0000000000000006
-[    6.484831] x17: 0000000000000000 x16: ffffd9bd3f665260 x15: 0720072007200720
-[    6.491970] x14: 0720072007200720 x13: 0720072007200720 x12: ffffd9bd401ee538
-[    6.499108] x11: 0000000000000058 x10: 0000000000000018 x9 : ffffd9bd401ee538
-[    6.506242] x8 : 0000000000000194 x7 : ffffd9bd40246538 x6 : ffffd9bd40246538
-[    6.513380] x5 : ffff00007fb886c8 x4 : 0000000000000000 x3 : 0000000000000027
-[    6.520518] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000005504300
-[    6.527656] Call trace:
-[    6.530104]  clk_core_disable+0xa4/0xac (P)
-[    6.534296]  clk_disable+0x30/0x4c
-[    6.537706]  cqspi_probe+0x7c0/0xc64 [spi_cadence_quadspi]
-[    6.543209]  platform_probe+0x5c/0xa4
-[    6.546885]  really_probe+0xc0/0x39c
-[    6.550467]  __driver_probe_device+0x7c/0x14c
-[    6.554831]  driver_probe_device+0x3c/0x120
-[    6.559022]  __driver_attach+0xc4/0x200
-[    6.559387] lt8912 1-0048: supply vccmipirx not found, using dummy regulator
-[    6.562855]  bus_for_each_dev+0x7c/0xdc
-[    6.573734]  driver_attach+0x24/0x30
-[    6.577315]  bus_add_driver+0x110/0x240
-[    6.581158]  driver_register+0x68/0x130
-[    6.585001]  __platform_driver_register+0x24/0x30
-[    6.589714]  cqspi_platform_driver_init+0x20/0x1000 [spi_cadence_quadspi]
-[    6.596516]  do_one_initcall+0x60/0x1e0
-[    6.600363]  do_init_module+0x54/0x23c
-[    6.604126]  load_module+0x1810/0x1f14
-[    6.607886]  init_module_from_file+0x88/0xcc
-[    6.612168]  __arm64_sys_finit_module+0x264/0x358
-[    6.616883]  invoke_syscall.constprop.0+0x50/0xe0
-[    6.619334] lt8912 1-0048: supply vccsysclk not found, using dummy regulator
-[    6.621583]  do_el0_svc+0xa8/0xe0
-[    6.631945]  el0_svc+0x3c/0x148
-[    6.635095]  el0t_64_sync_handler+0xa0/0xf0
-[    6.639285]  el0t_64_sync+0x198/0x19c
-[    6.642955] ---[ end trace 0000000000000000 ]---
-[    6.655277] ------------[ cut here ]------------
-[    6.659991] clk:75:7 already unprepared
-[    6.667941] WARNING: CPU: 2 PID: 180 at drivers/clk/clk.c:1047 clk_core_unprepare+0xe4/0x104
-[    6.668689] lt8912 1-0048: supply vcclvdstx not found, using dummy regulator
-[    6.676411] Modules linked in: spidev evdev(+) rng_core aes_ce_blk aes_ce_cipher ghash_ce gf128mu
-l snd_soc_simple_card snd_soc_simple_card_utils spi_cadence_quadspi(+) optee display_connector tee t
-ps65219_pwrbutton usb_conn_gpio gpio_keys dwc3_am62 roles k3_j72xx_bandgap ti_ads1015 industrialio_t
-riggered_buffer kfifo_buf sa2ul hci_uart sha512 bluetooth rtc_ti_k3 ecdh_generic libsha512 sha256 ec
-c snd_soc_davinci_mcasp snd_soc_ti_udma rfkill sha1 authenc snd_soc_ti_edma wave5 libaes snd_soc_ti_
-sdma cdns_dsi cdns_dphy omap_hwspinlock lm75 omap_mailbox snd_soc_nau8822 i3c ina2xx lontium_lt8912b
- m_can_platform m_can can_dev pwm_tiehrpwm spi_omap2_mcspi fuse ipv6 libsha1 autofs4
-[    6.699332] lt8912 1-0048: supply vcchdmitx not found, using dummy regulator
-[    6.743120] CPU: 2 UID: 0 PID: 180 Comm: (udev-worker) Tainted: G        W           6.18.0+ #2 P
-REEMPT 
-[    6.743139] Tainted: [W]=WARN
-[    6.743142] Hardware name: Toradex Verdin AM62P WB on Verdin Development Board (DT)
-[    6.743147] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[    6.743153] pc : clk_core_unprepare+0xe4/0x104
-[    6.743168] lr : clk_core_unprepare+0xe4/0x104
-[    6.743175] sp : ffff800080bd37f0
-[    6.743178] x29: ffff800080bd37f0 x28: 0000000000000000 x27: ffff000001924810
-[    6.796577] x26: ffff000001924810 x25: ffffd9bd273e0408 x24: ffff000001924800
-[    6.799311] lt8912 1-0048: supply vcclvdspll not found, using dummy regulator
-[    6.803704] x23: 0000000000000000 x22: ffff000001439800 x21: 00000000ffffffed
-[    6.803713] x20: 0000000000000000 x19: ffff000002476c00 x18: 0000000000000000
-[    6.803723] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-[    6.803731] x14: 000000000000008f x13: 00000000efe4b99a x12: 00009b471872c248
-[    6.803740] x11: 00000000000000c0 x10: 00000000000009e0 x9 : ffff800080bd3660
-[    6.803749] x8 : ffff000005504d40 x7 : 000000000000b67e x6 : 000000000000ba61
-[    6.803758] x5 : 0000000078b6e217 x4 : 0000000000000818 x3 : 0000000000800000
-[    6.803767] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000005504300
-[    6.803777] Call trace:
-[    6.803781]  clk_core_unprepare+0xe4/0x104 (P)
-[    6.825908] lt8912 1-0048: supply vcchdmipll not found, using dummy regulator
-[    6.832255]  clk_unprepare+0x2c/0x44
-[    6.832266]  cqspi_probe+0x7c8/0xc64 [spi_cadence_quadspi]
-[    6.832286]  platform_probe+0x5c/0xa4
-[    6.894596]  really_probe+0xc0/0x39c
-[    6.898176]  __driver_probe_device+0x7c/0x14c
-[    6.902534]  driver_probe_device+0x3c/0x120
-[    6.906715]  __driver_attach+0xc4/0x200
-[    6.910548]  bus_for_each_dev+0x7c/0xdc
-[    6.914380]  driver_attach+0x24/0x30
-[    6.917954]  bus_add_driver+0x110/0x240
-[    6.921789]  driver_register+0x68/0x130
-[    6.925627]  __platform_driver_register+0x24/0x30
-[    6.930333]  cqspi_platform_driver_init+0x20/0x1000 [spi_cadence_quadspi]
-[    6.937128]  do_one_initcall+0x60/0x1e0
-[    6.940968]  do_init_module+0x54/0x23c
-[    6.944720]  load_module+0x1810/0x1f14
-[    6.948471]  init_module_from_file+0x88/0xcc
-[    6.952740]  __arm64_sys_finit_module+0x264/0x358
-[    6.957445]  invoke_syscall.constprop.0+0x50/0xe0
-[    6.962149]  do_el0_svc+0xa8/0xe0
-[    6.965463]  el0_svc+0x3c/0x148
-[    6.968605]  el0t_64_sync_handler+0xa0/0xf0
-[    6.972785]  el0t_64_sync+0x198/0x19c
-[    6.976447] ---[ end trace 0000000000000000 ]---
+Base DTS is [1], overlay DTS is [2].
+Applying and removing the overlay is done using OF_CONFIGFS[3],
+and "overlay [add|rm] 25lc040"[4].
 
+I assume you can reproduce the issue on any board that has an SPI
+EEPROM, after moving the SPI bus enablement and SPI EEPROM node to an
+overlay. Probably even with an I2C EEPROM instead.  Or even without
+an actual EEPROM connected, as even the SPI bus fails to appear.
 
+> Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect=
+.
+> Got emails delivery failure with this email address.
+
+Yeah, he moved company.
+He is still alive, I met him in the LPC Training Session yesterday ;-)
+
+Thanks!
+
+[1] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drive=
+rs.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
+[2] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drive=
+rs.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.=
+dtso?h=3Dtopic/renesas-overlays-v6.17-rc1
+[3] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drive=
+rs.git/log/?h=3Dtopic/overlays-v6.17-rc1
+[4] https://elinux.org/R-Car/DT-Overlays#Helper_Script
+[5] https://lore.kernel.org/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=3D9F9rZ+=
+-KzjOg@mail.gmail.com/
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
