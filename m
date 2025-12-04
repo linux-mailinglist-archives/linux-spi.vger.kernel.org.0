@@ -1,137 +1,120 @@
-Return-Path: <linux-spi+bounces-11757-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11758-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09CE4CA36BE
-	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 12:23:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBD1CA3885
+	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 13:04:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14865314EFEE
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 11:21:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 19EB3302D90E
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 12:04:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B05332EA2;
-	Thu,  4 Dec 2025 11:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A05C33CE87;
+	Thu,  4 Dec 2025 12:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QKSYdNdr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IX47SdZ4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8422229B36
-	for <linux-spi@vger.kernel.org>; Thu,  4 Dec 2025 11:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F0B22EFDAF;
+	Thu,  4 Dec 2025 12:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764847307; cv=none; b=s4oDvH1c7fiH9F4zKenVR1Jqa3+w9C1UfHteDMTHYua2cYkzreuWAN5QI6U944vf3E8a9sUdh2Iop8bhCGv51adE5A/5BHCa8ssJej6GJOFO3kQ7fZHimxaR5c8vpK9vcVK02ZL+GDlQLMu55dnCVX6bGwusMfX1JuuTkyRB1zI=
+	t=1764849883; cv=none; b=iOpsBTvtXpC/RCt7FMbEUlaa+GAsKT0lsoDzV4ItzYcbKkKPhR7V0TnG4CUlgNPJKzmsBQ67Cfi/kXy2kCd20fjOdnaQIqW6fqkcvjzR14HA1drcQAV0S4qy9Ma1Ffije3mMCv7Sk2L4YsQfGLdBQndS5NXaoR+v9fD/6omWgnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764847307; c=relaxed/simple;
-	bh=sa2/rwfPU/3AWe2gcmw+J611RZJxXkFCln1XxUj6HfE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a8SC8Go5sQz+Z03LCPXstChdTdIeLm5j/k0Vp4z2y7gkkc94+hDOPSsRbqvmWIP++VN1yxGZY0DlGlznvqdw0wEgwc/grI6auMH7b2EEUge/ZBRIJcmX7nD+fjSTyISkLNj7dGkZSF9ouZLADoI9SXsV+wqHV2Rmoi9U768hSIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QKSYdNdr; arc=none smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so7059225e9.2
-        for <linux-spi@vger.kernel.org>; Thu, 04 Dec 2025 03:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764847304; x=1765452104; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZCeemqjPzYHYloJnabZFEtDRR32WJAjkgl70eCbv6ZY=;
-        b=QKSYdNdrsD0eBvZOgEeG7YYQxkierAyXZts/buIdVc6kTcDqx+XMLvvOKl5BGCNd4K
-         1CEr8r5Cgiq0j9WN7BNmS4P5DAfOBs3dJR7ekHYwpLiA84aKpNxXeVk6d2nXODw1x1k/
-         8gKGnLoCS2WZctrHx6KZqrEcoZBzVBwyZIuxne5WpkZX0o/BecO0aUUgEpiWANk6kNkh
-         lenavRNI0iqjc4gjBp+Ofwr+klkTSXZtTcJGkQOv8tW3emJ2I/Q7OZlQloKaWBn4y5GP
-         QGJ/qSrSGViPbuSF6acrdGFV2G3FpJyu6tCaySDYL8lZjm/A/5ZGv8/q3dXr9fytJU4C
-         raNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764847304; x=1765452104;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZCeemqjPzYHYloJnabZFEtDRR32WJAjkgl70eCbv6ZY=;
-        b=byv1usUrBeE/4AY2dDK3FKVCguW6wCulz9IEgxUz+YMqaFvbvzRAh/mDKo2yz3O4ss
-         03MNgEO9YWCpw1y/o9O+jYYZZCHvCux0xEaGUhwWvlpY0DRY/lRmiy6rWdc9ZDx5kcgV
-         XdS8/QrUKxevlYmeJigTMG4xU8atmUy6BUZzN/7Dt24JXrwX722yyZ+ddMJj7YEyHJpf
-         sZjGl9/YFdb4Rl1ISLARAyfJljdBTVAo5C7H3qRbH1ctiBI7FAQ9Knppmj1rJ92ezWo1
-         wnL0LxFcW3ihvyMZdUJA1fjTINGaP9B8UxRmmnnJvRW5gpv3OWarnAc4rBjTx2eZ2PB5
-         6EQw==
-X-Forwarded-Encrypted: i=1; AJvYcCUevzWD7ItOleRhPzL9AAPGbxf1CaO8Mhofi9oBCSTHXLBlY11CZj2+M1xe1uK0mPRNGFFO0byUmQ8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YysABU3hCbtGrnGDXFQWgDNgv/48Y0eU3jw/detlMglwANia3k+
-	UGTtrvgIFDnijallb0kkRwhyZP9/ho59ax7h6CTVJc2fGLnpa/t1gzvOIKylhzd+
-X-Gm-Gg: ASbGnctyjJFTDcB93WlHUQQrUgJGOUygZmfWcGS4jdz+VPax+OhVt2JbCg9gAA9byiZ
-	VA63uJ4GGz14N3d+IXzPowqfMdtE0KoZDyuVB4hht6/5ytfOZJ/c2wI2E6zvWnIkmv3KwEMD6R/
-	hUW0fdP7HPiHovTX3yizBBW8acx+qPuB6uYuRvfWOFPvLCWwInVdkTNbVgtcsX7ctq8qKsOx1T4
-	+w5xNUZIzJZ7f2NoHrPsooSsHgJUlqy0MjPPY3Yov3jMiAqvf/lfi66BPDFA6q94Ewr9pBVgcrN
-	zdVDmBE/BxFe/VKoiLg6ABeJAwn+FFIGngwQceuZHdXSKYErHUYB7jii8C4YNLxo2o2eEo9nnwX
-	+v7PhiXCiZgcmfpdZHcaGg1MoJz/ApK37dwhZflCEwkJCTgIH9xEg6bIA3k5XHfDk7P3DVpG7uS
-	uHlJf1rCysA6F2LFSRAAlbVNY=
-X-Google-Smtp-Source: AGHT+IGxmFRNJ8vn/Q2VqFXfGRioN7Ju+TJs2Elh9XqUj6Bh3lwZ7KYSxHy4ZyqIZ1rZ/qGb/V57CQ==
-X-Received: by 2002:a05:600c:c490:b0:477:7479:f081 with SMTP id 5b1f17b1804b1-4792f25a030mr31401535e9.12.1764847303826;
-        Thu, 04 Dec 2025 03:21:43 -0800 (PST)
-Received: from [192.168.101.7] ([110.93.227.81])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47930ca15adsm28420305e9.13.2025.12.04.03.21.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Dec 2025 03:21:43 -0800 (PST)
-Message-ID: <27c926bf-f889-4e54-83c7-28134ca84899@gmail.com>
-Date: Thu, 4 Dec 2025 16:21:40 +0500
+	s=arc-20240116; t=1764849883; c=relaxed/simple;
+	bh=gahuY5j4rl/CtnfZX+Oxd0AZSKt23iPZjS1LKaxOyig=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ivc7+9SSRFJrSshrKkOSKEYfPkLWj8TLEqfOI/ZjMWcoJoV6BNzjICyyTbs6o1r+6CstVHH2oxU+am63liOGB90xh6KgMMx46qD3R4+vRi8/Ngp+c4bPqoOGufM6mzOPQgMoM+49/bf0fqajIWrtJx3FWOr3XXbMa+eLbMtRaUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IX47SdZ4; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764849882; x=1796385882;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gahuY5j4rl/CtnfZX+Oxd0AZSKt23iPZjS1LKaxOyig=;
+  b=IX47SdZ4skGCKIIKzo9cPGloHmGv44xpb2txMWJ+IjhywGOU6Ye4QXKK
+   KDdlyW+3xhQEn/9hqN5YatMfWlL1yAuxVqpqJSq/qGZt5k3i/+LNbMkkZ
+   d5906be8tAV1djtEZLDKF9LsljnmUtpGOd53yhhoRg9aMcInD74vrmcod
+   iS72cwV9fDcIiFrYcmeRUkkh+VC1q0EUOXMT44acjYhK1jeoAsO147JeP
+   7wkKT8+UzfDYhlfoSa4NDfeZHxCxuq9MSBy1MP4m+ju6AU01aGgpudf+3
+   8OIrhXOh6/BRbA8R89SvCz3Hc4Pd+Z9pfPCrrOLoVoBfJXoJ3+/rRzSnz
+   A==;
+X-CSE-ConnectionGUID: UxducDefRS2Mm1lqYtJC/g==
+X-CSE-MsgGUID: qzoMTSYbS4Goz3uNuBZcjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="66941073"
+X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
+   d="scan'208";a="66941073"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 04:04:41 -0800
+X-CSE-ConnectionGUID: XZTvr8laRxiwi8TbSrRJzg==
+X-CSE-MsgGUID: mLq186wHTMKddEFlXQFHCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,248,1758610800"; 
+   d="scan'208";a="195777812"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.245.222])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 04:04:36 -0800
+Date: Thu, 4 Dec 2025 14:04:33 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Herve Codina <herve.codina@bootlin.com>
+Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	linux-arm-kernel@lists.infradead.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Saravana Kannan <saravanak@google.com>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev,
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
+ overlays"
+Message-ID: <aTF40eLT2YTB8OoO@smile.fi.intel.com>
+References: <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
+ <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+ <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
+ <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+ <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
+ <20251202102619.5cd971cc@bootlin.com>
+ <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
+ <20251202175836.747593c0@bootlin.com>
+ <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
+ <20251204083839.4fb8a4b1@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] spi: cadence-qspi: Fix runtime PM imbalance in probe
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org,
- linux-kernel@vger.kernel.org, khairul.anuar.romli@altera.com,
- adrianhoyin.ng@altera.com, nirav.rabara@altera.com,
- matthew.gerlach@altera.com
-References: <20251130091251.12120-1-alitariq45892@gmail.com>
- <aS9RKnScH2DVXW-I@black.igk.intel.com>
-Content-Language: en-US
-From: Ali Tariq <alitariq45892@gmail.com>
-In-Reply-To: <aS9RKnScH2DVXW-I@black.igk.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251204083839.4fb8a4b1@bootlin.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Thanks for the merge. Recently, there was a patch which removed the
-redundant pm_runtime_mark_last_busy() call:
+On Thu, Dec 04, 2025 at 08:38:39AM +0100, Herve Codina wrote:
+> On Wed, 3 Dec 2025 12:11:45 +0200
+> Kalle Niemi <kaleposti@gmail.com> wrote:
 
-https://lore.kernel.org/linux-kernel/20251203181921.97171-1-akifejaz40@gmail.com/
+...
 
-The patch removes pm_runtime_mark_last_busy() from the probe function,
-as pm_runtime_put_autosuspend() already handles this internally.
+> Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect.
+> Got emails delivery failure with this email address.
 
-Best Regards,
-Ali
+According to the Git history his last activity was in August 2025 with
+adding (surprise) his name to one of the MAINTAINERS records.
 
-On 12/3/25 1:50 AM, Andy Shevchenko wrote:
-> On Sun, Nov 30, 2025 at 09:12:51AM +0000, Ali Tariq wrote:
->> The probe function incorrectly calls pm_runtime_put_autosuspend()
->> twice in succession at the end of successful probe, dropping two
->> runtime PM references while only one was acquired earlier with
->> pm_runtime_get_sync(). This causes a usage count underflow:
->>
->>      cadence-qspi 13010000.spi: Runtime PM usage count underflow!
->>
->> Remove the first redundant pm_runtime_put_autosuspend() call to
->> balance the reference count.
->>
->> Tested on StarFive VisionFive 2 v1.2A board.
-> 
-> ...
-> 
->>   	if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
->> -		pm_runtime_put_autosuspend(dev);
->>   		pm_runtime_mark_last_busy(dev);
-> 
-> This one — pm_runtime_mark_last_busy() — also may be removed as it's integrated
-> into the _put_auutosuspend().
-> 
->>   		pm_runtime_put_autosuspend(dev);
->>   	}
-> 
+And according to lore, his last message was in October 2025, so I dunno
+what's going on there.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
