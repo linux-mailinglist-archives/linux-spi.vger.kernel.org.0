@@ -1,190 +1,108 @@
-Return-Path: <linux-spi+bounces-11764-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11765-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F09EDCA4090
-	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 15:35:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D4BCA434A
+	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 16:18:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 97DF830671EC
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 14:28:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A3B92302C36C
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 15:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB25331B10F;
-	Thu,  4 Dec 2025 14:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3835F2E1C63;
+	Thu,  4 Dec 2025 15:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9GptvhQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AWrktubN"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EC8F3054F2;
-	Thu,  4 Dec 2025 14:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056A72DE6EF;
+	Thu,  4 Dec 2025 15:11:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764858529; cv=none; b=DYxPZ8v3oO6R3rga+bNDBqF7P5XRngXgl2Ljtr/0Dsx0j97lT9ouY1g/mfhQk/EI16Kuw/xiKp8Gv20L82vEPYGecyOtgBJaA+fPM24U0pb13Ar3aXcJ2ZNZX+f0A2yg0LpxLBOqDJC/Bxcbbjl6X8UAvVwFCYLBtWTyERgXeLE=
+	t=1764861087; cv=none; b=RTUDQOXnvlH1PtKthIpLndo2MzvEYPOSH9xowXLSgHRt4gKfZynRDAyGCUESEl52iQZmRTGTlBVB/mt1gc+Ryw58IyGWWPYboeXxw92PATOwTmD42kIJ3Xgnzf+MdROfkPSQ4bx7i4dUKjeJX+OGv52knUf7UE66zOt+DzwmPWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764858529; c=relaxed/simple;
-	bh=A7S0aqhNRp49+kPkpgOvDyswMTwDTAIZeVEntaKMiNQ=;
+	s=arc-20240116; t=1764861087; c=relaxed/simple;
+	bh=s8RwynxFSobSHFiYg6apsiIzFrd9hwGiYn1dp7L7tiE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bMZZF4nunW2mJSt10bEZaypS5GrBNLKK1zrx1ZNvoX+BrCNa56dJrRiZq125APyIofC9JDF+E+oUYynRmlkKLFsFLn/rHOJn4FKWJ8n8GogZL4Uy5zHferaKbt24CTdobTdu4YGBfH8BKdK8aCbRWLPTanNjk7aGEiGfAdbnJGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9GptvhQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BA4C4CEFB;
-	Thu,  4 Dec 2025 14:28:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cIL/BYwMQDG7xRk3xQn3XSvx2Ml8NaWUR87n80qe6CTZ+g+JareorNEK5a+v5TH3w5vFQgRLJktn9qsAub96oQ5ipxWz4H1InrPwC/c/jZ87C0QP9e42G0dOGP82ZCg7zH3qChT1+dfmC+RGnCHv+l8Tbn/gXqwa/Qhbs/p/akg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AWrktubN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC0FC4CEFB;
+	Thu,  4 Dec 2025 15:11:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764858528;
-	bh=A7S0aqhNRp49+kPkpgOvDyswMTwDTAIZeVEntaKMiNQ=;
+	s=k20201202; t=1764861086;
+	bh=s8RwynxFSobSHFiYg6apsiIzFrd9hwGiYn1dp7L7tiE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a9GptvhQzmrjIUAqXiGQVaXFPMJNpIA4Qs32xCzl131Ra7qCHiyRdEQsozNMtl1Ld
-	 NUQCKuQH+qKMmEk2IfpmR2tNKt5MdF77GT8GUOaJO5EPx2ZpOnJBAt8o21q9C9p1yi
-	 nP6zSys2/qtwTh/vrJ+6ncCJw2FEux1vriv+ePMLn68vWQTF3Q1IZpkRSLo9Sr55UY
-	 Ufs5Cc1zW8i6EVQa520w3g+9VIDoSQsSLQdmGsS//oju94/ju9Xz9DxNBDHPu+TX/1
-	 T5833m7y33jm87qabnz8O7cALxpnmAk++SUOJM8lg6i7EVU0xABXsYyCt9ki8LbOUF
-	 /yEgbRVcPHnTQ==
-Date: Thu, 4 Dec 2025 08:28:45 -0600
-From: Rob Herring <robh@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] dt-bindings: iio: adc: adi,ad7380: add spi-buses
- property
-Message-ID: <20251204142845.GA1303976-robh@kernel.org>
-References: <20251107-spi-add-multi-bus-support-v2-0-8a92693314d9@baylibre.com>
- <20251107-spi-add-multi-bus-support-v2-5-8a92693314d9@baylibre.com>
- <20251118155905.GB3236324-robh@kernel.org>
- <97c6b55d-9505-4091-8f0b-317dcbd70838@baylibre.com>
- <CAL_Jsq+ZZE0g424jE75xeCt2KY1ThPLqmbmOs0o_ddaJ8fOf3w@mail.gmail.com>
- <f2ac13fc-8f47-465e-8cef-e2e34bf41818@baylibre.com>
+	b=AWrktubNcNgYiCf093EJiWNLLDny7SZD9Lk++GZ0QXgt6aTDgZOt/VAyW6wwLxVcf
+	 I4dU421pgedMmWPLHfS79AEdhg73obtZhHl6oh0Bax6YAX6pFDXSZCm1Go+Nx3fXTt
+	 WCcdtY4IoM4YmpZBY5EGYZO/OiysHzRo5L2tazZCWHUtMFX5tj0YoPrwYU1yi/fxnl
+	 eSwJzBx2+/dQj675DVnzHeZUl8gwmCOLGJ93LPBB8yq7ihtFljlIyT79dXfqLcir7g
+	 h7MPPU7uRY9h/YI3z5RcQeUsJJ1Dt1EeO3GF3K542CDmdF3oet1sFAl5MdW+MRDcdM
+	 JOvX7qCwJHwzA==
+Date: Thu, 4 Dec 2025 15:11:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Nishanth Menon <nm@ti.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>,
+	Anurag Dutta <a-dutta@ti.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
+ runtime PM
+Message-ID: <4d6b857e-4bfe-45ef-a428-6e92f218f0c5@sirena.org.uk>
+References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+ <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
+ <555e9f6b-b8b6-4cc5-900b-63aaff8b4e6c@sirena.org.uk>
+ <20251204140530.xax5didvuc7auzcd@problem>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="t9U0UkLkOfzEnkeG"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f2ac13fc-8f47-465e-8cef-e2e34bf41818@baylibre.com>
+In-Reply-To: <20251204140530.xax5didvuc7auzcd@problem>
+X-Cookie: volcano, n.:
 
-On Wed, Nov 19, 2025 at 08:45:42AM -0600, David Lechner wrote:
-> On 11/19/25 7:18 AM, Rob Herring wrote:
-> > On Tue, Nov 18, 2025 at 11:46 AM David Lechner <dlechner@baylibre.com> wrote:
-> >>
-> >> On 11/18/25 9:59 AM, Rob Herring wrote:
-> >>> On Fri, Nov 07, 2025 at 02:52:51PM -0600, David Lechner wrote:
-> >>>> Add spi-buses property to describe how many SDO lines are wired up on
-> >>>> the ADC. These chips are simultaneous sampling ADCs and have one SDO
-> >>>> line per channel, either 2 or 4 total depending on the part number.
-> >>>>
-> >>>> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> >>>> ---
-> >>>>  .../devicetree/bindings/iio/adc/adi,ad7380.yaml    | 22 ++++++++++++++++++++++
-> >>>>  1 file changed, 22 insertions(+)
-> >>>>
-> >>>> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
-> >>>> index b91bfb16ed6bc6c605880f81050250d1ed9c307a..9ef46cdb047d45d088e0fbc345f58c5b09083385 100644
-> >>>> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
-> >>>> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad7380.yaml
-> >>>> @@ -62,6 +62,10 @@ properties:
-> >>>>    spi-cpol: true
-> >>>>    spi-cpha: true
-> >>>>
-> >>>> +  spi-data-buses:
-> >>>> +    minItems: 1
-> >>>> +    maxItems: 4
-> >>>> +
-> >>>
-> >>> As the property is not required, what's the default?
-> >>
-> >> spi-perepheral-props.yaml defines:
-> >>
-> >>         default: [0]
-> >>
-> >> Do I need to repeat that here?
-> > 
-> > No. So that means you only use one channel and the others are not connected?
-> 
-> Correct.
-> 
-> > 
-> >>
-> >>>
-> >>>>    vcc-supply:
-> >>>>      description: A 3V to 3.6V supply that powers the chip.
-> >>>>
-> >>>> @@ -245,6 +249,22 @@ allOf:
-> >>>>        patternProperties:
-> >>>>          "^channel@[0-3]$": false
-> >>>>
-> >>>> +  # 2-channel chip can only have up to 2 buses
-> >>>> +  - if:
-> >>>> +      properties:
-> >>>> +        compatible:
-> >>>> +          enum:
-> >>>> +            - adi,ad7380
-> >>>> +            - adi,ad7381
-> >>>> +            - adi,ad7386
-> >>>> +            - adi,ad7387
-> >>>> +            - adi,ad7388
-> >>>> +            - adi,ad7389
-> >>>> +    then:
-> >>>> +      properties:
-> >>>> +        spi-data-buses:
-> >>>> +          maxItems: 2
-> >>>> +
-> >>>>  examples:
-> >>>>    - |
-> >>>>      #include <dt-bindings/interrupt-controller/irq.h>
-> >>>> @@ -260,6 +280,7 @@ examples:
-> >>>>              spi-cpol;
-> >>>>              spi-cpha;
-> >>>>              spi-max-frequency = <80000000>;
-> >>>> +            spi-data-buses = <0>, <1>;
-> >>>>
-> >>>>              interrupts = <27 IRQ_TYPE_EDGE_FALLING>;
-> >>>>              interrupt-parent = <&gpio0>;
-> >>>> @@ -284,6 +305,7 @@ examples:
-> >>>>              spi-cpol;
-> >>>>              spi-cpha;
-> >>>>              spi-max-frequency = <80000000>;
-> >>>> +            spi-data-buses = <0>, <1>, <2>, <3>;
-> >>>
-> >>> An example that doesn't look like a 1 to 1 mapping would be better.
-> >>> Otherwise, it still looks to me like you could just define the bus
-> >>> width.
-> >>
-> >> I'm not sure we could do that on this chip since it doesn't have
-> >> the possibility of more than one line per channel.
-> > 
-> > That's a property of the SPI controller though, right?
-> > 
-> > If the above controller had 4 lines per channel/serializer, then you could have:
-> > 
-> > spi-data-buses = <0>, <4>, <8>, <12>;
-> 
-> Ah, I get what you mean now. The intention here though was that the
-> index numbers correspond to the data lane (channel/serializer), not
-> to individual lines. So the example you gave would mean that the chip
-> has at least 13 data lanes (rather than what I think your intention was
-> of saying it has at least 16 data wires). I did it that way because all
-> of the hardware I looked at didn't allow assigning arbitrary data lines
-> to arbitrary lanes/channels so it keeps things simpler and easier to match
-> to the actual hardware docs.
 
-But what happens if there is such h/w? Better to design things for 
-something we can visualize and not have to revisit this. Of course there 
-will be things we don't anticipate. (Who thought we'd have parallel 
-SPI...)
+--t9U0UkLkOfzEnkeG
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I suppose if that's rare enough we can just have another property to map 
-pins to channels.
+On Thu, Dec 04, 2025 at 08:05:30AM -0600, Nishanth Menon wrote:
 
-Rob
+> The clock is already turned off by the runtime-PM suspend callback, so an
+> extra clk_disable*_unprepare() is only correct when runtime-PM support is
+> not in use.
+
+Right, I'm pretty sure that's where the extra disable is coming from.
+The pm_runtime_set_active() further up the function is looking rather
+suspect here.
+
+> -	clk_disable_unprepare(cqspi->clk);
+> +	/* Runtime-PM suspend already disables the core clock. */
+> +	if (ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))
+> +		clk_disable_unprepare(cqspi->clk);
+
+This will leak the reference if runtime PM isn't enabled unfortunately,
+no runtime PM operations will get called.  Life would be vastly simpler
+were that mandatory :(
+
+--t9U0UkLkOfzEnkeG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkxpJkACgkQJNaLcl1U
+h9C28Af+OMR9uVsQM4j51CaK4qIVO/f+4Cf60EexZIetalNBr4M7Yv9ra9WACfDe
+muQD5LEGSN1C+EnsNv9ie7J3Llx+rMDzcMqpYyXGddeTKeneNdoKSR4zNPGgf4Nf
+ImkbQZ7CiKK3OPh0gu6PgZekIxdNiUHPJB2X5WjbGWp7BWNLZDTJKYUTXxzpJHtw
+AVKQqqpgC4GgOSvbb9CwgZXbj7LGGo/E5WCkDkriQb6D0DUTPN5YShvU0yg5uu0o
+KkA23VfIwQcbyCL6dG0HU1nzuXZhhG4aImuuU3bcBZl8pCPTBbFPEHtWtVl9HQfP
+MiCYLcqqTAFpQmmB0k9LMIHEVbmPeg==
+=6bCa
+-----END PGP SIGNATURE-----
+
+--t9U0UkLkOfzEnkeG--
 
