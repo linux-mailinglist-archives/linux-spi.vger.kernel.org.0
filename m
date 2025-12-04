@@ -1,57 +1,55 @@
-Return-Path: <linux-spi+bounces-11760-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11761-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4A18CA39E5
-	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 13:33:24 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3091CA3CF0
+	for <lists+linux-spi@lfdr.de>; Thu, 04 Dec 2025 14:28:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 55A283034DE4
-	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 12:33:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 97DDE3009609
+	for <lists+linux-spi@lfdr.de>; Thu,  4 Dec 2025 13:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C906336EFE;
-	Thu,  4 Dec 2025 12:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C60341ACB;
+	Thu,  4 Dec 2025 13:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mhoww7L3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QiHahVYI"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F051330B3D;
-	Thu,  4 Dec 2025 12:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC5633FE01;
+	Thu,  4 Dec 2025 13:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764851599; cv=none; b=mFZa99w8FDbrI/Ej9I8w9gA2bw85IxZegEPaEgClUVkysGvQW/yLOeLvaCTZjY5gVd+kOBadrOYSvfiUmjv7CF/+Ah+sk7feMFwZDBeeF7IRo21nZ63MbAOSecBBHKEbxWNnbbH5a4HCkLf+xm+XItME/QNrVBJPXpR3TAGqZMk=
+	t=1764854888; cv=none; b=ALobbCUe7Z3LeCmSPJU96Mt9AxjmvZ/Poge1WLSpUvxWePe+JwIXy3kdMX2Tp+iU+Be2hEAS6nVK6eYdsQz0b3ciScBBSfFk2Gr37QaVpb53snrb3nNfEXPRCa6BtNXA27xp3qOnEM1MvL6iZwqA1I1BmdC2oMSSSym4HSJkJc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764851599; c=relaxed/simple;
-	bh=HMmNty+P3NAdwwW+CTsFuvrWKjzzvhFXf2oLlXgTZdw=;
+	s=arc-20240116; t=1764854888; c=relaxed/simple;
+	bh=xeLLsRWbjQjALHiUTrlrtoZ6VbalpQ7iBRIvIu/YyOE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gP2uPfCL8hZS8fPwR4cNNuP8LKDJH41xygvdlt9TdrMFWH5qUULRsoUsC+LbA5tYeOUhDOHg5uxjCCyoqTfrkVfvRmjVaUOi2iilg0w+9B0sgaKssIFuc6mQWFaP0+5v/6yJFll/nu14uDMfMa41NFloeZSaV73krd5t905sii8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mhoww7L3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E6C9C4CEFB;
-	Thu,  4 Dec 2025 12:33:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DIc5aJ+NPRSv+9xSUhpJD3NNYoTqEtLOYKtNyK1QKkqVE6P/SEJWRAfIGjRgEOZW5EWfg/pkDjagorkee7Qr8GiwhDx3URtmYmBrT8k/AZx090S9//XMWemgn5ZNpliJNb4ZYdoboA+nMQEgjaIEhEGsynxojNLG/CeKOsy7Hrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QiHahVYI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E44DFC116C6;
+	Thu,  4 Dec 2025 13:28:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764851598;
-	bh=HMmNty+P3NAdwwW+CTsFuvrWKjzzvhFXf2oLlXgTZdw=;
+	s=k20201202; t=1764854885;
+	bh=xeLLsRWbjQjALHiUTrlrtoZ6VbalpQ7iBRIvIu/YyOE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Mhoww7L37d2+HcwPhCcqhSAJryHtEPS2AOdqGh0uX7eC/kFvp9GayA+htefzOvat2
-	 wqk9wGjNGmal6eB/DbfxjUPDrKTQAMlwBSGhueHRBR3kHcACBpJ1zwB5yvlyxNepyi
-	 0kE02L3xJGmtjhaF+YGnN9/ppksV743tYZKXU/BtCo12OVmIpDv0q/IPIvRgu75LfO
-	 D2mNM+2Jt3QtbYGzCCorFzRtexXu2gn7eWT0z2J+cP6fk29xq3AFEBAR8hAZ36rbPr
-	 MmJ8lgEn9HbH1i8Ed+LS/npN8mU6oeGyiIghuKbdZzf2lCzcNLB7dNlEeKlh5xTO2g
-	 nfApDh32H3PkQ==
-Date: Thu, 4 Dec 2025 12:33:14 +0000
+	b=QiHahVYI09ao2DDbBgQbzY9ssKDyQod0FvA2sD82c/at5RYtpBvLNNVxiVq1PpZRE
+	 bzL0uOla9PKBXCSiBWztf1wQeK/ggzFBDZClDqJDzQLgedlfacmTOsjuVeZDJsCSVl
+	 kTgWNmPTUnTainrTHhZcOYKE1FILr2cDhrPl5txXGWr8Ay4s5OjQiQwEoddSjZ5ixd
+	 grO4+VWnmQfjzBWJrVklKORVgvsZ8joA/VzqgWlMtkuG4AG8DHoPSaCyFAG6QZN84Q
+	 LMX1XQms5dxy5Ksza6oZGUrnSU98d+qhmxMZDMd0M8sTMWiFbZj0iFkgtP24QpV7/x
+	 Igv7jEQrN5Jyg==
+Date: Thu, 4 Dec 2025 13:28:01 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Guixin Liu <kanie@linux.alibaba.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Sowjanya Komatineni <skomatineni@nvidia.com>,
-	Laxman Dewangan <ldewangan@nvidia.com>, linux-tegra@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: tegra210-quad: downgrade the log when fall back to
- PIO
-Message-ID: <cb9c67fa-c95e-44a3-b906-8f64bc4a9e29@sirena.org.uk>
-References: <20251127130207.43754-1-kanie@linux.alibaba.com>
- <16bc32ff-2c10-448b-ab82-a21eaa91f4ce@linux.alibaba.com>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Siddharth Vadapalli <s-vadapalli@ti.com>, Anurag Dutta <a-dutta@ti.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
+ runtime PM
+Message-ID: <555e9f6b-b8b6-4cc5-900b-63aaff8b4e6c@sirena.org.uk>
+References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+ <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -59,47 +57,45 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="U0KhDSkCRerBZi8d"
+	protocol="application/pgp-signature"; boundary="fYL5BUIZoAJo6euc"
 Content-Disposition: inline
-In-Reply-To: <16bc32ff-2c10-448b-ab82-a21eaa91f4ce@linux.alibaba.com>
+In-Reply-To: <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
 X-Cookie: volcano, n.:
 
 
---U0KhDSkCRerBZi8d
+--fYL5BUIZoAJo6euc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 04, 2025 at 09:46:26AM +0800, Guixin Liu wrote:
-> Friendly ping...
+On Thu, Dec 04, 2025 at 10:13:35AM +0100, Francesco Dolcini wrote:
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
+> Unless I did some stupid mistake testing the patch, it does not fix the issue.
+> Here the log with v6.18 + this patch
 
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
+Yeah, I'm pretty sure it didn't work.  I've managed to find a system
+which instantiates the IP so hopefully I can modify it to trigger the
+issue and test directly rather than working blind, I've also noticed
+that we're getting
 
---U0KhDSkCRerBZi8d
+[   15.430306] cadence-qspi 13010000.spi: Runtime PM usage count underflow!
+
+even in normal operation (on that system anyway) so the runtime PM
+handling is definitely unhappy.
+
+--fYL5BUIZoAJo6euc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkxf4kACgkQJNaLcl1U
-h9BsjQf+OYhDV4Z7kPWKI01Q5eLXCDLd8NmrTIbce0ywnQsYHbXT6FP0G6oVZPwk
-UsyTh6tToqKa3qnMKu4Fz0OC/s88WuEJq3kqClZ02eKVVXAUP+9PszTMPGsctpV/
-Rc20S3NvDXMzBqMQK13TUcg44SBwf5eJHICI63r/zRkxY04BBf1EHMU1xCscF3Nr
-LtVONTFiFBmpC/etV7R+qFPjRRrTzy7+XnIl0VbtjWCUdAHvoerCDNgxZ92JOIFn
-yaQKD7IZi4pbwUxT7F5eWPjByMP6lcpU4XWJDwVHy5H+WjVF1Yh09YLwRjdZ7Nqf
-nUSVGo5Ti/6v1B+/szCD4NKdlBSccg==
-=5ORn
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkxjGAACgkQJNaLcl1U
+h9Dh9wf/dY6Nm8EDZlrpDbXE9eUWQTwRKYwmP7KAAAhh38EkTWrDZWXtoD17gMO5
+Ac/7dAjaQRytB6uvcJvwgiCLPxKOgpoZmWQGMN0W46QsXpgCqCCmQdvfezclbFFO
+mrKkRjdZh6q9/mh0z3VeVxOAKjdIx/QBxU15v2R7/qA/VtygtNzrJxaCmkhQQ7SH
+PUeW/eHy4l8uMzMrdQg4gmX4pfD2wLc7gSpGzYm63S9tkC9ygntoCHGVo4tKmfet
+CC8gXCsW7q7Tetcq3UMw3VlV+ikeAJjdZuoRWYodZf07bGmTslyvVkhiVezJ4BXf
+R9Z5FQ+Af6dETTv1/MMbiE4RXEjKpA==
+=Zi8G
 -----END PGP SIGNATURE-----
 
---U0KhDSkCRerBZi8d--
+--fYL5BUIZoAJo6euc--
 
