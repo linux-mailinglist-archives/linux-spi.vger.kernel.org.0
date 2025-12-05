@@ -1,143 +1,181 @@
-Return-Path: <linux-spi+bounces-11803-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11804-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49724CA946F
-	for <lists+linux-spi@lfdr.de>; Fri, 05 Dec 2025 21:37:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6092CA95CC
+	for <lists+linux-spi@lfdr.de>; Fri, 05 Dec 2025 22:11:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5A2D3120105
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Dec 2025 20:36:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3BF8D3082355
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Dec 2025 21:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F972253E4;
-	Fri,  5 Dec 2025 20:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32D02E8B6C;
+	Fri,  5 Dec 2025 21:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ceybAcf1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F26D2DF146
-	for <linux-spi@vger.kernel.org>; Fri,  5 Dec 2025 20:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4722626561E
+	for <linux-spi@vger.kernel.org>; Fri,  5 Dec 2025 21:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764966982; cv=none; b=J4IJpwX3uoMBKy03frSfvecQtKh9hIN04QyAGWY40BZASTkzdI10OBLdZrNv3iMvUELXASXVL8m9nl1O9GeqANJpRq8HbOe61bPjIIA7VS4NeJ2Lh5sA47jxtIOpTkt/XafmhrTmO3dd3KaXqTV106nH7gBA5EG/x8meXon5ifM=
+	t=1764969071; cv=none; b=iK1kgQM8WRGGUuRkppsy/N7qQ93mKL2WWvyAEkPRDMKne9VdF74h5FToRpN6NXW9bQ6nl5OGpsUeA5Eu7W3P5VT+kT822mQfiOoxF29IepHnbyVUbwbuCGEgDoHVdfk6amW5cLJC1i4dSLQsMR+IgXyHNLI+WmBFJs91qYGy/Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764966982; c=relaxed/simple;
-	bh=VeOaZdkfKx/JkEpEeZiYTDaI9ZBnPx0g8uqP6LecDdw=;
+	s=arc-20240116; t=1764969071; c=relaxed/simple;
+	bh=c7c1J1vIUl2RUCCAw3PryaNjjaYVzuxa0pvkJ9f40DI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yc7Kuwu2RsSABZDFHHyEkZ4p7MGCDqt8yIzZvzPtER99cy0+z0m2L5f5AdyfqxxPsCZ6TJfFQvfVS10QJBUEcRkgIUt1sKVTVxwrT0cd+eY4qaJc4xgh7Z1y4DUKoxzjx2WiLkD9GqTaHeAJihkgZWAQqSYqCLRL5bgIuzk1TtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vRcX9-0002Tf-Q9; Fri, 05 Dec 2025 21:36:07 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1vRcX8-004BG4-2d;
-	Fri, 05 Dec 2025 21:36:06 +0100
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id 19EAF4B0195;
-	Fri, 05 Dec 2025 20:36:04 +0000 (UTC)
-Date: Fri, 5 Dec 2025 21:36:02 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Clark Wang <xiaoning.wang@nxp.com>
-Cc: Dhruva Gole <d-gole@ti.com>, "broonie@kernel.org" <broonie@kernel.org>, 
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	kernel@pengutronix.de
-Subject: Re: RE: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-Message-ID: <20251205-abstract-acrid-markhor-f49e81-mkl@pengutronix.de>
-References: <20230505063557.3962220-1-xiaoning.wang@nxp.com>
- <0608e366-1b0e-d387-569a-9ed123bc4d69@ti.com>
- <DB7PR04MB5098E2E44D74474BF98F8620F3729@DB7PR04MB5098.eurprd04.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uFUDJzZB349V6pRbNdBZXN82E8pJgzHy7I6XCNPKGUTP34ziWYSqMwJKZGPiZpDmaD9TCmxi7XdKPrvQBXkMvPHOnNpebxRAQhGrF12mLJ9bFtAP1FGTa6Zu7s2C0FbvEIkGG+RkUGHHxXCGqLow9e2ztKWFd556/Vln24nwa6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ceybAcf1; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7b8e49d8b35so3049641b3a.3
+        for <linux-spi@vger.kernel.org>; Fri, 05 Dec 2025 13:11:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764969069; x=1765573869; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9dp9/mKBjgaa+hOS/JhmxBoz56rQ07ceIHhKFiTPWfA=;
+        b=ceybAcf1xwMEFuJCZDVlTScA7kKEa5jiuiR57JEe8KGzDgCc32QHQ5xWIKXxl5Cagj
+         kkpD+s90WFuP1HKGoV8SK66n6aqhMtmDvUzlydMjRHzIOUpbjjy2KK1IML8Q6sEhtlmm
+         9BvL1Xs7GTyT3RWnfKtoaHUHsFrNz3SS10SaeNFzJj4kCKdsoYhlwEMED2KYi/PxYgej
+         ZqqqXtCEUSjiY8XBgirtFEL/X/mh0CXx5iQ/kypz9IpUOjRhpL4xoSE1A21rLWdoDXUj
+         Fpn/MjU4JISXEdebcB68AY90/MSvE5K6OYBMxiq7U0JAEL0kg0Eyqb1e02gNT6DsY5OZ
+         XWxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764969069; x=1765573869;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9dp9/mKBjgaa+hOS/JhmxBoz56rQ07ceIHhKFiTPWfA=;
+        b=lIgkgHcCQC4b6bJrJ13TDORox5B+nm7gQC3Mv7kELkNlMQ5zXQnsY+by3DWZukArdd
+         kIqGwZeZ+gPQyUQS6jYMQXdLQjOVR4YyxhWAoTPTbCITIpwYBHV50xs5nc9QBBIENebv
+         S5vb6j11JURP3skhCLrWcvdhpoHo5QqmUL0Qxj4YphmME8xegdc3yNoEkdnECVZPX6gi
+         B8QwIolAHN+m6XP78d7tfMk9owXVuwkaaYWeOrr/TFMpAQNo6IHrv9+kDE6l4e0hHvpE
+         PihO4COxN4a2BAgbr7tnsInV0ZHWc9hV4e9hiYORECEPtwB5IyAQOUXjltZ4cRf6sqnI
+         k3jw==
+X-Forwarded-Encrypted: i=1; AJvYcCWAixnW//M2tYxG8eQpOoSQZ92lWg+HwdLOs4mjOxMjkjv6uOQlL+bgwUXWLZ+mGXoiIuj+n7AmnyA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxr56UErKUqJemR6Ws7rBGZN45oRDQlk1wQWhx4GnCiUcFlnsJ1
+	ft7wqVOyRBpF+M7DQz72+SpDhLrdYskQtTwkw5KPPwCAb5eWZg6dTAva
+X-Gm-Gg: ASbGnctyM+IAqzEeQdO4RLa5JIpxJFxAIDLEuOW0NS8sk5dKxyLzgm6JFpszi3mLmNQ
+	SVZz0EBr/hKdvZpobTz9XmVPoJolrydFHsuZA1edWQqGbXa5YLsE+zuYNvc0QUsjcIRCiaQR9NO
+	D4e7XvnClpHgZTSRv7ljFB08rv+W2g4vcvrXGnUoea0ITVlQUxh6tYoUEKYL0ztWK72ZXldnGqp
+	O4ZbGfpYelhAOu4I6PRorLtQQSfrUPdlVYiDtSl8szznBqY52/W349RJTCuNk7EwGC6aMSilY0O
+	R2vqzQp4GV6cnvpmG83ahS4POh3ZDGHYcAWix35KCPt+Vlj0gLLJ3g+r6WTWpeNdyptnhZLVFll
+	Mbpko7hXMlrJl+J9N02TTCSoqlo4waDHKt0RrDSl5Pl9X+Gvs1uZF06pRKj+J4g0asaNtWdEvdI
+	mWmtMYAx7K9o+Fc5BoobeF
+X-Google-Smtp-Source: AGHT+IHcEY0Q1FA1vKURG7RgwRQex46GLvAineu1VoXOdKRh8PgkrSImSe/zY+sC4iAx07qvMIjyjw==
+X-Received: by 2002:a05:7022:4404:b0:119:e569:f60a with SMTP id a92af1059eb24-11e03162d6amr481897c88.3.1764969069289;
+        Fri, 05 Dec 2025 13:11:09 -0800 (PST)
+Received: from localhost ([2804:30c:2712:fd00:9579:9ff6:e506:6147])
+        by smtp.gmail.com with UTF8SMTPSA id a92af1059eb24-11df7552211sm21303509c88.1.2025.12.05.13.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 05 Dec 2025 13:11:08 -0800 (PST)
+Date: Fri, 5 Dec 2025 18:12:41 -0300
+From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
+To: Rob Herring <robh@kernel.org>
+Cc: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] dt-bindings: iio: adc: adi,ad4030: add data-lanes
+ property
+Message-ID: <aTNKyaWAEjVJixMI@debian-BULLSEYE-live-builder-AMD64>
+References: <20251201-spi-add-multi-bus-support-v3-0-34e05791de83@baylibre.com>
+ <20251201-spi-add-multi-bus-support-v3-7-34e05791de83@baylibre.com>
+ <20251204213348.GA2198382-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pdisdenfygihiq46"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DB7PR04MB5098E2E44D74474BF98F8620F3729@DB7PR04MB5098.eurprd04.prod.outlook.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-spi@vger.kernel.org
+In-Reply-To: <20251204213348.GA2198382-robh@kernel.org>
 
+On 12/04, Rob Herring wrote:
+> On Mon, Dec 01, 2025 at 08:20:45PM -0600, David Lechner wrote:
+> > Add data-lanes property to specify the number of data lanes used on the
+> > ad463x chips that support reading two samples at the same time using
+> > two data lanes with a capable SPI controller.
+> > 
+> > Signed-off-by: David Lechner <dlechner@baylibre.com>
+> > ---
+> > v3 changes: new patch
+> > 
+> > I added this one to give a real-world use case where spi-rx-bus-width
+> > was not sufficient to fully describe the hardware configuration.
+> > 
+> > spi-rx-bus-width = <4>; alone could be be interpreted as either:
+> > 
+> > +--------------+    +----------+
+> > | SPI          |    | AD4630   |
+> > | Controller   |    | ADC      |
+> > |              |    |          |
+> > |        SDIA0 |<---| SDOA0    |
+> > |        SDIA1 |<---| SDOA1    |
+> > |        SDIA2 |<---| SDOA2    |
+> > |        SDIA3 |<---| SDOA3    |
+> > |              |    |          |
+> > |        SDIB0 |x   | SDOB0    |
+> > |        SDIB1 |x   | SDOB1    |
+> > |        SDIB2 |x   | SDOB2    |
+> > |        SDIB3 |x   | SDOB3    |
+> > |              |    |          |
+> > +--------------+     +---------+
+> > 
+> > or
+> > 
+> > +--------------+    +----------+
+> > | SPI          |    | AD4630   |
+> > | Controller   |    | ADC      |
+> > |              |    |          |
+> > |        SDIA0 |<---| SDOA0    |
+> > |        SDIA1 |<---| SDOA1    |
+> > |        SDIA2 |x   | SDOA2    |
+> > |        SDIA3 |x   | SDOA3    |
+> > |              |    |          |
+> > |        SDIB0 |<---| SDOB0    |
+> > |        SDIB1 |<---| SDOB1    |
+> > |        SDIB2 |x   | SDOB2    |
+> > |        SDIB3 |x   | SDOB3    |
+> > |              |    |          |
+> > +--------------+     +---------+
+> > 
+> > Now, with data-lanes having a default value of [0] (inherited from
+> > spi-peripheral-props.yaml), specifying:
+> > 
+> >     spi-rx-bus-width = <4>;
+> > 
+> > is unambiguously the first case and the example given in the binding
+> > documentation is the second case:
+> > 
+> >     spi-rx-bus-width = <2>;
+> >     data-lanes = <0>, <1>;
+> 
+> I just reviewed this and all, but what if you just did:
+> 
+> spi-rx-bus-width = <2>, <2>;
+> 
+> So *-bus-width becomes equal to the number of serializers/channels.
 
---pdisdenfygihiq46
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: RE: [PATCH] spi: lpspi: disable lpspi module irq in DMA mode
-MIME-Version: 1.0
+Unless I'm missing something, I think that would also describe the currently
+possible use cases as well. To me, it actually seems even more accurate than
+data-lanes. The data-lanes property only describes the SPI controller input
+lines/lanes, no info is given about the output lanes. Well yeah, that would only
+be a problem for a device with multiple input serializers and multiple output
+serializers. Still, the *-bus-width = <N>, <N>, ... <N>; notation looks clearer,
+IMHO.
 
-On 05.05.2023 09:40:43, Clark Wang wrote:
-> > >   	if (ret < 0)
-> > >   		dev_err(&pdev->dev, "dma setup error %d, use pio\n", ret);
-> > > +	else
-> > > +		/*
-> > > +		 * disable LPSPI module IRQ when enable DMA mode successfully,
-> > > +		 * to prevent the unexpected LPSPI module IRQ events.
-> > > +		 */
-> > > +		disable_irq(irq);
-> >
-> > Just wondering, have you actually seen any unexpected LPSPI module IRQ
-> > events? If this was causing issues earlier then maybe add a fixes tag?
->
-> Yes, I have observed this issue.
->
-> The reason for this problem is that some older platforms
-
-Can you elaborate which platforms are affected by this issue?
-
-> are designed to combine LPSPI interrupt and LPSPI DMA channel
-> interrupt into one shared interrupt number because the IRQ interrupt
-> number is not enough.
-
-You say that on these platforms the LPSPI interrupt and the LPSPI DMA
-interrupt are combined into the same IRQ number, right?
-
-How does the DMA work at all, if you disabled the shared IRQ number?
-
-I'm asking because this breaks 24 bit per word mode, where DMA is not
-used, so the driver falls back to PIO. And PIO doesn't work, as IRQs are
-disabled.
-
-> When the problem occurs, we can observe that if the interrupt comes
-> too many times and too quickly, it will trigger the IRQ in the LPSPI
-> driver while DMA is still processing the previous DMA request(through
-> the shared dma channel interrupt), resulting in data messing.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---pdisdenfygihiq46
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmkzQi4ACgkQDHRl3/mQ
-kZxWxQf+KooGOGjtkO1DjXMLPizkCJsqajOcib8wwbxwJ5qRMLQvTDTv/4pMSl32
-ZLj24dcO7a27tYf9J6lSXhHfX71pX2ZfA9EpD5grRGQzOSz6ofQxPcflh1BZ+QP4
-juQzKD4J5VXPmnDR3e78/Jt8PFyFV0H4yFxUC3vdW4PIZ592Q3CrDOQERfSap8FC
-Ajd1r7QXgwsWJpNo04XR0btc2YQQSNbovlXKUDoq1ixbTZARTrCYB7c6hj8je+Dz
-l1jFVMnB3tOk1SRPt1qJZel7RF7p4d5kYJ/RQJF4VU2IvreXVw9DNfzjnrkFAs/L
-uHp+zgqpor0+TZ+rSvOVl6gEgJQD6w==
-=9xTI
------END PGP SIGNATURE-----
-
---pdisdenfygihiq46--
+> 
+> Rob
+> 
 
