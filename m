@@ -1,152 +1,196 @@
-Return-Path: <linux-spi+bounces-11793-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11794-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A66CA83AB
-	for <lists+linux-spi@lfdr.de>; Fri, 05 Dec 2025 16:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACA52CA919B
+	for <lists+linux-spi@lfdr.de>; Fri, 05 Dec 2025 20:40:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DFE68334CA1E
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Dec 2025 15:33:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA81C301D5BD
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Dec 2025 19:39:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675EC316903;
-	Fri,  5 Dec 2025 15:30:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FA42E22AA;
+	Fri,  5 Dec 2025 19:39:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="ymQMBfHT"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ePySEHFg"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03051DC997
-	for <linux-spi@vger.kernel.org>; Fri,  5 Dec 2025 15:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E083B8D5F
+	for <linux-spi@vger.kernel.org>; Fri,  5 Dec 2025 19:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764948635; cv=none; b=X2bYE2rRpebfnH8JKtE5sTRUs1atWou0nZaqbAus+T1gZVvC0QufruFzncA1j7tKz2XRHKZLfQfoSC6RsFyhTB0aFKNNp1TMs1XpzkRO3nPKH+xt4xzMnmvOu2iQoM4ym3wOZvK7v/wp26Uj49c0JxEhpy2UnyH1RNT4Bp+eK2w=
+	t=1764963584; cv=none; b=Bk00TZgzDSf//HXErWDB5Tjb70x1u37FkAinqSJ2yKwGtH1ykYj73j0Onsp7IdkvXOSmLXAxMsdkDte9oQf3vPQexjCL5QV2osh7cI109NxoeP7TNyP0Id+5i/bmcg+n5GF/UMMpnWaZkBHN+4wVVFP9mOK6uroFyKOfnFTIITA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764948635; c=relaxed/simple;
-	bh=bnF87if676vlxacDwch5pHFPRT0g1yDIFuiGnidHF4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LlJ4ThCzw6cazdq0BmISc7s+4z9P8YvIUs1iS2Jc2NKFedflbfqvkXB0eMS18gtqhp+GL/qWrVrvqjRy51GFmM3c/V4ybGx/Gs1BktyvwrPiy8TbBEjVGOJMNOb5lMF2vOaaUH1d7/BO0ENzylGxIhXiY3EORpD66UhkhxK3PfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=ymQMBfHT; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4775e891b5eso11680295e9.2
-        for <linux-spi@vger.kernel.org>; Fri, 05 Dec 2025 07:30:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764948621; x=1765553421; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bnF87if676vlxacDwch5pHFPRT0g1yDIFuiGnidHF4s=;
-        b=ymQMBfHTdviE/LSJeor2jrlkRUPhA7tYmPVMSylZVXk6ddlu91w/Ei3BzdsD0oigv2
-         9EkEWEE9zOo0FW4eU5+E0JqQEOM5oHwnf6F/sV5hJTUjXxwvAzo/xkoEQz2oaPvrKrtX
-         mm8RkI9t1gNufiNyYRm7IGUQVVYcZEyIaCFWZbLZbnyzQ7w+0x1JpzN22L1Lh8emiKYl
-         l0+hs9Y3ZNit/cXFfeNalleHE7iHyjhumKePYw4sGGnaXkgFdTYpp1m6kor6unI1a+Nb
-         N5N3amg+ccermXbfc1L5abo2/pdeQQnZl53NgsyOv0F3LZl6D6UR3Ri4j8PAfGYiDEvq
-         T38Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764948621; x=1765553421;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bnF87if676vlxacDwch5pHFPRT0g1yDIFuiGnidHF4s=;
-        b=UJUymdCohecne0JIP3XqIvbJWFWnvQoRSaXt3PXDyNy5Op7cOyXnjJ8JezQbMH6gdb
-         /8BUvq6p7iYPAwWO61M5/kWdgCV98oPl3bfFQW5zUUtZniOoeOeCUwleY7ABpQoF1MLj
-         x3kgwQNnKAa8P9osafaoGzniFnqvVAiVjF2gaTwsLKLcQQy9QtawOhdZtrm33x5r/z8q
-         vFL/9RF20mu5PozGmUPN86Zu7iTIM6Yo7vvab75XcQpL7NkSmD/sscmfEL3Bgrsfoqm0
-         1U7a+G6QJNJoAxGfY9pscEMaLmaYkUDohVtUxpnI8JDLwJaAMalYAaV+Xp12xEPN7Ksa
-         +GUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVBgFWyubnQV20sieoNqrH2stLxZ5eB+zaR3+FfcWo0HP0kiorS+KUwFuZyIWVrbaa7pRNei2iabQI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFLz1cAlW0ch5pYgM2xmDLLflDVhvsJbDArGyy5Z8eXlapgfz8
-	gohDLLl/elHoc4mDZYAsyaJ6LmupCphzCv/FVAbeZmO2ZlWMLTAD5g9J9pAuX9cvvvc=
-X-Gm-Gg: ASbGnctUSq94sNe6QUzhDXmNZOYu6pby9Moq9kZZSS09kHvitLj18vJwHhY0kDJIxbp
-	//iM6hVNJORBXGn6NvwJJFgCP9XeoTmOPMHqK0aMk5An7b07PLMcXkVsMg8WIx3DuQF6T3tDCyh
-	q3JIm2RggpT9Kw1zDuRFdIHiu9xREeXUV7Lr1BiHrniN5z+sn1th16hMbz/NncThJs1/jlLA6Iw
-	0B6n6Hglvj+gH3EiZdtDMGmg2M0wO1euwQ2Ec8VYpp4xvymMWu3CycrOWU0alxYixyt4HxX3LAD
-	dwfh/3SjR41C/YTjMr0Rl18vQMpm1fit38qIRdYSx4mrQraeAO7WNLh2Mh6vQxkuQaqW8Tzef61
-	7HEdRVr/WHQ4iXMm0TdmRRc5TrPoTgoKz+R8LtGtCt5ckqmPCGi3X+UW4ujXs4zfscp6DUieqhE
-	4WFxq3NmwcVhc7kIRPBNHIfb6YbPZxA8E02kir13mwMgRU0hQd+5j/uRUM7FzKHC2a4SG9s0IgA
-	w==
-X-Google-Smtp-Source: AGHT+IG9OTpWAaFioAhUqNYkEUIfjg2JVgLW6606fMapNPZXQsf9lwNr2Fe2wAiolNVCjjQfc9D6Gg==
-X-Received: by 2002:a5d:5f45:0:b0:42b:39d0:6386 with SMTP id ffacd0b85a97d-42f731e98eemr10449236f8f.31.1764948621389;
-        Fri, 05 Dec 2025 07:30:21 -0800 (PST)
-Received: from localhost (p200300f65f0066080f2a7d55dcab4de7.dip0.t-ipconnect.de. [2003:f6:5f00:6608:f2a:7d55:dcab:4de7])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-42f7cbe9065sm9319885f8f.8.2025.12.05.07.30.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 07:30:20 -0800 (PST)
-Date: Fri, 5 Dec 2025 16:30:19 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Eddie James <eajames@linux.ibm.com>, 
-	Andi Shyti <andi.shyti@kernel.org>, Mark Brown <broonie@kernel.org>
-Cc: Ninad Palsule <ninad@linux.ibm.com>, linux-fsi@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org, 
-	linux-spi@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 00/12] fsi: Convert to bus probe mechanism
-Message-ID: <tkg3ut5prrbur6dqh7elxmu4djqj6dgsymmdzalg5gtqgnn6jn@6pi2fskmnbyb>
-References: <cover.1764434226.git.ukleinek@kernel.org>
+	s=arc-20240116; t=1764963584; c=relaxed/simple;
+	bh=p2qDtg3IJWGXGkruF5KNVDxupI2sfCEAI8vHsM/3WFc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qT20JYG//2H9eRZDX55QYFhVQ2nmrtGincmdZeLtxEnLP4uTpaMdhceV/qywI9KBbKd4nMNHpk5v5Qnj+IoIz2j80V6wHIsY0od6L8goL16qlYkxNtydsO4qQg5DP9fZpdzIgNEMPh7boTrT4eqOfiwoCbaJwPe5Dd5HlkLxeyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ePySEHFg; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6C34F1A1F9C;
+	Fri,  5 Dec 2025 19:39:39 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 34479606AC;
+	Fri,  5 Dec 2025 19:39:39 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AAEBA102F170A;
+	Fri,  5 Dec 2025 20:39:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1764963578; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=0Qawmau/PjPZ3PGQY+c8TNDQ5ZTEU3SIELVRk+KNuaE=;
+	b=ePySEHFg8LAQLNMkVoZk/Ez1k9esGYMFwX9Oq8QNhRJwip1xOS9k00gAoYewbHvH8iokJl
+	bBLJ2U78g0/iq+/Gf3BKBVT0dmK+rNoFYvPeTcdVoCZcredcK3FDrOoDZK1UGlB/fiMpAq
+	1BjG2nrox6wsA0KfBY/US87eL7pE9p22sTO/o+DS1ecSOS6J1YRtVton3TPpcsFcj1FlyN
+	ptT39Zpd77e6RKOn9HLFOIviMgeDfN8h+x+VAPF2b+pOLGxDV/N+0308QNQnyh2iPZrTQk
+	fiqDBDsVBVRJLyjz4i4Ret9FmjrJ6STkiCbVbSkj7bUbS9MPlDYP3OXEhrjppA==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH RFC 0/8] mtd: spinand: Winbond continuous read support
+Date: Fri, 05 Dec 2025 20:38:51 +0100
+Message-Id: <20251205-winbond-v6-18-rc1-cont-read-v1-0-01bc48631c73@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yfs5kz5w2cta6clk"
-Content-Disposition: inline
-In-Reply-To: <cover.1764434226.git.ukleinek@kernel.org>
-
-
---yfs5kz5w2cta6clk
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 00/12] fsi: Convert to bus probe mechanism
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MOw7CMAwA0KtUnrFUhxI+KxIHYK0Y2tiAF6dyU
+ KlU9e5EjG95KxRxlQKXZgWXWYtmq6BdA+k92EtQuRpCGw4U2g6/amM2xjkindATYcr2QZeBMcb
+ ueCbmMcQ91GFyeery33u4367w2LYfWEP9DnIAAAA=
+X-Change-ID: 20251204-winbond-v6-18-rc1-cont-read-664791ddb263
+To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
+ Vignesh Raghavendra <vigneshr@ti.com>, Michael Walle <mwalle@kernel.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Pratyush Yadav <pratyush@kernel.org>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Steam Lin <STLin2@winbond.com>, Santhosh Kumar K <s-k6@ti.com>, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, Miquel Raynal <miquel.raynal@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
 Hello,
 
-On Sat, Nov 29, 2025 at 05:57:36PM +0100, Uwe Kleine-K=F6nig wrote:
-> for the quest to drop .probe(), .remove() and .shutdown() from struct
-> device_driver, convert the fsi subsystem to make use of the respective
-> bus methods. Some cleanups are also included, I noticed those while
-> working on the conversion.
->=20
-> Regarding how to merge this series: There are two drivers touched that
-> are not in drivers/fsi, namely drivers/i2c/busses/i2c-fsi.c and
-> drivers/spi/spi-fsi.c. The easiest would be to merge this series through
-> a single tree because the i2c and spi driver changes depend on some fsi
-> core patches and fsi_bus_type can only made private when these are
-> applied. I tried to quickly resort the series to only need three steps
-> when merged separately, but this wasn't trivially possible, so I hope
-> Andi and Mark give their acks to merge their driver changes together
-> with the fsi core changes in one go.
->=20
-> Note this series is only compile tested as I don't have a machine using
-> the fsi subsystem.=20
->=20
-> All the calls to get_device() I found in these drivers look a bit
-> suspicious and I think there are some issues with lifetime tracking. But
-> I didn't try to address these, so I'm just mentioning that here.
+SPI NAND continuous read support has already been added a few releases
+ago, but only Macronix chips were benefiting from this support. Winbond
+chips also have a continuous read feature, which is slightly more
+complex to use in the scope of the Linux kernel, because they these
+chips expect a different read from cache operation once in continuous
+mode.
 
-While working on more such patches (for other subsystems) I found a
-problem in this patch set. Please don't apply it yet, I will prepare a
-v2 (and then also explain the things that need to be done).
+In order to be more flexible, this series changes the logic behind
+dirmaps. Direct mappings used to be very static, not flexible. I am
+proposing to change this and turn them in to slightly more dynamic
+interfaces, where for instance we can:
+- Enable/disable the correction (was previously handled by creating yet
+  another pair of direct mappings per target).
+- Select one or another variant for the cache operations.
 
-Thanks
-Uwe
+I propose to name the variants available in a direct mapping "primary"
+and "secondary", and let the upper layer (SPI NOR or SPI NAND) point to
+the one that needs to be used for the operation. Controller drivers
+should not really care about this change, expect the fact that they
+should not keep a static representation of the template on their
+side. Because of that, I am creating a capability boolean to flag
+drivers that support this capability (the flag is ignored in the
+nodirmap case).
 
---yfs5kz5w2cta6clk
-Content-Type: application/pgp-signature; name="signature.asc"
+This series is sent as an RFC because it changes the way direct mappings
+work, even though in practice I expect no regressions™. I am interested
+to get an "early" feedback on it. I have also not yet experimentally
+tested all combinations yet (last patch is only compile tested), and
+because this will take a lot of time, I would like to validate the
+approach first.
 
------BEGIN PGP SIGNATURE-----
+The series must be applied on top of the SPI NAND Octal DTR series, as I
+wanted to include the octal DTR variants in my testing/benchmarks.
+Link: https://lore.kernel.org/r/20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmky+oMACgkQj4D7WH0S
-/k4phQf/TtGRlPwbVYnyLP0xN1AzA3+J1cbc7ZQfmjPBA8VMd4NuPfJYbMYA9S6k
-v4ssPKpvMCGVgU9DVWY+HMAmtejMLoj322bJ0N/8YAt+eTlFTfctwKNRPZWU7Nbs
-HHQhj9D4Z6/mCwYdULVTeLZRzTf7lJf8MPFdlhpnHcAZrlzEt5MM1fHsMKf1TRl7
-whcDek39s9jy75CN3kR3Cb6LtmRG5eigVl6JOQ220UgKX5tZ4kKzuvDHZQAvCxzF
-pzM5L7aPOU7xjDH/d2M2CB7ooQ/OslKGo+qZ4aJu0Y9zGMEwuti9fGQ5AV75tkgL
-5Iaaxj8c2PLV0tWwemlo5uyUUYN+ng==
-=e/VW
------END PGP SIGNATURE-----
+Here is a benchmark with the faster Winbond chip I have, W35N02JW on a
+TI AM62a7 LP SK featuring the Cadence QSPI controller, clocked at
+25MHz. Speed gain for a 10-page read is about +32% in octal SDR mode,
++47% for a 10-page read in octal DTR mode and up to +83% for a entire
+block read!
 
---yfs5kz5w2cta6clk--
+    1S-8S-8S, no continuous read:
+
+       64 page read speed is 15058 KiB/s
+
+    1S-8S-8S, with continuous reads:
+
+       1 page read speed is 15058 KiB/s
+       2 page read speed is 15058 KiB/s
+       3 page read speed is 16800 KiB/s
+       4 page read speed is 17066 KiB/s
+       5 page read speed is 18461 KiB/s
+       6 page read speed is 18461 KiB/s
+       7 page read speed is 19384 KiB/s
+       8 page read speed is 19692 KiB/s
+       9 page read speed is 19384 KiB/s
+       10 page read speed is 20000 KiB/s
+       11 page read speed is 20000 KiB/s
+       12 page read speed is 20000 KiB/s
+       13 page read speed is 20800 KiB/s
+       14 page read speed is 20363 KiB/s
+       15 page read speed is 20000 KiB/s
+       16 page read speed is 19692 KiB/s
+       32 page read speed is 19692 KiB/s
+       64 page read speed is 19692 KiB/s
+
+    8D-8D-8D, no continuous read:
+
+       64 page read speed is 23272 KiB/s
+
+    8D-8D-8D, with continuous read:
+
+       1 page read speed is 23272 KiB/s
+       2 page read speed is 23272 KiB/s
+       3 page read speed is 28000 KiB/s
+       4 page read speed is 32000 KiB/s
+       5 page read speed is 34285 KiB/s
+       6 page read speed is 34285 KiB/s
+       7 page read speed is 36000 KiB/s
+       8 page read speed is 36571 KiB/s
+       9 page read speed is 36000 KiB/s
+       10 page read speed is 34285 KiB/s
+       11 page read speed is 36666 KiB/s
+       12 page read speed is 40000 KiB/s
+       13 page read speed is 41600 KiB/s
+       14 page read speed is 37333 KiB/s
+       15 page read speed is 40000 KiB/s
+       16 page read speed is 36571 KiB/s
+       32 page read speed is 42666 KiB/s
+       64 page read speed is 42666 KiB/s
+
+Thanks!
+Miquèl
+
+---
+Miquel Raynal (8):
+      mtd: spinand: Drop a too strong limitation
+      mtd: spinand: Expose spinand_op_is_odtr()
+      mtd: spinand: Drop ECC dirmaps
+      spi: spi-mem: Transform the read operation template
+      spi: spi-mem: Create a secondary read operation
+      mtd: spinand: Use secondary ops for continuous reads
+      mtd: spinand: winbond: Add support for continuous reads on W35NxxJW
+      mtd: spinand: winbond: Add support for continuous reads on W25NxxJW
+
+ drivers/mtd/nand/spi/core.c    | 125 ++++++++++++++---------
+ drivers/mtd/nand/spi/winbond.c | 227 ++++++++++++++++++++++++++++++++++++-----
+ drivers/mtd/spi-nor/core.c     |  20 ++--
+ drivers/spi/spi-mem.c          |  32 ++++--
+ include/linux/mtd/spinand.h    |  16 ++-
+ include/linux/spi/spi-mem.h    |   8 +-
+ 6 files changed, 336 insertions(+), 92 deletions(-)
+---
+base-commit: dbb1c07d7654e3609ca892fcebafde7f33d67c38
+change-id: 20251204-winbond-v6-18-rc1-cont-read-664791ddb263
+
+Best regards,
+-- 
+Miquel Raynal <miquel.raynal@bootlin.com>
+
 
