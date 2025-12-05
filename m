@@ -1,54 +1,55 @@
-Return-Path: <linux-spi+bounces-11797-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11798-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DF48CA91AD
-	for <lists+linux-spi@lfdr.de>; Fri, 05 Dec 2025 20:42:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12BBDCA91B6
+	for <lists+linux-spi@lfdr.de>; Fri, 05 Dec 2025 20:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0CD5330AC02F
-	for <lists+linux-spi@lfdr.de>; Fri,  5 Dec 2025 19:39:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99AB5313C1C7
+	for <lists+linux-spi@lfdr.de>; Fri,  5 Dec 2025 19:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F3E322B7C;
-	Fri,  5 Dec 2025 19:39:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155432F5A3E;
+	Fri,  5 Dec 2025 19:39:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aKWi69wq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qZdm467v"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6764431AABC
-	for <linux-spi@vger.kernel.org>; Fri,  5 Dec 2025 19:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C76E322B84
+	for <linux-spi@vger.kernel.org>; Fri,  5 Dec 2025 19:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764963589; cv=none; b=Z7k0vqcFY/fXlvpVX5l0JP7i+Y4tVaZZxtKqdRRYSgfyTUbBtBINXitvhR/3WMOesYo8eXH1hKKkBOBsB7VNYA84S2I1JCvRMm2Fb2lgNmMUFzLeP0KnKiYty6YuVNj5jcsC367MVUCarojD29tFALgmgX+LX54XbsEumnkZihQ=
+	t=1764963593; cv=none; b=naXAAI16CCfVuhI0DCUm/T9prh0YP10lHnPBhZgjgTXPnENqbaRMRcFqlF/zH4lpGziM0Tl0kUyHIUsb0ZOdlCtdsap3W3dAvK37Qi0YoqiUDmZi218sPyAM0Iw5mWJ+OhXIIkXBxyUDD7m331liKFkTF0T/faYM5RUcaoVGND0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764963589; c=relaxed/simple;
-	bh=0cukgJ5NKjqHVM+tQAlvy8PWi0Q1Fsr8fCIOzOzJR88=;
+	s=arc-20240116; t=1764963593; c=relaxed/simple;
+	bh=NtGMTPcvwLs/cyAIQMv0WvoA4poN06nbQoGZCMYKOQU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Kc/71oDWNGyM2k9horcVbCwBPmDGgpy9womwQhCxOhJj8mEz2rIGWNkysBLKMWRrrll82O/q5fVsx5Nigqrw3tL8VHLSjVkwfQPrFVX7w3m15nZpdMM5nwt58t29TgYOB/e9UO+H275wao3S/wwafrLNcjKpXV4rYdj7MG+WAmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aKWi69wq; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=JykfY4Qs7b3nZK+Jn78uq8VCg7bHO/7DC0971TSdIVLy/1DUzi+TLcvAloM8qhCqEXZZiQvQiG3CTfDkTjxkUfqayQjW9YptVxAJIFpZL0lzO5rySd2Ystx8d5zTR7+n2X+H6VybC34V6inllViJXel4Lm1+4aExLhp3noIhGq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qZdm467v; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 63EA1C1964F;
-	Fri,  5 Dec 2025 19:39:22 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 3A88FC19650;
+	Fri,  5 Dec 2025 19:39:25 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D70CC606AC;
-	Fri,  5 Dec 2025 19:39:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 456D9102F170A;
-	Fri,  5 Dec 2025 20:39:43 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id B2E06606AC;
+	Fri,  5 Dec 2025 19:39:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A2979102F17A8;
+	Fri,  5 Dec 2025 20:39:45 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764963585; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1764963587; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=EMGpx1MzAg6O8NLZEwbaJM17V1d6KdJfLT/hxVY3Xs4=;
-	b=aKWi69wqYVysNMyrftPssWDmkIa8f8R9dT8gmxcN+8e0mdsA4bY3Pg33colA+ecbDjOTMy
-	B56XCj5cmtA2GOpR0qlgG4kEqxeYU73gBu94dlmCrKWFTBWF3/7RzDBLGFMFzUUoZrioTu
-	Xvrnm51iWn2q06pQ+dnHJJoAHkiyKQ0N6Y+7Z8jvY7T+lGJG+h9YoBI8K2Mp4+E/WWoiAt
-	E9tqOrnuy9Mse6k60/dv5C7n10rrb4Tg4HXKq+TXBMCQ5tX21gSlJYQl63XTrFPoSgRYkT
-	WfzD8yofRYqIGFo6sr5ULVyb9AY5LmSp0uC9klZkK1nDtkA2s4OSgA+iPaiPCw==
+	bh=rzut/2vscrbvO9lhGJS+PxaQwT5GezE0dsfH+zXVtxg=;
+	b=qZdm467v7LenNWq01VJrJCVXwBEoTdtnu3Rj4uoqGcO1qAc7pJqZZEyz5nRmFRtYYrq6FW
+	6QzmoUbSXY89q8xCsXnVTi9W+pMBcJPf/zPJsXHGbAAGaIv+xfmd+SQC7KYvjbg/kZLv1+
+	O7lS7ER+RAnQNL87qEQPATl2fSf3/yiOuBaEQIdrrlQy/LGABPJiogIaFsqVvn6XnGjAgI
+	pfH5ADEOm+BzLbfgEKfnPMIbej9dc4J2m8XMzi8ZHH8sXBzbjf1I4CBjgYLA1JuGDDw2yO
+	9gvCe+G97ApIDkCGC2fpDRNaDVF8d2NjC5LX5e6hcElWaVkl/aWCmWXp2+4H9w==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 05 Dec 2025 20:38:54 +0100
-Subject: [PATCH RFC 3/8] mtd: spinand: Drop ECC dirmaps
+Date: Fri, 05 Dec 2025 20:38:55 +0100
+Subject: [PATCH RFC 4/8] spi: spi-mem: Transform the read operation
+ template
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,7 +58,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251205-winbond-v6-18-rc1-cont-read-v1-3-01bc48631c73@bootlin.com>
+Message-Id: <20251205-winbond-v6-18-rc1-cont-read-v1-4-01bc48631c73@bootlin.com>
 References: <20251205-winbond-v6-18-rc1-cont-read-v1-0-01bc48631c73@bootlin.com>
 In-Reply-To: <20251205-winbond-v6-18-rc1-cont-read-v1-0-01bc48631c73@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
@@ -71,153 +72,202 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Direct mappings are very static concepts, which allow us to reuse a
-template to perform reads or writes in a very efficient manner after a
-single initialization. With the introduction of pipelined ECC engines
-for SPI controllers, the need to differentiate between an operation with
-and without correction has arised. The chosen solution at that time has
-been to create new direct mappings for these operations, jumping from 2
-to 4 dirmaps per target. Enabling ECC was done by choosing the correct
-dirmap.
+As of now, we only use a single operation template when creating SPI
+memory direct mappings. With the idea to extend this possibility to 2,
+rename the template to reflect that we are currently setting the
+"primary" operation, and create a pointer in the same structure to point
+to it.
 
-Today, we need to further parametrize dirmaps. With the goal to enable
-continuous reads on a wider range of devices, we will need more
-flexibility regarding the read from cache operation template to pick at
-run time, for instance to use shorter "continuous read from cache"
-variants.
+From a user point of view, the op_tmpl name remains but becomes a
+pointer, leading to minor changes in both the SPI NAND and SPI NOR
+cores.
 
-We could create other direct mappings, but it would increase the matrix
-by a power of two, bringing the theoretical number of dirmaps to
-8 (read/write, ecc, shorter read variants) per target. This grow is not
-sustainable, so let's change how dirmaps work - a little bit.
-
-Operations already carry an ECC parameter, use it to indicate whether
-error correction is required or not. In practice this change happens
-only at the core level, SPI controller drivers do not care about the
-direct mapping structure in this case, they just pick whatever is in the
-template as a base. As a result, we allow the core to dynamically change
-the content of the templates.
-
-He who can do more can do less, so during the checking steps, make sure
-to enable the ECC requirement just for the time of the checks.
+There is no functional change.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/core.c | 52 +++++++++++++++++----------------------------
- include/linux/mtd/spinand.h |  2 --
- 2 files changed, 20 insertions(+), 34 deletions(-)
+ drivers/mtd/nand/spi/core.c | 15 ++++++++-------
+ drivers/mtd/spi-nor/core.c  | 20 ++++++++++----------
+ drivers/spi/spi-mem.c       | 15 ++++++++-------
+ include/linux/spi/spi-mem.h |  3 ++-
+ 4 files changed, 28 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 3765fcc95c4a..086c9f293373 100644
+index 086c9f293373..209146f21326 100644
 --- a/drivers/mtd/nand/spi/core.c
 +++ b/drivers/mtd/nand/spi/core.c
-@@ -397,10 +397,13 @@ static int spinand_read_from_cache_op(struct spinand_device *spinand,
- 		}
- 	}
+@@ -401,9 +401,9 @@ static int spinand_read_from_cache_op(struct spinand_device *spinand,
  
--	if (req->mode == MTD_OPS_RAW)
--		rdesc = spinand->dirmaps[req->pos.plane].rdesc;
-+	rdesc = spinand->dirmaps[req->pos.plane].rdesc;
-+
-+	if (nand->ecc.engine->integration == NAND_ECC_ENGINE_INTEGRATION_PIPELINED &&
-+	    req->mode != MTD_OPS_RAW)
-+		rdesc->info.op_tmpl.data.ecc = true;
+ 	if (nand->ecc.engine->integration == NAND_ECC_ENGINE_INTEGRATION_PIPELINED &&
+ 	    req->mode != MTD_OPS_RAW)
+-		rdesc->info.op_tmpl.data.ecc = true;
++		rdesc->info.op_tmpl->data.ecc = true;
  	else
--		rdesc = spinand->dirmaps[req->pos.plane].rdesc_ecc;
-+		rdesc->info.op_tmpl.data.ecc = false;
+-		rdesc->info.op_tmpl.data.ecc = false;
++		rdesc->info.op_tmpl->data.ecc = false;
  
  	if (spinand->flags & SPINAND_HAS_READ_PLANE_SELECT_BIT)
  		column |= req->pos.plane << fls(nanddev_page_size(nand));
-@@ -489,10 +492,13 @@ static int spinand_write_to_cache_op(struct spinand_device *spinand,
- 			       req->ooblen);
- 	}
+@@ -496,9 +496,9 @@ static int spinand_write_to_cache_op(struct spinand_device *spinand,
  
--	if (req->mode == MTD_OPS_RAW)
--		wdesc = spinand->dirmaps[req->pos.plane].wdesc;
-+	wdesc = spinand->dirmaps[req->pos.plane].wdesc;
-+
-+	if (nand->ecc.engine->integration == NAND_ECC_ENGINE_INTEGRATION_PIPELINED &&
-+	    req->mode != MTD_OPS_RAW)
-+		wdesc->info.op_tmpl.data.ecc = true;
+ 	if (nand->ecc.engine->integration == NAND_ECC_ENGINE_INTEGRATION_PIPELINED &&
+ 	    req->mode != MTD_OPS_RAW)
+-		wdesc->info.op_tmpl.data.ecc = true;
++		wdesc->info.op_tmpl->data.ecc = true;
  	else
--		wdesc = spinand->dirmaps[req->pos.plane].wdesc_ecc;
-+		wdesc->info.op_tmpl.data.ecc = false;
+-		wdesc->info.op_tmpl.data.ecc = false;
++		wdesc->info.op_tmpl->data.ecc = false;
  
  	if (spinand->flags & SPINAND_HAS_PROG_PLANE_SELECT_BIT)
  		column |= req->pos.plane << fls(nanddev_page_size(nand));
-@@ -1133,12 +1139,17 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
- 	struct nand_device *nand = spinand_to_nand(spinand);
- 	struct spi_mem_dirmap_info info = { 0 };
- 	struct spi_mem_dirmap_desc *desc;
-+	bool enable_ecc = false;
-+
-+	if (nand->ecc.engine->integration == NAND_ECC_ENGINE_INTEGRATION_PIPELINED)
-+		enable_ecc = true;
+@@ -1149,7 +1149,8 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
  
- 	/* The plane number is passed in MSB just above the column address */
- 	info.offset = plane << fls(nand->memorg.pagesize);
- 
-+	/* Write descriptor */
+ 	/* Write descriptor */
  	info.length = nanddev_page_size(nand) + nanddev_per_page_oobsize(nand);
--	info.op_tmpl = *spinand->op_templates->update_cache;
-+	info.op_tmpl.data.ecc = enable_ecc;
+-	info.op_tmpl.data.ecc = enable_ecc;
++	info.primary_op_tmpl = *spinand->op_templates->update_cache;
++	info.primary_op_tmpl.data.ecc = enable_ecc;
  	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
  					  spinand->spimem, &info);
  	if (IS_ERR(desc))
-@@ -1146,38 +1157,15 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
- 
+@@ -1158,8 +1159,8 @@ static int spinand_create_dirmap(struct spinand_device *spinand,
  	spinand->dirmaps[plane].wdesc = desc;
  
-+	/* Read descriptor */
- 	info.op_tmpl = *spinand->op_templates->read_cache;
-+	info.op_tmpl.data.ecc = enable_ecc;
+ 	/* Read descriptor */
+-	info.op_tmpl = *spinand->op_templates->read_cache;
+-	info.op_tmpl.data.ecc = enable_ecc;
++	info.primary_op_tmpl = *spinand->op_templates->read_cache;
++	info.primary_op_tmpl.data.ecc = enable_ecc;
  	desc = spinand_create_rdesc(spinand, &info);
  	if (IS_ERR(desc))
  		return PTR_ERR(desc);
+diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+index 20ea80450f22..4de0a2b66e56 100644
+--- a/drivers/mtd/spi-nor/core.c
++++ b/drivers/mtd/spi-nor/core.c
+@@ -3631,14 +3631,14 @@ EXPORT_SYMBOL_GPL(spi_nor_scan);
+ static int spi_nor_create_read_dirmap(struct spi_nor *nor)
+ {
+ 	struct spi_mem_dirmap_info info = {
+-		.op_tmpl = SPI_MEM_OP(SPI_MEM_OP_CMD(nor->read_opcode, 0),
+-				      SPI_MEM_OP_ADDR(nor->addr_nbytes, 0, 0),
+-				      SPI_MEM_OP_DUMMY(nor->read_dummy, 0),
+-				      SPI_MEM_OP_DATA_IN(0, NULL, 0)),
++		.primary_op_tmpl = SPI_MEM_OP(SPI_MEM_OP_CMD(nor->read_opcode, 0),
++					      SPI_MEM_OP_ADDR(nor->addr_nbytes, 0, 0),
++					      SPI_MEM_OP_DUMMY(nor->read_dummy, 0),
++					      SPI_MEM_OP_DATA_IN(0, NULL, 0)),
+ 		.offset = 0,
+ 		.length = nor->params->size,
+ 	};
+-	struct spi_mem_op *op = &info.op_tmpl;
++	struct spi_mem_op *op = info.op_tmpl;
  
- 	spinand->dirmaps[plane].rdesc = desc;
+ 	spi_nor_spimem_setup_op(nor, op, nor->read_proto);
  
--	if (nand->ecc.engine->integration != NAND_ECC_ENGINE_INTEGRATION_PIPELINED) {
--		spinand->dirmaps[plane].wdesc_ecc = spinand->dirmaps[plane].wdesc;
--		spinand->dirmaps[plane].rdesc_ecc = spinand->dirmaps[plane].rdesc;
--
--		return 0;
--	}
--
--	info.length = nanddev_page_size(nand) + nanddev_per_page_oobsize(nand);
--	info.op_tmpl = *spinand->op_templates->update_cache;
--	info.op_tmpl.data.ecc = true;
--	desc = devm_spi_mem_dirmap_create(&spinand->spimem->spi->dev,
--					  spinand->spimem, &info);
--	if (IS_ERR(desc))
--		return PTR_ERR(desc);
--
--	spinand->dirmaps[plane].wdesc_ecc = desc;
--
--	info.op_tmpl = *spinand->op_templates->read_cache;
--	info.op_tmpl.data.ecc = true;
--	desc = spinand_create_rdesc(spinand, &info);
--	if (IS_ERR(desc))
--		return PTR_ERR(desc);
--
--	spinand->dirmaps[plane].rdesc_ecc = desc;
--
- 	return 0;
- }
+@@ -3662,14 +3662,14 @@ static int spi_nor_create_read_dirmap(struct spi_nor *nor)
+ static int spi_nor_create_write_dirmap(struct spi_nor *nor)
+ {
+ 	struct spi_mem_dirmap_info info = {
+-		.op_tmpl = SPI_MEM_OP(SPI_MEM_OP_CMD(nor->program_opcode, 0),
+-				      SPI_MEM_OP_ADDR(nor->addr_nbytes, 0, 0),
+-				      SPI_MEM_OP_NO_DUMMY,
+-				      SPI_MEM_OP_DATA_OUT(0, NULL, 0)),
++		.primary_op_tmpl = SPI_MEM_OP(SPI_MEM_OP_CMD(nor->program_opcode, 0),
++					      SPI_MEM_OP_ADDR(nor->addr_nbytes, 0, 0),
++					      SPI_MEM_OP_NO_DUMMY,
++					      SPI_MEM_OP_DATA_OUT(0, NULL, 0)),
+ 		.offset = 0,
+ 		.length = nor->params->size,
+ 	};
+-	struct spi_mem_op *op = &info.op_tmpl;
++	struct spi_mem_op *op = info.op_tmpl;
  
-diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
-index a90e873cf693..5ca1181048f7 100644
---- a/include/linux/mtd/spinand.h
-+++ b/include/linux/mtd/spinand.h
-@@ -681,8 +681,6 @@ struct spinand_info {
- struct spinand_dirmap {
- 	struct spi_mem_dirmap_desc *wdesc;
- 	struct spi_mem_dirmap_desc *rdesc;
--	struct spi_mem_dirmap_desc *wdesc_ecc;
--	struct spi_mem_dirmap_desc *rdesc_ecc;
+ 	if (nor->program_opcode == SPINOR_OP_AAI_WP && nor->sst_write_second)
+ 		op->addr.nbytes = 0;
+diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+index 71e3eaf59df9..50f16943dc73 100644
+--- a/drivers/spi/spi-mem.c
++++ b/drivers/spi/spi-mem.c
+@@ -642,7 +642,7 @@ EXPORT_SYMBOL_GPL(spi_mem_calc_op_duration);
+ static ssize_t spi_mem_no_dirmap_read(struct spi_mem_dirmap_desc *desc,
+ 				      u64 offs, size_t len, void *buf)
+ {
+-	struct spi_mem_op op = desc->info.op_tmpl;
++	struct spi_mem_op op = *desc->info.op_tmpl;
+ 	int ret;
+ 
+ 	op.addr.val = desc->info.offset + offs;
+@@ -662,7 +662,7 @@ static ssize_t spi_mem_no_dirmap_read(struct spi_mem_dirmap_desc *desc,
+ static ssize_t spi_mem_no_dirmap_write(struct spi_mem_dirmap_desc *desc,
+ 				       u64 offs, size_t len, const void *buf)
+ {
+-	struct spi_mem_op op = desc->info.op_tmpl;
++	struct spi_mem_op op = *desc->info.op_tmpl;
+ 	int ret;
+ 
+ 	op.addr.val = desc->info.offset + offs;
+@@ -701,11 +701,11 @@ spi_mem_dirmap_create(struct spi_mem *mem,
+ 	int ret = -ENOTSUPP;
+ 
+ 	/* Make sure the number of address cycles is between 1 and 8 bytes. */
+-	if (!info->op_tmpl.addr.nbytes || info->op_tmpl.addr.nbytes > 8)
++	if (!info->primary_op_tmpl.addr.nbytes || info->primary_op_tmpl.addr.nbytes > 8)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	/* data.dir should either be SPI_MEM_DATA_IN or SPI_MEM_DATA_OUT. */
+-	if (info->op_tmpl.data.dir == SPI_MEM_NO_DATA)
++	if (info->primary_op_tmpl.data.dir == SPI_MEM_NO_DATA)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	desc = kzalloc(sizeof(*desc), GFP_KERNEL);
+@@ -714,12 +714,13 @@ spi_mem_dirmap_create(struct spi_mem *mem,
+ 
+ 	desc->mem = mem;
+ 	desc->info = *info;
++	desc->info.op_tmpl = &desc->info.primary_op_tmpl;
+ 	if (ctlr->mem_ops && ctlr->mem_ops->dirmap_create)
+ 		ret = ctlr->mem_ops->dirmap_create(desc);
+ 
+ 	if (ret) {
+ 		desc->nodirmap = true;
+-		if (!spi_mem_supports_op(desc->mem, &desc->info.op_tmpl))
++		if (!spi_mem_supports_op(desc->mem, &desc->info.primary_op_tmpl))
+ 			ret = -EOPNOTSUPP;
+ 		else
+ 			ret = 0;
+@@ -843,7 +844,7 @@ ssize_t spi_mem_dirmap_read(struct spi_mem_dirmap_desc *desc,
+ 	struct spi_controller *ctlr = desc->mem->spi->controller;
+ 	ssize_t ret;
+ 
+-	if (desc->info.op_tmpl.data.dir != SPI_MEM_DATA_IN)
++	if (desc->info.op_tmpl->data.dir != SPI_MEM_DATA_IN)
+ 		return -EINVAL;
+ 
+ 	if (!len)
+@@ -889,7 +890,7 @@ ssize_t spi_mem_dirmap_write(struct spi_mem_dirmap_desc *desc,
+ 	struct spi_controller *ctlr = desc->mem->spi->controller;
+ 	ssize_t ret;
+ 
+-	if (desc->info.op_tmpl.data.dir != SPI_MEM_DATA_OUT)
++	if (desc->info.op_tmpl->data.dir != SPI_MEM_DATA_OUT)
+ 		return -EINVAL;
+ 
+ 	if (!len)
+diff --git a/include/linux/spi/spi-mem.h b/include/linux/spi/spi-mem.h
+index e4db0924898c..3092caefa0b6 100644
+--- a/include/linux/spi/spi-mem.h
++++ b/include/linux/spi/spi-mem.h
+@@ -217,7 +217,8 @@ struct spi_mem_op {
+  * direction is directly encoded in the ->op_tmpl.data.dir field.
+  */
+ struct spi_mem_dirmap_info {
+-	struct spi_mem_op op_tmpl;
++	struct spi_mem_op *op_tmpl;
++	struct spi_mem_op primary_op_tmpl;
+ 	u64 offset;
+ 	u64 length;
  };
- 
- /**
 
 -- 
 2.51.1
