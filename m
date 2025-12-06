@@ -1,68 +1,78 @@
-Return-Path: <linux-spi+bounces-11808-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11809-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F09ECA9C84
-	for <lists+linux-spi@lfdr.de>; Sat, 06 Dec 2025 01:57:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA999CAA14A
+	for <lists+linux-spi@lfdr.de>; Sat, 06 Dec 2025 06:21:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3707832535EC
-	for <lists+linux-spi@lfdr.de>; Sat,  6 Dec 2025 00:53:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C32EE305654B
+	for <lists+linux-spi@lfdr.de>; Sat,  6 Dec 2025 05:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B13F23BD17;
-	Sat,  6 Dec 2025 00:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D9821E091;
+	Sat,  6 Dec 2025 05:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBM3ZoKa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOnD4tXH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453BF17BA2;
-	Sat,  6 Dec 2025 00:47:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E9C1D63F3;
+	Sat,  6 Dec 2025 05:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764982082; cv=none; b=XudphbTNFav09W69M91yFyT1f7Kd3DJuKmbZ0zttBbbhyRpmGbStQ6OQnOpmUJHer6JtK1yzWx0zFiIGQ/bmUOu+j9euZUO6E7kOiTDDmh7xFpo0SJKaLcCPbuEhVM+8aAIgCPcUPbccybPsG8QEfOL8oQxNLSfxIAsJexmPWvg=
+	t=1764998444; cv=none; b=QRu+pNCCXDOH+GrM/V5oHakzIUJ8M/aP92C+zlDIXAYcrQPYR8YQl1sIJ//gRD20HGkHqmto+1iR1i8awyEaGm+Lf4OkP8pTD72gHrx1pvwypAaa9sILdBfc4hIQBA/aZ4kJx8MlIqvcY7J7+Ed2PczOGMlzHXpELxzXjxLZVTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764982082; c=relaxed/simple;
-	bh=3r+/te3zSS54bBwDzvPEgNnCe8Q1KuObyX/Z1h+VAc8=;
+	s=arc-20240116; t=1764998444; c=relaxed/simple;
+	bh=ZFjNsLDmNldfG/5D2Bo1Qfl2RpXTUFrxrN62ffaxeME=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IGUrPyCEIktykaA29YbkMS1O8pau6kL/CTIp5/0A1QJLz6gAxXW6A10KvgOJaMV8DnyeJOg4Hdgurc63VPkW5EflUr0ImaxzvzBETujxgQrxw0VrvjuvjucbMs2RY9QY5nJBSeuykrYN+0DciFvYA/wcbhOWP+8jOLV7MNZA8cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBM3ZoKa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9763EC4CEF1;
-	Sat,  6 Dec 2025 00:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764982079;
-	bh=3r+/te3zSS54bBwDzvPEgNnCe8Q1KuObyX/Z1h+VAc8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pBM3ZoKapRQzNDKhiluRNsGLO9XMjo6IJk7ZyjS4dGXSFjccyWLfqRKlvUnrAKHtC
-	 Hw5CUQJaLnSH8fhzHoKV69Jk/xhi+WzTfXinlV9CYsPjcuDrugOivS1SOiJJYpEjhB
-	 1Th+I7g8JRA9Blsj2dPec4xpySarXaN2mfP5m31sImtRnLUNT/6fPd8XUKgpJfMEfv
-	 GJM432SADyG/M6vctTMhwFDYItqCKzHX5pWpArtaTRxRkc4Hhg+xb4fVR0Sagze1cv
-	 hg8xozF4cf+Blnm+tuyL6SAJpEX8BZBSNr7KYGGliyTG+w7DftTOxdGWtT2f7cwL8m
-	 gO4MsQVEQeINg==
-Date: Fri, 5 Dec 2025 18:47:57 -0600
-From: Rob Herring <robh@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=q47dAAorG49EEvl8O10BeyVaITtNfSJXq5K6mzjP/ziy8hnJOd5PzDhpvi+9UPvo48O6owAbd5rVUnW2p0nFT0x0qzo/yHOWEE4WjSz6HMfbeSreXHSkh7MCMGHt2u0JxpyvT47Bk9Zg2pPiadKOJzuMdb5cRSWqc0zOeXxJBBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOnD4tXH; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764998443; x=1796534443;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZFjNsLDmNldfG/5D2Bo1Qfl2RpXTUFrxrN62ffaxeME=;
+  b=jOnD4tXHFYfea9bqretoSovZs3Zr/piVDcxDyjjUrM+HDm47u7wWemS9
+   CQ+bEegNxuE/26SIZlMI3/z7a63x7ORfPmYI1NblOUQKL+h38cv07qaf4
+   OrX1QMoLBwa1S3yYFcqRXjTdW/Y87xE3OLzkAq41FrglfsR8rQqBvDFVd
+   fJJBnQfAWaNmjWzhVeBDuEd9YAk7M9/m2md1pgCnMIJhMWBG0DTo26zV+
+   j+LDgwxipCn3NmYzA4oJGW/fHtQtu0mGE7Yg1HaV4oPkxbAin0Wzbmwih
+   GmaYMA0DyamZHF7ivdXbPG24FgnSJT9HxEjmcfIU9MXYqdGIgLGCJJEPN
+   Q==;
+X-CSE-ConnectionGUID: QBLrcPI9RPyvUIWKJ6hR9A==
+X-CSE-MsgGUID: Ug0cRECWSVqLuymHGyedMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="89684191"
+X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
+   d="scan'208";a="89684191"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 21:20:43 -0800
+X-CSE-ConnectionGUID: M8sn2e1iS7WipgYPGUEVrg==
+X-CSE-MsgGUID: FnNPjzW+SuyCFsShyfMMBQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
+   d="scan'208";a="200605245"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 05 Dec 2025 21:20:40 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vRkij-00000000Fsj-1Jo7;
+	Sat, 06 Dec 2025 05:20:37 +0000
+Date: Sat, 6 Dec 2025 13:19:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Patrice Chotard <patrice.chotard@foss.st.com>,
 	Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] dt-bindings: iio: adc: adi,ad4030: add data-lanes
- property
-Message-ID: <20251206004757.GA980619-robh@kernel.org>
-References: <20251201-spi-add-multi-bus-support-v3-0-34e05791de83@baylibre.com>
- <20251201-spi-add-multi-bus-support-v3-7-34e05791de83@baylibre.com>
- <20251204213348.GA2198382-robh@kernel.org>
- <aTNKyaWAEjVJixMI@debian-BULLSEYE-live-builder-AMD64>
- <0cf78f84-01e7-4507-abf9-2f82f98206b2@baylibre.com>
- <221d5ed6-51da-4dce-b8a7-58b4d2423101@baylibre.com>
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Patrice Chotard <patrice.chotard@foss.st.com>
+Subject: Re: [PATCH 3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
+Message-ID: <202512061327.9CDC4SNs-lkp@intel.com>
+References: <20251205-upstream_qspi_ospi_updates-v1-3-7e6c8b9f5141@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -71,272 +81,82 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <221d5ed6-51da-4dce-b8a7-58b4d2423101@baylibre.com>
+In-Reply-To: <20251205-upstream_qspi_ospi_updates-v1-3-7e6c8b9f5141@foss.st.com>
 
-On Fri, Dec 05, 2025 at 05:43:31PM -0600, David Lechner wrote:
-> On 12/5/25 3:33 PM, David Lechner wrote:
-> > On 12/5/25 3:12 PM, Marcelo Schmitt wrote:
-> >> On 12/04, Rob Herring wrote:
-> >>> On Mon, Dec 01, 2025 at 08:20:45PM -0600, David Lechner wrote:
-> >>>> Add data-lanes property to specify the number of data lanes used on the
-> >>>> ad463x chips that support reading two samples at the same time using
-> >>>> two data lanes with a capable SPI controller.
-> >>>>
-> >>>> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> >>>> ---
-> >>>> v3 changes: new patch
-> >>>>
-> >>>> I added this one to give a real-world use case where spi-rx-bus-width
-> >>>> was not sufficient to fully describe the hardware configuration.
-> >>>>
-> >>>> spi-rx-bus-width = <4>; alone could be be interpreted as either:
-> >>>>
-> >>>> +--------------+    +----------+
-> >>>> | SPI          |    | AD4630   |
-> >>>> | Controller   |    | ADC      |
-> >>>> |              |    |          |
-> >>>> |        SDIA0 |<---| SDOA0    |
-> >>>> |        SDIA1 |<---| SDOA1    |
-> >>>> |        SDIA2 |<---| SDOA2    |
-> >>>> |        SDIA3 |<---| SDOA3    |
-> >>>> |              |    |          |
-> >>>> |        SDIB0 |x   | SDOB0    |
-> >>>> |        SDIB1 |x   | SDOB1    |
-> >>>> |        SDIB2 |x   | SDOB2    |
-> >>>> |        SDIB3 |x   | SDOB3    |
-> >>>> |              |    |          |
-> >>>> +--------------+     +---------+
-> >>>>
-> >>>> or
-> >>>>
-> >>>> +--------------+    +----------+
-> >>>> | SPI          |    | AD4630   |
-> >>>> | Controller   |    | ADC      |
-> >>>> |              |    |          |
-> >>>> |        SDIA0 |<---| SDOA0    |
-> >>>> |        SDIA1 |<---| SDOA1    |
-> >>>> |        SDIA2 |x   | SDOA2    |
-> >>>> |        SDIA3 |x   | SDOA3    |
-> >>>> |              |    |          |
-> >>>> |        SDIB0 |<---| SDOB0    |
-> >>>> |        SDIB1 |<---| SDOB1    |
-> >>>> |        SDIB2 |x   | SDOB2    |
-> >>>> |        SDIB3 |x   | SDOB3    |
-> >>>> |              |    |          |
-> >>>> +--------------+     +---------+
-> >>>>
-> >>>> Now, with data-lanes having a default value of [0] (inherited from
-> >>>> spi-peripheral-props.yaml), specifying:
-> >>>>
-> >>>>     spi-rx-bus-width = <4>;
-> >>>>
-> >>>> is unambiguously the first case and the example given in the binding
-> >>>> documentation is the second case:
-> >>>>
-> >>>>     spi-rx-bus-width = <2>;
-> >>>>     data-lanes = <0>, <1>;
-> >>>
-> >>> I just reviewed this and all, but what if you just did:
-> >>>
-> >>> spi-rx-bus-width = <2>, <2>;
-> >>>
-> >>> So *-bus-width becomes equal to the number of serializers/channels.
-> >>
-> >> Unless I'm missing something, I think that would also describe the currently
-> >> possible use cases as well. To me, it actually seems even more accurate than
-> >> data-lanes. The data-lanes property only describes the SPI controller input
-> >> lines/lanes, no info is given about the output lanes.
-> > 
-> > It describes both directions.
-> > 
-> >> Well yeah, that would only> be a problem for a device with multiple input serializers and multiple output
-> >> serializers. Still, the *-bus-width = <N>, <N>, ... <N>; notation looks clearer,
-> >> IMHO.
-> >>
-> >>>
-> >>> Rob
-> >>>
-> > 
-> > It think it complicates Sean's use case though where such
-> > a controller is being used as basically two separate SPI
-> > buses.
-> > 
-> > For that case, we want to be able to do:
-> > 
-> > spi {
-> > 	...
-> > 
-> > 	thing@0 {
-> > 		compatible = ...;
-> > 		reg = <0>;
-> > 		/* (implicit) data-lanes = <0>; */
-> > 	};
-> > 
-> > 	thing@1 {
-> > 		compatible = ...;
-> > 		reg = <1>;
-> > 		data-lanes = <1>;
-> > 	};
-> > };
-> > 
-> > Meaning:
-> > 
-> > +--------------+    +----------+
-> > | SPI          |    | Thing 1  |
-> > | Controller   |    |          |
-> > |              |    |          |
-> > |          CS0 |--->| CS       |
-> > |         SDI0 |<---| SDO      |
-> > |         SDO0 |--->| SDI      |
-> > |        SCLK0 |--->| SCLK     |
-> > |              |    |          |
-> > |              |    +----------+
-> > |              |                
-> > |              |    +----------+
-> > |              |    | Thing 2  |
-> > |              |    |          |
-> > |          CS1 |--->| CS       |
-> > |         SDI1 |<---| SDO      |
-> > |         SDO1 |--->| SDI      |
-> > |        SCLK1 |--->| SCLK     |
-> > |              |    |          |
-> > +--------------+    +----------+
-> > 
-> > (I don't remember if SCLKs are shared or separate, but I don't
-> > think that is relevant anyway).
-> > 
-> > 
-> > I guess we could write it like this?
-> > 
-> > spi {
-> > 	...
-> > 
-> > 	thing@0 {
-> > 		compatible = ...;
-> > 		reg = <0>;
-> > 	};
-> > 
-> > 	thing@1 {
-> > 		compatible = ...;
-> > 		reg = <1>;
-> > 		spi-tx-bus-width = <0>, <1>;
-> > 		spi-rx-bus-width = <0>, <1>;
-> > 	};
-> > };
+Hi Patrice,
 
-I forget the details on that, but just looking at the above I think 
-something like that should have 2 SPI bus nodes under the controller. 
-Unless CS0 and CS1 can't be asserted at the same time and they aren't 
-really independent.
+kernel test robot noticed the following build errors:
 
-But would be good to wait for Sean's comments here.
+[auto build test ERROR on 7d0a66e4bb9081d75c82ec4957c50034cb0ea449]
 
-> 
-> I started down this road. Before I do the working of changing the
-> whole series, this is what it will probably look like. Is this really
-> what we want?
-> 
-> There is one issue I see with this. If we allow <0> to mean that a lane
-> isn't wired up on the controller, then we can't constrain the length of
-> the array in peripheral bindings. For example, the ad403x chips can only
-> have one lane and the ad463x chips can have one or two lanes. But I
-> don't see a way to express that in the binding if <0> at any index
-> doesn't count towards the number of lanes that are actually wired up.
+url:    https://github.com/intel-lab-lkp/linux/commits/Patrice-Chotard/spi-stm32-ospi-Set-DMA-maxburst-dynamically/20251205-174931
+base:   7d0a66e4bb9081d75c82ec4957c50034cb0ea449
+patch link:    https://lore.kernel.org/r/20251205-upstream_qspi_ospi_updates-v1-3-7e6c8b9f5141%40foss.st.com
+patch subject: [PATCH 3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
+config: sparc64-randconfig-002-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061327.9CDC4SNs-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061327.9CDC4SNs-lkp@intel.com/reproduce)
 
-That's fine I think. How many entries is primarily a controller 
-property. We set the length in the controller binding. The device just 
-sets the maximum width per channel.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512061327.9CDC4SNs-lkp@intel.com/
 
-> 
-> This is e.g. why the binding in sitronix,st7789v.yaml is
-> 
-> 	items:
-> 	  enum: [0, 1]
-> 
-> rather than
-> 
-> 	items:
-> 	  - enum: [0, 1]
-> 
-> ---
-> commit 049b9508b1b0190f87a4b35fe3ed8a9f3d0d3c50
-> Author: David Lechner <dlechner@baylibre.com>
-> Date:   Fri Dec 5 16:09:08 2025 -0600
-> 
->     spi: dt-bindings: change spi-{rx,tx}-bus-width to arrays
->     
->     Change spi-rx-bus-width and spi-tx-bus-width properties from single
->     uint32 values to arrays of uint32 values. This allows describing SPI
->     peripherals connected to controllers that have multiple data lanes for
->     receiving or transmitting two or more words at the same time.
->     
->     Bindings that make use of this property are updated in the same commit
->     to avoid validation errors. Bindings that used minimum/maximum are
->     changed to use enum instead to be consistent with the base property
->     definition.
->     
->     The adi,ad4030 binding has an example added now that we can fully
->     describe the peripheral's capabilities.
->     
->     Converting from single uint32 to array of uint32 does not break .dts/
->     .dtb files since there is no difference between specifying a single
->     uint32 value and an array with a single uint32 value in devicetree.
->     
->     Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---   
-> 
-> diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-> index 0ce2ea13583d..23b33dcd5ed4 100644
-> --- a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-> +++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-> @@ -34,8 +34,8 @@ properties:
->    spi-cpol: true
->  
->    spi-rx-bus-width:
-> -    minimum: 0
-> -    maximum: 1
-> +    items:
-> +      enum: [0, 1]
->  
->    dc-gpios:
->      maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
-> index 54e7349317b7..6052a44b04de 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
-> @@ -37,7 +37,8 @@ properties:
->      maximum: 102040816
->  
->    spi-rx-bus-width:
-> -    enum: [1, 2, 4]
-> +    items:
-> +      enum: [1, 2, 4]
+All errors (new ones prefixed by >>):
 
-We'd need to allow 0 here, right?
+   In file included from drivers/spi/spi-stm32-ospi.c:16:
+   drivers/spi/spi-stm32-ospi.c: In function 'stm32_ospi_wait_cmd':
+>> drivers/spi/spi-stm32-ospi.c:246:48: error: 'struct stm32_ospi' has no member named 'io_base'; did you mean 'mm_base'?
+     err = readl_relaxed_poll_timeout_atomic(ospi->io_base + OSPI_SR, sr,
+                                                   ^~~~~~~
+   include/linux/iopoll.h:102:3: note: in definition of macro 'poll_timeout_us_atomic'
+      op; \
+      ^~
+   include/linux/iopoll.h:213:2: note: in expansion of macro 'read_poll_timeout_atomic'
+     read_poll_timeout_atomic(op, val, cond, delay_us, timeout_us, false, addr)
+     ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/iopoll.h:255:2: note: in expansion of macro 'readx_poll_timeout_atomic'
+     readx_poll_timeout_atomic(readl_relaxed, addr, val, cond, delay_us, timeout_us)
+     ^~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/spi/spi-stm32-ospi.c:246:8: note: in expansion of macro 'readl_relaxed_poll_timeout_atomic'
+     err = readl_relaxed_poll_timeout_atomic(ospi->io_base + OSPI_SR, sr,
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-What we really want to say is there is exactly 1 entry of 1, 2, or 4. I 
-can't think of a concise way to say that. The closest is something like 
-this:
 
-uniqueItems: true
-items:
-  enum: [0, 1, 2, 4]
-contains:
-  enum: [1, 2, 4]
+vim +246 drivers/spi/spi-stm32-ospi.c
 
-That implicitly limits the length to 4, but does allow [0, 1, 2, 4] and 
-other ordering. More generally, if the device supports fewer channels 
-than the host, then we can't constrain that. Oh well, we can't check 
-everything (we hardly check values within reg, interrupts, clocks, and 
-on and on). But most controllers are going to limit the length to 1 
-entry, so it should end up with the same constraints most of the time.
+   236	
+   237	static int stm32_ospi_wait_cmd(struct stm32_ospi *ospi)
+   238	{
+   239		void __iomem *regs_base = ospi->regs_base;
+   240		u32 sr;
+   241		int err = 0;
+   242	
+   243		if (ospi->fmode == CR_FMODE_APM)
+   244			goto out;
+   245	
+ > 246		err = readl_relaxed_poll_timeout_atomic(ospi->io_base + OSPI_SR, sr,
+   247							(sr & (SR_TEF | SR_TCF)), 1,
+   248							STM32_WAIT_CMD_TIMEOUT_US);
+   249	
+   250		if (sr & SR_TCF)
+   251			/* avoid false timeout */
+   252			err = 0;
+   253		if (sr & SR_TEF)
+   254			err = -EIO;
+   255	
+   256	out:
+   257		/* clear flags */
+   258		writel_relaxed(FCR_CTCF | FCR_CTEF, regs_base + OSPI_FCR);
+   259	
+   260		if (!err)
+   261			err = stm32_ospi_wait_nobusy(ospi);
+   262	
+   263		return err;
+   264	}
+   265	
 
-Are these updates all of them or just a sampling. If the latter and 
-there's a lot more, then we may want to split spi-controller.yaml into 
-2 (3 really with a common part). Make spi-controller.yaml define single 
-channel SPI controllers which keeps the length of spi-[rt]x-bus-width at 
-1 entry and then define a spi-multi-chan-controller.yaml which doesn't 
-constrain it. 
-
-Rob
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
