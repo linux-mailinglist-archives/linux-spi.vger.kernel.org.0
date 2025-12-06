@@ -1,77 +1,77 @@
-Return-Path: <linux-spi+bounces-11809-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11810-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA999CAA14A
-	for <lists+linux-spi@lfdr.de>; Sat, 06 Dec 2025 06:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C6AF7CAA25A
+	for <lists+linux-spi@lfdr.de>; Sat, 06 Dec 2025 08:19:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C32EE305654B
-	for <lists+linux-spi@lfdr.de>; Sat,  6 Dec 2025 05:20:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C000D301A731
+	for <lists+linux-spi@lfdr.de>; Sat,  6 Dec 2025 07:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30D9821E091;
-	Sat,  6 Dec 2025 05:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540E92459D1;
+	Sat,  6 Dec 2025 07:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOnD4tXH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JLN/Em5S"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E9C1D63F3;
-	Sat,  6 Dec 2025 05:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5662C2550CD;
+	Sat,  6 Dec 2025 07:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764998444; cv=none; b=QRu+pNCCXDOH+GrM/V5oHakzIUJ8M/aP92C+zlDIXAYcrQPYR8YQl1sIJ//gRD20HGkHqmto+1iR1i8awyEaGm+Lf4OkP8pTD72gHrx1pvwypAaa9sILdBfc4hIQBA/aZ4kJx8MlIqvcY7J7+Ed2PczOGMlzHXpELxzXjxLZVTM=
+	t=1765005534; cv=none; b=Q22CgnkPe1oPzKPrd7IXDwoGdRIflDifwemzP+vPMCvFwW+3RG6GOj7G6mdE1dgZ0E00vjFH5WePf3OKsozthsJDri8MgxKxkS9awOkXLKPn0zF5g1/eTwlcEh8nO0B74Rf8Fifcg3AmT8iW2wrP0/aIocbkhwtOfTN1uVf1/ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764998444; c=relaxed/simple;
-	bh=ZFjNsLDmNldfG/5D2Bo1Qfl2RpXTUFrxrN62ffaxeME=;
+	s=arc-20240116; t=1765005534; c=relaxed/simple;
+	bh=oQCyKfe48rYH5RAg2kQmpAmcDXxICCIuye7g2EDqWtw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q47dAAorG49EEvl8O10BeyVaITtNfSJXq5K6mzjP/ziy8hnJOd5PzDhpvi+9UPvo48O6owAbd5rVUnW2p0nFT0x0qzo/yHOWEE4WjSz6HMfbeSreXHSkh7MCMGHt2u0JxpyvT47Bk9Zg2pPiadKOJzuMdb5cRSWqc0zOeXxJBBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOnD4tXH; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=L2N17EIXHX9wN8BiB+P2NASpIAMswRRs8Cnpx3MuKmgHWULqCXwXOWymLs3jsD9Ty9rF07En6UdMlUCvb2HVgNYhBN8AAkUFbI9P269ojK0to8QQI9uurVMHRK6Q+wQisNdN0uPc9RNGOrGfiva+tMfbB8kEdPzku5x8APHrw2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JLN/Em5S; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764998443; x=1796534443;
+  t=1765005531; x=1796541531;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=ZFjNsLDmNldfG/5D2Bo1Qfl2RpXTUFrxrN62ffaxeME=;
-  b=jOnD4tXHFYfea9bqretoSovZs3Zr/piVDcxDyjjUrM+HDm47u7wWemS9
-   CQ+bEegNxuE/26SIZlMI3/z7a63x7ORfPmYI1NblOUQKL+h38cv07qaf4
-   OrX1QMoLBwa1S3yYFcqRXjTdW/Y87xE3OLzkAq41FrglfsR8rQqBvDFVd
-   fJJBnQfAWaNmjWzhVeBDuEd9YAk7M9/m2md1pgCnMIJhMWBG0DTo26zV+
-   j+LDgwxipCn3NmYzA4oJGW/fHtQtu0mGE7Yg1HaV4oPkxbAin0Wzbmwih
-   GmaYMA0DyamZHF7ivdXbPG24FgnSJT9HxEjmcfIU9MXYqdGIgLGCJJEPN
-   Q==;
-X-CSE-ConnectionGUID: QBLrcPI9RPyvUIWKJ6hR9A==
-X-CSE-MsgGUID: Ug0cRECWSVqLuymHGyedMQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="89684191"
+  bh=oQCyKfe48rYH5RAg2kQmpAmcDXxICCIuye7g2EDqWtw=;
+  b=JLN/Em5S9GN7qN1GxZdqZhu+eJp2TfNv05BTDXraaGae8tO4FcdSanEO
+   obAgmkvJ0EICJF9Hp8+kVlPR3/jpixuIBBNhjVdzYeg2fkGPL6Upf3zt4
+   3tbjTkF+7pq0oZhrhKPR0yX3BjxrH9TG/Jnnzxdys2I3DOGt7sZnGap0E
+   M4PMZiQfC+7qjHvs72J6oxlnOjkYubgH//48HaXGzK5odAyEJ65QlHb3R
+   QEzSVLw976WOO0aaG9J8enW95lHvaVlfIcz9ZZ3OS2A4KISZ1+gs+8+jf
+   9WS8yd1XPTuvSi1cg5FoXwGByc+GI9MnJgVvdON7Abl25WDtcZjrgp8lV
+   w==;
+X-CSE-ConnectionGUID: cUw9UhTmTeyAzv6boIG8ug==
+X-CSE-MsgGUID: kIE9PLqpTZmP5D5xtfSc/g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="84636831"
 X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
-   d="scan'208";a="89684191"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 21:20:43 -0800
-X-CSE-ConnectionGUID: M8sn2e1iS7WipgYPGUEVrg==
-X-CSE-MsgGUID: FnNPjzW+SuyCFsShyfMMBQ==
+   d="scan'208";a="84636831"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 23:18:50 -0800
+X-CSE-ConnectionGUID: jeOhal7kQjOEIQ4xIheCkw==
+X-CSE-MsgGUID: 2BcrPTSDTMyAGkOdxvTlyA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,254,1758610800"; 
-   d="scan'208";a="200605245"
+   d="scan'208";a="194778838"
 Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 05 Dec 2025 21:20:40 -0800
+  by orviesa010.jf.intel.com with ESMTP; 05 Dec 2025 23:18:47 -0800
 Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vRkij-00000000Fsj-1Jo7;
-	Sat, 06 Dec 2025 05:20:37 +0000
-Date: Sat, 6 Dec 2025 13:19:46 +0800
+	id 1vRmZ3-00000000Fyf-0Vbv;
+	Sat, 06 Dec 2025 07:18:45 +0000
+Date: Sat, 6 Dec 2025 15:18:20 +0800
 From: kernel test robot <lkp@intel.com>
 To: Patrice Chotard <patrice.chotard@foss.st.com>,
 	Mark Brown <broonie@kernel.org>,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
 	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
 	Patrice Chotard <patrice.chotard@foss.st.com>
 Subject: Re: [PATCH 3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
-Message-ID: <202512061327.9CDC4SNs-lkp@intel.com>
+Message-ID: <202512061458.1wp2IbOG-lkp@intel.com>
 References: <20251205-upstream_qspi_ospi_updates-v1-3-7e6c8b9f5141@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -93,34 +93,44 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Patrice-Chotard/spi-stm32
 base:   7d0a66e4bb9081d75c82ec4957c50034cb0ea449
 patch link:    https://lore.kernel.org/r/20251205-upstream_qspi_ospi_updates-v1-3-7e6c8b9f5141%40foss.st.com
 patch subject: [PATCH 3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
-config: sparc64-randconfig-002-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061327.9CDC4SNs-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 8.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061327.9CDC4SNs-lkp@intel.com/reproduce)
+config: riscv-randconfig-002-20251206 (https://download.01.org/0day-ci/archive/20251206/202512061458.1wp2IbOG-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251206/202512061458.1wp2IbOG-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512061327.9CDC4SNs-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512061458.1wp2IbOG-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/spi/spi-stm32-ospi.c:16:
-   drivers/spi/spi-stm32-ospi.c: In function 'stm32_ospi_wait_cmd':
->> drivers/spi/spi-stm32-ospi.c:246:48: error: 'struct stm32_ospi' has no member named 'io_base'; did you mean 'mm_base'?
-     err = readl_relaxed_poll_timeout_atomic(ospi->io_base + OSPI_SR, sr,
-                                                   ^~~~~~~
-   include/linux/iopoll.h:102:3: note: in definition of macro 'poll_timeout_us_atomic'
-      op; \
-      ^~
-   include/linux/iopoll.h:213:2: note: in expansion of macro 'read_poll_timeout_atomic'
-     read_poll_timeout_atomic(op, val, cond, delay_us, timeout_us, false, addr)
-     ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/iopoll.h:255:2: note: in expansion of macro 'readx_poll_timeout_atomic'
-     readx_poll_timeout_atomic(readl_relaxed, addr, val, cond, delay_us, timeout_us)
-     ^~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/spi/spi-stm32-ospi.c:246:8: note: in expansion of macro 'readl_relaxed_poll_timeout_atomic'
-     err = readl_relaxed_poll_timeout_atomic(ospi->io_base + OSPI_SR, sr,
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/spi/spi-stm32-ospi.c:246:48: error: no member named 'io_base' in 'struct stm32_ospi'; did you mean 'mm_base'?
+     246 |         err = readl_relaxed_poll_timeout_atomic(ospi->io_base + OSPI_SR, sr,
+         |                                                       ^~~~~~~
+         |                                                       mm_base
+   include/linux/iopoll.h:255:43: note: expanded from macro 'readl_relaxed_poll_timeout_atomic'
+     255 |         readx_poll_timeout_atomic(readl_relaxed, addr, val, cond, delay_us, timeout_us)
+         |                                                  ^
+   include/linux/iopoll.h:213:71: note: expanded from macro 'readx_poll_timeout_atomic'
+     213 |         read_poll_timeout_atomic(op, val, cond, delay_us, timeout_us, false, addr)
+         |                                                                              ^
+   include/linux/iopoll.h:172:36: note: expanded from macro 'read_poll_timeout_atomic'
+     172 |         poll_timeout_us_atomic((val) = op(args), cond, sleep_us, timeout_us, sleep_before_read)
+         |                                           ^
+   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   arch/riscv/include/asm/mmio.h:90:76: note: expanded from macro 'readl_cpu'
+      90 | #define readl_cpu(c)            ({ u32 __r = le32_to_cpu((__force __le32)__raw_readl(c)); __r; })
+         |                                                                                      ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   include/linux/iopoll.h:102:3: note: expanded from macro 'poll_timeout_us_atomic'
+     102 |                 op; \
+         |                 ^
+   drivers/spi/spi-stm32-ospi.c:124:16: note: 'mm_base' declared here
+     124 |         void __iomem *mm_base;
+         |                       ^
+   1 error generated.
 
 
 vim +246 drivers/spi/spi-stm32-ospi.c
