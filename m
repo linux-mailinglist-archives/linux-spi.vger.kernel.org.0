@@ -1,78 +1,99 @@
-Return-Path: <linux-spi+bounces-11830-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11829-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5D9ECAFA16
-	for <lists+linux-spi@lfdr.de>; Tue, 09 Dec 2025 11:27:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01E45CAFA0D
+	for <lists+linux-spi@lfdr.de>; Tue, 09 Dec 2025 11:26:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 86FDB307B4D0
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Dec 2025 10:23:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1086F30B453E
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Dec 2025 10:22:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB042E173D;
-	Tue,  9 Dec 2025 10:23:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8D82EB5A1;
+	Tue,  9 Dec 2025 10:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhwX96F7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YFPYuGCy"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6BB2BE7A7
-	for <linux-spi@vger.kernel.org>; Tue,  9 Dec 2025 10:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A408B2C0270;
+	Tue,  9 Dec 2025 10:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765275790; cv=none; b=XIoU1ZQQ+jc3lZZ7YGsEUpubSk+75hODXFjCSxGmgFvxDkm+dhp3o7bCRugbwMTgh5bXX41dKp3YjqeFSmmzDLzlOcbesilLZpKwviz10XXDlr1NVWr7el+B1VlCWx1ShsxcOV5c0+nE54csN695y29j4pQicd0XBwH8nqc4J3A=
+	t=1765275727; cv=none; b=eteDqa9vEIV9fjq3WnSi4vKReBIm7jRpGxEZ6oivSYq+uOs1/arn21IQJnpKDH+JjS6GyrhNeolKDu3WUbUq4E/BOUhO+h4Dtqtyv+Ia03kDvZ9Ax4GEgp7sroauARcdGepQBF4GenJ4I7WMnFS7KPpmkr2tbbtVxpfClc6cVIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765275790; c=relaxed/simple;
-	bh=/i0SNXgntT6JcCEauoPoD7Woz/g3mDzopu6mZJQKXwk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=jmZZSiHVEjkgdVEUjCmVIfveWMrgG+TsrdxjV/XUXOx8y2UQOQUBsLjPkuczhmPA5fvg3hDyf+fpF9IyRE1C2MKfr3WeVAxKNJb2hWxxJYSRR77a4QeH7oQcS32OkESAH/RW+8EX8TNjaNVBNR/DccYvDWWJXabj6q0MEoBY98I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhwX96F7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CEEC4CEF5;
-	Tue,  9 Dec 2025 10:23:10 +0000 (UTC)
+	s=arc-20240116; t=1765275727; c=relaxed/simple;
+	bh=BxGEzqB4zTaHJ1wmuJwo0vF4iXtuYZcWRVJf54n45lQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=DpkJetEatiM5ZxHQADh8OS9VnsVWh7kxeagUwc25jsRKSwTSzOuSh12xIhH5OIS3ZQ2p70hLPtKIQkpDqxX97ruMND72+FZm7Hc5JzdI6nCLvOs/DgonL70H5cQmtOk/ir2fCOzwERhVMd+H37f+tx+gR7dvVF/TuM+Zrrg9nek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YFPYuGCy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6F6C4CEF5;
+	Tue,  9 Dec 2025 10:22:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765275790;
-	bh=/i0SNXgntT6JcCEauoPoD7Woz/g3mDzopu6mZJQKXwk=;
-	h=Subject:From:Date:To:From;
-	b=UhwX96F7f7ZaDg6ZwAuMKxIrY0rODDOt2/yZG1z3iojbv51sG9f6p2f8pyp+Nhcwc
-	 qrjLSpv2Vbt4W4K91zVXcJyHuPOR418npgSBDOTrsaeNG8YWdEEc8R4kJIeSY9rZty
-	 81NNMBYcDb0qNUGGfK5j0y8zJmx6kI/kCyg8n3YNaFFN326MRhi3cm3h7sCfzf+Csc
-	 g1YL8IrvJkW1TcyrgLMkhzhiPsVFilIL2smxTSCvkC8QbSkkg+aN3i6qS3+nafuYOv
-	 Gatai52m/YplrblyeP8kBHi0BNOBNdCbSBIbgXJwhUVsCT3C4q0HaYLtxQt7pSYDDc
-	 RqKwAiI/jMK0g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA5F03808200;
-	Tue,  9 Dec 2025 10:20:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1765275725;
+	bh=BxGEzqB4zTaHJ1wmuJwo0vF4iXtuYZcWRVJf54n45lQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=YFPYuGCyu9pk/PDSNSWtUslxpVcvbKmCKh0RjP0r6nj77Vnx/L7qTfki4sKd43Ljd
+	 4X5f4sY0EtJW6H2zGA2trFgl+HK5oEW+G0NEjiCZnLP9l57WDx0VS+YjE+20in0a3g
+	 z17WUtkluL5506+wsY8psPGaKteMb0hyL5ARW7XUmvqXyeIaj/PPUhp1jSt3nxvpiD
+	 m5Us24nUYOroK9FSp1h4nM6rlx4UPdfj/H0cpOCnxfP+Pcc9OGm1tp7/Qmv2X372O5
+	 3zb9FWgfMbejhUNI8gUlohInY2cmFrslJuD9nm0TwZT1LqmbH7UDuuMVQ0Krm3n4vL
+	 J2XH3FdafLDgg==
+From: Mark Brown <broonie@kernel.org>
+To: Conor Dooley <conor.dooley@microchip.com>, 
+ Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+ linux-spi@vger.kernel.org
+In-Reply-To: <a7aaff1f28a83303a288de2914724a874fe1a11e.1764969247.git.christophe.jaillet@wanadoo.fr>
+References: <a7aaff1f28a83303a288de2914724a874fe1a11e.1764969247.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: microchip-core: Fix an error handling path in
+ mchp_corespi_probe()
+Message-Id: <176527571937.622968.1155008972776537715.b4-ty@kernel.org>
+Date: Tue, 09 Dec 2025 19:21:59 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176527560527.3892005.10174408861534045421.git-patchwork-summary@kernel.org>
-Date: Tue, 09 Dec 2025 10:20:05 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
-Hello:
+On Fri, 05 Dec 2025 22:14:10 +0100, Christophe JAILLET wrote:
+> mchp_corespi_init() calls mchp_corespi_enable_ints(), so
+> mchp_corespi_disable_ints() should be called if an error occurs after
+> calling mchp_corespi_init(), as already done in the remove function.
+> 
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: spi: microchip-core: Fix an error handling path in mchp_corespi_probe()
-  Submitter: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1030984
-  Lore link: https://lore.kernel.org/r/a7aaff1f28a83303a288de2914724a874fe1a11e.1764969247.git.christophe.jaillet@wanadoo.fr
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
 
-Total patches: 1
+[1/1] spi: microchip-core: Fix an error handling path in mchp_corespi_probe()
+      commit: 8cef9b451dc6fdf86b92c7a35d55a47465d500db
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
