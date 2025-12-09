@@ -1,99 +1,138 @@
-Return-Path: <linux-spi+bounces-11829-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11831-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01E45CAFA0D
-	for <lists+linux-spi@lfdr.de>; Tue, 09 Dec 2025 11:26:40 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D23CAFA3A
+	for <lists+linux-spi@lfdr.de>; Tue, 09 Dec 2025 11:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1086F30B453E
-	for <lists+linux-spi@lfdr.de>; Tue,  9 Dec 2025 10:22:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E07293008555
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Dec 2025 10:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8D82EB5A1;
-	Tue,  9 Dec 2025 10:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B6D1EE7C6;
+	Tue,  9 Dec 2025 10:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YFPYuGCy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MMvNMIBE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A408B2C0270;
-	Tue,  9 Dec 2025 10:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A56518DB35;
+	Tue,  9 Dec 2025 10:30:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765275727; cv=none; b=eteDqa9vEIV9fjq3WnSi4vKReBIm7jRpGxEZ6oivSYq+uOs1/arn21IQJnpKDH+JjS6GyrhNeolKDu3WUbUq4E/BOUhO+h4Dtqtyv+Ia03kDvZ9Ax4GEgp7sroauARcdGepQBF4GenJ4I7WMnFS7KPpmkr2tbbtVxpfClc6cVIQ=
+	t=1765276236; cv=none; b=FKMzcE2Tm1paYQFwvfR+/r40TEfyu0Zmo0WDxDDxdZhekrPUB1mqWiCz4ftrZkdn678AFMS+qaXwo1WVeDV7A1vEEvY75eeY/FfdCc8qO2PD4rUo4ZNFA0ire8SiCdKcdC2dRtZIikU4V2kjXul26XYYaCcjUGFavNNAlO+boeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765275727; c=relaxed/simple;
-	bh=BxGEzqB4zTaHJ1wmuJwo0vF4iXtuYZcWRVJf54n45lQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=DpkJetEatiM5ZxHQADh8OS9VnsVWh7kxeagUwc25jsRKSwTSzOuSh12xIhH5OIS3ZQ2p70hLPtKIQkpDqxX97ruMND72+FZm7Hc5JzdI6nCLvOs/DgonL70H5cQmtOk/ir2fCOzwERhVMd+H37f+tx+gR7dvVF/TuM+Zrrg9nek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YFPYuGCy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF6F6C4CEF5;
-	Tue,  9 Dec 2025 10:22:03 +0000 (UTC)
+	s=arc-20240116; t=1765276236; c=relaxed/simple;
+	bh=2O1lO8RaQHH8AUqxcU0VC7ms5Uf8CBesGTSI+sXGE/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DVxAvuEBrtTenMy3kdbUgr0Sd/5TR/9luu9wqa03HD+0eb+vh5phFxOQtfSY/CV61mo0uyzGJw3ji9X6Lxg6s0DnWEQJRz4s53qjFTlNfznMkyBppg8N5WAvqZXxoGaaHrXUtpQj1BCHU5wiv4RRHCX1PX4RYpBPH/M8xLDBxqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MMvNMIBE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 038DEC4CEF5;
+	Tue,  9 Dec 2025 10:30:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765275725;
-	bh=BxGEzqB4zTaHJ1wmuJwo0vF4iXtuYZcWRVJf54n45lQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=YFPYuGCyu9pk/PDSNSWtUslxpVcvbKmCKh0RjP0r6nj77Vnx/L7qTfki4sKd43Ljd
-	 4X5f4sY0EtJW6H2zGA2trFgl+HK5oEW+G0NEjiCZnLP9l57WDx0VS+YjE+20in0a3g
-	 z17WUtkluL5506+wsY8psPGaKteMb0hyL5ARW7XUmvqXyeIaj/PPUhp1jSt3nxvpiD
-	 m5Us24nUYOroK9FSp1h4nM6rlx4UPdfj/H0cpOCnxfP+Pcc9OGm1tp7/Qmv2X372O5
-	 3zb9FWgfMbejhUNI8gUlohInY2cmFrslJuD9nm0TwZT1LqmbH7UDuuMVQ0Krm3n4vL
-	 J2XH3FdafLDgg==
+	s=k20201202; t=1765276236;
+	bh=2O1lO8RaQHH8AUqxcU0VC7ms5Uf8CBesGTSI+sXGE/M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MMvNMIBECdF9OKo2lM7q3VSmSI9raekugGCr4IMGKuqWCLSv692HwTHbZzMve1gnM
+	 csQbYxINwoWQRGWZNdjAdNwOmbjdRvdKecpEPb50/PL5HOLP7U7zuz1G6hV1NQbz7Z
+	 PuBvIBAABl6Ltebraqaw0f1GiPZ9OSTXmGg1dA4SuB/6JR1BYj+K6znpOYowoHEDud
+	 ZNQNXkIQf/BkH62yEXuyoPfIwfmWZOZV3Q8sPnot+9FItojqe+GefCqgTwf95j1ogB
+	 jq++9Pdxf2bcU5bnPx+thyCL0cOgTa8yUdvvSeH9v4norVjWaoskG+ebE+HnwI19Cf
+	 FfKG7uUmIaxrg==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id 830DC1ACB951; Tue, 09 Dec 2025 10:30:29 +0000 (GMT)
+Date: Tue, 9 Dec 2025 19:30:29 +0900
 From: Mark Brown <broonie@kernel.org>
-To: Conor Dooley <conor.dooley@microchip.com>, 
- Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>, 
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
- linux-spi@vger.kernel.org
-In-Reply-To: <a7aaff1f28a83303a288de2914724a874fe1a11e.1764969247.git.christophe.jaillet@wanadoo.fr>
-References: <a7aaff1f28a83303a288de2914724a874fe1a11e.1764969247.git.christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] spi: microchip-core: Fix an error handling path in
- mchp_corespi_probe()
-Message-Id: <176527571937.622968.1155008972776537715.b4-ty@kernel.org>
-Date: Tue, 09 Dec 2025 19:21:59 +0900
+To: "Dutta, Anurag" <a-dutta@ti.com>
+Cc: Nishanth Menon <nm@ti.com>, Francesco Dolcini <francesco@dolcini.it>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	"Gujulan Elango, Hari Prasath" <gehariprasath@ti.com>,
+	"Kumar, Udit" <u-kumar1@ti.com>
+Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
+ runtime PM
+Message-ID: <aTf6RRAveRdVnWQZ@sirena.co.uk>
+References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+ <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
+ <555e9f6b-b8b6-4cc5-900b-63aaff8b4e6c@sirena.org.uk>
+ <20251204140530.xax5didvuc7auzcd@problem>
+ <4d6b857e-4bfe-45ef-a428-6e92f218f0c5@sirena.org.uk>
+ <2fcf5235-cc94-4202-9164-4889356c5264@sirena.org.uk>
+ <cd95320b-6852-476e-bc8a-2e8d1ac77a9e@ti.com>
+ <f804d7a7-4ffb-4d2a-bbaf-ca0a076a11ab@sirena.org.uk>
+ <5525272e-7220-4352-bb08-ac66631108e0@ti.com>
+ <cf8e7003-ebca-4817-8350-f29332d75fab@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-47773
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="EfM4AL38KKkP89t4"
+Content-Disposition: inline
+In-Reply-To: <cf8e7003-ebca-4817-8350-f29332d75fab@ti.com>
+X-Cookie: It's clever, but is it art?
 
-On Fri, 05 Dec 2025 22:14:10 +0100, Christophe JAILLET wrote:
-> mchp_corespi_init() calls mchp_corespi_enable_ints(), so
-> mchp_corespi_disable_ints() should be called if an error occurs after
-> calling mchp_corespi_init(), as already done in the remove function.
-> 
-> 
 
-Applied to
+--EfM4AL38KKkP89t4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+On Tue, Dec 09, 2025 at 03:22:43PM +0530, Dutta, Anurag wrote:
+> On 09-12-2025 11:13, Dutta, Anurag wrote:
 
-Thanks!
+> Another solution :
 
-[1/1] spi: microchip-core: Fix an error handling path in mchp_corespi_probe()
-      commit: 8cef9b451dc6fdf86b92c7a35d55a47465d500db
+> diff --git a/drivers/spi/spi-cadence-quadspi.c
+> b/drivers/spi/spi-cadence-quadspi.c
+> index af6d050da1c8..4d298b945f09 100644
+> --- a/drivers/spi/spi-cadence-quadspi.c
+> +++ b/drivers/spi/spi-cadence-quadspi.c
+> @@ -2024,7 +2024,11 @@ static int cqspi_probe(struct platform_device *pde=
+v)
+> =A0probe_reset_failed:
+> =A0 =A0 =A0 =A0 if (cqspi->is_jh7110)
+> =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 cqspi_jh7110_disable_clk(pdev, cqspi);
+> -=A0 =A0 =A0 =A0clk_disable_unprepare(cqspi->clk);
+> +
+> +=A0 =A0 =A0 =A0if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM)=
+)) {
+> +=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0if (pm_runtime_get_sync(&pdev->dev) >=3D =
+0)
+> +=A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0 =A0clk_disable_unprepare(cqs=
+pi->clk);
+> +=A0 =A0 =A0 =A0}
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> pm_runtime_get_sync() will increment the usage count thereby preventing f=
+rom
+> runtime_suspend()
+> getting invoked, thereby preventing double clock_disable()
+>=20
+> This will work for !CONFIG_PM as well because pm_runtime_get_sync() will
+> return 1 then.
+> and the runtime_suspend() is never going to be invoked.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+I think we want this, possibly using pm_runtime_force_resume() instead
+(not 100% sure on that one, glancing at the documentation there might be
+issues though it feels like the intent of what we're doing here).  Can
+you send a patch please?
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--EfM4AL38KKkP89t4
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mark
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmk3+kQACgkQJNaLcl1U
+h9ChoAf+Nu0YvtmDE9dT6b6dWMRLQqugy3gmp1TtstBUDAaHlkQI/2uV7emxNM0L
+SYehkH7knybaFnJuE+qxy17H2t2frMZnDJQN1qU1ZocspiAwSNb6nqqfuI91KAAO
+Q4gpvfj0QIAalxSMcgDBAbEmHG5OOTxR4FQKtNArLOKGrf18o9nyRBboDzIt9I5k
+VpRD7JOrRkZnq1TFj64HcCFSLSJo2+h7Aiae0MVxreqgKZUm7QF1J6377uGzEuZI
+sMubRC8u3G4vuUatGujD9wUg1zEtozr3E+mbn34fBdgE7DWoQOeW5KWet0e4g3JA
+Ah4juzdymqC8Lkl0pYaSXUsVSbKJtg==
+=ggd1
+-----END PGP SIGNATURE-----
 
+--EfM4AL38KKkP89t4--
 
