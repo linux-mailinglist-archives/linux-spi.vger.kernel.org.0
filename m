@@ -1,386 +1,212 @@
-Return-Path: <linux-spi+bounces-11825-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11826-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C567BCAE045
-	for <lists+linux-spi@lfdr.de>; Mon, 08 Dec 2025 19:42:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D221ECAEF63
+	for <lists+linux-spi@lfdr.de>; Tue, 09 Dec 2025 06:44:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 49A8430B6207
-	for <lists+linux-spi@lfdr.de>; Mon,  8 Dec 2025 18:42:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 81BB83030FF2
+	for <lists+linux-spi@lfdr.de>; Tue,  9 Dec 2025 05:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8FC2DEA70;
-	Mon,  8 Dec 2025 18:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C10030BF59;
+	Tue,  9 Dec 2025 05:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZhu+cMZ"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="uZvTtGs+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011027.outbound.protection.outlook.com [52.101.62.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 499052DCBE3;
-	Mon,  8 Dec 2025 18:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765218781; cv=none; b=GgROL6T0PrKo46JU+LaIy9zRyVAdfSwHaHWZwD7CTbPLeAsn/D/XCRtZPyyDMqfCMrF60+gVeUPxcxy1NBRp4Zjx1JUsInnAXoqN2o9JsqyCIza5KqRco528y8ncMrND8qQZJkQ7wVDI4rPn0cUYtxyFBmaWCZmg0ceOdZGdFwA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765218781; c=relaxed/simple;
-	bh=ZA+mTSJWTBLywz5DiXmr9MLP7m9fwm/qg/hcu+2sp4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EtnPSqZvAfiQ8xHo6s7otVVGtx1w5KYUp3lfZWN3lUhKxrWWjXrh0iLmirHTsanKJrMiDTdc8EqF5aYLg9kJ/0jpVGYVtRTxHeqiqYPvMRQo5RtuXtQX1P+ffTfGl3tt7Ex4/npWFRp8TA+xYgRd4uOGbfyjzy8KxPnAqWQFZvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZhu+cMZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9925C4CEF1;
-	Mon,  8 Dec 2025 18:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765218781;
-	bh=ZA+mTSJWTBLywz5DiXmr9MLP7m9fwm/qg/hcu+2sp4k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bZhu+cMZFMb5URqqXhOXo27VMmGdGodXz5lTl4usNvqiHN7m+MKwO4oCshWMQGHX/
-	 rbRv19ZCvvGvffN4wNmxmrylxL1jSFue8YlXmPIlZeg00b3vHxpq5phaIWANryuXxS
-	 Q7HNzgYn90tE6nzxAGmfelzxJ7CrFZ8Hhktx5nPz8/LffH1iuVH+GO4AEI7zb9fOgk
-	 XJIGs+n9oRRfUIUr71PQXnz76QsLdTfZr6c2rujfQvIw3Fpdv2ICZ3fzKejzrimrYE
-	 wy+gRFxjbmvX8K8So9Vy/iUn1eMCu82EcvCnSEXsrJPsJ5GftLKqKn9wjc7+ojUjxn
-	 1QZmFPpmtI64g==
-Date: Mon, 8 Dec 2025 12:32:58 -0600
-From: Rob Herring <robh@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] dt-bindings: iio: adc: adi,ad4030: add data-lanes
- property
-Message-ID: <20251208183258.GA2439268-robh@kernel.org>
-References: <20251201-spi-add-multi-bus-support-v3-0-34e05791de83@baylibre.com>
- <20251201-spi-add-multi-bus-support-v3-7-34e05791de83@baylibre.com>
- <20251204213348.GA2198382-robh@kernel.org>
- <aTNKyaWAEjVJixMI@debian-BULLSEYE-live-builder-AMD64>
- <0cf78f84-01e7-4507-abf9-2f82f98206b2@baylibre.com>
- <221d5ed6-51da-4dce-b8a7-58b4d2423101@baylibre.com>
- <20251206004757.GA980619-robh@kernel.org>
- <b31f9e88-a078-47f4-8d6c-359a0394ef7e@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423CE3081D5;
+	Tue,  9 Dec 2025 05:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765259037; cv=fail; b=BCJ0sG2sStb7XahC6e5mjHe6+KOEsGGgRftD8R3Zp9GN0RKiX5d+oCmbhLSOYeaIAby3Ael2TX5NghQiWJpddeP4ETERMYMsJfocH3fKrKjfiSP2O+tvde4T53HV7LLxV5Urc1rvXU2SyH/bXMq3ryh8hLPNOKqrDT0AS69Ng70=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765259037; c=relaxed/simple;
+	bh=piplTwgolbajR6YJNUR+c0J4xiLxVzphxhpHPzmR6lk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=prllYpBJf5V+1JJzUmX152xTMet996rPo2fHR3MGxF4u0zh1Uz0UgG03JjVcasluBvOUGg+y8MnyBlrFaELDsfqxhzeSAa26REI3BaVpv59l/xX1yjbkZtkOPXrKHBNYVLNBSv/zIGRg/oAFtvrt+8cVgOhrB3FXpZEDPBZ5Dq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=uZvTtGs+; arc=fail smtp.client-ip=52.101.62.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=t/3z1IOFZopKAcuDzCR+P01Tcfqd5LqeW2QhMS5KbEjzLtfOp5fGLfGQ6N86Q8FPfFPQoMJXc7/hciZcrtJJLHx0pmY7KchVm1hPdwR1UpcFveJOzwCkzy2dE5M3ifPnY4kcQyPbmkWxnYH5qKFnJsq+jZxJWIq2TMqQdZoeNCGm36IEWJZuLICNrAEp2nXYY5brspVcYr6nKIksDWa6j+NPsRhJ3Guu8dfEeRO9R1IDh+qy2dm5hMyAsZ2CoUSFlbgzCHX/J268tnpt+Mx/zKWYBwdznsHpLrkglfNeXVZBb7TSPKwVWXNM9ERVNn7/qtBgbdL1uytxwvd315z0zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gykD1gcyE2uhso4HYwovezh8nJBVOL3H87B6JFOF/Sk=;
+ b=eeam2rml9KWF9XbBuFRu1i4shtc6uxehLlok8mSJHUErlpCjeh5yErr84MES4TN+Zvw/SKPHUS1rKuy4KNl7yGuBj4amnOUOMSnCAg0ZdTXP6J7OcodEzcr4l81P9tPUvbLhOQbCINF8h8M/tH9UotxZw9+GKiUZse14aOB4r/jG2j+M+a8wcWsI5hUFTxG0OHI1lXUf+uqCo4VjOfKCnZdMUMqjZZi66xSaE/Y0B4NPBQx24A22eAl+lOmHtXrRriMv4ilU5bJv95ye2zvcXjKE7tmriQLGOEAOUBfNoDskYEy/UFnlBMBSYxEom1QrhXU2hfhqPEGtUgqv1i8iJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gykD1gcyE2uhso4HYwovezh8nJBVOL3H87B6JFOF/Sk=;
+ b=uZvTtGs+gd8UqETwdI48okNjia8x9mbe74dJUmPes8t3R2BSQRXwu+sgRgavzGk0H0pc0Y9aRBs9WGNSOO0uRKtRKXr8tG9TkRX+Ghhz92T9cIIti0Zc8l3CjbGHgFmPJ3oKyQYmvZZ2xJayIo8ek8FsPjsYj3iW88AQOiRRR4c=
+Received: from SN7PR04CA0195.namprd04.prod.outlook.com (2603:10b6:806:126::20)
+ by MW4PR10MB6629.namprd10.prod.outlook.com (2603:10b6:303:22e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.14; Tue, 9 Dec
+ 2025 05:43:50 +0000
+Received: from SA2PEPF00003AE8.namprd02.prod.outlook.com
+ (2603:10b6:806:126:cafe::59) by SN7PR04CA0195.outlook.office365.com
+ (2603:10b6:806:126::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.14 via Frontend Transport; Tue,
+ 9 Dec 2025 05:43:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
+Received: from flwvzet201.ext.ti.com (198.47.21.195) by
+ SA2PEPF00003AE8.mail.protection.outlook.com (10.167.248.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9412.4 via Frontend Transport; Tue, 9 Dec 2025 05:43:49 +0000
+Received: from DFLE206.ent.ti.com (10.64.6.64) by flwvzet201.ext.ti.com
+ (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 8 Dec
+ 2025 23:43:46 -0600
+Received: from DFLE210.ent.ti.com (10.64.6.68) by DFLE206.ent.ti.com
+ (10.64.6.64) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 8 Dec
+ 2025 23:43:46 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE210.ent.ti.com
+ (10.64.6.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Mon, 8 Dec 2025 23:43:46 -0600
+Received: from [172.24.21.18] (ltpw0bk3wf.dhcp.ti.com [172.24.21.18])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5B95hhx5654235;
+	Mon, 8 Dec 2025 23:43:44 -0600
+Message-ID: <5525272e-7220-4352-bb08-ac66631108e0@ti.com>
+Date: Tue, 9 Dec 2025 11:13:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b31f9e88-a078-47f4-8d6c-359a0394ef7e@baylibre.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
+ runtime PM
+To: Mark Brown <broonie@kernel.org>
+CC: Nishanth Menon <nm@ti.com>, Francesco Dolcini <francesco@dolcini.it>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>, "Gujulan Elango,
+ Hari Prasath" <gehariprasath@ti.com>, "Kumar, Udit" <u-kumar1@ti.com>
+References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+ <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
+ <555e9f6b-b8b6-4cc5-900b-63aaff8b4e6c@sirena.org.uk>
+ <20251204140530.xax5didvuc7auzcd@problem>
+ <4d6b857e-4bfe-45ef-a428-6e92f218f0c5@sirena.org.uk>
+ <2fcf5235-cc94-4202-9164-4889356c5264@sirena.org.uk>
+ <cd95320b-6852-476e-bc8a-2e8d1ac77a9e@ti.com>
+ <f804d7a7-4ffb-4d2a-bbaf-ca0a076a11ab@sirena.org.uk>
+Content-Language: en-US
+From: "Dutta, Anurag" <a-dutta@ti.com>
+In-Reply-To: <f804d7a7-4ffb-4d2a-bbaf-ca0a076a11ab@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003AE8:EE_|MW4PR10MB6629:EE_
+X-MS-Office365-Filtering-Correlation-Id: 99ccc02a-63d6-4f26-086c-08de36e5edb1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?aDlUdVNrY0d5RmpUQ3E0TGtYSlB5aml4dEZJNDhySU1lbVk2V2Foa2xpK3By?=
+ =?utf-8?B?bVJwUHBRZ2ZNZ0pJNUdrTGNzSjFURGZMTVhSVkZCL0U0dGl4cXdkR0w2M3Vu?=
+ =?utf-8?B?Wjg0TEF2WWsyRmd1QURDK083TFRGdjVTa1F6bmVxOXZNa1g3ZE1EdS85cFY0?=
+ =?utf-8?B?ODVCcHhNbGt5c1RnbWJYY2FKWVlqQk5aMnQ2M3c5Ny9yUTFKUlpidS8vWldB?=
+ =?utf-8?B?Q09KY1MyVityYlRXZ29HSXd4UVNjYzh5YytaNDNNcWhVTFdvZlN5dFFsWXpK?=
+ =?utf-8?B?eFB4U1crYUtJZTNYTDdreXcrT0pzQm1YWmRRTVhkTFdqQS9paDBJSUphRnJT?=
+ =?utf-8?B?WlhYcVhsNkI5eG1xNS9OZE5obWRtU3RyNDZBYmxqYytncEVzOXBQZkVVeUxw?=
+ =?utf-8?B?NjhlYjVMYVpTZU1KTitiOExIa2dQeE4vYm1UWjM2Q2hpaXBZUUdXQlJRN3Js?=
+ =?utf-8?B?NEhGSnhsZjJXRnNsYmxteXhuamZna1F0WitQTjZ1WVdzREVoTDBWZ0tKM1Fm?=
+ =?utf-8?B?VmJMellNMWJQQWN6VGNtT1RUbk5SY3ErTEVKcEdmM2FVclUzaWpldHJ2Vmp4?=
+ =?utf-8?B?MUJzVXk5VTJmYlR3SjQ5RlFmb295Rk1mUy9pL1JtcGt3OGw5dVhaNFJHUWY3?=
+ =?utf-8?B?K2tOcjloUk5wQUV5Ny82NTg1QjVOM3NRTU5ldHJsczBLRnpqb0hnNDNSNy9m?=
+ =?utf-8?B?OXdwcUZkUVpTYkxnRGRhd1V1Y3FFTlFBTHNSem0xZFQza3JDQlpRdE5VQ1Vi?=
+ =?utf-8?B?NHcya3o4OUppby9BU0gxUlFFWVVSbWhuMVc1a1pFZFVuSlJLU3g1M2xCckJr?=
+ =?utf-8?B?QmNYQktqcVpkbVNhTVBUZ3pGOWFMc0g3bkk2ZlZnMTliOHNPUHlaZW9HOCsx?=
+ =?utf-8?B?d3ZNZkEzU0QrU1AwSWJzbTJ0akdwQUd1YjROVWJ2L3JrSXJ4UnFhM0xaczZR?=
+ =?utf-8?B?UUZ3enA4R1lIbWxIQ3ZqcXg1bndYL29aZmFyc0JiR1Ftc29tZlN5cDhtaDdW?=
+ =?utf-8?B?UC9sKzN0YlpLKytXQTdjak9INTNMYnZEQlVSUEVzZlJ6REkyMFprZlFORDk3?=
+ =?utf-8?B?ZlFFbGQ4amJEcUpPWjFPcWF6WkVEOVp2K0VzdUsyQ1NFUStZQkNmS0V3NEN2?=
+ =?utf-8?B?R0tJNXMrSnE1VEdYUWZXWjBZdzIyd1NYR09ZWnRBeGJYUG11TTBCSjl4UVhw?=
+ =?utf-8?B?NHBET1BadGEzVm51aTVvREVQTU9mUFplVjZmU0c2Q0JtRndwWkZjSFJsN0NW?=
+ =?utf-8?B?cDZCKzhYSHJ2dFZ5bU82eTg5Q3hGZEcybTdCQ0VtN1FTNXBNMWpJa3NIYmtJ?=
+ =?utf-8?B?MVhHcDl3NFptVU51eE9BcGgwclNtQzdlQVdyTVBGZm1ITU1LOUU2bDJwKzFX?=
+ =?utf-8?B?MG1NQ0lJSlEwQXcwQy8zMFE0Z0srZGJIZ0ZLazRPakdhUDNHVU1LcHpXalJk?=
+ =?utf-8?B?REtMMVZFQUFNckd0b1NYbExHNFJUclNwSW1QbHVRVXN6d1dYNzhDditlSURL?=
+ =?utf-8?B?NXFLRWxINVNaWjQrS1ZwSkg5MFB5MkppVlh4b2RGMnBCZnBzSHp1d2lIWlFS?=
+ =?utf-8?B?K2h1aVdxOUNZZnFUdEI2SVIyRlJaL1RBVmlGd1NYQ3JUY1Q4UVNsZWtBb3Bj?=
+ =?utf-8?B?VDBGdmVqdk5tTjNYemt4MllZWm1oMUJYZlZzMlVraGlqaVNrUXZZN2R5cGRW?=
+ =?utf-8?B?SEZka0dkVlA3N2tMRG1WQW9uV1ZDRy9nY3YzdE1mT2h2STF4OXhSSVVFeUNs?=
+ =?utf-8?B?Tk5UaUc4a3NSbW5sNm95WGVad2dDeG1xWUk1bHlTMldvb0dwQVBVUVVMWmpS?=
+ =?utf-8?B?SUsxa1FtQnBvY3h2bGFCbEk0Y0xaNlkrSzhJVFdnaUdrT25kZzE4WEc3RmRU?=
+ =?utf-8?B?Wk9Md2xDbVhtMlBuWnhuaE53RlFobEN5WE03SjFXbFRNMWxHTERBY1RZR2JH?=
+ =?utf-8?B?RzFiRjdhNC9RcU00V2xyd2pqQ1R5T1k5eG5xVVdCY2pzRjRkT0I2Q0ZMbmd3?=
+ =?utf-8?B?MkVJWlRTd2h5eHFZVUt3ZGpHSWtDWFZwdVVmRGlpSy9ENlFYN1dES3dZRVZT?=
+ =?utf-8?B?a3U0QVREZTltS3RrTmVVL09RTmZXWkVUVFM3UzlKVzBaSVVoK2FFenVsQng0?=
+ =?utf-8?Q?2qc0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2025 05:43:49.5620
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 99ccc02a-63d6-4f26-086c-08de36e5edb1
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003AE8.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6629
 
-On Mon, Dec 08, 2025 at 10:14:36AM -0600, David Lechner wrote:
-> On 12/5/25 6:47 PM, Rob Herring wrote:
-> > On Fri, Dec 05, 2025 at 05:43:31PM -0600, David Lechner wrote:
-> >> On 12/5/25 3:33 PM, David Lechner wrote:
-> >>> On 12/5/25 3:12 PM, Marcelo Schmitt wrote:
-> >>>> On 12/04, Rob Herring wrote:
-> >>>>> On Mon, Dec 01, 2025 at 08:20:45PM -0600, David Lechner wrote:
-> >>>>>> Add data-lanes property to specify the number of data lanes used on the
-> >>>>>> ad463x chips that support reading two samples at the same time using
-> >>>>>> two data lanes with a capable SPI controller.
-> >>>>>>
-> >>>>>> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> >>>>>> ---
-> >>>>>> v3 changes: new patch
-> >>>>>>
-> >>>>>> I added this one to give a real-world use case where spi-rx-bus-width
-> >>>>>> was not sufficient to fully describe the hardware configuration.
-> >>>>>>
-> >>>>>> spi-rx-bus-width = <4>; alone could be be interpreted as either:
-> >>>>>>
-> >>>>>> +--------------+    +----------+
-> >>>>>> | SPI          |    | AD4630   |
-> >>>>>> | Controller   |    | ADC      |
-> >>>>>> |              |    |          |
-> >>>>>> |        SDIA0 |<---| SDOA0    |
-> >>>>>> |        SDIA1 |<---| SDOA1    |
-> >>>>>> |        SDIA2 |<---| SDOA2    |
-> >>>>>> |        SDIA3 |<---| SDOA3    |
-> >>>>>> |              |    |          |
-> >>>>>> |        SDIB0 |x   | SDOB0    |
-> >>>>>> |        SDIB1 |x   | SDOB1    |
-> >>>>>> |        SDIB2 |x   | SDOB2    |
-> >>>>>> |        SDIB3 |x   | SDOB3    |
-> >>>>>> |              |    |          |
-> >>>>>> +--------------+     +---------+
-> >>>>>>
-> >>>>>> or
-> >>>>>>
-> >>>>>> +--------------+    +----------+
-> >>>>>> | SPI          |    | AD4630   |
-> >>>>>> | Controller   |    | ADC      |
-> >>>>>> |              |    |          |
-> >>>>>> |        SDIA0 |<---| SDOA0    |
-> >>>>>> |        SDIA1 |<---| SDOA1    |
-> >>>>>> |        SDIA2 |x   | SDOA2    |
-> >>>>>> |        SDIA3 |x   | SDOA3    |
-> >>>>>> |              |    |          |
-> >>>>>> |        SDIB0 |<---| SDOB0    |
-> >>>>>> |        SDIB1 |<---| SDOB1    |
-> >>>>>> |        SDIB2 |x   | SDOB2    |
-> >>>>>> |        SDIB3 |x   | SDOB3    |
-> >>>>>> |              |    |          |
-> >>>>>> +--------------+     +---------+
-> >>>>>>
-> >>>>>> Now, with data-lanes having a default value of [0] (inherited from
-> >>>>>> spi-peripheral-props.yaml), specifying:
-> >>>>>>
-> >>>>>>     spi-rx-bus-width = <4>;
-> >>>>>>
-> >>>>>> is unambiguously the first case and the example given in the binding
-> >>>>>> documentation is the second case:
-> >>>>>>
-> >>>>>>     spi-rx-bus-width = <2>;
-> >>>>>>     data-lanes = <0>, <1>;
-> >>>>>
-> >>>>> I just reviewed this and all, but what if you just did:
-> >>>>>
-> >>>>> spi-rx-bus-width = <2>, <2>;
-> >>>>>
-> >>>>> So *-bus-width becomes equal to the number of serializers/channels.
-> >>>>
-> >>>> Unless I'm missing something, I think that would also describe the currently
-> >>>> possible use cases as well. To me, it actually seems even more accurate than
-> >>>> data-lanes. The data-lanes property only describes the SPI controller input
-> >>>> lines/lanes, no info is given about the output lanes.
-> >>>
-> >>> It describes both directions.
-> >>>
-> >>>> Well yeah, that would only> be a problem for a device with multiple input serializers and multiple output
-> >>>> serializers. Still, the *-bus-width = <N>, <N>, ... <N>; notation looks clearer,
-> >>>> IMHO.
-> >>>>
-> >>>>>
-> >>>>> Rob
-> >>>>>
-> >>>
-> >>> It think it complicates Sean's use case though where such
-> >>> a controller is being used as basically two separate SPI
-> >>> buses.
-> >>>
-> >>> For that case, we want to be able to do:
-> >>>
-> >>> spi {
-> >>> 	...
-> >>>
-> >>> 	thing@0 {
-> >>> 		compatible = ...;
-> >>> 		reg = <0>;
-> >>> 		/* (implicit) data-lanes = <0>; */
-> >>> 	};
-> >>>
-> >>> 	thing@1 {
-> >>> 		compatible = ...;
-> >>> 		reg = <1>;
-> >>> 		data-lanes = <1>;
-> >>> 	};
-> >>> };
-> >>>
-> >>> Meaning:
-> >>>
-> >>> +--------------+    +----------+
-> >>> | SPI          |    | Thing 1  |
-> >>> | Controller   |    |          |
-> >>> |              |    |          |
-> >>> |          CS0 |--->| CS       |
-> >>> |         SDI0 |<---| SDO      |
-> >>> |         SDO0 |--->| SDI      |
-> >>> |        SCLK0 |--->| SCLK     |
-> >>> |              |    |          |
-> >>> |              |    +----------+
-> >>> |              |                
-> >>> |              |    +----------+
-> >>> |              |    | Thing 2  |
-> >>> |              |    |          |
-> >>> |          CS1 |--->| CS       |
-> >>> |         SDI1 |<---| SDO      |
-> >>> |         SDO1 |--->| SDI      |
-> >>> |        SCLK1 |--->| SCLK     |
-> >>> |              |    |          |
-> >>> +--------------+    +----------+
-> >>>
-> >>> (I don't remember if SCLKs are shared or separate, but I don't
-> >>> think that is relevant anyway).
-> >>>
-> >>>
-> >>> I guess we could write it like this?
-> >>>
-> >>> spi {
-> >>> 	...
-> >>>
-> >>> 	thing@0 {
-> >>> 		compatible = ...;
-> >>> 		reg = <0>;
-> >>> 	};
-> >>>
-> >>> 	thing@1 {
-> >>> 		compatible = ...;
-> >>> 		reg = <1>;
-> >>> 		spi-tx-bus-width = <0>, <1>;
-> >>> 		spi-rx-bus-width = <0>, <1>;
-> >>> 	};
-> >>> };
-> > 
-> > I forget the details on that, but just looking at the above I think 
-> > something like that should have 2 SPI bus nodes under the controller. 
-> > Unless CS0 and CS1 can't be asserted at the same time and they aren't 
-> > really independent.
-> 
-> It is the case that they aren't really independent. Only one "bus"
-> can operate at a time.
-> 
-> > 
-> > But would be good to wait for Sean's comments here.
-> > 
-> >>
-> >> I started down this road. Before I do the working of changing the
-> >> whole series, this is what it will probably look like. Is this really
-> >> what we want?
-> >>
-> >> There is one issue I see with this. If we allow <0> to mean that a lane
-> >> isn't wired up on the controller, then we can't constrain the length of
-> >> the array in peripheral bindings. For example, the ad403x chips can only
-> >> have one lane and the ad463x chips can have one or two lanes. But I
-> >> don't see a way to express that in the binding if <0> at any index
-> >> doesn't count towards the number of lanes that are actually wired up.
-> > 
-> > That's fine I think. How many entries is primarily a controller 
-> > property. We set the length in the controller binding. The device just 
-> > sets the maximum width per channel.
-> > 
-> >>
-> >> This is e.g. why the binding in sitronix,st7789v.yaml is
-> >>
-> >> 	items:
-> >> 	  enum: [0, 1]
-> >>
-> >> rather than
-> >>
-> >> 	items:
-> >> 	  - enum: [0, 1]
-> >>
-> >> ---
-> >> commit 049b9508b1b0190f87a4b35fe3ed8a9f3d0d3c50
-> >> Author: David Lechner <dlechner@baylibre.com>
-> >> Date:   Fri Dec 5 16:09:08 2025 -0600
-> >>
-> >>     spi: dt-bindings: change spi-{rx,tx}-bus-width to arrays
-> >>     
-> >>     Change spi-rx-bus-width and spi-tx-bus-width properties from single
-> >>     uint32 values to arrays of uint32 values. This allows describing SPI
-> >>     peripherals connected to controllers that have multiple data lanes for
-> >>     receiving or transmitting two or more words at the same time.
-> >>     
-> >>     Bindings that make use of this property are updated in the same commit
-> >>     to avoid validation errors. Bindings that used minimum/maximum are
-> >>     changed to use enum instead to be consistent with the base property
-> >>     definition.
-> >>     
-> >>     The adi,ad4030 binding has an example added now that we can fully
-> >>     describe the peripheral's capabilities.
-> >>     
-> >>     Converting from single uint32 to array of uint32 does not break .dts/
-> >>     .dtb files since there is no difference between specifying a single
-> >>     uint32 value and an array with a single uint32 value in devicetree.
-> >>     
-> >>     Signed-off-by: David Lechner <dlechner@baylibre.com>
-> >> ---   
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-> >> index 0ce2ea13583d..23b33dcd5ed4 100644
-> >> --- a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-> >> +++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
-> >> @@ -34,8 +34,8 @@ properties:
-> >>    spi-cpol: true
-> >>  
-> >>    spi-rx-bus-width:
-> >> -    minimum: 0
-> >> -    maximum: 1
-> >> +    items:
-> >> +      enum: [0, 1]
-> >>  
-> >>    dc-gpios:
-> >>      maxItems: 1
-> >> diff --git a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
-> >> index 54e7349317b7..6052a44b04de 100644
-> >> --- a/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
-> >> +++ b/Documentation/devicetree/bindings/iio/adc/adi,ad4030.yaml
-> >> @@ -37,7 +37,8 @@ properties:
-> >>      maximum: 102040816
-> >>  
-> >>    spi-rx-bus-width:
-> >> -    enum: [1, 2, 4]
-> >> +    items:
-> >> +      enum: [1, 2, 4]
-> > 
-> > We'd need to allow 0 here, right?
-> 
-> To avoid binding check failures, yes, I suppose so. All of the
-> `const: 1` would need to be changed to `enum: [0, 1]` as well.
-> 
-> Although since the controller also could have limitations maybe
-> we should have the controller use `enum` and have the peripheral
-> use `maximum`?
 
-Yeah, that's probably better.
+On 05-12-2025 18:55, Mark Brown wrote:
+> On Fri, Dec 05, 2025 at 06:28:06PM +0530, Dutta, Anurag wrote:
+>
+>> Hi Mark and Nishanth The below seems to work for me on j721e. Let me know
+>> your thoughts.
+>> Also, the error actually comes from :
+>> if (cqspi->use_direct_mode) {
+>>      ret = cqspi_request_mmap_dma(cqspi);
+>>      if (ret == -EPROBE_DEFER)
+>>      goto probe_setup_failed;
+>> }
+>> And not from flash_setup().
+> Great, thanks for confirming.  We should probably ensure that has some
+> logging...
+>
+>> @@ -2024,7 +2024,7 @@ static int cqspi_probe(struct platform_device *pdev)
+>>   probe_reset_failed:
+>>          if (cqspi->is_jh7110)
+>>                  cqspi_jh7110_disable_clk(pdev, cqspi);
+>> -       clk_disable_unprepare(cqspi->clk);
+>> +       pm_runtime_force_suspend(dev);
+>>   probe_clk_failed:
+> The trouble with that is that in the !CONFIG_PM case
+> pm_runtime_force_suspend() is defined as:
+>
+>    static inline int pm_runtime_force_suspend(struct device *dev) { return 0; }
+>
+> so we'll leak the clock enable.  If we could just require runtime PM
+> this would be an awful lot easier to deal with.
+So, can we maintain an internal state of the clock(enabled/disabled) in 
+the  struct cqspi_st ?
+Before every, clk_disable_unprepare()/clk_prepare_enable(), we check if 
+the clock is actually
+enabled/disabled by checking the state of "atomic_t clock_enabled" 
+within struct cqspi_st.
+And, when we do clk_disable_unprepare()/clk_prepare_enable(), we set the 
+value of clock_enabled
+accordingly.
 
-> Then, if we have a controller with:
-> 
-> patternProperties:
->   "@[0-9a-f]+$":
->       # controller has 2 lanes with 2 lines per lane
->       spi-rx-bus-width:
-> 	maxItems: 2
->         items:
->           enum: [0, 1, 2]
-> 
-> And a peripheral with:
-> 
-> properties:
->   spi-rx-bus-width:
->     items:
->       maximum: 4
-> 
-> The controller limit would be in effect and cause a binding check error
-> if attempting to use bus width of 4.
-> 
-> But if the controller was enum: [0, 1, 2, 4, 8], then the peripheral
-> maximum would be the limiting factor if attempting to use bus width of 8.
-> 
-> > 
-> > What we really want to say is there is exactly 1 entry of 1, 2, or 4. I
-> 
-> Not sure this is what we want. For the ADC cases, we want 2 or 4 items
-> in the array to be the same value.
-
-I meant for devices with only 1 possible channel attached to a 
-controller with multiple channels.
-
-On an ADC with multiple channels, you'd want 'minItems: 2' (or more) 
-unless it can work with a single channel.
-
->  
-> > can't think of a concise way to say that. The closest is something like 
-> > this:
-> > 
-> > uniqueItems: true
-> > items:
-> >   enum: [0, 1, 2, 4]
-> > contains:
-> >   enum: [1, 2, 4]
-
-Actually, uniqueItems doesn't work here. It would prevent multiple 
-unused channels (e.g. [0, 4, 0, 0] ).
-
-So there's not really any sane way to constrain this case. That's fine I 
-guess.
-
-Rob
+Is this a good approach, given we take care of race conditions as well ?
 
