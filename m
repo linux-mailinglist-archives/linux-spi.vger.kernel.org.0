@@ -1,96 +1,115 @@
-Return-Path: <linux-spi+bounces-11842-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11845-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 774C8CB27CB
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 10:06:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D797CCB299A
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 10:51:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A7937303D300
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 09:05:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C2E03305482E
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 09:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4063C302CB2;
-	Wed, 10 Dec 2025 09:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2D9A26F46E;
+	Wed, 10 Dec 2025 09:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="Tjo7BiKx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3312930497C;
-	Wed, 10 Dec 2025 09:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618542EA171
+	for <linux-spi@vger.kernel.org>; Wed, 10 Dec 2025 09:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765357512; cv=none; b=kvbKAlXYGtMnu/GHg27vz4edJidM+pJVpmGEMX92Y+JFBT0E7BiKoMo1i5QYEIABvM4iSnnWIBW8vwa+A+WVBgs+WZ9fbhnPtBnrBE1/4zHu+YVzYaKQM/HY1NYawCLp/wvTrXzyUTHy67MEQ59+H3yhvnGzCszf2f2EgkIpAec=
+	t=1765360218; cv=none; b=of7UC0iLqmFb9Mp1oVSXDTl9C5A7EoLVKpwMLRh+tgmf9MczEP+pK8jjimvGJWzxcMFvv1Jr2lPx0TtB0lfFWCnaJAionvxtcrTvftITG43TK4mmyVg458vFZQ2zEqmTVz3pXkfR9q0XIX0lzpUnAXK+7qLfdqRS02czIAGsK4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765357512; c=relaxed/simple;
-	bh=1pNuUrCkwQCUCVbTWndpLvdT2wMY8V9sH1g+0NmALTk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PRAIO9+HynpdPL9VmuT/URdUeM6dPSNeh83TeBEAydQPApZhMsZHIwDo/y5fs1nh4RNP+f0Ac1k6aXVCNt4M3BVNJHtOtY/YscEkf5SdZdrNcAAGMMKocNCBbIT9w6dvoiwCPsPQhIgZzV8fh5XdulccU1NGXPYY032tvyQseFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 5BA950AK081158
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Wed, 10 Dec 2025 17:05:00 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
- (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 10 Dec
- 2025 17:05:00 +0800
-From: CL Wang <cl634@andestech.com>
-To: <cl634@andestech.com>, <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tim609@andestech.com>
-Subject: [PATCH V2 3/3] MAINTAINERS: Add MAINTAINERS entry for the ATCSPI200 SPI controller driver
-Date: Wed, 10 Dec 2025 17:04:30 +0800
-Message-ID: <20251210090430.3602380-4-cl634@andestech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251210090430.3602380-1-cl634@andestech.com>
-References: <20251210090430.3602380-1-cl634@andestech.com>
+	s=arc-20240116; t=1765360218; c=relaxed/simple;
+	bh=DAhy7+18z0hRT14nNWvE+nXvzMFcCHOonmxVfSqSvM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pMkuCDx6TyyRry/9lUzggBJfjciSh9HmvIJtd6AaVAdE+uEwSwKO4KwmDOsWJ4NXnpjE3sE0YaOTdCnhoGi5Z9bNS/G3xpZgv87wScSmNPTVo5AxvmNczqT4SIBYyUZkULGaILhauXWSp3Hzg+gBv80uMK4BRCkhSI5PrEegJ5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=Tjo7BiKx; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=runbox.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vTGpX-007ap0-Us; Wed, 10 Dec 2025 10:49:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
+	 s=selector2; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date;
+	bh=+1orBKHm47l/ZHuPL7ncTrPFFa1u/p2z7XukvtGBhl0=; b=Tjo7BiKxGZCEiUjnqWxox5kbrg
+	SPwaJqZabNxajZI7n4UTHazIaVKRL8qy10tw0/YB0gcioB2JGh96U7hQmjU1USmNREORuqlbdNGKV
+	5Qav3PB+z3oLv/ni8SfCTsJV0y2qfIhQH1qSi2RAUVcDlM6cserr8Itk6oXh1DlaRJCOOp6bCNnzY
+	PHrttR7/ht/UUfABIvQf4z4M7lDbRPpAyJ8YZfPmLC+2aBOmT7FjDOPy2+bj3zDIA6pQIRLC2aOb3
+	QPYOVsEiC4iIEGU07nYhziwZ2M20ykmlqbwn/zW2zrddUxQt3NzlN5LQOPuLtA6vY7jdrH6UgG8M2
+	Ec+bz2IQ==;
+Received: from [10.9.9.73] (helo=submission02.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <david.laight@runbox.com>)
+	id 1vTGpX-00074w-3y; Wed, 10 Dec 2025 10:49:55 +0100
+Received: by submission02.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vTGpQ-00Eiw5-OT; Wed, 10 Dec 2025 10:49:48 +0100
+Date: Wed, 10 Dec 2025 09:49:46 +0000
+From: david laight <david.laight@runbox.com>
+To: Carlos Song <carlos.song@nxp.com>
+Cc: Frank.Li@nxp.com, broonie@kernel.org, daniel.baluta@nxp.com,
+ andriy.shevchenko@intel.com, linux-spi@vger.kernel.org,
+ imx@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] spi: spi-fsl-lpspi: convert min_t() to simple min()
+Message-ID: <20251210094946.6823aef2@pumpkin>
+In-Reply-To: <20251210074115.3883180-1-carlos.song@nxp.com>
+References: <20251210074115.3883180-1-carlos.song@nxp.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5BA950AK081158
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-MAINTAINERS: Add entry for the Andes ATCSPI200 SPI controller driver
+On Wed, 10 Dec 2025 15:41:15 +0800
+Carlos Song <carlos.song@nxp.com> wrote:
 
-Signed-off-by: CL Wang <cl634@andestech.com>
----
-Changes for v2:
- - Split the MAINTAINERS update into a separate patch.
+> Current min() has supported comparison by normal integer promotion rules,
+> so explicit type casts or min_t() are not needed.
+> 
+> Fixes: 9f0c21bac5a8 ("spi: spi-fsl-lpspi: fix watermark truncation caused by type cast")
 
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+I don't think it needs a 'Fixes' tag since it is just a cleanup, but apart from that:
+Reviewed-by: David Laight <david.laight.linux@gmail.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8b39a55b939a..74ded6a79efd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1804,6 +1804,12 @@ S:	Supported
- F:	drivers/clk/analogbits/*
- F:	include/linux/clk/analogbits*
- 
-+ANDES ATCSPI200 SPI DRIVER
-+M:	CL Wang <cl634@andestech.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/spi/andestech,qilai-spi.yaml
-+F:	drivers/spi/spi-atcspi200.c
-+
- ANDROID DRIVERS
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- M:	Arve Hjønnevåg <arve@android.com>
--- 
-2.34.1
+> Signed-off-by: Carlos Song <carlos.song@nxp.com>
+> ---
+> Change since v1:
+> * remove unused comment according to David's comment
+> * improve commit log according to Frank's comment
+> ---
+>  drivers/spi/spi-fsl-lpspi.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
+> index 065456aba2ae..8f45ead23836 100644
+> --- a/drivers/spi/spi-fsl-lpspi.c
+> +++ b/drivers/spi/spi-fsl-lpspi.c
+> @@ -486,15 +486,7 @@ static int fsl_lpspi_setup_transfer(struct spi_controller *controller,
+>  		fsl_lpspi->tx = fsl_lpspi_buf_tx_u32;
+>  	}
+>  
+> -	/*
+> -	 * t->len is 'unsigned' and txfifosize and watermrk is 'u8', force
+> -	 * type cast is inevitable. When len > 255, len will be truncated in min_t(),
+> -	 * it caused wrong watermark set. 'unsigned int' is as the designated type
+> -	 * for min_t() to avoid truncation.
+> -	 */
+> -	fsl_lpspi->watermark = min_t(unsigned int,
+> -				     fsl_lpspi->txfifosize,
+> -				     t->len);
+> +	fsl_lpspi->watermark = min(fsl_lpspi->txfifosize, t->len);
+>  
+>  	if (fsl_lpspi_can_dma(controller, spi, t))
+>  		fsl_lpspi->usedma = true;
 
 
