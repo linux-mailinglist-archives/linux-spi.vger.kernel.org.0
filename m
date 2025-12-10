@@ -1,68 +1,143 @@
-Return-Path: <linux-spi+bounces-11848-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11849-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AFEACB2C04
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 12:00:09 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC6A4CB2C0A
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 12:00:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 709B83019BD3
-	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 11:00:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C488830137B4
+	for <lists+linux-spi@lfdr.de>; Wed, 10 Dec 2025 11:00:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C502E92BC;
-	Wed, 10 Dec 2025 11:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CB8321428;
+	Wed, 10 Dec 2025 11:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t0ECUMUG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="edNWy3IV"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0E42D9ED1
-	for <linux-spi@vger.kernel.org>; Wed, 10 Dec 2025 11:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC64A205E25
+	for <linux-spi@vger.kernel.org>; Wed, 10 Dec 2025 11:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765364401; cv=none; b=irNOeFSWiWxjLooGfs5RYjw2BRrRXpTovJ5se/kTLQotGOfNbiqqhjgAE8fejXCHKmWbpaRTCiEES19hhq1mTZv3w2o3/jvOjLiqe2BgqPTjTV3sQmtF68bmr3m+SiPri7bymdxOXOxJj1e/X3obnnHCX+VS+5Z2lGVC3XI3cQg=
+	t=1765364423; cv=none; b=D6MPEDdl3AVO92e4jVpq/vlfX8jqEpeZ2lvHVj/tH5nebfjTfTwanKTnEl20T6dpW7S18RWDGK496YvRPlWhYJ2jYA+FRg/VAaQYKBFiNFDomGZTPv6JE1AioZCl0O9Wykt3ks3stgqHAUWHrz2o3FHYyPpI/0RZotESakCGwxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765364401; c=relaxed/simple;
-	bh=sRFBRAhwOgHs8Uwv51R9WMye2Y1di0mfDnMjd6D0Vh8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=lhkKYwJS5YlVj2iupZDmnbJU+UzAezZ/so4dbptzrkgZVhEDfNcC7mC6+92gw+w0D7iuVXw8T77GeMpM/nfA7Br+5p1r/IeQQcX1b4qxNUdlx3ot5jG+fxR8b2H4MUboUzEeNcmJsGxHt3pHhIh8aL1a1BEJTgmofps6uo/pG/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t0ECUMUG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C072C4CEF1;
-	Wed, 10 Dec 2025 11:00:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765364401;
-	bh=sRFBRAhwOgHs8Uwv51R9WMye2Y1di0mfDnMjd6D0Vh8=;
-	h=Subject:From:Date:To:From;
-	b=t0ECUMUGpkjQc08gvI/Yuhb5+ZezW0dILknSmdR9SzCtPKoAsXzNgbPS1N0edT6CN
-	 lPv8brE129LVs3P82g5N0a/gvLZxhUGTLVi/PscFvL+UzB+5a6jZCVBQSAgqh/94e/
-	 K3+3sXGZkeWcl0QkCifOINZNHkK16BP3NVlgFR16lP5GlhOVACmBT2/1KGSq60SiG4
-	 X3gNnbQhE/zPgcfWpr9J+UWuV9fmVquaiXwxEosCJPNNbnAKHo90aOt84GhopsanIV
-	 p/YiMJUzMMbmFP0Pi/UNB3Bv6bTYcOsDnbs76IjZ+3D2UePEbT8FGATM51fCIMpX/6
-	 eOZZh0+Rr1Q5g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 79EF63809A1A;
-	Wed, 10 Dec 2025 10:56:56 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1765364423; c=relaxed/simple;
+	bh=NyL9C4Q7nKA3xVfg/2QpoLWEPS5+KcYWdViAB5mP6vE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aihaClZXG+MwQuJ4KyvKioRg7fzenGhnVyfAjO4nxIWr1Nx+lu8441VywdPKueloOyeZuuAiet6Q25D4SnSoGkVfMUg7zSJ0hisSYwwL97Xtg+s4RIby2COHaq4jWmtPBR1nuhH+McBvf/h4d5cApRmfhZBMSZjk9m1oP5Z14Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=edNWy3IV; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b7636c96b9aso968162166b.2
+        for <linux-spi@vger.kernel.org>; Wed, 10 Dec 2025 03:00:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765364420; x=1765969220; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iDGP1HvpfMkO5vmj5IH/U7W1oBMmvxtv1IG7s407g+g=;
+        b=edNWy3IVPXPM3zU0wC+OKVwWWtCTa1/IJXbpNDirrBoxMb1Kt2PYezGogg60Nb4H48
+         PNN2mdxCWesb+nHbV1TzU6cgTEGqJo/qrm6Ekcq07K07hFTxVr+6eaKUu8Bylg3+fAmz
+         1oN9yTrdBF0RO9JYEIP/THEMF1S+8Uuv/46QIdJWrm8h1qeoJ00tNOvniBGU8SIHzwox
+         42Bm4ElYEWIxIM0nCghOqgv6WadJKqRKbBUo2ZifquI0MkUyW61LTblN3tevhRHosZXM
+         iUsVzx+1tSulRHxFTe2T/7naVYZl9E9HbRt64W7UCQTqsD15n/y8ufuj2rydaJie9HaO
+         e2TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765364420; x=1765969220;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iDGP1HvpfMkO5vmj5IH/U7W1oBMmvxtv1IG7s407g+g=;
+        b=rWmK+J2556PSMHUCbpJTb/oSSXk34jBxdXNrtrPZK3Yuoaiu4YEyyx8vA7RLxDuNzW
+         sK2ikuSfDSSoAOjmD3YSfbi0E59c2RjdEKCy7Pd6nk/vatE2Y3pUmMbwkce25bJQj+FS
+         YDJuNyL0J2lQc6j21qKOjWTjkSIYTNRkNa0shUhaOnmmN58/CabGCGpN3OehZA4iReGK
+         +W9POJ3xl08QV7/s0+SAyfej8WdOPLWI6W+M5RplTMoH0P9b6WvuFXKEYJ49rtpP5ifk
+         lcDKg0tjEiQ9+sfE7hoKzdvwohNjoMin44rcTVx/gBk+0CLI3I7ZLH9v/eAL1zB+YuHb
+         lxVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXHJDpRmoNFft42JYoCSVc7fw6Ysk5gkwUZTvWtRNN6TJtpa/t8Brs34xbJqUM6fZAS+xF29QEgeBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZdc6Pzo19/N0mBnQt9KUM/6U58NIMs7LtGMkf6E/Uf4+D/Eqj
+	k4AFPwPVZv0HC7zMIbt/hrcFjsQcsmeZZtwjMZPucTf+7WKQ5J5gdKassh8sUThsL1ZxxJnWLIn
+	XG3kSiWpm7r/J68pUet7rtN+QXJ6oDyQ19OWBst4=
+X-Gm-Gg: AY/fxX4YnRGmZleS/zmG9ZjmrE9qBTjof8YE2N9ddnh1hpdWzKRuaO7ZlrQenbOKhTx
+	cWAsmitv7Azz5Ed2Mz8S2Q1pZRQxm7QxVPqzXEXpPZyKRRigUe5lwRrDy+PRYk1auL3fQ/Sr003
+	hyGh+gZwZfXgBb7hj72qCaetqTnZAeKSXlsjZ7uvy2a1WiQLwbcDZogQjumnUke0sv3hHCl5WxO
+	xaTMYAyNqC0xa/H27jW2ATz/Pffs/yqQq8o0t6b1aIVoRCa155vjWatX5XgmWk/7qmjYPxIpDvp
+	KDJNwIGwfUtyp42RHUz854Avc5RaBBAm0iCF6OpQGOZVp/TUsUtF2pgLn99OVvVahqMaiodfxHR
+	aOYgYnYI=
+X-Google-Smtp-Source: AGHT+IFw5sv5HXkXEMI2iheFRxQ9CQIewk40C9/tFhkHDACVndFWuGjn2muHwTeRVZoGxiPmcZt+1g/gDVd6sRshhE4=
+X-Received: by 2002:a17:907:3da7:b0:b73:8d2e:2d38 with SMTP id
+ a640c23a62f3a-b7ce8427b94mr209542666b.50.1765364419760; Wed, 10 Dec 2025
+ 03:00:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176536421503.551958.17034272735857652560.git-patchwork-housekeeping@kernel.org>
-Date: Wed, 10 Dec 2025 10:56:55 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+References: <20251201-spi-add-multi-bus-support-v3-0-34e05791de83@baylibre.com>
+ <20251201-spi-add-multi-bus-support-v3-4-34e05791de83@baylibre.com>
+ <aS79ex5Konr_EeMA@smile.fi.intel.com> <2aca99a6-9541-4cd4-933e-815ceaabe365@baylibre.com>
+In-Reply-To: <2aca99a6-9541-4cd4-933e-815ceaabe365@baylibre.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Wed, 10 Dec 2025 12:59:43 +0200
+X-Gm-Features: AQt7F2oyHJ70Ni3PdQ_hcep-LsJmXx61VP_xsyFV78eFuHodczdlUa0PKwRFL7A
+Message-ID: <CAHp75VeC1VePFHr9y+5spkyGh3viwu1vwdd+jRcDzyZJq_W1Fg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/7] spi: axi-spi-engine: support SPI_MULTI_LANE_MODE_STRIPE
+To: David Lechner <dlechner@baylibre.com>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcelo Schmitt <marcelo.schmitt@analog.com>, 
+	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Latest series: [v3] spi: spi-fsl-lpspi: convert min_t() to simple min() (2025-12-10T10:50:01)
-  Superseding: [v2] spi: spi-fsl-lpspi: convert min_t() to simple min() (2025-12-10T07:41:15):
-    [v2] spi: spi-fsl-lpspi: convert min_t() to simple min()
+On Wed, Dec 10, 2025 at 2:02=E2=80=AFAM David Lechner <dlechner@baylibre.co=
+m> wrote:
+> On 12/2/25 8:53 AM, Andy Shevchenko wrote:
+> > On Mon, Dec 01, 2025 at 08:20:42PM -0600, David Lechner wrote:
 
+...
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> >> +static u8 spi_engine_all_lane_flags(struct spi_device *spi)
+> >> +{
+> >> +    u8 flags =3D 0;
+> >
+> >> +    int i;
+> >
+> > Why signed?
+>
+> Because it is conventional.
 
+I would expect the variable to be the same or close enough to the one
+that defines the limit.
+
+> >> +    for (i =3D 0; i < spi->num_data_lanes; i++)
+> >> +            flags |=3D BIT(spi->data_lanes[i]);
+> >> +
+> >> +    return flags;
+> >> +}
+
+...
+
+> >>      version =3D readl(spi_engine->base + ADI_AXI_REG_VERSION);
+> >> -    if (ADI_AXI_PCORE_VER_MAJOR(version) !=3D 1) {
+> >> +    if (ADI_AXI_PCORE_VER_MAJOR(version) > 2) {
+> >
+> > But this includes v0 as well!
+>
+> I think it is OK. There was never a version 0 released, nor
+> is one expected.
+
+Perhaps a note in the commit message?
+
+> >>      }
+
+--=20
+With Best Regards,
+Andy Shevchenko
 
