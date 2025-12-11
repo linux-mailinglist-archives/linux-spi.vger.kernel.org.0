@@ -1,73 +1,68 @@
-Return-Path: <linux-spi+bounces-11866-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11867-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E26A7CB629F
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Dec 2025 15:17:00 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E908CB62B2
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Dec 2025 15:19:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5C4863001BD2
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Dec 2025 14:17:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9C01C3006449
+	for <lists+linux-spi@lfdr.de>; Thu, 11 Dec 2025 14:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A726C226CF1;
-	Thu, 11 Dec 2025 14:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFADD226CF1;
+	Thu, 11 Dec 2025 14:19:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="F51875p7"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zeztCUkh"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7332236EE
-	for <linux-spi@vger.kernel.org>; Thu, 11 Dec 2025 14:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E6317BB35
+	for <linux-spi@vger.kernel.org>; Thu, 11 Dec 2025 14:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765462619; cv=none; b=Ioj8a5l6JFNf2df94L8JwvRDmSbzUB7tT56sCHDGwwV0f+9Yvmx/sqjUJ8bnEWBkd4JG68hcipHveJZg3Zc5D9lzeYMwi0XypcQxHj2GzXph2xQOSqgaW/tExNFGbxoXEJwFSehxG7hE5rYM+/63vdC3ns36FhkGC0u5txIDh1k=
+	t=1765462779; cv=none; b=d7R/TFIU9a9J2XqiynGKnf+7JgbBVrHsV8FUGO8e4d+c7bLsmcQDBgAsXjV/mANuYpNCtf4VBgelgMivwYOLg8OOvED+0HB8KnJIStgHImbttJEpJexUTi3tWsiNzOYz1iC1LeXIkePPYyqdLkJbRs+G1AQhoBrDl/ni/24DKnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765462619; c=relaxed/simple;
-	bh=l82uC19Iu/GcmFWQIWIS6+UXXzmtlcb0dUcv3MCyk38=;
+	s=arc-20240116; t=1765462779; c=relaxed/simple;
+	bh=8rjys0EWHdXH6WGIS1Zzap+OABSzfKqtGnMMZqg29FI=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=b7QQGJs0Y1KzNGxFJV0Rp5rnw4YxEFpCJC18cvSe1nHNVa7KXkNMcPy1RNZIBoml8m3AOeXrd0oSCazvl3zDKLc7kgp39AbHNz0za10I9vMQvtR/5ox0kv+Bib5jvPvUZQJKVDcAPa1fXidYqeOzZj35y6ElA/NYtWFpoaq3t0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=F51875p7; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version:Content-Type; b=Gy++s5w7wI52YGkRLk5hRXex28QUXEPqLsdTvwe0kWTJM1p1umz1gqJwAPn9L0NV7yIy/ErMUM2rMI0b6CV+flya0Tz+l/vwTUubBdVoDxIfMheDTuuDH4lmmiqJpmih0dgy2Xp3XdYatj4+/jFWE3Ge/1qRQh3ClBUgGuj6GGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zeztCUkh; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 639521A20EC;
-	Thu, 11 Dec 2025 14:16:49 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 4FA531A20EC;
+	Thu, 11 Dec 2025 14:19:36 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 372A96068C;
-	Thu, 11 Dec 2025 14:16:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CE08B103C8C1E;
-	Thu, 11 Dec 2025 15:16:44 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1015E6068C;
+	Thu, 11 Dec 2025 14:19:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 61B29103C8C1E;
+	Thu, 11 Dec 2025 15:19:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765462608; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1765462775; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=LN2XRvJPP64/tzjn2G4k9S/sITzG6yY/jxfa/OMZy/U=;
-	b=F51875p7OT407UAmMFyy2xslQJqdFc+r9NgYdqDorB7cQTU04s3jIFN9UJfITEWvBsMnPh
-	+GLocod0FOo8RsEhHvNqDTPmjzaoHObupoq9n2A51iDxzTNE25C3J5uoRL7L1S82E5AU6c
-	ralrEIHHjvwTAcB8azruXAbWhvJPtqDKWdpTFLdv7NjwUyS7GkIHsUnlDRpjhxr5Vhq3sc
-	ljcDVrkAe99eLf09xwSyH4WdbSrpVBaTZXTsiTGHarNFc0UkuK3bzmYhcvyNV8/SZaX70q
-	5DWMkd+ODnfJd7ya8M/McQqyKSXeXspRGdklx56MELSDcFHIj0yiJknktOhEvQ==
+	bh=8rjys0EWHdXH6WGIS1Zzap+OABSzfKqtGnMMZqg29FI=;
+	b=zeztCUkh2ghNaWhvbCqXv/dW6nAyuBawnJCDfOAjKgOB/lwpeHBaU/zyJlfOLfWxx7oMmv
+	ojQc7vlyeliMXBXKgj3sFo2y1g4J1lXNjLXE8NBefvuXKslzYDA1wWMSggdLLjNHsprfZ9
+	+fSVZjMMP3Jcor1nstjNVagQxP7YHarSP9Dar21M6+RY/Ubx0cEUn9Yq1ZLIEtpcPDl6qR
+	LoJEAH/ri8YRBZmogJHQo3uVRxLEiLc5daO3KOgBDuf5FVMfGzoPZ2PG9fCAKyT7UYrY1a
+	+ATM18UShpbTtfA3ygelN/vMGRenpIc+Mfbff/DWQ0MqwLre54yT/SZ0WcR72Q==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Santhosh Kumar K <s-k6@ti.com>
-Cc: Michael Walle <mwalle@kernel.org>,  Pratyush Yadav
- <pratyush@kernel.org>,  <richard@nod.at>,  <vigneshr@ti.com>,
-  <broonie@kernel.org>,  <tudor.ambarus@linaro.org>,  <p-mantena@ti.com>,
-  <linux-spi@vger.kernel.org>,  <linux-mtd@lists.infradead.org>,
-  <linux-kernel@vger.kernel.org>,  <a-dutta@ti.com>,  <u-kumar1@ti.com>,
-  <praneeth@ti.com>
-Subject: Re: [RFC PATCH 01/10] spi: spi-mem: Introduce support for tuning
- controller
-In-Reply-To: <ea6f3dd7-0732-4de9-8bf1-e88a45ad6ac2@ti.com> (Santhosh Kumar
-	K.'s message of "Wed, 10 Dec 2025 17:04:09 +0530")
-References: <20250811193219.731851-1-s-k6@ti.com>
-	<20250811193219.731851-2-s-k6@ti.com> <87seguemzu.fsf@bootlin.com>
-	<cb04a4ec-c643-4b80-9288-8fd8944cb4f7@ti.com>
-	<mafs0ikf74fja.fsf@kernel.org>
-	<fe103265-7a68-41b8-b168-15a5e19abb3f@ti.com>
-	<DEOH4AUI33SQ.DGKJ4W258658@kernel.org> <87jyz3ao8b.fsf@bootlin.com>
-	<ea6f3dd7-0732-4de9-8bf1-e88a45ad6ac2@ti.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Richard Weinberger <richard@nod.at>,  Vignesh Raghavendra
+ <vigneshr@ti.com>,  Michael Walle <mwalle@kernel.org>,  Tudor Ambarus
+ <tudor.ambarus@linaro.org>,  Pratyush Yadav <pratyush@kernel.org>,  Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>,  Steam Lin <STLin2@winbond.com>,
+  Santhosh Kumar K <s-k6@ti.com>,  linux-spi@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-mtd@lists.infradead.org
+Subject: Re: [PATCH RFC 5/8] spi: spi-mem: Create a secondary read operation
+In-Reply-To: <aTonE4REBDfaWBQo@sirena.co.uk> (Mark Brown's message of "Thu, 11
+	Dec 2025 11:06:11 +0900")
+References: <20251205-winbond-v6-18-rc1-cont-read-v1-0-01bc48631c73@bootlin.com>
+	<20251205-winbond-v6-18-rc1-cont-read-v1-5-01bc48631c73@bootlin.com>
+	<aTonE4REBDfaWBQo@sirena.co.uk>
 User-Agent: mu4e 1.12.7; emacs 30.2
-Date: Thu, 11 Dec 2025 15:16:43 +0100
-Message-ID: <878qf96r3o.fsf@bootlin.com>
+Date: Thu, 11 Dec 2025 15:19:31 +0100
+Message-ID: <87345h6qz0.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -78,44 +73,25 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Last-TLS-Session-Version: TLSv1.3
 
+On 11/12/2025 at 11:06:11 +09, Mark Brown <broonie@kernel.org> wrote:
 
->>>> 2. Using of_get_* APIs:
->>>>         Using the standard OF helpers to locate the phypattern partiti=
-on
->>>>         and retrieve its offset is both reliable and straighforward, a=
-nd
->>>>         is the approach currently implemented in v2.
->>>
->>> I don't like that hardcoded partition name which is basically
->>> becoming an ABI then.
->>>
->>> At least we'd need some kind of phandle to the partition inside the
->>> controller node (and get the ACK from the DT maintainers).
->> Yes, agreed, this is controller specific, if we need to use an of_ API
->> (which is still not needed for SPI NANDs, only for tuning the read SPI
->> NOR path), it should not just be a partition hardcoded name but a
->> phandle in the controller node.
+> On Fri, Dec 05, 2025 at 08:38:56PM +0100, Miquel Raynal wrote:
 >
-> Yes, using a phandle is a valid idea to avoid relying on a hard-coded
-> name. But, it does not work well when multiple chip selects are
-> involved. The controller is not tied to a single flash device - a single
-> SPI controller may host both NOR and NAND flashes, for example. In such
-> case, only the NOR would require this phandle, while the NAND would
-> not,
-
-This honestly doesn't seem a problem to me.
-
-> which makes the phandle approach unsuitable. Another example is a
-> controller hosting two NOR flashes - both would then need their own
-> phandle references.
+>> The choice of defining two variables named primary and secondary instead
+>> of using an array of templates is on purpose, to simplify the reading. I
+>> find less obvious the use of an array here but this is personal taste.
 >
-> An alternative would be to associate the phandle with the flash device
-> itself rather than with the controller. Let me know your thoughts on
-> this approach.
+> This makes sense to me:
+>
+> Acked-by: Mark Brown <broonie@kernel.org>
+>
+> Feel free to carry both these patches along with the rest of the
+> series, if/when you do end up applying it a signed tag would probably be
+> a good idea in case there's some collision with other SPI work.
 
-I find pretty strange to have this property in the flash node, even
-though I understand the reason. Perhaps an array of phandles may work in
-the controller node instead?
+Thanks a lot for the feedback.
+
+Yes, when the series is considered ready, I'll take care of that tag.
 
 Thanks,
 Miqu=C3=A8l
