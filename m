@@ -1,175 +1,220 @@
-Return-Path: <linux-spi+bounces-11868-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11869-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CE58CB64E6
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Dec 2025 16:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 44618CB7DE0
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 05:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13501303A1A3
-	for <lists+linux-spi@lfdr.de>; Thu, 11 Dec 2025 15:19:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DDA663027A42
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 04:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80958303C8F;
-	Thu, 11 Dec 2025 15:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB75B26FA6E;
+	Fri, 12 Dec 2025 04:35:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GZ04GN+Y"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="gTZjVYEA"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010024.outbound.protection.outlook.com [52.101.46.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C582FBDF4;
-	Thu, 11 Dec 2025 15:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765466366; cv=none; b=aFu2zDKlLEhV4I4GuNKilJ5UtlgVc+YFFC5QPBK12z1DIRHDFnqcCllQjwth+Fg0o8EraVVL9Pv5lf6YngUOA8QG6XsI4Ec7SrGka877VEobe4V6XVSGiuG9BRIaJKKllt+e7U61OOmQq79rgJBkbgCoTp8Tqf54K6x7/gNKEhE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765466366; c=relaxed/simple;
-	bh=fWpmLL1z7q9BxSPVUYz8JHtTujuBUEm3CzFbbQaDgtc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PjGR9AdkR5Zm0Py/M6B+dh3Uanst0wXn8Pa4N9IXiczW3kU1tOdc17aXsfM8XoInM3AZB44KP4UYxOCS2GK7tgJLHeChf07hi7BTbhVaVKyc9PzrtXB3xJZZQKENPUPVoUHI5h32ffC2ZbOL9pXy1z5lG8y3absxC/Dlz6J/e9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GZ04GN+Y; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 1479FC1934D;
-	Thu, 11 Dec 2025 15:18:58 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EDAF160738;
-	Thu, 11 Dec 2025 15:19:21 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 641CD103C8C7B;
-	Thu, 11 Dec 2025 16:19:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765466359; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=7YFG4wLJmjR/E/MqOc1NCEw1lot9ZBUWy77cdvC/abM=;
-	b=GZ04GN+YsE0cv0BQQYoZpyVYAYEsovdzJ9rXmDON0bJIZxnJU7VPl2eg1p8e0NQ9k+K5Dp
-	/LRca+qQVGSjdqk8rZVoLiG+Y+sqtI/yxaymDKJc9jZxsUrEC0ffilz5i/Pg3I8zRmwpJS
-	taMVcM89WUFFX51Ek3tAsGArlvFRqyRVPdmd6IrgjHKE7xrG4LzqbztURSYcKnyHSuVeO0
-	J67fZCzMN/AGR3a33M4QUHtoTEJbjcuY3+UKEhaz2RTDuiDFFZpLeGkOJMjJFnFSz1vbjo
-	hs+44nERIBIh7DW/ujTn09iVGaGgu0W9sZBJpf2sMe5nwN92PyYkCL/V4aE1wA==
-Date: Thu, 11 Dec 2025 16:19:02 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Matti Vaittinen <mazziesaccount@gmail.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Rob Herring <robh@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Kalle Niemi <kaleposti@gmail.com>, linux-arm-kernel@lists.infradead.org,
- Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Charles
- Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally
- <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
- <jonathan.cameron@huawei.com>, Dave Jiang <dave.jiang@intel.com>, Alison
- Schofield <alison.schofield@intel.com>, Vishal Verma
- <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
- <dan.j.williams@intel.com>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251211161902.11ef4248@bootlin.com>
-In-Reply-To: <1b9fa77b-d74a-4fa7-b2e7-8b389d59a5a0@gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
-	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
-	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-	<20251202102619.5cd971cc@bootlin.com>
-	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
-	<20251202175836.747593c0@bootlin.com>
-	<dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
-	<20251204083839.4fb8a4b1@bootlin.com>
-	<CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-	<20251210132140.32dbc3d7@bootlin.com>
-	<c50c40cc-69f6-436c-a94e-94a3a10f6727@gmail.com>
-	<20251211132044.10f5b1ea@bootlin.com>
-	<1b9fa77b-d74a-4fa7-b2e7-8b389d59a5a0@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C063264F9C;
+	Fri, 12 Dec 2025 04:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765514101; cv=fail; b=cXmnxkhpU8ykWxMEMMLmnHZtpEZ40+zEU/X3NPrfqdUNQ+8U/XeahNn5/JQD6QqYalCSDVlwghGj+Px7OoifDhRDH4/FXBBqBmgcMqAVs/kcqi++BxgLvzk9XYW+a9tipjTmmfZI55rxopqz7G4nOzWEvFXHdsBkzuX+LzH1qdQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765514101; c=relaxed/simple;
+	bh=gv1lrAL7xozzI3C/gyZX0/EFkrsbhs/7JV0eJ3VJPfM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=GgHZh495wU0OvBHJ+G3yFSkL5hN8WLfUthIP90+3k2EauxGBZMkxboI+kg9ULB6bQM5mgYnlFK7WVYxxmicsU4o7j3BS3wXow8jmx94Vb+G2YOQnLrNloX7pCeLwEHpVDs9pIMn3jUfQZZ+ycFKAuBQvIdoD3WDHxqfZNKtgyk0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=gTZjVYEA; arc=fail smtp.client-ip=52.101.46.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LEhYncWJqoh7naRsYvnTpGLrRoBlLA6f5j+2oLGqkVs6826XdizqRwuT7XWr00TThlkepl7BNmqC30/PUaC1G0CFV7AoiRDDPVb8DUznd66MjZm0XKLYJVeIjunQY1hU2+MVWr6GtDOq2qb3e3w5/m47smZ0p48XEtJlvkXNw/xMWSDlRZ27l6bjuwleY0B9P5S5/e/xSugRLBYaQ0n/Iz7B10VStE7DORtneM8FOxcvDNz2x7fa1hSxd8Cw5r53C+VHkyGMaMHbIpaMVzF6t0Gx777qhx5nmrX0DTf9sJDECzJKIbd9K7Z9e3fBDaSrFK5/5mnM6PzSjBj9rCMezQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pPYy/rRk4r+FGANBpiKCe3xm+Wf0SdQRw1WG/15JeKQ=;
+ b=rzgttcPJ2JLk9b5OaZ4Xm1G+5F9K7siDggNK1cO6vQmHl6rZDXHwwjxz0KAKxOadSalOfXjUShFFnnuLr7fTTIzyjUSYgcLkxvDc5p7ve1yhtK9RCVuNW4mihLSV0lnIM5mCsGI+QSZy3wmdNc3AwDbnQ/awKf65b/9ebsXCIRnNsduADuaf68E3szqkOiGfo1LMwifYS4kLxdwIKvhkvp4GP4YmrjrPPwoyveSddB22jI3C0QxwCysoDmxCrS8rjBC0yyWvLXAY8WiJEqaV1SCEfmxCUx4HTrFqCaE8bmI1r+APShwdC7Y3835qcJF0KYhYilKt5SQ4es0Yomj9yQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pPYy/rRk4r+FGANBpiKCe3xm+Wf0SdQRw1WG/15JeKQ=;
+ b=gTZjVYEAGPmop2AOjXtuGaGtUksRbOIuEBP8GimLGoalqUYb0vsClqtf8zbCvY5uepFlQkqqPh6PjDphr7d7Rje2HHfgGL0+UUZqLy3PO8kX8ebQ+oMlR2IU5jst4nXJM6qpX8W96ShkrFtmaUuspY4TVOzRuKkcg0EV+Sc1Ocs=
+Received: from MN0PR04CA0017.namprd04.prod.outlook.com (2603:10b6:208:52d::10)
+ by SJ0PR10MB5663.namprd10.prod.outlook.com (2603:10b6:a03:3db::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.10; Fri, 12 Dec
+ 2025 04:34:56 +0000
+Received: from BN3PEPF0000B069.namprd21.prod.outlook.com
+ (2603:10b6:208:52d:cafe::95) by MN0PR04CA0017.outlook.office365.com
+ (2603:10b6:208:52d::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9412.10 via Frontend Transport; Fri,
+ 12 Dec 2025 04:34:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ BN3PEPF0000B069.mail.protection.outlook.com (10.167.243.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9434.0 via Frontend Transport; Fri, 12 Dec 2025 04:34:54 +0000
+Received: from DFLE205.ent.ti.com (10.64.6.63) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 11 Dec
+ 2025 22:34:51 -0600
+Received: from DFLE212.ent.ti.com (10.64.6.70) by DFLE205.ent.ti.com
+ (10.64.6.63) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 11 Dec
+ 2025 22:34:51 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE212.ent.ti.com
+ (10.64.6.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 11 Dec 2025 22:34:51 -0600
+Received: from [172.24.21.18] (ltpw0bk3wf.dhcp.ti.com [172.24.21.18])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5BC4YmPi1630956;
+	Thu, 11 Dec 2025 22:34:48 -0600
+Message-ID: <1542ee8a-620b-4349-92fb-ab1f6c5b5eab@ti.com>
+Date: Fri, 12 Dec 2025 10:04:47 +0530
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] spi: cadence-quadspi: Fix clock enable underflows due to
+ runtime PM
+To: Mark Brown <broonie@kernel.org>
+CC: Nishanth Menon <nm@ti.com>, Francesco Dolcini <francesco@dolcini.it>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>, <linux-spi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>, "Gujulan Elango,
+ Hari Prasath" <gehariprasath@ti.com>, "Kumar, Udit" <u-kumar1@ti.com>
+References: <20251202-spi-cadence-qspi-runtime-pm-imbalance-v1-1-aee8c7fa21f2@kernel.org>
+ <aTFQv157O-wJjVrZ@gaggiata.pivistrello.it>
+ <555e9f6b-b8b6-4cc5-900b-63aaff8b4e6c@sirena.org.uk>
+ <20251204140530.xax5didvuc7auzcd@problem>
+ <4d6b857e-4bfe-45ef-a428-6e92f218f0c5@sirena.org.uk>
+ <2fcf5235-cc94-4202-9164-4889356c5264@sirena.org.uk>
+ <cd95320b-6852-476e-bc8a-2e8d1ac77a9e@ti.com>
+ <f804d7a7-4ffb-4d2a-bbaf-ca0a076a11ab@sirena.org.uk>
+ <5525272e-7220-4352-bb08-ac66631108e0@ti.com>
+ <cf8e7003-ebca-4817-8350-f29332d75fab@ti.com> <aTf6RRAveRdVnWQZ@sirena.co.uk>
+Content-Language: en-US
+From: "Dutta, Anurag" <a-dutta@ti.com>
+In-Reply-To: <aTf6RRAveRdVnWQZ@sirena.co.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B069:EE_|SJ0PR10MB5663:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d073ed4-ef9b-46d5-01e4-08de3937cc44
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?TVZtWGFTVU1RYjhON0hKcHFFVDNYOHArMEt6VjdpbjIwalNWZi9PdGs3VHBw?=
+ =?utf-8?B?RkdNSlM2NWZTZjU4UmpwVmxER2VMTk96ZUk1Vm90a1N5TTFoSHBER0Jia2VL?=
+ =?utf-8?B?Qjc0UHdETXkrMVdsaDB6NU5VTW5zbS8xRmNaeThjYTk5UWxsczJ3d3BQMEpI?=
+ =?utf-8?B?TUdiaDI3YklLUnFkV3lTWXVuUzVyTERpNTFEcDZzeW1xb2xNS0lhb25yTktY?=
+ =?utf-8?B?blY5ZmJ2QTVEQXVrb1ppS1htR2w1WmRxMEQvbUc1R1dFOTBYNEdZVFdYeVAy?=
+ =?utf-8?B?QUk1ZUorYWk4d1VBR3BSQXk3UTE1b29zVHZEQ0sySVBUNHdLdFhMclRvOEJI?=
+ =?utf-8?B?Q1o5ZTVoemJqWENEMHBud3IwZS9zVWdHRUxJVlV5cDd1WmlHMFg1SnhKdHds?=
+ =?utf-8?B?dnZ5SHN6UXpVUVZUaHovNVZLRnY2c3dDNlE5dGsweDZZbTJMbk56QVRPRHQv?=
+ =?utf-8?B?SEhmVHc5YkFYNGM3alliSG1PR3Z6dXRIaFM1VStZQ296cWsvUU8xZEdFcytp?=
+ =?utf-8?B?VTllVFBzOGF4SzJncWlLWUNqQ0NZVDVCYVRjQ092MzFCejVYOU51Uy82QXAy?=
+ =?utf-8?B?SEcyT0pTS0NFSEZzMzdXRzRYNVc0TndtT2JzdDM1cmZUaldtK0VGUXdaLzFt?=
+ =?utf-8?B?ZUdybTAxck9DWWlnWjh6RFBSVFNzNHh5REwvTDRZTEdKYUNvN2hKTTlCTDZE?=
+ =?utf-8?B?ZUUxRW92WmdNMTVMVDJMdUFhb2U1bTlGek8yNE5jVkl3cFdja1dMSnlyZlRZ?=
+ =?utf-8?B?b2RZSmNlL0QzeHNpaG0yay85UDdCTm1XU2tnOXJ3MlFLazRHaTYrOHZJUUsx?=
+ =?utf-8?B?WXpPOVhTaFdZaDFkaUtJLzV4QlFvaWloMUNPVy8vSVlqd29xSExEU1kwS2g1?=
+ =?utf-8?B?ZW9LY1RtcHFmV2JyZm5udmZCSnZsOXg1WXV2OHlOTGhTUVNNaHJJMjdCcGl0?=
+ =?utf-8?B?UnhuUXc3TlJPNi9NRUZvQzNvZ0szVGd5RW9IaWJsdkdJNGRnekN3OXhUSGVK?=
+ =?utf-8?B?UGFqOWVLVFo1TzY5VjZxRFd4a2o1L0lQQysyWENOa1ZrbUZEUVJwdisraFor?=
+ =?utf-8?B?c3k5T3RZbWVwQjlLdVJiUHZ6M2g1REZhMlp3eTdYem1NZmZBK2NPcStIeFRD?=
+ =?utf-8?B?UVoyeko4Ykd3QmpHbC85OXZ3N0ZHdk9RVTllRWdEbk1Za3VQZ3hqUjIvS1BC?=
+ =?utf-8?B?cTAvNlRZdGhkeWhpNE1mQzhMRitlbUxZaE82N0xlT2tLcCsrZjE0ZmE3VTRi?=
+ =?utf-8?B?WDk3NTVVb0hCWWNTQjUzelZ2c1hZQ29hcTFjWjZlMlVNQlFQUFRHbkRaaUl6?=
+ =?utf-8?B?Qy9QWjluTW04RnUyaUx1QVZIRGlwOWlNL0ZaM05kSktZQWtZMW8wRDVsQXVo?=
+ =?utf-8?B?RmtVeHQxTW05QVNJKzIyU0JnbTZZaS9vTnl1cVlhUzlWaFJYbkl4RU1seHdr?=
+ =?utf-8?B?REh5cEVpQjVzRCtnelpLbkhUU2N1UmJJTUxVUnFjSUR5ZjhSTUM1UStLREdO?=
+ =?utf-8?B?alpJai8ycWRCYXJValM5Y1JRUmFPTTY2MGozK2duTDZveTBhU2FJMUwxUDdH?=
+ =?utf-8?B?MlpsUXpJYlcxVGJPM0lFWWIwcTNjUUU2NENUTU9RYzRNNWx6amlQRGJWV004?=
+ =?utf-8?B?am1vbW1BSS9DQnpHODFGaWx0UGdFOThrZisvZ21XRU9qR04xZ0tnaHV3djU1?=
+ =?utf-8?B?ckV2YzdPU24zVkg5dVhuZ0V3MDVJUXZBK0pCSXUzbGl0eW54MmxHd1JPQk1s?=
+ =?utf-8?B?YzhlTXc4VDExSTFCNmxkMEtCNjNjclQvODVIN05kZDRnWFdBWG54aTN2WUdy?=
+ =?utf-8?B?NllCK0dyUmdkd2hiRGV0WDNQNnFoZXV1NW45b1o3K2RtdSthMk1PaTUzaXVG?=
+ =?utf-8?B?SG1LRFBlc3lRRlo2UXFMVENYNHQ0eDlzaGdnS3pmTW9xMVZNQ1dTZ0VlL3RE?=
+ =?utf-8?B?QnVZaTJmNmhLOTY2a3E2QWl1T0J1d2VNOFYwSTNNZG9EaGsrMHRPejU1WTZu?=
+ =?utf-8?B?czRoMXZUekl6bUpvUkZlc3A3N0V6MFZ1MTFkSVdyOFovdzBHZ1NWbjZFcC9h?=
+ =?utf-8?B?V2VZdlBkRlo4eEdhKzVjUURrd3I1OUJuL0VvU1ltQXdYSGtpVVA3ekk3R0sx?=
+ =?utf-8?Q?5usE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 04:34:54.5013
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d073ed4-ef9b-46d5-01e4-08de3937cc44
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B069.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5663
 
-Hi Matti, Geert, all,
 
-On Thu, 11 Dec 2025 15:52:28 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On 09-12-2025 16:00, Mark Brown wrote:
+> On Tue, Dec 09, 2025 at 03:22:43PM +0530, Dutta, Anurag wrote:
+>> On 09-12-2025 11:13, Dutta, Anurag wrote:
+>> Another solution :
+>> diff --git a/drivers/spi/spi-cadence-quadspi.c
+>> b/drivers/spi/spi-cadence-quadspi.c
+>> index af6d050da1c8..4d298b945f09 100644
+>> --- a/drivers/spi/spi-cadence-quadspi.c
+>> +++ b/drivers/spi/spi-cadence-quadspi.c
+>> @@ -2024,7 +2024,11 @@ static int cqspi_probe(struct platform_device *pdev)
+>>   probe_reset_failed:
+>>          if (cqspi->is_jh7110)
+>>                  cqspi_jh7110_disable_clk(pdev, cqspi);
+>> -       clk_disable_unprepare(cqspi->clk);
+>> +
+>> +       if (!(ddata && (ddata->quirks & CQSPI_DISABLE_RUNTIME_PM))) {
+>> +               if (pm_runtime_get_sync(&pdev->dev) >= 0)
+>> +                       clk_disable_unprepare(cqspi->clk);
+>> +       }
+>> pm_runtime_get_sync() will increment the usage count thereby preventing from
+>> runtime_suspend()
+>> getting invoked, thereby preventing double clock_disable()
+>>
+>> This will work for !CONFIG_PM as well because pm_runtime_get_sync() will
+>> return 1 then.
+>> and the runtime_suspend() is never going to be invoked.
+> I think we want this, possibly using pm_runtime_force_resume() instead
+> (not 100% sure on that one, glancing at the documentation there might be
+> issues though it feels like the intent of what we're doing here).  Can
+> you send a patch please?
 
-> On 11/12/2025 14:20, Herve Codina wrote:
-> > Hi Matti,
-> > 
-> > On Thu, 11 Dec 2025 10:34:46 +0200
-> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> >   
-> /snip
-> 
-> > 
-> > Do you see the same trace with:
-> > - "pinctrl-0 = <&i2c1_pins>;" in your overlay
-> > - fragment0 removed from the overlay (i2c1_pins definition removed from
-> >    the overlay.
-> > - i2c1_pins node defined in your base DT.  
-> 
-> Just tested. The i2c1 appears and the test-overlay probe gets called, 
-> when the i2c1_pins is in the base-dt and not in the overlay.
-
-Geert, do you expirement same results?
-
-> 
-> > In other word, is the issues related to adding a pinctrl sub-node (pinctrl
-> > pins definition) in the overlay or is it something else?  
-> 
-> Seems to be related to the pinctrl.
-> 
-
-I don't think that the issue is related to pinctrl itself.
-
-IMHO, I think the issue is related to overlays and fw_devlink.
-The distinction between "a new node is going to lead to a device" vs "a new
-node is just data and will never been attached to a new device" when an
-overlay is applied is broken.
-
-This is broken with the upstream "treewide: Fix probing of devices in DT
-overlays" commit I've tried to revert. Indeed, on the LAN966x PCI device
-use case devlinks created are not correct with this commit applied.
-
-I am not sure also that devlinks created with a more complex overlay will be
-correct. For instance, Matti, with your overlay not sure that a phandle from
-the oscillator node referencing the pmic node will lead to a correct
-provider/consumer devlink between the pmic device and the oscillator device.
-
-On the other hand, this is broken with "of: dynamic: Fix overlayed devices
-not probing because of fw_devlink" works for the LAN966x PCI device use case
-an lead to correct devlinks but breaks your use cases.
-
-Does anyone have an idea about how to fix those issues?
-
-Best regards,
-Hervé
+> Hi Mark
+> If we use pm_runtime_force_resume(), then for CONFIG_PM_SLEEP, it will work.
+> But, in case of !CONFIG_PM_SLEEP, pm_runtime_force_resume() returns -ENXIO,
+> because of which :
+>
+> if (pm_runtime_get_sync(&pdev->dev) >= 0)
+>
+> will be become false and clk_disable_unprepare() will never be invoked,
+> which might be an issue.
+>
+> Let me send a patch with pm_runtime_get_sync(). If changes are required,
+> please let me know.
+>
+> Regards
+> Anurag
 
