@@ -1,93 +1,96 @@
-Return-Path: <linux-spi+bounces-11874-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11876-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E0CCB8198
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 08:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C7ABCB81A4
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 08:24:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E14EE300B809
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 07:23:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6B57C30575BB
+	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 07:23:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D59BE1F584C;
-	Fri, 12 Dec 2025 07:23:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332642797B5;
+	Fri, 12 Dec 2025 07:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="YMAlYhjC"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="b1mmrcMW"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013004.outbound.protection.outlook.com [40.93.201.4])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010024.outbound.protection.outlook.com [52.101.201.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581FD1AC44D;
-	Fri, 12 Dec 2025 07:23:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BC128C84D;
+	Fri, 12 Dec 2025 07:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.24
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765524206; cv=fail; b=pXYkwzug/eKv1/QkJkO5QmP3+Pg/WP3GnH2754IBDshDd/e8Ry8//V/Cv9MC3z934bBuHU9f13YiFOfseD2mK/l8jqef2SVUpLFFAiHx2Ax83va60uiYEFH5xnOXNYksWgf1xr0rY/enP8Q4RvzdSWwQk5Ru1dAf9PRt9i5Rq1o=
+	t=1765524216; cv=fail; b=Sci6q4Th2fQTXZpDjqWjSqW9B0acPhrCaf1qmFTlvpPUt11xY+Ud5w6Vx3gbQKGG9G1qAXCU2rEq0gi/Bx64PSZIHPdfdFWlzIgDbCRX4qlp/cjdLvr2QYXrhWvy/Om3dpdEotQsA44H3aehQEvK6ThoL3tjPRxaVf48L+Fbots=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765524206; c=relaxed/simple;
-	bh=ffVP4OduHl3pEoWpk3jI7vAwMnmqw4cVAZ92uEhoERo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=J1/FSfvZRXz5agdHCmUhT1sql9MLvCJiUFJsz3U97RkMmvZtQMrWQNAfQxi4GPRKtj0rW7iLBWQe2sYW5+bPgSMLCL77dFHVV0SscptLJ0MFQiuA9Snxee1D2ANPe2ooE2NeUJn+Uio7aILpgK0YpzC3HR/yjUuusu4dUwgOYR4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=YMAlYhjC; arc=fail smtp.client-ip=40.93.201.4
+	s=arc-20240116; t=1765524216; c=relaxed/simple;
+	bh=PSwrDo4sBVmntRi+tfuCVmXZAhC4SPG66lv11sGwHLg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h5MMUQ/To8fjjAJQcUFPFg1kui54Kwp5POU0/gisU0pEkOOr2IZs1bNaeZPzFfDQg4N74+aKgtp9hx95mec8oT+HBqFf5wWsNO0lflnEOoB1xGCyARfeYEUz/L9j4R/w9fNbKaPzD5RMWN4qurxplv3LvUq+V7MsseY+Bc1D3tw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=b1mmrcMW; arc=fail smtp.client-ip=52.101.201.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rzm7FDAIn+4cHDCY7pGQMbIJ8QeQrnpSlHWbhSX6QmemdiLdbseDKHaqkfEC8jq5o8lJKHQnLB8vkcxanoljBttJT0R9ERu41zRmFm6w/cugAfe96gJqO4bSgZ0+R94vbfm+q5CfKbO8bYQ8g+WBpH+7USf5WThdXwYIinstWt4Q2bf4YeSnGyG7GL5b3dmUSz5CkcnYgsxE1xvB6gdcrJZUYOuQWViSqX9B+fz13+DQATI6MN1br+gGlacNYTIW4HZFWbuRHoantKvVN6tuG5Y9qYLNldzX7zKCeXdash2hH2TrHKkEu/EaaVc3f5CK6O/EpaQX3YkyrETR+MUarA==
+ b=wYs8GJ1G1WnwYaJ2BIZYJDIvcDUgI4G9tIfLwQrCJK+ddo0XIXUN80fNn1O1oCynaAfxOOidzaliHFIGrmLEXnx1rbcoxqPIRtjuCgMnWMZvMOFfCemeZCa24YpgFbLKnXCHKjx66tb/O9K+V4i4iMbxR9qGPNGvRIdBnVvhKhThyq/a0pNooxIq+gOZdG54pBKO/Rwbm9+tlfzjIt/54PvbAn7XDQOnFjJlfRWD1lP/9IVcvOE3W6noVHkNT004+T2BfP0BlhjyTWUg0EVcV45UkCQKGwzW/rcfp4YxHqJeovW3P2bxYUjh2eVWDEuvw0sY08a1YlOyvZqHjeYj/g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DsuGXAXEvrleZUk5GemriJL56NHGZLlWub1poXCY5gc=;
- b=JABShWYwtUzr2jjBmRVgD7FmYNyS4tXB68rvl/GaEPOZyV3TH+sBl/53e2nQQ2TllSy8LmaEgtCEm73Hsi6FnY9L3FYqbkx3My6savgGWYy0m14e2dJllbhCumrYZPY43vOX5/rS4/C0YU5LiLXYuTvau0UdsWD7ZE0K6zy4AQ36WWslpHmiOKu7jo9ifrl1hOy9CRE6d4hBbShR1TKbWfRx+jjvw5KXrFcxqn3CxK/Lbf9d/7HyfUi4Z4TWuM60mNvGfFjNmq1DCmnC2jOL782xNcofAIbKkyqIeUZa29eToArhYNhl/a1C6VNgAVLaO2wG1n6/7OapiA+zD0CSUA==
+ bh=YMhk0vFp7Gp+xhpT+YHHu7a/zxVrLPkPaYqA2vSc/Po=;
+ b=a/W8IS3wrdyxVrfhi7T5YrIJEu+pC6sfJijwaXMBD1nOYHtGYq+QlAp4dH5FAwko1q+G2L8RHwHBlbHU1Kz7CnFV7tVSviIb1HvuBgipFf//BRTRfDoE89BRU9G177B6mIGusTzDA1Y8fx0qYJetiGvCOH6BU6+f28V2HRxd3oWHC7AFUnmNkciXTKaN5gF5oxaVmrM015xbQdXUjWuRCDD61uHK3WK5oggWVmDEwhhtj7MMIHImHPOoy4sBab3CLgxNfSbH1gcucDygDsgYhcMn5CYSnmV9Y1X/WGXXFg0R4RJQLR6av1crNXqK2TFQUjxocJA5eHrcpTgUuotVHA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ 198.47.21.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DsuGXAXEvrleZUk5GemriJL56NHGZLlWub1poXCY5gc=;
- b=YMAlYhjCD0DyEgZic9NPMGxm15ONxMemYT4jqHdn8oR/6U6S5VZ7rde64ZDzD00oMsLkZM8YPCK0LRCm9hbxG3xQrrjB722TLaauCsA7TgrMkYtnFevhjJ/a4YKDBKxTSn0QtcSgHxa+HkLRcO9BqIYTHiG3gWoEizZwMD0seeg=
-Received: from CH5P220CA0009.NAMP220.PROD.OUTLOOK.COM (2603:10b6:610:1ef::11)
- by BY5PR10MB4180.namprd10.prod.outlook.com (2603:10b6:a03:211::9) with
+ bh=YMhk0vFp7Gp+xhpT+YHHu7a/zxVrLPkPaYqA2vSc/Po=;
+ b=b1mmrcMWcjM6AkWE7mbua9mE2Ubi2wbxTq1O/hFmFSK8yNcRAH6WQCEc/mdhA2sUlqf1qNlGOHExomFTognYGxqX3gPrvtHYBIIYs2XhdKyDsHYF1WFLrtPofhddgh9hTD0TZ4UiAj6XbhnlSkAYh39wolfg59mfQ2AlUpO9w7c=
+Received: from BL1PR13CA0246.namprd13.prod.outlook.com (2603:10b6:208:2ba::11)
+ by SA3PR10MB6952.namprd10.prod.outlook.com (2603:10b6:806:31b::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.9; Fri, 12 Dec
- 2025 07:23:20 +0000
-Received: from CH3PEPF00000017.namprd21.prod.outlook.com
- (2603:10b6:610:1ef:cafe::dd) by CH5P220CA0009.outlook.office365.com
- (2603:10b6:610:1ef::11) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9412.10 via Frontend Transport; Fri,
- 12 Dec 2025 07:23:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.8; Fri, 12 Dec
+ 2025 07:23:31 +0000
+Received: from BL02EPF0001A108.namprd05.prod.outlook.com
+ (2603:10b6:208:2ba:cafe::22) by BL1PR13CA0246.outlook.office365.com
+ (2603:10b6:208:2ba::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.5 via Frontend Transport; Fri,
+ 12 Dec 2025 07:23:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
  smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
  action=none header.from=ti.com;
 Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- CH3PEPF00000017.mail.protection.outlook.com (10.167.244.122) with Microsoft
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ BL02EPF0001A108.mail.protection.outlook.com (10.167.241.138) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9434.0 via Frontend Transport; Fri, 12 Dec 2025 07:23:20 +0000
-Received: from DLEE207.ent.ti.com (157.170.170.95) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9412.4 via Frontend Transport; Fri, 12 Dec 2025 07:23:29 +0000
+Received: from DFLE202.ent.ti.com (10.64.6.60) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 12 Dec
- 2025 01:23:16 -0600
-Received: from DLEE209.ent.ti.com (157.170.170.98) by DLEE207.ent.ti.com
- (157.170.170.95) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 01:23:20 -0600
+Received: from DFLE206.ent.ti.com (10.64.6.64) by DFLE202.ent.ti.com
+ (10.64.6.60) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 12 Dec
- 2025 01:23:16 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE209.ent.ti.com
- (157.170.170.98) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 01:23:19 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE206.ent.ti.com
+ (10.64.6.64) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Fri, 12 Dec 2025 01:23:16 -0600
+ Transport; Fri, 12 Dec 2025 01:23:19 -0600
 Received: from a-dutta.dhcp.ti.com (a-dutta.dhcp.ti.com [172.24.235.228])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5BC7NDoY1844826;
-	Fri, 12 Dec 2025 01:23:13 -0600
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5BC7NDoZ1844826;
+	Fri, 12 Dec 2025 01:23:17 -0600
 From: Anurag Dutta <a-dutta@ti.com>
 To: <broonie@kernel.org>
 CC: <grmoore@opensource.altera.com>, <nm@ti.com>, <francesco@dolcini.it>,
 	<s-vadapalli@ti.com>, <linux-spi@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <gehariprasath@ti.com>, <u-kumar1@ti.com>,
 	<a-dutta@ti.com>
-Subject: [PATCH 0/2] spi: cadence-quadspi: Fix probe error path and logging
-Date: Fri, 12 Dec 2025 12:53:10 +0530
-Message-ID: <20251212072312.2711806-1-a-dutta@ti.com>
+Subject: [PATCH 1/2] spi: cadence-quadspi: Add error logging for DMA request failure
+Date: Fri, 12 Dec 2025 12:53:11 +0530
+Message-ID: <20251212072312.2711806-2-a-dutta@ti.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251212072312.2711806-1-a-dutta@ti.com>
+References: <20251212072312.2711806-1-a-dutta@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -99,74 +102,78 @@ Content-Type: text/plain
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PEPF00000017:EE_|BY5PR10MB4180:EE_
-X-MS-Office365-Filtering-Correlation-Id: 402ac71a-3664-4936-a4d1-08de394f53c5
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A108:EE_|SA3PR10MB6952:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00376bf0-fe5e-4fff-3e01-08de394f597f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
+	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?RKbApbzSv/eeeafnrpqexqJYIBoM8W9YzcZsbTIu0+RU12g4E/gDSaAFBkak?=
- =?us-ascii?Q?baToid+f2bsOv/91ZQ0Ws8jee82pgJq6N9GlTBPkTNhQi4S3KBJ830Nat7d8?=
- =?us-ascii?Q?drgBEwI2/BK/wgPJC2hStn45nF3yJP5os9Jen/egpgJipm0VCgS7u7L8imh+?=
- =?us-ascii?Q?71dzAQeIE03aegLbhyPvJ/4yp4hT5zZmLuYFrUqiUX7rx/LEFUxvwi4b48LB?=
- =?us-ascii?Q?xrKXLXERkS7/C9EnzoBaWAgWh8rxtJsXlm57r7fwA+ekMquyilUiEsm157Hh?=
- =?us-ascii?Q?B0S8wmbT8QE/v8mndAXCjZ+O3CHHYLK/fk/tbvNgf91K6aEoh+K8Ug+QpmiM?=
- =?us-ascii?Q?8YGTHgY1aXAtmrBLX3v7tKQSeBrurex9noIZ7QvTVnnrGj+YR4tCmgzzT/h3?=
- =?us-ascii?Q?wtwhhWAPxhxmAiIBPk+ujAU4X4VUjRqwEpIqyS7/GP76nqaH/RAjtx9Shtg9?=
- =?us-ascii?Q?1SkEC8lxC2Om1AyMXI5xuqHm1gzerx6OPzHKQ2b95Bo8Jtlu8VMvHrI3qhzk?=
- =?us-ascii?Q?tHgGjLmz2Sni2QY+6oOM04v0ywvVsBULSeYZGO02xCuxA86ED01Azh0e6FCe?=
- =?us-ascii?Q?9HfKP9FasYapgBjiczuQYrq7/aoMS1gfkOQ2izbRLLlqdOmUZBHFzYjIXpqi?=
- =?us-ascii?Q?4e6o6QxsxO78wOYrgpPcnSOKJMvJzexGx+le1nZHgYdv3n7s3pif2W+DZ9vh?=
- =?us-ascii?Q?FO08A8PcrHgR1h01qk5ECd130OySB/Pha96tx4NNI++9KF1iQen4Nq/qEMoP?=
- =?us-ascii?Q?VIRCbb0zJwkgaKoXeP2rweQ6Je1DrLgXu+yUUz0NnMIsMAfW7xmZbPAtfKmo?=
- =?us-ascii?Q?2ZR+KkdriskA75fPRFwH48QQj08Aq2q/P0FDBEmsJZ4+V6mGK/xK65G7zkoy?=
- =?us-ascii?Q?FC+ZUVtpE62CVAaf1vpkqeXlsLS1m9GAKWoEfAUdMbIvujUeqMdX8ZMXa9O5?=
- =?us-ascii?Q?OcgwffmaFuxGHWNXJ34Hjeg9IJCA9YafjhOL1PIZpcxfy8sIdKQRW9HC75xT?=
- =?us-ascii?Q?KnmnRFLxUJ/ygkNiiiOK3wlwKOonHcClOVkpysbAKkNBQlkKach8eELTFJkw?=
- =?us-ascii?Q?5PIwLWTj+/yaUeQG2eRqpErs79hMuPDbJ5I5BQimcZfa0F2F/ck6sqjIqh1w?=
- =?us-ascii?Q?JKUwNMvFhjsfOyGYesT8Hs4nSKpmUgm6gYAX7hoyiVijv+tCgZsCkRfRVxvU?=
- =?us-ascii?Q?1+9t7lD1s4b/XPGLu8CCnifrE8TV6iiGSO1W49SoSRidzKabLQdL1gZejweb?=
- =?us-ascii?Q?hn8legHpcZsRQzootURoBdrgMnmHTU7xfih0kSnYk4R/A8lvqwNqLUrt11IY?=
- =?us-ascii?Q?1jBV0Cf7NWUuW8yRt4nyW6MOsC4kvK6mFsPXsp8ztw7DJYJoymtky1FXeepk?=
- =?us-ascii?Q?qnx0RH8CLpFHycv5Jm/zHiH0VHYyI7aHZWsdqdQhDQSWNe17+epgsWEzEdQD?=
- =?us-ascii?Q?+sGmR3GE6Gz+ywIjWfL+K2CyqoxTGIdfQgTdiNewysZIXew7OG/GmrbgQ9N9?=
- =?us-ascii?Q?OLHkQRyY5b/CaJMy6DrkRxC4a7NNA9EOou0nzghPxxgRmz6GbFm+xFcoK+/T?=
- =?us-ascii?Q?YifGARPKTx5wbQ7adAk=3D?=
+	=?us-ascii?Q?PZS6clnJ2VgSscjzQQfSEH16JR1s7x5iykF0Kz4q8zXMRWQGorBKkHOmFlSS?=
+ =?us-ascii?Q?BpG8hiMItRb202FO7g2QJa9lCFdVTI3gszX4zbTvoIxTGHi9zyVxeJYV/zv+?=
+ =?us-ascii?Q?0HSqJrkQ0pkAuulALrq52OR68r5b5/ejePzq67cyWzBvJeo9OoWEVp5AHlRJ?=
+ =?us-ascii?Q?Lz13u1c8T8imsdugaZrux4eev/E0nctKrvi/jQktne3uUc1ycgG+sGiAddsj?=
+ =?us-ascii?Q?LfMYN05g+c4PwbakJ9E93XhOOwVv2C3iWw09abZEkRQyUsfdYIMxNyXW34uL?=
+ =?us-ascii?Q?URO4FH29vbYoZJfy7G1dFS9Qu4Aolb1QxqBOzChoVm2NyiSRy2WfDwSKtmyH?=
+ =?us-ascii?Q?0NQZmXF5yGWFA6+h3X5EOjw3SRcRsa6fFx1tDnpmrRG5EdC6wkhRfiZ4H8lW?=
+ =?us-ascii?Q?1PToG5lMi/MOiDXrybR2kDkiEifzTkE8scNY8f6nRgnrlj5ilmPScYHZM9u7?=
+ =?us-ascii?Q?TW+F7JzsNyw6RU9Ejv4zg2+kOeyy4+6H2CHOcm6/qTcDm/aSuTW+CPYB7Ba2?=
+ =?us-ascii?Q?9M/5C/2lG8tfrTnhTIIrlhQ0T8oOG/i9Ban+YMmmr3WOZq6DaXwpdXSVKTQw?=
+ =?us-ascii?Q?awfLlKtGnf4ZzIeY+SgYvhdJlIizmL3fMcc1bbzYha/MJBzmTRY0AlnPH9P2?=
+ =?us-ascii?Q?KJN5jXSimdpAU1zrFsCrP63djvQztZ6Bp2cGMmUT0kaBl/KWDLZ+c92bw9hP?=
+ =?us-ascii?Q?B1STvz25iBj9FA5p2lkSQbiAQGie9FZeVOWQ8dRC46tYhr2SpZKFB4/NZlMd?=
+ =?us-ascii?Q?XIUw4aO1VyCoC1SM0AVuobz2dpVNesSZCkxE0j7L/dn8vz30L/6j2xGfSR+5?=
+ =?us-ascii?Q?4BMYcqJao/QRfsACzpBektaBtVO5A57Ejo+SHBNQXMP2AMcYE863E+A/Ai+q?=
+ =?us-ascii?Q?IImGOEPhFV2BGdhY9yjFBE5YKSFflKexYz6jbu/iIL07COoG6Tqsg5Bm3T/I?=
+ =?us-ascii?Q?+qgjiJMNJol7KQDwChjaT94Y8mGkoE528o6sVzrl9EOVFd5tlZW1esdZT7ef?=
+ =?us-ascii?Q?xgBubnVFE2kX+mcQRVQOAorcCEoCFcp+xdfz28s/2Qn9r/4kS6mZptobjy70?=
+ =?us-ascii?Q?jzx2I/rzVv4OhW0xtGHyECI+7EguVrMpkPcTYEqIMXsF0o5KMlByzmdWJEMj?=
+ =?us-ascii?Q?20cjgSPIdZnDYJfklLuTUmb8GwEOqT+9HFwJGF7E6QNsmVdoiQH1GiTDbIyX?=
+ =?us-ascii?Q?GmrN5/L2Xsr5+7eTBz7/+IO7dv4SaW1K4Nj+gl4irYN0eSWyd8JR7Cl7yvzl?=
+ =?us-ascii?Q?a/4yXEa70HiWMGtq/z/fayRm8aGtteW2Xb2XYG/rt2FTF6nqYYfr00DaxB1e?=
+ =?us-ascii?Q?drD5nHHTbTbKR7JO9Yhy0Fxqbm+G+17yn7oxE8nIRK86h4SDl7+ApvTS44OC?=
+ =?us-ascii?Q?iXO3/l/c2ly8MqRfQTMvmXZ6yB1yBG6CmGjySflnR7HR6AK3OPCqZa3s7W3x?=
+ =?us-ascii?Q?78USOjwD+10Wabq1BMsJJT0x1sie2NLAshvrAytW52IAw8mPcNlxsrJJLq+u?=
+ =?us-ascii?Q?g4iDrPmtkVyg2YaISnAr6mhVEY2rBKelCKwjXU+pLOA0GcqYO92KOedTQepW?=
+ =?us-ascii?Q?yEcudg+FiYFfq89NgSc=3D?=
 X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1101;
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 07:23:20.3046
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 07:23:29.8725
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 402ac71a-3664-4936-a4d1-08de394f53c5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00376bf0-fe5e-4fff-3e01-08de394f597f
 X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH3PEPF00000017.namprd21.prod.outlook.com
+	BL02EPF0001A108.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4180
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR10MB6952
 
-This series addresses issues in the cadence-quadspi driver's probe
-error path:
+Add dev_err_probe() to log DMA request failures. This properly handles
+-EPROBE_DEFER at debug level, reducing log spam during deferred probing.
 
-Patch 1 fixes a clock disable imbalance that occurs when probe fails
-after runtime PM is enabled, particularly when DMA request returns
--EPROBE_DEFER.
+Signed-off-by: Anurag Dutta <a-dutta@ti.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Patch 2 adds proper error logging for DMA request failures using
-dev_err_probe() to improve diagnostics and handle probe deferral
-appropriately.
-
-logs : https://gist.github.com/anuragdutta731/59925cd11a50913b7128c88cd5394db7
-
-Anurag Dutta (2):
-  spi: cadence-quadspi: Add error logging for DMA request failure
-  spi: cadence-quadspi: Fix clock disable on probe failure path
-
- drivers/spi/spi-cadence-quadspi.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index af6d050da1c8..7c1f742d95a6 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -2001,8 +2001,10 @@ static int cqspi_probe(struct platform_device *pdev)
+ 
+ 	if (cqspi->use_direct_mode) {
+ 		ret = cqspi_request_mmap_dma(cqspi);
+-		if (ret == -EPROBE_DEFER)
++		if (ret == -EPROBE_DEFER) {
++			dev_err_probe(&pdev->dev, ret, "Failed to request mmap DMA\n");
+ 			goto probe_setup_failed;
++		}
+ 	}
+ 
+ 	ret = spi_register_controller(host);
 -- 
 2.34.1
 
