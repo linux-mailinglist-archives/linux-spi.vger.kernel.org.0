@@ -1,89 +1,98 @@
-Return-Path: <linux-spi+bounces-11879-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11880-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54089CB8884
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 10:52:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64C26CBA6D7
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Dec 2025 08:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 511A3306CA0F
-	for <lists+linux-spi@lfdr.de>; Fri, 12 Dec 2025 09:49:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6AB2230517F0
+	for <lists+linux-spi@lfdr.de>; Sat, 13 Dec 2025 07:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F152F8BC8;
-	Fri, 12 Dec 2025 09:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1922B26F2AC;
+	Sat, 13 Dec 2025 07:50:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="l9AMgc2n"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C724C2874E3;
-	Fri, 12 Dec 2025 09:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E753FCC;
+	Sat, 13 Dec 2025 07:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765532980; cv=none; b=JEj+w4+gWWulDU+wPC9hVNFBGpXJpcDZ1b89mimg5bF48L+Koc0+licJczhE5GxjM1Bk5jcX2wYMDYOLlNPhYSO190czEtU41EFNcpJJ4IPg1vFYexSF1gOQDBMx0phy/+vE/1JEoOEI0o94S//uxIvknoIwXGh8og/u8BMdyAM=
+	t=1765612212; cv=none; b=oMKEVtDGwOT0nuLIlMC9IHurIJMCRqWWT8n+/cnAL1rDo3lfNzsIUEiWN/IUTYy0RKEvmeIH1NvQ2NIUwycQgrq0WYAvtNcAnGweZW8PSQm9fwcCw5bUvfMpMWNJxgmXeii+l2gWnh7THybd+euxUwRqCNbaoe2poK6sJtGNFvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765532980; c=relaxed/simple;
-	bh=K25Ijgc/BM3blmvklpXrCkKN0IcPd1eYBRFuDZGcUxE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HrhlMujDo7WimKZtWuZsJtX7xuk8WnfTzC0XSagLKYCpcFRdDXl/9+4KCG9jPzEF4GkclS0uZpcrFamT6pklxGg98PCSrepNTiI9OB2LXd55pDcfF4YdxyVUtnxWAg11B++rpOlxp+B5Z9ElYvdinhgw2r1aujCntOOzQRfZDwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 5BC9nN5G091007
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Fri, 12 Dec 2025 17:49:23 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02 (10.0.15.183) by ATCPCS34.andestech.com (10.0.1.134)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 12 Dec
- 2025 17:49:22 +0800
-Date: Fri, 12 Dec 2025 17:49:22 +0800
-From: CL Wang <cl634@andestech.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-CC: <broonie@kernel.org>, <linux-spi@vger.kernel.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tim609@andestech.com>
-Subject: Re: [PATCH V2 1/3] dt-bindings: spi: Add support for ATCSPI200 SPI
- controller
-Message-ID: <aTvlIqS3KnZZ1UlU@swlinux02>
-References: <20251210090430.3602380-1-cl634@andestech.com>
- <20251210090430.3602380-2-cl634@andestech.com>
- <33e24f43-53d3-46cf-9012-aed67230723b@kernel.org>
+	s=arc-20240116; t=1765612212; c=relaxed/simple;
+	bh=zPl8jdOfErDbetfy36FhTWsLjkCnqsYiK32veHf1xRg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fOW65u3VnM7RRVuV//XVktMkhPjEOCc9LRM0QDSUvazV8r5jdNtbq3NxPhwneDOG63Ej+xSFU+S13ZaTYXXzbGr8igyZBM9p84m0lVYreUVe1FSMRpFZq33PtUeSB1OTiiHnG1L2HBlzurjev2z0cUjG9OdaQu6TI9Wpav5i9nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=l9AMgc2n; arc=none smtp.client-ip=80.12.242.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from fedora.home ([IPv6:2a01:cb10:785:b00:8347:f260:7456:7662])
+	by smtp.orange.fr with ESMTPA
+	id UKN4vDVOgExqPUKN4vDE3L; Sat, 13 Dec 2025 08:48:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1765612136;
+	bh=TmR7zwuEwzlgwCwE4av5VCifSpkN9NkXmUL/n0dw1EU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=l9AMgc2nXTMTYWOFBJ938avi7lltf9B3F3SY2CV+2HkXNbU1T2bAj8mHum36wV6QV
+	 RTOp3e+DeKf5q7596u178aPfzDIHQXTw5AkosOJ0dHReiUOG7BDx/B62TIfimFtCBt
+	 6AoE5gf6pFhkLhDH1Gltrsm0G4AUEujH8BFzDcITl0/grTjRkHU/0rtbE+BhQKQ1vZ
+	 KQG2yyc9TvARE+YKTiOk9zKVSkG9SB2fZQmkTcDP/6vZSp2Yhpw6IyAkwr5gCZ/q48
+	 yWUwhjx6d+NIiQF3B0V0EtWQdr8ofZVlc7lp/ekqaWT4R31Ar8UZP+vaxVZ/azgO4h
+	 VQ2qM9GvgPhJQ==
+X-ME-Helo: fedora.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 13 Dec 2025 08:48:56 +0100
+X-ME-IP: 2a01:cb10:785:b00:8347:f260:7456:7662
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-riscv@lists.infradead.org,
+	linux-spi@vger.kernel.org
+Subject: [PATCH] spi: mpfs: Fix an error handling path in mpfs_spi_probe()
+Date: Sat, 13 Dec 2025 08:48:51 +0100
+Message-ID: <eb35f168517cc402ef7e78f26da02863e2f45c03.1765612110.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <33e24f43-53d3-46cf-9012-aed67230723b@kernel.org>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5BC9nN5G091007
 
-Hi Krzysztof,
+mpfs_spi_init() calls mpfs_spi_enable_ints(), so mpfs_spi_disable_ints()
+should be called if an error occurs after calling mpfs_spi_init(), as
+already done in the remove function.
 
-Thank you for pointing out the mistake. I’ll make sure to properly verify the
-change log formatting before the next submission. I appreciate your guidance
-and will follow this practice going forward.
+Fixes: 9ac8d17694b6 ("spi: add support for microchip fpga spi controllers")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This patch is compile tested only.
 
-Best regards,
-CL Wang
+This patch is similar to commit 8cef9b451dc6 but for another driver.
+---
+ drivers/spi/spi-mpfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/spi/spi-mpfs.c b/drivers/spi/spi-mpfs.c
+index 9a14d1732a15..7e9e64d8e6c8 100644
+--- a/drivers/spi/spi-mpfs.c
++++ b/drivers/spi/spi-mpfs.c
+@@ -577,6 +577,7 @@ static int mpfs_spi_probe(struct platform_device *pdev)
+ 
+ 	ret = devm_spi_register_controller(&pdev->dev, host);
+ 	if (ret) {
++		mpfs_spi_disable_ints(spi);
+ 		mpfs_spi_disable(spi);
+ 		return dev_err_probe(&pdev->dev, ret,
+ 				     "unable to register host for SPI controller\n");
+-- 
+2.52.0
 
-On Thu, Dec 11, 2025 at 06:31:23AM +0100, Krzysztof Kozlowski wrote:
-> >
-> 
-> That's a completely corrupted changelog.
-> 
-> Please apply your patch and look. Or run checkpatch. Does it look good?
-> 
-> Best regards,
-> Krzysztof
 
