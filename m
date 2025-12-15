@@ -1,49 +1,49 @@
-Return-Path: <linux-spi+bounces-11886-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11887-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BBFFCBE0B8
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:24:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E963CBE0CD
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:25:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B821C301B3B1
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6C43A30173A0
 	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 13:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7693314AB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C59C331A41;
 	Mon, 15 Dec 2025 13:24:33 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
 Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB70B331A52;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD30A331A55;
 	Mon, 15 Dec 2025 13:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765805073; cv=none; b=mSZXkBBI2w5wgC8zNv353L9eYYGbYb9VR/fXRsSvnB4PSQ2YeyAhsP/uqKGWuy5WNHvgBPat3675I7mwSm83U8Ub+O1b18wuHJdyXtw2CbYXwQvTAXoJt142vEc+IUHxYC0918CyCTkimIOhVpfwi/emOxtUgnh8q7VeF4NzNTc=
+	t=1765805073; cv=none; b=NESOr7tijQ+0IkUNwEJzRHhiS+rnC3trW2F2/qDGo1inM6SnuuFyRUX4cyaMDoe5n2D4eQ7Z9Il8FO7iv/n0ufeUPfQ5jG49G2K8CfV1ckQ/MGwMD2y5JrsZSpfY/mjL8o5MnfLVBmLCrKcr1zffnb0yV7boyi2mkw41AEx8iMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765805073; c=relaxed/simple;
-	bh=dT36iiWpLNn9sqJzfMR2bdVr5vvdXX10afAZCfarpy8=;
+	bh=8nAjaK3AM7PlO3k+42LQNJbeyTwUADTAxrYJKly9+Bk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QEb4oaYyLxg67r2+wzrkUCcniXI7Z7hlRzTgbSFQVPH6Ui9xLSqF8QjC60QO852i6i1is1gYzf3JFZvSI/35oJvoYnCimTaRTxRlhxYQZGFrPJAH2EzRbJKvqTO4oDyeJD6+eIMl8bDA/dH8pzQfVXi2ldU53GS4TdEipA+7kWg=
+	 MIME-Version:Content-Type; b=a4GzeCfWcG2/ezuX1RjRI9RbHShcBvIlub4pR5r4IRlgkrZbXU2d17Y7fmd4ILyUlK8GhbgeNmaeHLfdteNvzaEWk21ANyncoU6PAFVZZmFnIHsLtKoVe3NGi4vT3qhVTg2FR1aLHHV0GT4yVb8LKvoQOEYMBwTlZgYi0mabsCY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
 Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 5BFDO4vA076819
+	by Atcsqr.andestech.com with ESMTPS id 5BFDOBij076930
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Mon, 15 Dec 2025 21:24:04 +0800 (+08)
+	Mon, 15 Dec 2025 21:24:11 +0800 (+08)
 	(envelope-from cl634@andestech.com)
 Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
  (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 15 Dec
- 2025 21:24:04 +0800
+ 2025 21:24:11 +0800
 From: CL Wang <cl634@andestech.com>
 To: <cl634@andestech.com>, <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
         <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
 CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <tim609@andestech.com>
-Subject: [PATCH V3 1/3] dt-bindings: spi: Add support for ATCSPI200 SPI controller
-Date: Mon, 15 Dec 2025 21:23:47 +0800
-Message-ID: <20251215132349.513843-2-cl634@andestech.com>
+Subject: [PATCH V3 2/3] spi: atcspi200: Add ATCSPI200 SPI controller driver
+Date: Mon, 15 Dec 2025 21:23:48 +0800
+Message-ID: <20251215132349.513843-3-cl634@andestech.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251215132349.513843-1-cl634@andestech.com>
 References: <20251215132349.513843-1-cl634@andestech.com>
@@ -60,122 +60,747 @@ X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
 X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
 X-DNSRBL: 
 X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5BFDO4vA076819
+X-MAIL:Atcsqr.andestech.com 5BFDOBij076930
 
-Document devicetree bindings for the Andes ATCSPI200 SPI controller.
+Add driver for the Andes ATCSPI200 SPI controller.
 
 Signed-off-by: CL Wang <cl634@andestech.com>
 ---
 Changes for v3:
-  - Reworked the DT binding to properly describe the compatible fallback
-    relationship, defining "andestech,qilai-spi" as a platform-specific
-    compatible that falls back to the generic "andestech,ae350-spi".
-  - Renamed the DT binding file from 'andestech,qilai-spi.yaml' to
-    'andestech,ae350-spi.yaml' to match the generic fallback compatible.
-  - Updated the 'compatible' property to use a 'oneOf' schema, enforcing
-    the fallback requirement for the specific compatible string.
+  - No functional changes to the driver.
 
 Changes for v2:
+  - Added missing clock disable/unprepare handling in probe error paths.
+  - Switched to devm_dma_request_chan() for proper DMA channel cleanup.
   - Dropped the "spi_" prefix from dma-names as suggested.
-  - Updated the DT binding and documented all compatible strings.
+  - Added suspend/resume support for power management.
   - Added the "andestech,ae350-spi" compatible string.
- 
----
- .../bindings/spi/andestech,ae350-spi.yaml     | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/spi/andestech,ae350-spi.yaml
 
-diff --git a/Documentation/devicetree/bindings/spi/andestech,ae350-spi.yaml b/Documentation/devicetree/bindings/spi/andestech,ae350-spi.yaml
+---
+ drivers/spi/Kconfig         |   9 +
+ drivers/spi/Makefile        |   1 +
+ drivers/spi/spi-atcspi200.c | 680 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 690 insertions(+)
+ create mode 100644 drivers/spi/spi-atcspi200.c
+
+diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
+index 5520403896fc..617d3095f2c8 100644
+--- a/drivers/spi/Kconfig
++++ b/drivers/spi/Kconfig
+@@ -136,6 +136,15 @@ config SPI_AR934X
+ 	  This enables support for the SPI controller present on the
+ 	  Qualcomm Atheros AR934X/QCA95XX SoCs.
+ 
++config SPI_ATCSPI200
++	tristate "Andes ATCSPI200 SPI controller"
++	depends on ARCH_ANDES
++	help
++	  SPI driver for Andes ATCSPI200 SPI controller.
++	  ATCSPI200 controller supports DMA and PIO modes. When DMA
++	  is not available, the driver automatically falls back to
++	  PIO mode.
++
+ config SPI_ATH79
+ 	tristate "Atheros AR71XX/AR724X/AR913X SPI controller driver"
+ 	depends on ATH79 || COMPILE_TEST
+diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
+index 863b628ff1ec..96c346144645 100644
+--- a/drivers/spi/Makefile
++++ b/drivers/spi/Makefile
+@@ -26,6 +26,7 @@ obj-$(CONFIG_SPI_APPLE)			+= spi-apple.o
+ obj-$(CONFIG_SPI_AR934X)		+= spi-ar934x.o
+ obj-$(CONFIG_SPI_ARMADA_3700)		+= spi-armada-3700.o
+ obj-$(CONFIG_SPI_ASPEED_SMC)		+= spi-aspeed-smc.o
++obj-$(CONFIG_SPI_ATCSPI200)		+= spi-atcspi200.o
+ obj-$(CONFIG_SPI_ATMEL)			+= spi-atmel.o
+ obj-$(CONFIG_SPI_ATMEL_QUADSPI)		+= atmel-quadspi.o
+ obj-$(CONFIG_SPI_AT91_USART)		+= spi-at91-usart.o
+diff --git a/drivers/spi/spi-atcspi200.c b/drivers/spi/spi-atcspi200.c
 new file mode 100644
-index 000000000000..78093468dd5e
+index 000000000000..0af7446642e5
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/spi/andestech,ae350-spi.yaml
-@@ -0,0 +1,85 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spi/andestech,ae350-spi.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/spi/spi-atcspi200.c
+@@ -0,0 +1,680 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Driver for Andes ATCSPI200 SPI Controller
++ *
++ * Copyright (C) 2025 Andes Technology Corporation.
++ */
 +
-+title: Andes ATCSPI200 SPI controller
++#include <linux/bitfield.h>
++#include <linux/clk.h>
++#include <linux/completion.h>
++#include <linux/dev_printk.h>
++#include <linux/dmaengine.h>
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/jiffies.h>
++#include <linux/minmax.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/mutex.h>
++#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/spi/spi.h>
++#include <linux/spi/spi-mem.h>
 +
-+maintainers:
-+  - CL Wang <cl634@andestech.com>
++/* Register definitions  */
++#define ATCSPI_TRANS_FMT	0x10	/* SPI transfer format register */
++#define ATCSPI_TRANS_CTRL	0x20	/* SPI transfer control register */
++#define ATCSPI_CMD		0x24	/* SPI command register */
++#define ATCSPI_ADDR		0x28	/* SPI address register */
++#define ATCSPI_DATA		0x2C	/* SPI data register */
++#define ATCSPI_CTRL		0x30	/* SPI control register */
++#define ATCSPI_STATUS		0x34	/* SPI status register */
++#define ATCSPI_TIMING		0x40	/* SPI interface timing register */
++#define ATCSPI_CONFIG		0x7C	/* SPI configuration register */
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - andestech,qilai-spi
-+          - const: andestech,ae350-spi
-+      - const: andestech,ae350-spi
++/* Transfer format register */
++#define TRANS_FMT_CPHA		BIT(0)
++#define TRANS_FMT_CPOL		BIT(1)
++#define TRANS_FMT_DATA_MERGE_EN	BIT(7)
++#define TRANS_FMT_DATA_LEN_MASK	GENMASK(12, 8)
++#define TRANS_FMT_ADDR_LEN_MASK	GENMASK(17, 16)
++#define TRANS_FMT_DATA_LEN(x)	FIELD_PREP(TRANS_FMT_DATA_LEN_MASK, (x) - 1)
++#define TRANS_FMT_ADDR_LEN(x)	FIELD_PREP(TRANS_FMT_ADDR_LEN_MASK, (x) - 1)
 +
-+  reg:
-+    maxItems: 1
++/* Transfer control register */
++#define TRANS_MODE_MASK		GENMASK(27, 24)
++#define TRANS_MODE_W_ONLY	FIELD_PREP(TRANS_MODE_MASK, 1)
++#define TRANS_MODE_R_ONLY	FIELD_PREP(TRANS_MODE_MASK, 2)
++#define TRANS_MODE_NONE_DATA	FIELD_PREP(TRANS_MODE_MASK, 7)
++#define TRANS_MODE_DMY_READ	FIELD_PREP(TRANS_MODE_MASK, 9)
++#define TRANS_FIELD_DECNZ(m, x)	((x) ? FIELD_PREP(m, (x) - 1) : 0)
++#define TRANS_RD_TRANS_CNT(x)	TRANS_FIELD_DECNZ(GENMASK(8, 0), x)
++#define TRANS_DUMMY_CNT(x)	TRANS_FIELD_DECNZ(GENMASK(10, 9), x)
++#define TRANS_WR_TRANS_CNT(x)	TRANS_FIELD_DECNZ(GENMASK(20, 12), x)
++#define TRANS_DUAL_QUAD(x)	FIELD_PREP(GENMASK(23, 22), (x))
++#define TRANS_ADDR_FMT		BIT(28)
++#define TRANS_ADDR_EN		BIT(29)
++#define TRANS_CMD_EN		BIT(30)
 +
-+  clocks:
-+    maxItems: 1
++/* Control register */
++#define CTRL_SPI_RST		BIT(0)
++#define CTRL_RX_FIFO_RST	BIT(1)
++#define CTRL_TX_FIFO_RST	BIT(2)
++#define CTRL_RX_DMA_EN		BIT(3)
++#define CTRL_TX_DMA_EN		BIT(4)
 +
-+  num-cs:
-+    description: Number of chip selects supported
-+    maxItems: 1
++/* Status register */
++#define ATCSPI_ACTIVE		BIT(0)
++#define ATCSPI_RX_EMPTY		BIT(14)
++#define ATCSPI_TX_FULL		BIT(23)
 +
-+  dmas:
-+    items:
-+      - description: Transmit FIFO DMA channel
-+      - description: Receive FIFO DMA channel
++/* Interface timing setting */
++#define TIMING_SCLK_DIV_MASK	GENMASK(7, 0)
++#define TIMING_SCLK_DIV_MAX	0xFE
 +
-+  dma-names:
-+    items:
-+      - const: tx
-+      - const: rx
++/* Configuration register */
++#define RXFIFO_SIZE(x)		FIELD_GET(GENMASK(3, 0), (x))
++#define TXFIFO_SIZE(x)		FIELD_GET(GENMASK(7, 4), (x))
 +
-+patternProperties:
-+  "@[0-9a-f]+$":
-+    type: object
-+    additionalProperties: true
++/* driver configurations */
++#define ATCSPI_MAX_TRANS_LEN	512
++#define ATCSPI_MAX_SPEED_HZ	50000000
++#define ATCSPI_RDY_TIMEOUT_US	1000000
++#define ATCSPI_XFER_TIMEOUT(n)	((n) * 10)
++#define ATCSPI_MAX_CS_NUM	1
++#define ATCSPI_DMA_THRESHOLD	256
++#define ATCSPI_BITS_PER_UINT	8
++#define ATCSPI_DATA_MERGE_EN	1
++#define ATCSPI_DMA_SUPPORT	1
 +
-+    properties:
-+      spi-rx-bus-width:
-+        enum: [1, 4]
++/**
++ * struct atcspi_dev - Andes ATCSPI200 SPI controller private data
++ * @host:           Pointer to the SPI controller structure.
++ * @mutex_lock:     A mutex to protect concurrent access to the controller.
++ * @dma_completion: A completion to signal the end of a DMA transfer.
++ * @dev:            Pointer to the device structure.
++ * @regmap:         Register map for accessing controller registers.
++ * @clk:            Pointer to the controller's functional clock.
++ * @dma_addr:       The physical address of the SPI data register for DMA.
++ * @clk_rate:       The cached frequency of the functional clock.
++ * @sclk_rate:      The target frequency for the SPI clock (SCLK).
++ * @txfifo_size:    The size of the transmit FIFO in bytes.
++ * @rxfifo_size:    The size of the receive FIFO in bytes.
++ * @data_merge:     A flag indicating if the data merge mode is enabled for
++ *                  the current transfer.
++ * @use_dma:        Enable DMA mode if ATCSPI_DMA_SUPPORT is set and DMA is
++ *                  successfully configured.
++ */
++struct atcspi_dev {
++	struct spi_controller	*host;
++	struct mutex		mutex_lock;
++	struct completion	dma_completion;
++	struct device		*dev;
++	struct regmap		*regmap;
++	struct clk		*clk;
++	dma_addr_t		dma_addr;
++	unsigned int		clk_rate;
++	unsigned int		sclk_rate;
++	unsigned int		txfifo_size;
++	unsigned int		rxfifo_size;
++	bool			data_merge;
++	bool			use_dma;
++};
 +
-+      spi-tx-bus-width:
-+        enum: [1, 4]
++static int atcspi_wait_fifo_ready(struct atcspi_dev *spi,
++				  enum spi_mem_data_dir dir)
++{
++	unsigned int val;
++	unsigned int mask;
++	int ret;
 +
-+allOf:
-+  - $ref: spi-controller.yaml#
++	mask = (dir == SPI_MEM_DATA_OUT) ? ATCSPI_TX_FULL : ATCSPI_RX_EMPTY;
++	ret = regmap_read_poll_timeout(spi->regmap,
++				       ATCSPI_STATUS,
++				       val,
++				       !(val & mask),
++				       0,
++				       ATCSPI_RDY_TIMEOUT_US);
++	if (ret)
++		dev_info(spi->dev, "Timed out waiting for FIFO ready\n");
 +
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - dmas
-+  - dma-names
++	return ret;
++}
 +
-+unevaluatedProperties: false
++static int atcspi_xfer_data_poll(struct atcspi_dev *spi,
++				 const struct spi_mem_op *op)
++{
++	void *rx_buf = op->data.buf.in;
++	const void *tx_buf = op->data.buf.out;
++	unsigned int val;
++	int trans_bytes = op->data.nbytes;
++	int num_byte;
++	int ret = 0;
 +
-+examples:
-+  - |
-+    spi@f0b00000 {
-+        compatible = "andestech,ae350-spi";
-+        reg = <0xf0b00000 0x100>;
-+        clocks = <&clk_spi>;
-+        dmas = <&dma0 0>, <&dma0 1>;
-+        dma-names = "tx", "rx";
++	num_byte = spi->data_merge ? 4 : 1;
++	while (trans_bytes) {
++		if (op->data.dir == SPI_MEM_DATA_OUT) {
++			ret = atcspi_wait_fifo_ready(spi, SPI_MEM_DATA_OUT);
++			if (ret)
++				return ret;
 +
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++			if (spi->data_merge)
++				val = *(unsigned int *)tx_buf;
++			else
++				val = *(unsigned char *)tx_buf;
++			regmap_write(spi->regmap, ATCSPI_DATA, val);
++			tx_buf = (unsigned char *)tx_buf + num_byte;
++		} else {
++			ret = atcspi_wait_fifo_ready(spi, SPI_MEM_DATA_IN);
++			if (ret)
++				return ret;
 +
-+        flash@0 {
-+            compatible = "jedec,spi-nor";
-+            reg = <0>;
-+            spi-tx-bus-width = <4>;
-+            spi-rx-bus-width = <4>;
-+            spi-cpol;
-+            spi-cpha;
-+        };
-+    };
++			regmap_read(spi->regmap, ATCSPI_DATA, &val);
++			if (spi->data_merge)
++				*(unsigned int *)rx_buf = val;
++			else
++				*(unsigned char *)rx_buf = (unsigned char)val;
++			rx_buf = (unsigned char *)rx_buf + num_byte;
++		}
++		trans_bytes -= num_byte;
++	}
++
++	return ret;
++}
++
++static void atcspi_set_trans_ctl(struct atcspi_dev *spi,
++				 const struct spi_mem_op *op)
++{
++	unsigned int tc = 0;
++
++	if (op->cmd.nbytes)
++		tc |= TRANS_CMD_EN;
++	if (op->addr.nbytes)
++		tc |= TRANS_ADDR_EN;
++	if (op->addr.buswidth > 1)
++		tc |= TRANS_ADDR_FMT;
++	if (op->data.nbytes) {
++		tc |= TRANS_DUAL_QUAD(ffs(op->data.buswidth) - 1);
++		if (op->data.dir == SPI_MEM_DATA_IN) {
++			if (op->dummy.nbytes)
++				tc |= TRANS_MODE_DMY_READ |
++				      TRANS_DUMMY_CNT(op->dummy.nbytes);
++			else
++				tc |= TRANS_MODE_R_ONLY;
++			tc |= TRANS_RD_TRANS_CNT(op->data.nbytes);
++		} else {
++			tc |= TRANS_MODE_W_ONLY |
++			      TRANS_WR_TRANS_CNT(op->data.nbytes);
++		}
++	} else {
++		tc |= TRANS_MODE_NONE_DATA;
++	}
++	regmap_write(spi->regmap, ATCSPI_TRANS_CTRL, tc);
++}
++
++static void atcspi_set_trans_fmt(struct atcspi_dev *spi,
++				 const struct spi_mem_op *op)
++{
++	unsigned int val;
++
++	regmap_read(spi->regmap, ATCSPI_TRANS_FMT, &val);
++	if (op->data.nbytes) {
++		if (ATCSPI_DATA_MERGE_EN && ATCSPI_BITS_PER_UINT == 8 &&
++		    !(op->data.nbytes % 4)) {
++			val |= TRANS_FMT_DATA_MERGE_EN;
++			spi->data_merge = true;
++		} else {
++			val &= ~TRANS_FMT_DATA_MERGE_EN;
++			spi->data_merge = false;
++		}
++	}
++
++	val = (val & ~TRANS_FMT_ADDR_LEN_MASK) |
++	      TRANS_FMT_ADDR_LEN(op->addr.nbytes);
++	regmap_write(spi->regmap, ATCSPI_TRANS_FMT, val);
++}
++
++static void atcspi_prepare_trans(struct atcspi_dev *spi,
++				 const struct spi_mem_op *op)
++{
++	atcspi_set_trans_fmt(spi, op);
++	atcspi_set_trans_ctl(spi, op);
++	if (op->addr.nbytes)
++		regmap_write(spi->regmap, ATCSPI_ADDR, op->addr.val);
++	regmap_write(spi->regmap, ATCSPI_CMD, op->cmd.opcode);
++}
++
++static int atcspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
++{
++	struct atcspi_dev *spi;
++
++	spi = spi_controller_get_devdata(mem->spi->controller);
++	op->data.nbytes = min(op->data.nbytes, ATCSPI_MAX_TRANS_LEN);
++
++	/* DMA needs to be aligned to 4 byte */
++	if (spi->use_dma && op->data.nbytes >= ATCSPI_DMA_THRESHOLD)
++		op->data.nbytes = ALIGN_DOWN(op->data.nbytes, 4);
++
++	return 0;
++}
++
++static int atcspi_dma_config(struct atcspi_dev *spi, bool is_rx)
++{
++	struct dma_slave_config conf = { 0 };
++	struct dma_chan *chan;
++
++	if (is_rx) {
++		chan = spi->host->dma_rx;
++		conf.direction = DMA_DEV_TO_MEM;
++		conf.src_addr = spi->dma_addr;
++	} else {
++		chan = spi->host->dma_tx;
++		conf.direction = DMA_MEM_TO_DEV;
++		conf.dst_addr = spi->dma_addr;
++	}
++	conf.dst_maxburst = spi->rxfifo_size / 2;
++	conf.src_maxburst = spi->txfifo_size / 2;
++
++	if (spi->data_merge) {
++		conf.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++		conf.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
++	} else {
++		conf.src_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
++		conf.dst_addr_width = DMA_SLAVE_BUSWIDTH_1_BYTE;
++	}
++
++	return dmaengine_slave_config(chan, &conf);
++}
++
++static void atcspi_dma_callback(void *arg)
++{
++	struct completion *dma_completion = arg;
++
++	complete(dma_completion);
++}
++
++static int atcspi_dma_trans(struct atcspi_dev *spi,
++			    const struct spi_mem_op *op)
++{
++	struct dma_async_tx_descriptor *desc;
++	struct dma_chan *dma_ch;
++	struct sg_table sgt;
++	enum dma_transfer_direction dma_dir;
++	dma_cookie_t cookie;
++	unsigned int ctrl;
++	int timeout;
++	int ret;
++
++	regmap_read(spi->regmap, ATCSPI_CTRL, &ctrl);
++	ctrl |= CTRL_TX_DMA_EN | CTRL_RX_DMA_EN;
++	regmap_write(spi->regmap, ATCSPI_CTRL, ctrl);
++	if (op->data.dir == SPI_MEM_DATA_IN) {
++		ret = atcspi_dma_config(spi, TRUE);
++		dma_dir = DMA_DEV_TO_MEM;
++		dma_ch = spi->host->dma_rx;
++	} else {
++		ret = atcspi_dma_config(spi, FALSE);
++		dma_dir = DMA_MEM_TO_DEV;
++		dma_ch = spi->host->dma_tx;
++	}
++	if (ret)
++		return ret;
++
++	ret = spi_controller_dma_map_mem_op_data(spi->host, op, &sgt);
++	if (ret)
++		return ret;
++
++	desc = dmaengine_prep_slave_sg(dma_ch, sgt.sgl, sgt.nents, dma_dir,
++				       DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	if (!desc) {
++		ret = -ENOMEM;
++		goto exit_unmap;
++	}
++
++	reinit_completion(&spi->dma_completion);
++	desc->callback = atcspi_dma_callback;
++	desc->callback_param = &spi->dma_completion;
++	cookie = dmaengine_submit(desc);
++	ret = dma_submit_error(cookie);
++	if (ret)
++		goto exit_unmap;
++
++	dma_async_issue_pending(dma_ch);
++	timeout = msecs_to_jiffies(ATCSPI_XFER_TIMEOUT(op->data.nbytes));
++	if (!wait_for_completion_timeout(&spi->dma_completion, timeout)) {
++		ret = -ETIMEDOUT;
++		dmaengine_terminate_all(dma_ch);
++	}
++
++exit_unmap:
++	spi_controller_dma_unmap_mem_op_data(spi->host, op, &sgt);
++
++	return ret;
++}
++
++static int atcspi_exec_mem_op(struct spi_mem *mem, const struct spi_mem_op *op)
++{
++	struct spi_device *spi_dev = mem->spi;
++	struct atcspi_dev *spi;
++	unsigned int val;
++	int ret;
++
++	spi = spi_controller_get_devdata(spi_dev->controller);
++	mutex_lock(&spi->mutex_lock);
++	atcspi_prepare_trans(spi, op);
++	if (op->data.nbytes) {
++		if (spi->use_dma && op->data.nbytes >= ATCSPI_DMA_THRESHOLD)
++			ret = atcspi_dma_trans(spi, op);
++		else
++			ret = atcspi_xfer_data_poll(spi, op);
++		if (ret) {
++			dev_info(spi->dev, "SPI transmission failed\n");
++			goto exec_mem_exit;
++		}
++	}
++
++	ret = regmap_read_poll_timeout(spi->regmap,
++				       ATCSPI_STATUS,
++				       val,
++				       !(val & ATCSPI_ACTIVE),
++				       0,
++				       ATCSPI_RDY_TIMEOUT_US);
++	if (ret)
++		dev_info(spi->dev, "Timed out waiting for ATCSPI_ACTIVE\n");
++
++exec_mem_exit:
++	mutex_unlock(&spi->mutex_lock);
++
++	return ret;
++}
++
++static const struct spi_controller_mem_ops atcspi_mem_ops = {
++	.exec_op = atcspi_exec_mem_op,
++	.adjust_op_size = atcspi_adjust_op_size,
++};
++
++static int atcspi_setup(struct atcspi_dev *spi)
++{
++	unsigned int ctrl_val;
++	unsigned int val;
++	int actual_spi_sclk_f;
++	int ret;
++	unsigned char div;
++
++	ctrl_val = CTRL_TX_FIFO_RST | CTRL_RX_FIFO_RST | CTRL_SPI_RST;
++	regmap_write(spi->regmap, ATCSPI_CTRL, ctrl_val);
++	ret = regmap_read_poll_timeout(spi->regmap,
++				       ATCSPI_CTRL,
++				       val,
++				       !(val & ctrl_val),
++				       0,
++				       ATCSPI_RDY_TIMEOUT_US);
++	if (ret)
++		return dev_err_probe(spi->dev, ret,
++				     "Timed out waiting for ATCSPI_CTRL\n");
++
++	val = TRANS_FMT_DATA_LEN(ATCSPI_BITS_PER_UINT) |
++	      TRANS_FMT_CPHA | TRANS_FMT_CPOL;
++	regmap_write(spi->regmap, ATCSPI_TRANS_FMT, val);
++
++	regmap_read(spi->regmap, ATCSPI_CONFIG, &val);
++	spi->txfifo_size = BIT(TXFIFO_SIZE(val) + 1);
++	spi->rxfifo_size = BIT(RXFIFO_SIZE(val) + 1);
++
++	regmap_read(spi->regmap, ATCSPI_TIMING, &val);
++	val &= ~TIMING_SCLK_DIV_MASK;
++
++	/*
++	 * The SCLK_DIV value 0xFF is special and indicates that the
++	 * SCLK rate should be the same as the SPI clock rate.
++	 */
++	if (spi->sclk_rate >= spi->clk_rate) {
++		div = TIMING_SCLK_DIV_MASK;
++	} else {
++		/*
++		 * The divider value is determined as follows:
++		 * 1. If the divider can generate the exact target frequency,
++		 *    use that setting.
++		 * 2. If an exact match is not possible, select the closest
++		 *    available setting that is lower than the target frequency.
++		 */
++		div = (spi->clk_rate + (spi->sclk_rate * 2 - 1)) /
++		      (spi->sclk_rate * 2) - 1;
++
++		/* Check if the actual SPI clock is lower than the target */
++		actual_spi_sclk_f = spi->clk_rate / ((div + 1) * 2);
++		if (actual_spi_sclk_f < spi->sclk_rate)
++			dev_info(spi->dev,
++				 "Clock adjusted %d to %d due to divider limitation",
++				 spi->sclk_rate, actual_spi_sclk_f);
++
++		if (div > TIMING_SCLK_DIV_MAX)
++			return dev_err_probe(spi->dev, -EINVAL,
++					     "Unsupported SPI clock %d\n",
++					     spi->sclk_rate);
++	}
++	val |= div;
++	regmap_write(spi->regmap, ATCSPI_TIMING, val);
++
++	return ret;
++}
++
++static int atcspi_init_resources(struct platform_device *pdev,
++				 struct atcspi_dev *spi,
++				 struct resource **mem_res)
++{
++	void __iomem *base;
++	const struct regmap_config atcspi_regmap_cfg = {
++		.name = "atcspi",
++		.reg_bits = 32,
++		.val_bits = 32,
++		.cache_type = REGCACHE_NONE,
++		.reg_stride = 4,
++		.pad_bits = 0,
++		.max_register = ATCSPI_CONFIG
++	};
++
++	base = devm_platform_get_and_ioremap_resource(pdev, 0, mem_res);
++	if (IS_ERR(base))
++		return dev_err_probe(spi->dev, PTR_ERR(base),
++				     "Failed to get ioremap resource\n");
++
++	spi->regmap = devm_regmap_init_mmio(spi->dev, base,
++					    &atcspi_regmap_cfg);
++	if (IS_ERR(spi->regmap))
++		return dev_err_probe(spi->dev, PTR_ERR(spi->regmap),
++				     "Failed to init regmap\n");
++
++	spi->clk = devm_clk_get(spi->dev, NULL);
++	if (IS_ERR(spi->clk))
++		return dev_err_probe(spi->dev, PTR_ERR(spi->clk),
++				     "Failed to get SPI clock\n");
++
++	spi->sclk_rate = ATCSPI_MAX_SPEED_HZ;
++	return 0;
++}
++
++static int atcspi_configure_dma(struct atcspi_dev *spi)
++{
++	struct dma_chan *dma_chan;
++	int ret = 0;
++
++	dma_chan = devm_dma_request_chan(spi->dev, "rx");
++	if (IS_ERR(dma_chan)) {
++		ret = PTR_ERR(dma_chan);
++		goto err_exit;
++	}
++	spi->host->dma_rx = dma_chan;
++
++	dma_chan = devm_dma_request_chan(spi->dev, "tx");
++	if (IS_ERR(dma_chan)) {
++		ret = PTR_ERR(dma_chan);
++		goto free_rx;
++	}
++	spi->host->dma_tx = dma_chan;
++	init_completion(&spi->dma_completion);
++
++	return ret;
++
++free_rx:
++	dma_release_channel(spi->host->dma_rx);
++	spi->host->dma_rx = NULL;
++err_exit:
++	return ret;
++}
++
++static int atcspi_enable_clk(struct atcspi_dev *spi)
++{
++	int ret;
++
++	ret = clk_prepare_enable(spi->clk);
++	if (ret)
++		return dev_err_probe(spi->dev, ret,
++				     "Failed to enable clock\n");
++
++	spi->clk_rate = clk_get_rate(spi->clk);
++	if (!spi->clk_rate)
++		return dev_err_probe(spi->dev, -EINVAL,
++				     "Failed to get SPI clock rate\n");
++
++	return 0;
++}
++
++static void atcspi_init_controller(struct platform_device *pdev,
++				   struct atcspi_dev *spi,
++				   struct spi_controller *host,
++				   struct resource *mem_res)
++{
++	/* Get the physical address of the data register for DMA transfers. */
++	spi->dma_addr = (dma_addr_t)(mem_res->start + ATCSPI_DATA);
++
++	/* Initialize controller properties */
++	host->bus_num = pdev->id;
++	host->mode_bits = SPI_CPOL | SPI_CPHA | SPI_RX_QUAD | SPI_TX_QUAD;
++	host->dev.of_node = pdev->dev.of_node;
++	host->num_chipselect = ATCSPI_MAX_CS_NUM;
++	host->mem_ops = &atcspi_mem_ops;
++	host->max_speed_hz = spi->sclk_rate;
++}
++
++static int atcspi_probe(struct platform_device *pdev)
++{
++	struct spi_controller *host;
++	struct atcspi_dev *spi;
++	struct resource *mem_res;
++	int ret;
++
++	host = spi_alloc_host(&pdev->dev, sizeof(*spi));
++	if (!host)
++		return -ENOMEM;
++
++	spi = spi_controller_get_devdata(host);
++	spi->host = host;
++	spi->dev = &pdev->dev;
++	dev_set_drvdata(&pdev->dev, host);
++
++	ret = atcspi_init_resources(pdev, spi, &mem_res);
++	if (ret)
++		goto free_controller;
++
++	ret = atcspi_enable_clk(spi);
++	if (ret)
++		goto free_controller;
++
++	atcspi_init_controller(pdev, spi, host, mem_res);
++
++	ret = atcspi_setup(spi);
++	if (ret)
++		goto disable_clk;
++
++	ret = devm_spi_register_controller(&pdev->dev, host);
++	if (ret) {
++		dev_err_probe(spi->dev, ret,
++			      "Failed to register SPI controller\n");
++		goto disable_clk;
++	}
++
++	spi->use_dma = false;
++	if (ATCSPI_DMA_SUPPORT) {
++		ret = atcspi_configure_dma(spi);
++		if (ret)
++			dev_info(spi->dev,
++				 "Failed to init DMA, fallback to PIO mode\n");
++		else
++			spi->use_dma = true;
++	}
++	mutex_init(&spi->mutex_lock);
++
++	return 0;
++
++disable_clk:
++	clk_disable_unprepare(spi->clk);
++
++free_controller:
++	spi_controller_put(host);
++	return ret;
++}
++
++static int atcspi_suspend(struct device *dev)
++{
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct atcspi_dev *spi = spi_controller_get_devdata(host);
++
++	spi_controller_suspend(host);
++
++	clk_disable_unprepare(spi->clk);
++
++	return 0;
++}
++
++static int atcspi_resume(struct device *dev)
++{
++	struct spi_controller *host = dev_get_drvdata(dev);
++	struct atcspi_dev *spi = spi_controller_get_devdata(host);
++	int ret;
++
++	ret = clk_prepare_enable(spi->clk);
++	if (ret)
++		return ret;
++
++	ret = atcspi_setup(spi);
++	if (ret)
++		goto disable_clk;
++
++	ret = spi_controller_resume(host);
++	if (ret)
++		goto disable_clk;
++
++	return ret;
++
++disable_clk:
++	clk_disable_unprepare(spi->clk);
++
++	return ret;
++}
++
++static DEFINE_SIMPLE_DEV_PM_OPS(atcspi_pm_ops, atcspi_suspend, atcspi_resume);
++
++static const struct of_device_id atcspi_of_match[] = {
++	{ .compatible = "andestech,qilai-spi", },
++	{ .compatible = "andestech,ae350-spi", },
++	{ /* sentinel */ }
++};
++
++MODULE_DEVICE_TABLE(of, atcspi_of_match);
++
++static struct platform_driver atcspi_driver = {
++	.probe = atcspi_probe,
++	.driver = {
++		.name = "atcspi200",
++		.owner	= THIS_MODULE,
++		.of_match_table = atcspi_of_match,
++		.pm = pm_sleep_ptr(&atcspi_pm_ops)
++	}
++};
++module_platform_driver(atcspi_driver);
++
++MODULE_AUTHOR("CL Wang <cl634@andestech.com>");
++MODULE_DESCRIPTION("Andes ATCSPI200 SPI controller driver");
++MODULE_LICENSE("GPL");
 -- 
 2.34.1
 
