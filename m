@@ -1,57 +1,53 @@
-Return-Path: <linux-spi+bounces-11894-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11893-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05EB8CBE9C7
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:23:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4728DCBEDFB
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 17:23:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7E29D309191E
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:12:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1CC2C303FE06
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33EDD33120F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B79A331208;
 	Mon, 15 Dec 2025 13:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdV9YeSs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NrXC1zGu"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EB0331202;
-	Mon, 15 Dec 2025 13:59:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03E1D330B2D;
+	Mon, 15 Dec 2025 13:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807169; cv=none; b=pASUxFxdXLkhDp+pSUYH2KONQbBiFh+iZT/Yc0Rt9x6xmLwzhhfsbXJzddOnNXTHanJFZQHbjDehez83BDVS94js3M+dJcucmVcqjsneMM6Ywi5missIMkuES6F0CFEJ98bMB3Rmo0+iQukhDnY/C+0vcX0QNjQ2n9LAmgEyUcE=
+	t=1765807169; cv=none; b=juipbjxH//UMMVi47j83Hu7c1yjSwX1TLV4o/2kWEhbHx1IW39vdNwbOpYHDqkZjX4SgzQTs3NCiqUIsruIB9FGEB1PIDGfIIrSCboejJiI++jpdGdTDY5QDgIOQIamFkoZbujIQKcF7EZUYNI/zPeVSFO0Y42N6n9HBhI9vrYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765807169; c=relaxed/simple;
-	bh=cfJDm4wYiGitWnngtHNxkthZHqnlQgjzwLU69mBly90=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=HvxX6lnMYMtzQt2GSYuo8JVhhiHPsAkxGzmUruQkV/NIf17i+N3Oa6lBpNa4IaOzbwTroitBr01lmihu779vKaOcUDpAcXlpDX9jRL0s+/2TJsnerSfbuduUAl8+BdI7RQLPPl9039tDqPYBbroVzLRpzeTC219HEscKfKbAvsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdV9YeSs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE3BC4CEF5;
-	Mon, 15 Dec 2025 13:59:25 +0000 (UTC)
+	bh=GnK7KI/KEHI6oN/m7wthG1pFth6QKtX8R7DqegGKBs4=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=hzJ8/4tNLiOnxFWi9gwB0jWxuw27LRdOzZL1B1Poq+S5T38voZwfCWKRt5F5aRY8lmeYOd9q3vWq+7gqEpaZcyw2FsgFtAJ1iXdCC3UGP7drTp6bEAG1xGtKiJCfVK+VAppsjuces+VoAesMDr6tM1ek7miWZ+XK3sRpJv+R4vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NrXC1zGu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03644C4CEFB;
+	Mon, 15 Dec 2025 13:59:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807167;
-	bh=cfJDm4wYiGitWnngtHNxkthZHqnlQgjzwLU69mBly90=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=OdV9YeSsdQmu7/bQcVmD8XlVXOq3y/rwXUDJUbHHLgin2Oo8ssgtvwDFQ9n1/6Fjd
-	 AKc1xgWoASmNyybhSks9k6oDzfiiaj8iy8Y9uLuDbpmf0wWJ/nWT5PQfq7XlCfP1rG
-	 vae+9jtWehpPHxlLiX4Y46vVMfZoO/+560L0Yhof29O3RYHURNzDsl4EXv/Kcg8e0T
-	 TGTXx30ZWIfvhJPusm7xLeuV5/o3G8cthFfb7NGf+jUnd/IBHU9xCI95psT4oTqJjr
-	 ZfLJw7hivwWdRJlLyB9oUGBwmFTBl3X36/NFj7HTJr2OR8NbBt7CcHbO1rV4CUB5Rr
-	 6QuvKgv7j2haQ==
+	s=k20201202; t=1765807168;
+	bh=GnK7KI/KEHI6oN/m7wthG1pFth6QKtX8R7DqegGKBs4=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=NrXC1zGuluis4NheK4QEVDB3wwvXwkPOMb4K2f5oUP0t5HqIFpw+wZzq70gvyD+kz
+	 uzhgHPxsqFZo13jpI+G5cNxD3KIali9jd4+lv7MjDly3guaLRXZfFjSejlPrle11N+
+	 iG0qQ5wZ27K7vDa9HlbLS2AbsTWuVUUPdtsX7yDlmMFsuFMKPPu8MWE3a9NflMeQek
+	 bZr+XfKZIKjuWaTX5Cqv1e8UCIzOKrTzgN0/qNgzaQklbc6R3EwoSTtjhoWgQQ2Ev7
+	 Kjf0V7cVMn3USC/XNEvijCi//Ek7pMczustJucDv7gd7mCDVAg8/AVtafLvClhHF67
+	 Mh64R6kDtbU7Q==
 From: Mark Brown <broonie@kernel.org>
-To: frank.li@nxp.com, mkl@pengutronix.de, shawnguo@kernel.org, 
- s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
- kees@kernel.org, gustavoars@kernel.org, Carlos Song <carlos.song@nxp.com>
-Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-hardening@vger.kernel.org
-In-Reply-To: <20251203085949.2922166-1-carlos.song@nxp.com>
-References: <20251203085949.2922166-1-carlos.song@nxp.com>
-Subject: Re: [PATCH v3 0/6] Support ECSPI dynamic burst feature for DMA
- mode
-Message-Id: <176580716540.161463.10558713364568567703.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:25 +0900
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251129151739.3998668-1-andriy.shevchenko@linux.intel.com>
+References: <20251129151739.3998668-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: cadence-xspi: Replace ACPI specifics by
+ agnostic APIs
+Message-Id: <176580716744.161463.9153763964021295249.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:27 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,13 +58,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Wed, 03 Dec 2025 16:59:43 +0800, Carlos Song wrote:
-> ECSPI has a low throughput because of no dynamic burst support, it
-> transfers only one word per frame in DMA mode, causing SCLK stalls
-> between words due to BURST_LENGTH updates.
+On Sat, 29 Nov 2025 16:17:39 +0100, Andy Shevchenko wrote:
+> Replace ACPI specific calls to get device property with the agnostic one.
+> The code looses the direct dependency to the ACPI APIs and get cleaner.
+> This doesn't change functionality.
 > 
-> This patch set is to support ECSPI dynamic burst feature to help improve
-> the ECSPI DMA mode performance.
+> While at it, drop now unneeded acpi.h.
+> 
 > 
 > [...]
 
@@ -78,18 +74,8 @@ Applied to
 
 Thanks!
 
-[1/6] spi: imx: group spi_imx_dma_configure() with spi_imx_dma_transfer()
-      commit: c64f62b036aed30626cb30fa82d3ec4a13fa83df
-[2/6] spi: imx: introduce helper to clear DMA mode logic
-      commit: 5395bb7f7c361310d0f329c8169d2190809b05c1
-[3/6] spi: imx: avoid dmaengine_terminate_all() on TX prep failure
-      commit: a5f298581d454c5ea77c5fb6f4ee1bff61eb2b2c
-[4/6] spi: imx: handle DMA submission errors with dma_submit_error()
-      commit: a450c8b77f929f5f9f5236861761a8c5cab22023
-[5/6] spi: imx: support dynamic burst length for ECSPI DMA mode
-      commit: faa8e404ad8e686cb98c51dc507fdcacfb8020ce
-[6/6] spi: imx: enable DMA mode for target operation
-      commit: ba9b28652c75b07383e267328f1759195d5430f7
+[1/1] spi: cadence-xspi: Replace ACPI specifics by agnostic APIs
+      commit: 6f9e4740e8591176eb90bb1dae95bbbb5c7d789e
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
