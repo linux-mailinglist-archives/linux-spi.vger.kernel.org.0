@@ -1,55 +1,54 @@
-Return-Path: <linux-spi+bounces-11900-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11901-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5518BCBE9D2
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:24:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99767CBE9C4
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E6A0530A2D80
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 72812306D88D
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F245133291C;
-	Mon, 15 Dec 2025 13:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70EFC332EBD;
+	Mon, 15 Dec 2025 13:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jEvPfafc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mkZ4sisO"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F55332917;
-	Mon, 15 Dec 2025 13:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FC3332EB6;
+	Mon, 15 Dec 2025 13:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807176; cv=none; b=acqSS7f91lG+F+Z47IBfOAHOrw6dQNCDAFTxdyFKyG/8P6Xws8EASqPrFFlEeyEv4eXtz1b6lZeOwHSKRoaHKtETACeaKiec6U1vYvaa6r5WadmnQyjHN19BEKr4bflP+HpeQHaoHiHkqA34JxqvlXxK4A8VuB/oel4fZnXJ7Ds=
+	t=1765807178; cv=none; b=Bl1UtyXP2PgIAJO8KWYIbqAFv22FDaG4pRqB4l6ZIRacBa937GIsdV8lCniUsKq9t2+m+IeJL3krEGnVAEkr+R8AfissInsTiHxeM2gEjQlUQlOG0POEYvYHwnoAmBc4AeGj3YXLIlR9mimsCLN/38+uIx0+xUkzPCEKcKrD4kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807176; c=relaxed/simple;
-	bh=o0X2IyCU5xJJncvKbdeohmJq4Nt8o89APee6pHzCAfE=;
+	s=arc-20240116; t=1765807178; c=relaxed/simple;
+	bh=KJvZzhKrn8uZz3eEveVdsonmL/mTsWm49pT4/VAg3L4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=POtejcuoN2ujGfrvSo3aNnyKcaslZFNtBQ017Xp/zSsCT2I3Y7LpgKX1FTfxBJEm2255btOW8nqIOPDVhmfX96r+CNgJBr8J4OND5gaqcyHi+pOiOdB8yV5AwC4e7EZL8O/oDe17O93o8j/5MHMx4kve8pBfBiYzqDSdyoY7REo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jEvPfafc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93286C4CEF5;
-	Mon, 15 Dec 2025 13:59:35 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Ghp7xpcW75cikNp4+jXrgjVy9eTMfbBGnr24YsMYq1Z06VJbXzqvQ8fozXR9YGO0vVUHs936lnaREG0NUXdyXJcjpYyXViVBAYjAhjjz5CyC1A16SbLtXuFt/LG5MclSvaRuGySfm/JTxgxiTmefIBtsMRw3lm5fTz10L8jtygU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mkZ4sisO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02431C4CEFB;
+	Mon, 15 Dec 2025 13:59:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807176;
-	bh=o0X2IyCU5xJJncvKbdeohmJq4Nt8o89APee6pHzCAfE=;
+	s=k20201202; t=1765807178;
+	bh=KJvZzhKrn8uZz3eEveVdsonmL/mTsWm49pT4/VAg3L4=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jEvPfafcH0xiTVOe9LMvWBjQf488lqW7thyhMiVVthpo5/vh+2KdAn8BpLKo9i98v
-	 FuBThjuFN8DNEY9PWXJVaWsSJHzwCM1SiU5dmrHAGCIm3efvNPFyHFUxZC1w95DFDm
-	 hzN45fijycF81XBy2KM2ilr8ukGrEPoV4s00U2aSANlG5xjKwssk4vJceErAAsqU1u
-	 eSKXpPjJiUwvDPOl9No4mQogMnMoFoqMKfw/VUYhnhArR9Hjx4m9v09DI59pqCfwWA
-	 tyyNYgDkpPBENE0+lTuGw2Ne2fm2D8PMWJZR7Rz+A4bNiZpRMYt8EtFDPl5iLbBJVR
-	 45vCXp0M8calg==
+	b=mkZ4sisOnb2X/+73p4W7RG33/m0KdAAxaWy0Vx8x9Uigmgy1Pkcr1GSLVRSWoVBqW
+	 WZXqsNtl0Y2KWB1Piz0AALA/NyKjpu3kFf+OCxZbWrXV0kXMczYgQeTS8koY4iiHFS
+	 DUEZWBJgJJYKS5F9FlEKI5B6XresijefCyC47W71P7ajzA7mIa4BHf3cVYPvPM1Ib6
+	 I598KPNr4t28bylz954NfqJqPX1HugeeTz1DzJVl0iAC0dNcSg0+SvLshdzWYPmoy2
+	 RqDBJGOP2D2/+qjKWao1eQrlCDRCMsce+IjFRKI9o9950WkP8z32D+hj1CpVPva2DC
+	 opL1x0NLliBhw==
 From: Mark Brown <broonie@kernel.org>
-To: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20251208-upstream_qspi_ospi_updates-v2-0-62526c9467dc@foss.st.com>
-References: <20251208-upstream_qspi_ospi_updates-v2-0-62526c9467dc@foss.st.com>
-Subject: Re: [PATCH v2 0/8] spi: stm32: Update for OSPI and QSPI drivers
-Message-Id: <176580717503.161463.8142752344614450653.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:35 +0900
+To: Frank.Li@nxp.com, daniel.baluta@nxp.com, andriy.shevchenko@intel.com, 
+ david.laight@runbox.com, Carlos Song <carlos.song@nxp.com>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20251209055634.3845602-1-carlos.song@nxp.com>
+References: <20251209055634.3845602-1-carlos.song@nxp.com>
+Subject: Re: [PATCH] spi: spi-fsl-lpspi: convert min_t() to simple min()
+Message-Id: <176580717644.161463.14088769832395670607.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:36 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,18 +59,10 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Mon, 08 Dec 2025 08:29:07 +0100, Patrice Chotard wrote:
-> This serie applies the following updates on the spi-stm32-ospi and
-> spi-stm32-qspi dirvers :
+On Tue, 09 Dec 2025 13:56:34 +0800, Carlos Song wrote:
+> Convert min_t() to simple min() for better readability.
 > 
->   _ Update FIFO accesses using u16 and u32 when possible instead of u8
->     only to optimize throughput.
->   _ Replace Transmit Complete and Transmit Error interrupt management by
->     usage of read_poll_timeout_atomic() to optimize throughtput.
->   _ Simplify Status Match interrupt check.
->   _ Set DMA burst configuration dynamically.
 > 
-> [...]
 
 Applied to
 
@@ -79,22 +70,8 @@ Applied to
 
 Thanks!
 
-[1/8] spi: stm32-ospi: Set DMA maxburst dynamically
-      commit: e35a7607e05d59d35e937b80532ae93d1dd2493f
-[2/8] spi: stm32-ospi: Optimize FIFO accesses using u16 or u32
-      commit: cfe58ffc95a601988702df6f3462cb54dde467e9
-[3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
-      commit: f6ed06926b510f54a0817567ffd458194ed90bd6
-[4/8] spi: stm32-ospi: Simplify SMIE interrupt test
-      commit: e2f0ea18e560e5fa6180f52dffe434525a0cf86b
-[5/8] spi: stm32-qspi: Set DMA maxburst dynamically
-      commit: 4ef80c71c62ab841db9b1a9d74ffe043c60f6222
-[6/8] spi: stm32-qspi: Optimize FIFO accesses using u16 or u32
-      commit: 1ca91281649547efa4be34584a304974c9601df1
-[7/8] spi: stm32-qspi: Remove CR_TCIE and CR_TEIE irq usage
-      commit: c5f76d888810bca2d46297a7b942e10bc8cc69dd
-[8/8] spi: stm32-qspi: Simplify SMIE interrupt test
-      commit: fee876b2ec75dcc18fdea154eae1f5bf14d82659
+[1/1] spi: spi-fsl-lpspi: convert min_t() to simple min()
+      commit: b884e34994ca41f7b7819f3c41b78ff494787b27
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
