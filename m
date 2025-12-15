@@ -1,56 +1,56 @@
-Return-Path: <linux-spi+bounces-11905-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11906-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF19CBE6D1
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D5D5CBE381
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2F22B3015030
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:56:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4CE8F302AAD5
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2A0334374;
-	Mon, 15 Dec 2025 13:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5064233469D;
+	Mon, 15 Dec 2025 13:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CQku6Xcw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Se0Bz+j9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A245B33436A;
-	Mon, 15 Dec 2025 13:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277D3334695;
+	Mon, 15 Dec 2025 13:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807184; cv=none; b=PF0hkBJSFfECOgCg8xpKs0nKK9EQoaDrn8HZ3kol2r6kh5YEcp7OHIyeGMtRXdeQaYutsbXMh5lhR52LshYPGt/NtR1BdVwPuT2jKVCQchE9H404MHC78Y2h49Uqf71Y+XhlhGmomsS+mOBOR5RzxNAJ7scXPmCQSf/yqEdB5zI=
+	t=1765807186; cv=none; b=ndRF7OAbb/NT/UkYTnSKLqcKZjyTA02NTh4USCLqXzViBpEuYoprynkwaqH9pmJjnu4v0KL/CwXiVTiYeXw0GhsmC64OxWyA3cThWjorMDZvz98OACKb68iDWvJ+df1gzFJRcK7S5S1VLJ82KwJ5eG+obko/4+hFqbRVeu/Mwrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807184; c=relaxed/simple;
-	bh=Rerg6CRIESKX0MqYmdy4582EGZX3A+sak14/yCthaD0=;
+	s=arc-20240116; t=1765807186; c=relaxed/simple;
+	bh=KOAvoqG7RnTWQZeujmBk7U/h4REQ9si9oHsscWJ0Z1E=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Wy4i1/q+2GxSHI8eS9c2bpxy+MB33ohHjfW9knivRULVwJPadLNxCbieUUmx11fJgDTDCqb6K2Q9cGG6khkeyKeeksTI8NkVgi2Qz3FDeVPyO0zbXiTHz4UcILMIwwC1UMRq4QQ+onEHVwgrOAR/pMcK1vgDq/KgZdHvmH4gWEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CQku6Xcw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB71C16AAE;
-	Mon, 15 Dec 2025 13:59:43 +0000 (UTC)
+	 MIME-Version:Content-Type; b=Pa0C5nAsdMfpCHw7GZDo6Km/fn4G2w+mNmg/Q/clRJmNrq6UMQuvCSHZGWTNNDRM+54aleFftg1TQneiCRIkaeGZfnNFyXWXv1H9gQFXz8MlrTGJfqjUjuyR/gMYyQ7cdZwTW20AjoiL+UO6VjFffZbVPvrPzmiF2JMFIBzjf5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Se0Bz+j9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60CDC4CEFB;
+	Mon, 15 Dec 2025 13:59:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807184;
-	bh=Rerg6CRIESKX0MqYmdy4582EGZX3A+sak14/yCthaD0=;
+	s=k20201202; t=1765807186;
+	bh=KOAvoqG7RnTWQZeujmBk7U/h4REQ9si9oHsscWJ0Z1E=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=CQku6Xcw9vnV3WJdsGFfsvrmUtaSqVtZsl+G4JK6zcdTLtdbKZQ349pc4StJbF6sv
-	 R5qJf86ekKaXeToulmiecdS4CkWZPBAy5Jvd5PfiV0SbSC1Me/R8YQ+T6cCZZUrQz+
-	 l0wdbK5UYedAWOBDNGHg+zniZpSZ6Wcq8Cxacu2StxAHTOzejw2vPYS6zRQ9alNrtE
-	 mAkc3S6nXu37vhC/n6kSupPA4ow/2XptxgoDZtsfGNGjead9KeldFTwG8QQewSnpj8
-	 4aj+m1wvu32LT+8frWHHGX09euev+Ho2nkSMTcnAZm7UyBlfraCiazpY4FSwHVn7kS
-	 TeROKFBjjUc9Q==
+	b=Se0Bz+j9E6Ig2JOTIrffmOVI26Cnyw2L6LpypgVoJlNUoPwpzTfglr1p3QLdiyEuX
+	 iM0A3hf/cQcXntvR1aZP6Go7c5NjXUgtc6NWSrDU8+UVH54LuQOn+mQYdcUD8WACbL
+	 TE+dod2OnSiKfWq3FeZ+ztrKGn+4yMArEbyj8flv2orfJcyDKGDqgZaBHKyiP7T9Gr
+	 f44lBwS59EabRFjINjFb2wanSS26c8/cRLKEO0Mms2q0GrZoXLVuLDj4y/VsQnIaBq
+	 lzouUHQDKs1j2sENAe8fv0Fh6G3khRj5w3Re7bClr0MLDjoYx4mUoy4WJaHzyIe+ja
+	 K39NApFPNubhQ==
 From: Mark Brown <broonie@kernel.org>
-To: Francesco Dolcini <francesco@dolcini.it>, 
- Siddharth Vadapalli <s-vadapalli@ti.com>, Anurag Dutta <a-dutta@ti.com>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org
-In-Reply-To: <20251204-spi-cadence-qspi-runtime-pm-imbalance-v2-1-10af9115d531@kernel.org>
-References: <20251204-spi-cadence-qspi-runtime-pm-imbalance-v2-1-10af9115d531@kernel.org>
-Subject: Re: [PATCH v2] spi: cadence-quadspi: Parse DT for flashes with the
- rest of the DT parsing
-Message-Id: <176580718260.161463.4539075429059025833.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:42 +0900
+To: Conor Dooley <conor.dooley@microchip.com>, 
+ Daire McNamara <daire.mcnamara@microchip.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org
+In-Reply-To: <eb35f168517cc402ef7e78f26da02863e2f45c03.1765612110.git.christophe.jaillet@wanadoo.fr>
+References: <eb35f168517cc402ef7e78f26da02863e2f45c03.1765612110.git.christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] spi: mpfs: Fix an error handling path in
+ mpfs_spi_probe()
+Message-Id: <176580718430.161463.4850754049730233485.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:44 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -61,16 +61,12 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Thu, 04 Dec 2025 19:13:35 +0000, Mark Brown wrote:
-> The recent refactoring of where runtime PM is enabled done in commit
-> f1eb4e792bb1 ("spi: spi-cadence-quadspi: Enable pm runtime earlier to
-> avoid imbalance") made the fact that when we do a pm_runtime_disable()
-> in the error paths of probe() we can trigger a runtime disable which in
-> turn results in duplicate clock disables.  This is particularly likely
-> to happen when there is missing or broken DT description for the flashes
-> attached to the controller.
+On Sat, 13 Dec 2025 08:48:51 +0100, Christophe JAILLET wrote:
+> mpfs_spi_init() calls mpfs_spi_enable_ints(), so mpfs_spi_disable_ints()
+> should be called if an error occurs after calling mpfs_spi_init(), as
+> already done in the remove function.
 > 
-> [...]
+> 
 
 Applied to
 
@@ -78,8 +74,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: cadence-quadspi: Parse DT for flashes with the rest of the DT parsing
-      commit: 9f0736a4e136a6eb61e0cf530ddc18ab6d816ba3
+[1/1] spi: mpfs: Fix an error handling path in mpfs_spi_probe()
+      commit: a8a313612af7a55083ba5720f14f1835319debee
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
