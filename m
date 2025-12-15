@@ -1,53 +1,55 @@
-Return-Path: <linux-spi+bounces-11899-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11900-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D41E5CBE9C1
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:23:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5518BCBE9D2
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:24:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E3F7F306EF6A
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:12:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6A0530A2D80
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF233328F8;
-	Mon, 15 Dec 2025 13:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F245133291C;
+	Mon, 15 Dec 2025 13:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yp/pMdAs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jEvPfafc"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E73F3328F0;
-	Mon, 15 Dec 2025 13:59:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F55332917;
+	Mon, 15 Dec 2025 13:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807175; cv=none; b=KLiqmjha3/bDs7OZMEkRbMrJ4gvofHnMUuYaq+obf9dBJ9U3UL+CnU+tFWJca5QglRgKqBogT+ac/JoSDJ9/4HNmCAYwDSvkf+9O6vi+RMYB1Wq3zCDpzWtP1llWXot6/On597ox9dI7ShyX1xs8y5hJQl/x2tyCT/1rw36ctnM=
+	t=1765807176; cv=none; b=acqSS7f91lG+F+Z47IBfOAHOrw6dQNCDAFTxdyFKyG/8P6Xws8EASqPrFFlEeyEv4eXtz1b6lZeOwHSKRoaHKtETACeaKiec6U1vYvaa6r5WadmnQyjHN19BEKr4bflP+HpeQHaoHiHkqA34JxqvlXxK4A8VuB/oel4fZnXJ7Ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807175; c=relaxed/simple;
-	bh=F/G/9D/MfKM0tJrztBRflOEn1hJgcQ9gnt2LlbM8maA=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=iXcmyszp/Uavl39j/aT06jwr7c+0WUelAfz27GU2rgu5FO6gi9tCVc49Pa2dGmXPjJvyLBrdYvAam7WIOWAmUvVZkteStYnrM1ZQa+HiyK+MMb0svVJrVI8OHP2XhrrnWSJY4Qe82S5jvGRJ0atT0wOPJxyeofw0UQvSjZpzyGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yp/pMdAs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C7EC4CEFB;
-	Mon, 15 Dec 2025 13:59:34 +0000 (UTC)
+	s=arc-20240116; t=1765807176; c=relaxed/simple;
+	bh=o0X2IyCU5xJJncvKbdeohmJq4Nt8o89APee6pHzCAfE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=POtejcuoN2ujGfrvSo3aNnyKcaslZFNtBQ017Xp/zSsCT2I3Y7LpgKX1FTfxBJEm2255btOW8nqIOPDVhmfX96r+CNgJBr8J4OND5gaqcyHi+pOiOdB8yV5AwC4e7EZL8O/oDe17O93o8j/5MHMx4kve8pBfBiYzqDSdyoY7REo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jEvPfafc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93286C4CEF5;
+	Mon, 15 Dec 2025 13:59:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807175;
-	bh=F/G/9D/MfKM0tJrztBRflOEn1hJgcQ9gnt2LlbM8maA=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=Yp/pMdAs8qpvfkWrpXzDYmo4xrzmz+SzLR2HCgK05ukKvTVlrpAecmEhbUr0krhPD
-	 Y9+arISqYmJw4nv32BN5dzwtpNjGaE7XVQ6+yWKvA4A+NjqZ2SetCZL2gBCrscz9vh
-	 wDo7ZNi7crnMHJQZkQaidxnI1EhbtcsXTIKOjN+G37QD/tKG4VJMQaKf1mmuxeCDN9
-	 alUv0X19Vat8lf7wJysqHicI4jXwBrX0tqa8ZQjxAYYNi+l0WvEZ7+9E5h6whD5MhG
-	 REjRy7a2lKXT2L06Z5tKtQh963WgaTYXNXDYJf9XCLD5lfh9bMGnqnRCY+UqyWmxdU
-	 wFLhnZL+Fyyfw==
+	s=k20201202; t=1765807176;
+	bh=o0X2IyCU5xJJncvKbdeohmJq4Nt8o89APee6pHzCAfE=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jEvPfafcH0xiTVOe9LMvWBjQf488lqW7thyhMiVVthpo5/vh+2KdAn8BpLKo9i98v
+	 FuBThjuFN8DNEY9PWXJVaWsSJHzwCM1SiU5dmrHAGCIm3efvNPFyHFUxZC1w95DFDm
+	 hzN45fijycF81XBy2KM2ilr8ukGrEPoV4s00U2aSANlG5xjKwssk4vJceErAAsqU1u
+	 eSKXpPjJiUwvDPOl9No4mQogMnMoFoqMKfw/VUYhnhArR9Hjx4m9v09DI59pqCfwWA
+	 tyyNYgDkpPBENE0+lTuGw2Ne2fm2D8PMWJZR7Rz+A4bNiZpRMYt8EtFDPl5iLbBJVR
+	 45vCXp0M8calg==
 From: Mark Brown <broonie@kernel.org>
-To: Haixu Cui <quic_haixcui@quicinc.com>, virtualization@lists.linux.dev, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-In-Reply-To: <20251208020830.5225-2-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20251208020830.5225-2-krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH] spi: virtio: Fix confusing cleanup.h syntax
-Message-Id: <176580717392.161463.3784278976785359258.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:33 +0900
+To: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Patrice Chotard <patrice.chotard@foss.st.com>
+Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251208-upstream_qspi_ospi_updates-v2-0-62526c9467dc@foss.st.com>
+References: <20251208-upstream_qspi_ospi_updates-v2-0-62526c9467dc@foss.st.com>
+Subject: Re: [PATCH v2 0/8] spi: stm32: Update for OSPI and QSPI drivers
+Message-Id: <176580717503.161463.8142752344614450653.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:35 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,16 +60,16 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Mon, 08 Dec 2025 03:08:31 +0100, Krzysztof Kozlowski wrote:
-> Initializing automatic __free variables to NULL without need (e.g.
-> branches with different allocations), followed by actual allocation is
-> in contrary to explicit coding rules guiding cleanup.h:
+On Mon, 08 Dec 2025 08:29:07 +0100, Patrice Chotard wrote:
+> This serie applies the following updates on the spi-stm32-ospi and
+> spi-stm32-qspi dirvers :
 > 
-> "Given that the "__free(...) = NULL" pattern for variables defined at
-> the top of the function poses this potential interdependency problem the
-> recommendation is to always define and assign variables in one statement
-> and not group variable definitions at the top of the function when
-> __free() is used."
+>   _ Update FIFO accesses using u16 and u32 when possible instead of u8
+>     only to optimize throughput.
+>   _ Replace Transmit Complete and Transmit Error interrupt management by
+>     usage of read_poll_timeout_atomic() to optimize throughtput.
+>   _ Simplify Status Match interrupt check.
+>   _ Set DMA burst configuration dynamically.
 > 
 > [...]
 
@@ -77,8 +79,22 @@ Applied to
 
 Thanks!
 
-[1/1] spi: virtio: Fix confusing cleanup.h syntax
-      commit: e6268db46c173b18e5b2f4fc0c8a5c0aaaee61ea
+[1/8] spi: stm32-ospi: Set DMA maxburst dynamically
+      commit: e35a7607e05d59d35e937b80532ae93d1dd2493f
+[2/8] spi: stm32-ospi: Optimize FIFO accesses using u16 or u32
+      commit: cfe58ffc95a601988702df6f3462cb54dde467e9
+[3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
+      commit: f6ed06926b510f54a0817567ffd458194ed90bd6
+[4/8] spi: stm32-ospi: Simplify SMIE interrupt test
+      commit: e2f0ea18e560e5fa6180f52dffe434525a0cf86b
+[5/8] spi: stm32-qspi: Set DMA maxburst dynamically
+      commit: 4ef80c71c62ab841db9b1a9d74ffe043c60f6222
+[6/8] spi: stm32-qspi: Optimize FIFO accesses using u16 or u32
+      commit: 1ca91281649547efa4be34584a304974c9601df1
+[7/8] spi: stm32-qspi: Remove CR_TCIE and CR_TEIE irq usage
+      commit: c5f76d888810bca2d46297a7b942e10bc8cc69dd
+[8/8] spi: stm32-qspi: Simplify SMIE interrupt test
+      commit: fee876b2ec75dcc18fdea154eae1f5bf14d82659
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
