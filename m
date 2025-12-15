@@ -1,47 +1,131 @@
-Return-Path: <linux-spi+bounces-11908-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11909-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BC05CBE4ED
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:36:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F317CBEF0C
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 17:38:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 75A0E30115D8
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:35:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EE0023014DDC
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:38:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8DC28000A;
-	Mon, 15 Dec 2025 14:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB82E310782;
+	Mon, 15 Dec 2025 16:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cqu/yXlz"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="AIWJvlhh"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AB623EAB3
-	for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 14:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2353093C9
+	for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 16:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765809317; cv=none; b=eMxFWJefJevabgew95rnZe4h1I5B8q06dZQkX7u07lQ9Cs+WRLBw2YasnYSOPrRFo8j2iO6jGcNLv27TSHNGIcSXpEHyQgKSgrNWTi3UouJj8t1f7+auuMa9ck1SKeezKtsLcyBxmpWJPtjmfE/0uWwvgv0zssiuCPUWXOu8xKI=
+	t=1765816713; cv=none; b=pg51ZurmVGwoFLcWsIj+fg2G2xbbflOemgNWANvnRnrTeVE1yCHKhxQR9O9vYQOk3zgHN8jxV+ya/72uNjcO381fsp2rXNNGPfxhRzJVc/QLS30pWXtXjJUG+TRcwjhmyvgsx6lfwuFMGjlPdZ9vLsskOoGvGZcz+DHkj5CVxH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765809317; c=relaxed/simple;
-	bh=BW5HgqS+lsqT2bkA4kzv0rDnFw+IJOV+cYNcsROkFvE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=bCcZWkcS5CioDu9BPELAA+95YdfabaFune6Io5xObe+djuZ3zgah/LTkxzAuKZvo3xjP0nD1e1D/G+dVXt44ajuCkEt4kutqjVIaUK5Y+uM79a/H9WFxpbz5Whs1c6+VabhrfWJa4IFQH0kdxO/+AxfOCJWYyKZknP5bNm/dJlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cqu/yXlz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D68CC4CEF5;
-	Mon, 15 Dec 2025 14:35:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765809317;
-	bh=BW5HgqS+lsqT2bkA4kzv0rDnFw+IJOV+cYNcsROkFvE=;
-	h=Subject:From:Date:To:From;
-	b=cqu/yXlzBk20MNSGCrO4Fh8E3jPbriIQmbbowDu8RY4WeHbF4sxUUJ0KDukOyCPdl
-	 MeRCaSOY+7iCoseX7INZQg6Rz1gUX7MZJMB911yFYik+jM2TRVSZnWFivg8MWu0O2f
-	 vJnUok8itkcXjkEEWpuiBuKsldlVJl3h1dIVASbtaDH+e03otZsfI3UIDCxjY4Vl4C
-	 S5se554Yh7j28WlMgfODAEHjCraisA7WbUlnUaJhXQ2SwR1T31WrNG3sYPgJ4IR5Ax
-	 cFTLftJOiOSyMkSWs4mygrzTbD+CutpQLR76G/ySH311TXzeqcjv20oAzPdfYI0IJC
-	 BsPWwdyDboqPA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0ABF380AA77;
-	Mon, 15 Dec 2025 14:32:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1765816713; c=relaxed/simple;
+	bh=k/Yd1BmFzU0e9UFcJv9URIkTbmDEVBM0hOo+JTGIPAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZMccETcEl0Czv3Q8wUI9O2KYQLv6rc8hNe4YkndRKTZL4R2tpYnEe+o9RkaH5y7jS4l1fUEGV7c2LUCYixHUh4OK39oZ24C3IZYefh+rpnhoRtZ9mX36+RTJnIO21Ezvv5ixUgh8eR/mCJHGBxYtXbcY2KlMu+QfRcAQwq6KW7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=AIWJvlhh; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso28044805e9.2
+        for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 08:38:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1765816709; x=1766421509; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cnKll+Mu3yr6wHuUg3E47hI29XfbMlTNI5VvcSPHEnI=;
+        b=AIWJvlhhcWl5hbSyydkjLe/GDVS3V4vTDb4qeNWdR80M81ODF67qfM5mpLQNIjN2zg
+         Cg0N+4vq4jQXHdnYY3svgMl/T49I5Zrp29STPCUNk6JrOin56BtaqbkiwBbaqR3OEZxD
+         49isbVf+h4T2y7jhcwZgxNVTn28fbsNDx6pSx03mQF/0PDPnwg/ClnbgMkoHgXwi33ES
+         l4rcR55YPGa4n54zK4ReHi/Fp9QkdZ9iXcPVs3V1UJHq0sTlTOTD31QjCOJN1tBd4HdH
+         ScnT8mVHvKhb7KcWLzK4aDi21gN7q6e+xh5Vf/QLRwsO8/PdYTmcByG2duRS9HvdtUPv
+         m4cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765816709; x=1766421509;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cnKll+Mu3yr6wHuUg3E47hI29XfbMlTNI5VvcSPHEnI=;
+        b=fsodphHQB+2Z7EzlmuxPmenA59KXUH3uLKcVEwO1wK/mranD4/AXOgs3ScJe9iDJS6
+         EZwT8bq/nqMAPW47h+MXeNdOXSnwFTJsTzCyDDGPAdA2yFB4y9dXnVod6hPv8ojJZIGF
+         7ThOsZAbUNf6P/kvaSNAEK2e5cnuWkG3LdUDL+wkD7xt5GM1+0Vm7Og5T3Sa6W9+aAfy
+         qfnyM26tDXGPylw4qLiYJgkTW31AOZEmTF220xi0fetROu/l9IXQRcDIyS67ZxS4P0Ki
+         ZViVSaPmXk1abyHSvV3IUIBdoiLObr4p0IxuqVTELEWWaeb3hQ9bSt7usVDX6fYl5/u4
+         IA9w==
+X-Forwarded-Encrypted: i=1; AJvYcCVk3J7KCrret8LRWlaiquDjYD73JnrYABy6eFJLhRKGbKvLQDgqLGlZT2R02UB4yI1sl7ixoztINms=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEvibnZesSfB9tZu0x9YwWpNe811waXIV8lqMCqRinYDuKhBh9
+	Te0RwWSbEp+987LbXts/DMEuvzLBgqAdPoYPLp1q92zRbwOI1IbASAM6v84C8ChYaas=
+X-Gm-Gg: AY/fxX4DBah442rVq2gnBl8CnCjpa36JEFVfFkQguPyMxdGxem7PpxtHi24nX7bvBHG
+	kOSc1vybm3loxwJMgL1hw3hFwh1vkWD9vkwxJhaOH811wSCyLAvfHsAqiKypzXkoqF3eTRTtvos
+	5WA4Sd5kAh44tu/Twl12AfmXUJBHtO3iwm4msEVM2FZR+/n1x5JS40wGfpWf397YIgaQJA7EDPF
+	z7NcK7fUYYncJCxhEIB2QO6OthXxbDtbaZbqIx55o8FLWHIU60OoLnphO2AGl4rusK+lpnxbDIf
+	55mqGdQRCbxnDpwcDl0zJ1XzxBri8MSkfIIZsjhkyJ6JKP4Blqs5r8q5KvMrUznpBDoUayfOANE
+	NfrVkEojmqLm9k50toNirLAgdSbHlTHdqh19cEoAjJYTqQ8lmDw+7EEP026Jnwbrnu65doytGrc
+	62ARCrJbFFOzdfjYU5fg6dTUXLrtItNfV3g4XW51vUwiGa
+X-Google-Smtp-Source: AGHT+IHqk87hRgFNW+4zdWPZBEuhhkRVJA1LnAloDmFeZHxaQu5P+L96TkAMIyaxKGjp4sqU43QQWQ==
+X-Received: by 2002:a05:600c:a086:b0:471:1774:3003 with SMTP id 5b1f17b1804b1-47a8f90fefamr116081975e9.29.1765816709336;
+        Mon, 15 Dec 2025 08:38:29 -0800 (PST)
+Received: from fedora (cpezg-94-253-146-254-cbl.xnet.hr. [94.253.146.254])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-47a8f74b44csm192209725e9.3.2025.12.15.08.38.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Dec 2025 08:38:28 -0800 (PST)
+From: Robert Marko <robert.marko@sartura.hr>
+To: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	nicolas.ferre@microchip.com,
+	alexandre.belloni@bootlin.com,
+	claudiu.beznea@tuxon.dev,
+	Steen.Hegelund@microchip.com,
+	daniel.machon@microchip.com,
+	UNGLinuxDriver@microchip.com,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	vkoul@kernel.org,
+	linux@roeck-us.net,
+	andi.shyti@kernel.org,
+	lee@kernel.org,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	linusw@kernel.org,
+	olivia@selenic.com,
+	radu_nicolae.pirea@upb.ro,
+	richard.genoud@bootlin.com,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	richardcochran@gmail.com,
+	wsa+renesas@sang-engineering.com,
+	romain.sioen@microchip.com,
+	Ryan.Wanner@microchip.com,
+	lars.povlsen@microchip.com,
+	tudor.ambarus@linaro.org,
+	charan.pedumuru@microchip.com,
+	kavyasree.kotagiri@microchip.com,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	mwalle@kernel.org
+Cc: luka.perkov@sartura.hr,
+	Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH v2 01/19] include: dt-bindings: add LAN969x clock bindings
+Date: Mon, 15 Dec 2025 17:35:18 +0100
+Message-ID: <20251215163820.1584926-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -49,183 +133,49 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176580912841.4066817.6393660081984740416.git-patchwork-summary@kernel.org>
-Date: Mon, 15 Dec 2025 14:32:08 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-Hello:
+Add the required LAN969x clock bindings.
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+Changes in v2:
+* Rename file to microchip,lan9691.h
 
-Series: spi: stm32: Update for OSPI and QSPI drivers
-  Submitter: Patrice Chotard <patrice.chotard@foss.st.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1031284
-  Lore link: https://lore.kernel.org/r/20251208-upstream_qspi_ospi_updates-v2-0-62526c9467dc@foss.st.com
-    Patches: [v2,1/8] spi: stm32-ospi: Set DMA maxburst dynamically
-             [v2,2/8] spi: stm32-ospi: Optimize FIFO accesses using u16 or u32
-             [v2,3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
-             [v2,4/8] spi: stm32-ospi: Simplify SMIE interrupt test
-             [v2,5/8] spi: stm32-qspi: Set DMA maxburst dynamically
-             [v2,6/8] spi: stm32-qspi: Optimize FIFO accesses using u16 or u32
-             [v2,7/8] spi: stm32-qspi: Remove CR_TCIE and CR_TEIE irq usage
-             [v2,8/8] spi: stm32-qspi: Simplify SMIE interrupt test
+ include/dt-bindings/clock/microchip,lan9691.h | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+ create mode 100644 include/dt-bindings/clock/microchip,lan9691.h
 
-Series: Align availability checks on fwnode child node enumeration
-  Submitter: Sakari Ailus <sakari.ailus@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1005537
-  Lore link: https://lore.kernel.org/r/20250924074602.266292-1-sakari.ailus@linux.intel.com
-    Patches: [v2,01/16] ACPI: property: Make acpi_get_next_subnode() static
-             [v2,02/16] ACPI: property: Use ACPI functions in acpi_graph_get_next_endpoint() only
-             [v2,13/16] leds: Use fwnode_for_each_child_node() instead
-             [v2,14/16] leds: Use fwnode_get_next_child_node() instead
-
-Series: reset: rework reset-gpios handling
-  Submitter: Bartosz Golaszewski <brgl@bgdev.pl>
-  Committer: Philipp Zabel <p.zabel@pengutronix.de>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1025826
-  Lore link: https://lore.kernel.org/r/20251120-reset-gpios-swnodes-v7-0-a100493a0f4b@linaro.org
-    Patches: [v7,1/9] software node: read the reference args via the fwnode API
-             [v7,2/9] software node: increase the reference of the swnode by its fwnode
-             [v7,3/9] software node: allow referencing firmware nodes
-             [v7,4/9] spi: cs42l43: Use actual ACPI firmware node for chip selects
-             [v7,5/9] gpio: swnode: allow referencing GPIO chips by firmware nodes
-             [v7,6/9] reset: order includes alphabetically in reset/core.c
-             [v7,7/9] reset: make the provider of reset-gpios the parent of the reset device
-             [v7,8/9] reset: gpio: convert the driver to using the auxiliary bus
-             [v7,9/9] reset: gpio: use software nodes to setup the GPIO lookup
-
-Patch: spi: spi-qpic-snand: remove superfluous qcom_spi_set_read_loc() calls
-  Submitter: Gabor Juhos <j4g8y7@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1028857
-  Lore link: https://lore.kernel.org/r/20251129-qpic-snand-superfluous-readloc-v1-1-b84ca17095d9@gmail.com
-
-Series: [1/5] spi-geni-qcom: remove manual CS control
-  Submitter: Jonathan Marek <jonathan@marek.ca>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1026026
-  Lore link: https://lore.kernel.org/r/20251120211204.24078-1-jonathan@marek.ca
-    Patches: [1/5] spi-geni-qcom: remove manual CS control
-             [2/5] spi-geni-qcom: don't set max clock in setup_fifo_params
-             [3/5] spi-geni-qcom: use xfer->bits_per_word for can_dma()
-             [4/5] spi-geni-qcom: initialize mode related registers to 0
-             [5/5] spi-geni-qcom: rework setup_fifo_params
-
-Series: Support ECSPI dynamic burst feature for DMA mode
-  Submitter: Carlos Song <carlos.song@nxp.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1030032
-  Lore link: https://lore.kernel.org/r/20251203085949.2922166-1-carlos.song@nxp.com
-    Patches: [v3,1/6] spi: imx: group spi_imx_dma_configure() with spi_imx_dma_transfer()
-             [v3,2/6] spi: imx: introduce helper to clear DMA mode logic
-             [v3,3/6] spi: imx: avoid dmaengine_terminate_all() on TX prep failure
-             [v3,4/6] spi: imx: handle DMA submission errors with dma_submit_error()
-             [v3,5/6] spi: imx: support dynamic burst length for ECSPI DMA mode
-             [v3,6/6] spi: imx: enable DMA mode for target operation
-
-Patch: spi: virtio: Fix confusing cleanup.h syntax
-  Submitter: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1031230
-  Lore link: https://lore.kernel.org/r/20251208020830.5225-2-krzysztof.kozlowski@oss.qualcomm.com
-
-Series: Add DMA support for RZ/T2H RSPI
-  Submitter: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1029315
-  Lore link: https://lore.kernel.org/r/20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com
-    Patches: [01/13] spi: rzv2h-rspi: fix rzv2h_rspi_transfer_one() indentation
-             [02/13] spi: rzv2h-rspi: remove call to spi_finalize_current_transfer()
-             [03/13] spi: rzv2h-rspi: do not set SPI_TRANS_FAIL_IO
-             [04/13] spi: rzv2h-rspi: use device-managed APIs
-             [05/13] spi: rzv2h-rspi: store RX interrupt in state
-             [06/13] spi: rzv2h-rspi: set MUST_RX/MUST_TX
-             [07/13] spi: rzv2h-rspi: set TX FIFO threshold to 0
-             [08/13] spi: rzv2h-rspi: enable TX buffer empty interrupt
-             [09/13] spi: rzv2h-rspi: split out PIO transfer
-             [10/13] dt-bindings: spi: renesas,rzv2h-rspi: document optional support for DMA
-             [11/13] spi: rzv2h-rspi: add support for DMA mode
-
-Patch: [v3] spi: spi-fsl-lpspi: convert min_t() to simple min()
-  Submitter: Carlos Song <carlos.song@nxp.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1031963
-  Lore link: https://lore.kernel.org/r/20251210105001.3891776-1-carlos.song@nxp.com
-
-Patch: [v2] spi: fsl-cpm: Check length parity before switching to 16 bit mode
-  Submitter: Christophe Leroy <christophe.leroy@csgroup.eu>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1025713
-  Lore link: https://lore.kernel.org/r/3c4d81c3923c93f95ec56702a454744a4bad3cfc.1763627618.git.christophe.leroy@csgroup.eu
-
-Series: spi: enable the SpacemiT K1 SoC QSPI
-  Submitter: Alex Elder <elder@riscstar.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1016282
-  Lore link: https://lore.kernel.org/r/20251027133008.360237-1-elder@riscstar.com
-    Patches: [v4,1/9] dt-bindings: spi: fsl-qspi: support SpacemiT K1
-             [v4,8/9] riscv: dts: spacemit: enable K1 SoC QSPI on BPI-F3
-
-Patch: spi: cadence-qspi: Remove redundant pm_runtime_mark_last_busy call
-  Submitter: Akif Ejaz <akifejaz40@gmail.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1030199
-  Lore link: https://lore.kernel.org/r/20251203181921.97171-1-akifejaz40@gmail.com
-
-Patch: [GIT,PULL] Reset/GPIO/swnode changes for v6.19
-  Submitter: Philipp Zabel <p.zabel@pengutronix.de>
-  Committer: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1025926
-  Lore link: https://lore.kernel.org/r/20251120163252.34760-1-p.zabel@pengutronix.de
-
-Patch: [v1,1/1] spi: cadence-xspi: Replace ACPI specifics by agnostic APIs
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1028899
-  Lore link: https://lore.kernel.org/r/20251129151739.3998668-1-andriy.shevchenko@linux.intel.com
-
-Patch: [v2] spi: cadence-quadspi: Parse DT for flashes with the rest of the DT parsing
-  Submitter: Mark Brown <broonie@kernel.org>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1030570
-  Lore link: https://lore.kernel.org/r/20251204-spi-cadence-qspi-runtime-pm-imbalance-v2-1-10af9115d531@kernel.org
-
-Series: spi-cadence: support transmission with bits_per_word of 16 and 32
-  Submitter: Jun Guo <jun.guo@cixtech.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1018037
-  Lore link: https://lore.kernel.org/r/20251031073003.3289573-1-jun.guo@cixtech.com
-    Patches: [v3,1/3] dt-bindings: spi: spi-cadence: update DT binding docs to support cix sky1 SoC
-             [v3,3/3] arm64: dts: cix: add a compatible string for the cix sky1 SoC
-
-Patch: spi: mpfs: Fix an error handling path in mpfs_spi_probe()
-  Submitter: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1032829
-  Lore link: https://lore.kernel.org/r/eb35f168517cc402ef7e78f26da02863e2f45c03.1765612110.git.christophe.jaillet@wanadoo.fr
-
-Patch: [v1,1/1] spi: cadence-xspi: Replace OF/ACPI specifics by agnostic APIs
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1028898
-  Lore link: https://lore.kernel.org/r/20251129150704.3998301-1-andriy.shevchenko@linux.intel.com
-
-Series: [1/5] usb: misc: ljca: Remove Wentong's e-mail address
-  Submitter: Sakari Ailus <sakari.ailus@linux.intel.com>
-  Committer: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1004874
-  Lore link: https://lore.kernel.org/r/20250922120632.10460-1-sakari.ailus@linux.intel.com
-    Patches: [1/5] usb: misc: ljca: Remove Wentong's e-mail address
-
-
-Total patches: 58
-
+diff --git a/include/dt-bindings/clock/microchip,lan9691.h b/include/dt-bindings/clock/microchip,lan9691.h
+new file mode 100644
+index 000000000000..260370c2b238
+--- /dev/null
++++ b/include/dt-bindings/clock/microchip,lan9691.h
+@@ -0,0 +1,24 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++
++#ifndef _DT_BINDINGS_CLK_LAN9691_H
++#define _DT_BINDINGS_CLK_LAN9691_H
++
++#define GCK_ID_QSPI0		0
++#define GCK_ID_QSPI2		1
++#define GCK_ID_SDMMC0		2
++#define GCK_ID_SDMMC1		3
++#define GCK_ID_MCAN0		4
++#define GCK_ID_MCAN1		5
++#define GCK_ID_FLEXCOM0		6
++#define GCK_ID_FLEXCOM1		7
++#define GCK_ID_FLEXCOM2		8
++#define GCK_ID_FLEXCOM3		9
++#define GCK_ID_TIMER		10
++#define GCK_ID_USB_REFCLK	11
++
++/* Gate clocks */
++#define GCK_GATE_USB_DRD	12
++#define GCK_GATE_MCRAMC		13
++#define GCK_GATE_HMATRIX	14
++
++#endif
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.52.0
 
 
