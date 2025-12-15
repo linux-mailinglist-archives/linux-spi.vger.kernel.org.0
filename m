@@ -1,57 +1,57 @@
-Return-Path: <linux-spi+bounces-11891-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11892-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7118CBE396
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 442F9CBEDEF
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 17:22:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 499E530322BC
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:11:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 09730302AB8D
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56252330324;
-	Mon, 15 Dec 2025 13:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69FA330B37;
+	Mon, 15 Dec 2025 13:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUK+XdN8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFEXrMMp"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD2133030A;
-	Mon, 15 Dec 2025 13:59:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E5B330B2D;
+	Mon, 15 Dec 2025 13:59:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807163; cv=none; b=EblXayIzWk9PvgiDlZOY1+FfJcqdnZCzDnQRylT197Q7ZO6ITFpdnnoVQvHQYGE3avEnkeJrI1hs4ycGIh+1cMKDz/6w6r8KtXNRVmXjibniMFgArQ70V6JplG9au+1rqdWv6I+rEY5YFry7MjNFkFPXrO0NJVyCwrcA2lpskHs=
+	t=1765807165; cv=none; b=KbCx/2iqIBxjt/Afujl0TTuxnDOMNoo+A3pwA9EsKG9ePLtOOxHjtch9ST3NBhzfg2PTe6dU0lxtsCykbhOv15X0PfO1YiKuu2/62fu2sgVAODBhrEVrhvPK/ZYiPr3HdkunyM2YcN4WoHT1IBRZ/EBsdWtXPBobxC9WCzSA0tI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807163; c=relaxed/simple;
-	bh=aCAKHeRz0R1Pp79NnKo9Pw2t9f3vwIJOW1wBLc3sFv8=;
+	s=arc-20240116; t=1765807165; c=relaxed/simple;
+	bh=JITlun+LUxfRZs2r1MFqhuMlKLc42EgEPR3agL6aR7s=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=r3DWJb+ECF3uKOYvX+9563OzrIWqnwcudY57j0L55YDyp6Kt2NZvVlt+q39v8eu/cbT/w5WS40wvyRi1r4IKg39AqlX6jNluk7UL6J7pA88U5Gg7CujgwoBNWTuoeW7i2R0JmRjIKVgrjz5h3rpFjwySDbtB0JboY6UcEEX4cxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUK+XdN8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1225C4CEF5;
-	Mon, 15 Dec 2025 13:59:21 +0000 (UTC)
+	 MIME-Version:Content-Type; b=qzUEcGkHDO2QpsZ0tmVKFzTuk/+hwd9Bz6LwHsaeMC+XEvvQ/FdeReJBVlosZrYqcqqARepr/TzS+VHJA3KS2pqKoboPAPj7TRFM1ZRMmC++b3QAP5GutjS0nUlTJy5FqqbQS7+EPhuIJN3I6STOeElRxIs4cMuw6PQAN+TR9RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oFEXrMMp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A386C4CEFB;
+	Mon, 15 Dec 2025 13:59:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807163;
-	bh=aCAKHeRz0R1Pp79NnKo9Pw2t9f3vwIJOW1wBLc3sFv8=;
+	s=k20201202; t=1765807165;
+	bh=JITlun+LUxfRZs2r1MFqhuMlKLc42EgEPR3agL6aR7s=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=XUK+XdN8VUJ/wmD7y7N6QNnA34TyypFdS29JvTN/YGUNcI4c7vdL8gka52RXgnwLv
-	 K8mNzrvmdgPLTaXXd+oqdHpksRcE2Od1s2qx6g0cWz+5IYrl7N3ZVyIVDN9PkLjMCk
-	 /yxWNE2o6Qt/tiDpcCZaqGzkPuLjWumIDPfjmXM1SZHY6RFOtV50zDfq4zhECOYTs7
-	 j4eLQ3dZ0p9EnNSpGxukd3vVE7PdwvQZQVn/kyRP3+9ejEK8Zqs7+sxzn3HuQ/6nZd
-	 aC04MkhkJ8XBTKzBz6eThK8aPobIWV1Hdc1Q7KKV2GouYgNI19V24VkFtntT/O9ZOe
-	 0S/dwYZwXIyoQ==
+	b=oFEXrMMpeRORmI9dPoX79JDKsQD7TGn9JkW7QuEgnobHYeWJXj1VLD3iQV9vjkBxj
+	 JPo5OCU2EGs7EpSVQlSehcdPF/TnDVLXrCPWbs2iOoKPwDTOZrPi+DajEznhS3bR8p
+	 UlUSTfBoH9Uv73Uy6OvDHaJmYCy2r5XTY69qchLIf22xpAkgeYsYPxeFKFMYjAkByR
+	 Aa7eKiEd5DhEDTsciXgcEv8j3S2ReF1gW6wbP2seqvj3Hc+TPriS9BvO1SQfDXvS4a
+	 /ukIlaeMNUl27NEDg2UyipbQW577TdNIlGr6lu3bo6X89bhRqKoM3+71YEmbLHlxge
+	 enr/skcKpjwNQ==
 From: Mark Brown <broonie@kernel.org>
-To: Gabor Juhos <j4g8y7@gmail.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Md Sadre Alam <quic_mdalam@quicinc.com>, 
- Varadarajan Narayanan <quic_varada@quicinc.com>, 
- Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
- linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org
-In-Reply-To: <20251129-qpic-snand-superfluous-readloc-v1-1-b84ca17095d9@gmail.com>
-References: <20251129-qpic-snand-superfluous-readloc-v1-1-b84ca17095d9@gmail.com>
-Subject: Re: [PATCH] spi: spi-qpic-snand: remove superfluous
- qcom_spi_set_read_loc() calls
-Message-Id: <176580716116.161463.15413695989499192950.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:21 +0900
+To: frank.li@nxp.com, mkl@pengutronix.de, shawnguo@kernel.org, 
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
+ kees@kernel.org, gustavoars@kernel.org, Carlos Song <carlos.song@nxp.com>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-hardening@vger.kernel.org
+In-Reply-To: <20251202075503.2448339-1-carlos.song@nxp.com>
+References: <20251202075503.2448339-1-carlos.song@nxp.com>
+Subject: Re: [PATCH v2 0/6] Support ECSPI dynamic burst feature for DMA
+ mode
+Message-Id: <176580716285.161463.10166271924842509723.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:22 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,15 +62,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Sat, 29 Nov 2025 11:29:27 +0100, Gabor Juhos wrote:
-> Before configuring the registers related to page read, both the
-> qcom_spi_read_page_ecc() and the qcom_spi_read_page_oob() functions
-> are calling qcom_spi_set_read_loc() to set the read location for the
-> first codeword.
+On Tue, 02 Dec 2025 15:54:57 +0800, Carlos Song wrote:
+> ECSPI has a low throughput because of no dynamic burst support, it
+> transfers only one word per frame in DMA mode, causing SCLK stalls
+> between words due to BURST_LENGTH updates.
 > 
-> However the qcom_spi_set_read_loc() function puts the passed value
-> into the register write cache only, from where those gets written
-> to the corresponding register later via DMA.
+> This patch set is to support ECSPI dynamic burst feature to help improve
+> the ECSPI DMA mode performance.
 > 
 > [...]
 
@@ -80,8 +78,18 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-qpic-snand: remove superfluous qcom_spi_set_read_loc() calls
-      commit: cde4e63e847b4d41f017c2beb119c2668106a88a
+[1/6] spi: imx: group spi_imx_dma_configure() with spi_imx_dma_transfer()
+      commit: c64f62b036aed30626cb30fa82d3ec4a13fa83df
+[2/6] spi: imx: introduce helper to clear DMA mode logic
+      commit: 5395bb7f7c361310d0f329c8169d2190809b05c1
+[3/6] spi: imx: avoid dmaengine_terminate_all() on TX prep failure
+      commit: a5f298581d454c5ea77c5fb6f4ee1bff61eb2b2c
+[4/6] spi: imx: handle DMA submission errors with dma_submit_error()
+      commit: a450c8b77f929f5f9f5236861761a8c5cab22023
+[5/6] spi: imx: support dynamic burst length for ECSPI DMA mode
+      commit: faa8e404ad8e686cb98c51dc507fdcacfb8020ce
+[6/6] spi: imx: enable DMA mode for target operation
+      commit: ba9b28652c75b07383e267328f1759195d5430f7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
