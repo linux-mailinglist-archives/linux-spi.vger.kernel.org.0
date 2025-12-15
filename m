@@ -1,55 +1,58 @@
-Return-Path: <linux-spi+bounces-11897-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11898-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92793CBE89A
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:09:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFFE3CBE964
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:19:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 71AC7304CC20
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:00:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8BD6B301D614
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:11:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44353321B5;
-	Mon, 15 Dec 2025 13:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4E03321CB;
+	Mon, 15 Dec 2025 13:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwvl8iBg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSKRkvrJ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8E53314C2;
-	Mon, 15 Dec 2025 13:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4388B3321C5;
+	Mon, 15 Dec 2025 13:59:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807173; cv=none; b=ffMM77BwefREDJd7JRPjl4GO3C1W4GHrQS8hffK14UinUYlUV1b3inT1/Tfi/R7c069h7yQ0kGb/vt84PaR6NV4r7Y+4BHnoaLPBfC6PX9hvcX2EYbONxEqIiQ7JEllkHxlBbofKyOm5sr+IPdor5TpvBwxTXROLqhWPRL+PBp8=
+	t=1765807174; cv=none; b=TycpiE9Ez8sgYy176kutFq0bntcNzS89wvMdwPL4D45DQaCWgIQ3baCJH4XNkuI1wLhZ5laGV3sMT+uDGFvUWogxsmlxoI6zuR/eeEJYsBWQvCOolMULfNoCtHZp5A45P7zSIMYFikuP/Ya2qfe4VHBv7kerTMkv26N5YU5UXzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807173; c=relaxed/simple;
-	bh=X8bSPkSn54gl5nm6i0LYZaDo4hg0moqVmaxzKL4v99o=;
+	s=arc-20240116; t=1765807174; c=relaxed/simple;
+	bh=mUdPC/Zc8jOj+LQYMtJZ0IsCJFmwN6mnkenGPRzbU6c=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=YLNAvYwZaNEK2DTibPTeilRDCiQmN6ZR70BtdIpWLOWEeLkbro+rsGppYq6jQ9MFkKMAWZAmi3OY2+H8lnXIWRXmahmz6HQbdGghlbQAVc4logz4omJwsGkjHhjk/rODK0i9+7cwxZP1xawcpPcy0TmETPCJgzTvdOS+wbcuejk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwvl8iBg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0D3C4CEFB;
-	Mon, 15 Dec 2025 13:59:30 +0000 (UTC)
+	 MIME-Version:Content-Type; b=FIXdDTchHcM0UDxL2jZnFfFfW5M/tMlLcg69bQtyz6V93WiJ5mjJk6gx9aFHICbAnWZOD8KNEL6z5ILlV6bz5nzY3mlUpsTrEy2QQKmf83+SWvO8XWYkSuA5RBpK8YGC+ZuUOKjMG6HOmx9SNtUdMBxsmMexuYqF+oNWYsrsT4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSKRkvrJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0B4C4CEF5;
+	Mon, 15 Dec 2025 13:59:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807172;
-	bh=X8bSPkSn54gl5nm6i0LYZaDo4hg0moqVmaxzKL4v99o=;
+	s=k20201202; t=1765807174;
+	bh=mUdPC/Zc8jOj+LQYMtJZ0IsCJFmwN6mnkenGPRzbU6c=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=iwvl8iBgu+44+2mrFTRq7DsILnmh9WsWrxJ7FmMphGh4FfjG4tmO+V34NacuArIUF
-	 m2pVgwx6tvl9Na7dwU7fwhRteO99B/KhsHUoD56Iml+avy/aMHJnvX5eZuF7Zq9wNG
-	 oq2znZ3YNJCiK89oSmjtUKUNcKnKxNDpE4VhNM3apDGTKGYxt1PcxnrlhCdRw0BDGD
-	 kCPhy0mDpCk8NzAW4Ez247ov2XZkOoUZxue96xbPQfnHgkV0aJYTS9E5lVxsMJ68AT
-	 mVG23SQ8NC/EZzsy0AOtP83ttMIl09fTp4Qqq1s/Z5rffxgQlZ7aHFHFJbSSCm+VlR
-	 L+7AMYNKxIM7g==
+	b=ZSKRkvrJSLy3JMUHG9kXP2Oj5isQuIIEsPOnAu7lX9qP/SyIaksgWPQdb9t1rk4Hz
+	 WyMYDqUp83ieEQcZ0KPTcx6dtoJp3zZ9PyUqTB5n9BeiQ+FNwoQY+f7bkGWL/JeLaT
+	 d2hqwMcOoizEkiM40Yq1LELy1I0+2yS2EvVEuDJzMujcrd4L8oj9c74kWwfHHqoukn
+	 V2JCtApgI1bJVgjMowxh/gQk/UOkK6JxtouZZPf4BnXRmc6tjJMsR1LokPLq5KKsH8
+	 q1aZb+9muIzvUBG8ckq/O0eSdDjw1DTU1Q5XFbRJv8Sn8mMxW3hk2DAPIYt2DXbt/e
+	 c4gqMPz2Plumw==
 From: Mark Brown <broonie@kernel.org>
-To: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: linux-spi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20251205-upstream_qspi_ospi_updates-v1-0-7e6c8b9f5141@foss.st.com>
-References: <20251205-upstream_qspi_ospi_updates-v1-0-7e6c8b9f5141@foss.st.com>
-Subject: Re: [PATCH 0/8] spi: stm32: Update for OSPI and QSPI drivers
-Message-Id: <176580717045.161463.13864912582865667097.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:30 +0900
+To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Cc: linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
+References: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: Re: (subset) [PATCH 00/13] Add DMA support for RZ/T2H RSPI
+Message-Id: <176580717199.161463.3915595459908387302.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:31 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,16 +63,14 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Fri, 05 Dec 2025 10:04:50 +0100, Patrice Chotard wrote:
-> This serie applies the following updates on the spi-stm32-ospi and
-> spi-stm32-qspi dirvers :
+On Mon, 01 Dec 2025 15:42:16 +0200, Cosmin Tanislav wrote:
+> The DMA controller can be used to transfer data to and from the SPI
+> controller without involving the CPU for each word of a SPI transfer.
 > 
->   _ Update FIFO accesses using u16 and u32 when possible instead of u8
->     only to optimize throughput.
->   _ Replace Transmit Complete and Transmit Error interrupt management by
->     usage of read_poll_timeout_atomic() to optimize throughtput.
->   _ Simplify Status Match interrupt check.
->   _ Set DMA burst configuration dynamically.
+> Add support for DMA mode, and do some other cleanups while touching the
+> same code.
+> 
+> The dts changes in this series depend on the DMA series [1].
 > 
 > [...]
 
@@ -79,22 +80,28 @@ Applied to
 
 Thanks!
 
-[1/8] spi: stm32-ospi: Set DMA maxburst dynamically
-      commit: e35a7607e05d59d35e937b80532ae93d1dd2493f
-[2/8] spi: stm32-ospi: Optimize FIFO accesses using u16 or u32
-      commit: cfe58ffc95a601988702df6f3462cb54dde467e9
-[3/8] spi: stm32-ospi: Remove CR_TCIE and CR_TEIE irq usage
-      commit: f6ed06926b510f54a0817567ffd458194ed90bd6
-[4/8] spi: stm32-ospi: Simplify SMIE interrupt test
-      commit: e2f0ea18e560e5fa6180f52dffe434525a0cf86b
-[5/8] spi: stm32-qspi: Set DMA maxburst dynamically
-      commit: 4ef80c71c62ab841db9b1a9d74ffe043c60f6222
-[6/8] spi: stm32-qspi: Optimize FIFO accesses using u16 or u32
-      commit: 1ca91281649547efa4be34584a304974c9601df1
-[7/8] spi: stm32-qspi: Remove CR_TCIE and CR_TEIE irq usage
-      commit: c5f76d888810bca2d46297a7b942e10bc8cc69dd
-[8/8] spi: stm32-qspi: Simplify SMIE interrupt test
-      commit: fee876b2ec75dcc18fdea154eae1f5bf14d82659
+[01/13] spi: rzv2h-rspi: fix rzv2h_rspi_transfer_one() indentation
+        commit: fb0140774aff45b8dc326987cc1da89484ecb081
+[02/13] spi: rzv2h-rspi: remove call to spi_finalize_current_transfer()
+        commit: 9e4830b35dc0d522f45e1ec3ee5b1ff1648afe1b
+[03/13] spi: rzv2h-rspi: do not set SPI_TRANS_FAIL_IO
+        commit: 218917659df165cff72439480929e68a6e127b55
+[04/13] spi: rzv2h-rspi: use device-managed APIs
+        commit: b73ac782828f27c2217a17bd26aa8710769f032d
+[05/13] spi: rzv2h-rspi: store RX interrupt in state
+        commit: 28b590bd4c6a051ec61cf286a46a8b14846e6fcf
+[06/13] spi: rzv2h-rspi: set MUST_RX/MUST_TX
+        commit: 6f9026b5a18acdf190d1622831b100aacfca0eb3
+[07/13] spi: rzv2h-rspi: set TX FIFO threshold to 0
+        commit: a886baaaa6e12a9b7d5a9687d11d3b895f1b87c9
+[08/13] spi: rzv2h-rspi: enable TX buffer empty interrupt
+        commit: d49eea07de5851e1b8941ad6b6179be7ec36a986
+[09/13] spi: rzv2h-rspi: split out PIO transfer
+        commit: 1e5e10df8b9be71ca64435cbe7c96b189e5ee293
+[10/13] dt-bindings: spi: renesas,rzv2h-rspi: document optional support for DMA
+        commit: 163345e356722e98ba57cd120787d6e991da7b1d
+[11/13] spi: rzv2h-rspi: add support for DMA mode
+        commit: fa08b566860bca8ebf9300090b85174c34de7ca5
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
