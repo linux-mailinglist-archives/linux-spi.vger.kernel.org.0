@@ -1,53 +1,57 @@
-Return-Path: <linux-spi+bounces-11890-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11891-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1228CBE98B
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C7118CBE396
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3375030A757E
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:13:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 499E530322BC
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC2FC32F745;
-	Mon, 15 Dec 2025 13:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56252330324;
+	Mon, 15 Dec 2025 13:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TppoHVBe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUK+XdN8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7142132ED4D;
-	Mon, 15 Dec 2025 13:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BD2133030A;
+	Mon, 15 Dec 2025 13:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807161; cv=none; b=JSHdxkpQPADtyKyK29LF6Bo4b/OxI9K2Gwc+gX4OmckaVo7mOlbusr301iqM1lOg27CM7RMYkfOPkngbtzLdXmR4T0o+PmGrY40ivgMUg8cTeOay59OcG6sB6qiYASY1a1elPcWbpB27M0SI44qVqOV63LQPcXYXwQ/E2rWEDi0=
+	t=1765807163; cv=none; b=EblXayIzWk9PvgiDlZOY1+FfJcqdnZCzDnQRylT197Q7ZO6ITFpdnnoVQvHQYGE3avEnkeJrI1hs4ycGIh+1cMKDz/6w6r8KtXNRVmXjibniMFgArQ70V6JplG9au+1rqdWv6I+rEY5YFry7MjNFkFPXrO0NJVyCwrcA2lpskHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807161; c=relaxed/simple;
-	bh=+FICKIXvz43PKUIXqLLP/8JcYAgebtkv5kowjCUQgRw=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=o2zblVO2p/AioBK5eJPXmIUSj5lX1ksYOnX4zS/vyMhT3+KhybVDdbsUh1HWJhCqvpN/44VlXGJRvi9IFNMEs9kwc95crL3Q15fbVzMMQA2NgxhzfANsUF/JvvNw2ELGRymWTkeN+Y9sBe5XHKNBmO6b7dLEHokQlkjwB7pldr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TppoHVBe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBE6FC4CEF5;
-	Mon, 15 Dec 2025 13:59:20 +0000 (UTC)
+	s=arc-20240116; t=1765807163; c=relaxed/simple;
+	bh=aCAKHeRz0R1Pp79NnKo9Pw2t9f3vwIJOW1wBLc3sFv8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=r3DWJb+ECF3uKOYvX+9563OzrIWqnwcudY57j0L55YDyp6Kt2NZvVlt+q39v8eu/cbT/w5WS40wvyRi1r4IKg39AqlX6jNluk7UL6J7pA88U5Gg7CujgwoBNWTuoeW7i2R0JmRjIKVgrjz5h3rpFjwySDbtB0JboY6UcEEX4cxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUK+XdN8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1225C4CEF5;
+	Mon, 15 Dec 2025 13:59:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807161;
-	bh=+FICKIXvz43PKUIXqLLP/8JcYAgebtkv5kowjCUQgRw=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=TppoHVBenGUi/kHGmdxA8Xc5p7ogaHOXlGwoagUX/+Imtt1I7bfYXLjhSDtoZBZxy
-	 JynXVpEleQNSen/QBY05MYf24PZqO5YgEBQarrNVDW+mi2fiGomQdnuez9hhacLxfx
-	 12Bb43NJ4ixIOvRHWUTEnBrMHkI6ZLPKgM+DLzZThVLn2BC5kLyCnte7C9gTRECQ57
-	 n4i2JoqHe1PLCUps+deV0EXQqvu8gXmvVGj2DcjphysDWqFNY0YmIQLlaAJASSpo6l
-	 cxglCNqJvuOey2mhlCfPcCenG+owBEeFFBtaZq+XSUdA/3cT7G8Ugij/aPilNKjfwT
-	 iH0PvZv6BEZoQ==
+	s=k20201202; t=1765807163;
+	bh=aCAKHeRz0R1Pp79NnKo9Pw2t9f3vwIJOW1wBLc3sFv8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=XUK+XdN8VUJ/wmD7y7N6QNnA34TyypFdS29JvTN/YGUNcI4c7vdL8gka52RXgnwLv
+	 K8mNzrvmdgPLTaXXd+oqdHpksRcE2Od1s2qx6g0cWz+5IYrl7N3ZVyIVDN9PkLjMCk
+	 /yxWNE2o6Qt/tiDpcCZaqGzkPuLjWumIDPfjmXM1SZHY6RFOtV50zDfq4zhECOYTs7
+	 j4eLQ3dZ0p9EnNSpGxukd3vVE7PdwvQZQVn/kyRP3+9ejEK8Zqs7+sxzn3HuQ/6nZd
+	 aC04MkhkJ8XBTKzBz6eThK8aPobIWV1Hdc1Q7KKV2GouYgNI19V24VkFtntT/O9ZOe
+	 0S/dwYZwXIyoQ==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20251129150704.3998301-1-andriy.shevchenko@linux.intel.com>
-References: <20251129150704.3998301-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: cadence-xspi: Replace OF/ACPI specifics by
- agnostic APIs
-Message-Id: <176580716012.161463.17794631902855329215.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:20 +0900
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Md Sadre Alam <quic_mdalam@quicinc.com>, 
+ Varadarajan Narayanan <quic_varada@quicinc.com>, 
+ Sricharan Ramabadhran <quic_srichara@quicinc.com>, 
+ linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <20251129-qpic-snand-superfluous-readloc-v1-1-b84ca17095d9@gmail.com>
+References: <20251129-qpic-snand-superfluous-readloc-v1-1-b84ca17095d9@gmail.com>
+Subject: Re: [PATCH] spi: spi-qpic-snand: remove superfluous
+ qcom_spi_set_read_loc() calls
+Message-Id: <176580716116.161463.15413695989499192950.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:21 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,12 +62,17 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Sat, 29 Nov 2025 16:07:04 +0100, Andy Shevchenko wrote:
-> Replace OF/ACPI specific call to get matched driver data with
-> the agnostic one. This doesn't change functionality. While at
-> it, add missing property.h include, and drop now unneeded of.h.
+On Sat, 29 Nov 2025 11:29:27 +0100, Gabor Juhos wrote:
+> Before configuring the registers related to page read, both the
+> qcom_spi_read_page_ecc() and the qcom_spi_read_page_oob() functions
+> are calling qcom_spi_set_read_loc() to set the read location for the
+> first codeword.
 > 
+> However the qcom_spi_set_read_loc() function puts the passed value
+> into the register write cache only, from where those gets written
+> to the corresponding register later via DMA.
 > 
+> [...]
 
 Applied to
 
@@ -71,8 +80,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: cadence-xspi: Replace OF/ACPI specifics by agnostic APIs
-      commit: e83ba2e698aafa052d0df82564f7c8cd777fd5c7
+[1/1] spi: spi-qpic-snand: remove superfluous qcom_spi_set_read_loc() calls
+      commit: cde4e63e847b4d41f017c2beb119c2668106a88a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
