@@ -1,99 +1,70 @@
-Return-Path: <linux-spi+bounces-11888-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11907-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEFA9CBE0BE
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 14:24:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EC7FCBE9CD
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:23:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 93AF13014F5A
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 13:24:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A3DFE30726F3
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695C4331A71;
-	Mon, 15 Dec 2025 13:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C6E0334C02;
+	Mon, 15 Dec 2025 13:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TlJgs+SO"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C6B22FDFF;
-	Mon, 15 Dec 2025 13:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.248.80.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188CD334C13
+	for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 13:59:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765805074; cv=none; b=VlsT484Xhfyvy2HjOgeVta+rj6qTXn/1MEXud2udHr5TkSTLGb2e7vQlPEKceGdbovT1tW173XcgmK2ikymHZNd7lXeCwSajFN1atsQcteAIIEyJ+LFiRbuHDAX6Fkeldp9k5Xuo16d8bhjIvBRpzmMiDJGffQg0f9w4IzArcYY=
+	t=1765807189; cv=none; b=RP8eQcGpg97OC0VLANts+YJhFUELea+sdqXOttX1RVsRl/Sik4pecDHIxByVtSPSn7FMIaKLafcRwXQZbV2E1XX71AaCYD8TJ6vF4oUKhXOsrSeZ73FBgE0fR0e3CR0tphtB6YJIw50UwldV4eU0ME9LpvGiFZdwKR8AcvxYu30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765805074; c=relaxed/simple;
-	bh=dwZqDlAZtpYjqFnUGItczi6z1PobsLwEUgdFAO/ahNs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WnwmrIKXoM1tIR1gzGTwV40Yx+q6hJl4/pK0ZwA9ihtAJnTBoLny7Cbca8KglrRcExMjTHeF9ozNb15KyTU0/XGKSxUtLrfEDGHAUHxuWn1ZDobWRO5UPAUXU5KxXDtDdHUtzJsDyPwrjbHZep8iQ764iuGiAylPACPvyGvHl1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com; spf=pass smtp.mailfrom=andestech.com; arc=none smtp.client-ip=60.248.80.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=andestech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=andestech.com
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
-	by Atcsqr.andestech.com with ESMTPS id 5BFDOIsZ076978
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-	Mon, 15 Dec 2025 21:24:18 +0800 (+08)
-	(envelope-from cl634@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
- (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 15 Dec
- 2025 21:24:18 +0800
-From: CL Wang <cl634@andestech.com>
-To: <cl634@andestech.com>, <broonie@kernel.org>, <linux-spi@vger.kernel.org>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-CC: <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tim609@andestech.com>
-Subject: [PATCH V3 3/3] MAINTAINERS: Add MAINTAINERS entry for the ATCSPI200 SPI controller driver
-Date: Mon, 15 Dec 2025 21:23:49 +0800
-Message-ID: <20251215132349.513843-4-cl634@andestech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251215132349.513843-1-cl634@andestech.com>
-References: <20251215132349.513843-1-cl634@andestech.com>
+	s=arc-20240116; t=1765807189; c=relaxed/simple;
+	bh=6n0LWEmN4UqidHTptn+3zginOOz53lIirfLkkom45Wc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=AGZV0IkEgw6Svm24VM8YpbyhVi2fcPN2Z7KnU2IITA42W++6B+nDijgfqPB4FWhyvQJsOk9li23gP/QcGEBkIZeoP3TEK19zO7hrW2/0/C1/brD16BXwd+I3RExlSDtiDs1anpYtGmbQRxjuoOQ0i8hD9HjCHlWHQTdhx6MARkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TlJgs+SO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC232C4CEF5;
+	Mon, 15 Dec 2025 13:59:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765807188;
+	bh=6n0LWEmN4UqidHTptn+3zginOOz53lIirfLkkom45Wc=;
+	h=Subject:From:Date:To:From;
+	b=TlJgs+SO5nyJ69LuE1u5ylXJk/krxqjyUXWhGAYtRDFSc87YSg0xpkMUJgHTguuPj
+	 OoOZbG80x2zbytavLg7X3bCFj842iJiPYBVJViA3V201Z9Q2s4kFo3BP1N+/NuY8SP
+	 hk1XXnSsuA5c4Ux9dysL139FR+fDYKhA1BrVsVfDoRbxydaI3n3uLuPkIFcntbL8KR
+	 HMLCYoN0jNb3KnsBUmx7mfgXz02CPeEjk0tFTAs/bd3MZ6klUDWS8dTB8pGrlxKFiG
+	 tO9eWcmfWulHH+1i+BLMZaTvny/MsHSJZX7+yE0od09qbDHw2bAYT9sLpH/whOnOsC
+	 H1k0XPbsaqSDA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 42B39380AA77;
+	Mon, 15 Dec 2025 13:56:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DKIM-Results: atcpcs34.andestech.com; dkim=none;
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:Atcsqr.andestech.com 5BFDOIsZ076978
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176580699968.4191605.6978873903465781793.git-patchwork-housekeeping@kernel.org>
+Date: Mon, 15 Dec 2025 13:56:39 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-MAINTAINERS: Add entry for the Andes ATCSPI200 SPI controller driver
+Latest series: [v3] spi: atcspi200: Add support for Andes ATCSPI200 SPI controller (2025-12-15T13:23:46)
+  Superseding: [v2] spi: atcspi200: Add support for Andes ATCSPI200 SPI controller (2025-12-10T09:04:29):
+    [V2,1/3] dt-bindings: spi: Add support for ATCSPI200 SPI controller
+    [V2,2/3] spi: atcspi200: Add ATCSPI200 SPI controller driver
+    [V2,3/3] MAINTAINERS: Add MAINTAINERS entry for the ATCSPI200 SPI controller driver
 
-Signed-off-by: CL Wang <cl634@andestech.com>
----
-Changes for v3:
-  - Updated the MAINTAINERS entry to reflect the renamed DT binding file.
 
-Changes for v2:
-  - Split the MAINTAINERS update into a separate patch.
-
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8b39a55b939a..986344d1bce8 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1804,6 +1804,12 @@ S:	Supported
- F:	drivers/clk/analogbits/*
- F:	include/linux/clk/analogbits*
- 
-+ANDES ATCSPI200 SPI DRIVER
-+M:	CL Wang <cl634@andestech.com>
-+S:	Supported
-+F:	Documentation/devicetree/bindings/spi/andestech,ae350-spi.yaml
-+F:	drivers/spi/spi-atcspi200.c
-+
- ANDROID DRIVERS
- M:	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
- M:	Arve Hjønnevåg <arve@android.com>
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
