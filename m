@@ -1,58 +1,53 @@
-Return-Path: <linux-spi+bounces-11898-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11899-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFFE3CBE964
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:19:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D41E5CBE9C1
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:23:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8BD6B301D614
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:11:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E3F7F306EF6A
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 15:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4E03321CB;
-	Mon, 15 Dec 2025 13:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF233328F8;
+	Mon, 15 Dec 2025 13:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZSKRkvrJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yp/pMdAs"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4388B3321C5;
-	Mon, 15 Dec 2025 13:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E73F3328F0;
+	Mon, 15 Dec 2025 13:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807174; cv=none; b=TycpiE9Ez8sgYy176kutFq0bntcNzS89wvMdwPL4D45DQaCWgIQ3baCJH4XNkuI1wLhZ5laGV3sMT+uDGFvUWogxsmlxoI6zuR/eeEJYsBWQvCOolMULfNoCtHZp5A45P7zSIMYFikuP/Ya2qfe4VHBv7kerTMkv26N5YU5UXzE=
+	t=1765807175; cv=none; b=KLiqmjha3/bDs7OZMEkRbMrJ4gvofHnMUuYaq+obf9dBJ9U3UL+CnU+tFWJca5QglRgKqBogT+ac/JoSDJ9/4HNmCAYwDSvkf+9O6vi+RMYB1Wq3zCDpzWtP1llWXot6/On597ox9dI7ShyX1xs8y5hJQl/x2tyCT/1rw36ctnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807174; c=relaxed/simple;
-	bh=mUdPC/Zc8jOj+LQYMtJZ0IsCJFmwN6mnkenGPRzbU6c=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=FIXdDTchHcM0UDxL2jZnFfFfW5M/tMlLcg69bQtyz6V93WiJ5mjJk6gx9aFHICbAnWZOD8KNEL6z5ILlV6bz5nzY3mlUpsTrEy2QQKmf83+SWvO8XWYkSuA5RBpK8YGC+ZuUOKjMG6HOmx9SNtUdMBxsmMexuYqF+oNWYsrsT4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZSKRkvrJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0B4C4CEF5;
-	Mon, 15 Dec 2025 13:59:32 +0000 (UTC)
+	s=arc-20240116; t=1765807175; c=relaxed/simple;
+	bh=F/G/9D/MfKM0tJrztBRflOEn1hJgcQ9gnt2LlbM8maA=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=iXcmyszp/Uavl39j/aT06jwr7c+0WUelAfz27GU2rgu5FO6gi9tCVc49Pa2dGmXPjJvyLBrdYvAam7WIOWAmUvVZkteStYnrM1ZQa+HiyK+MMb0svVJrVI8OHP2XhrrnWSJY4Qe82S5jvGRJ0atT0wOPJxyeofw0UQvSjZpzyGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yp/pMdAs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C7EC4CEFB;
+	Mon, 15 Dec 2025 13:59:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807174;
-	bh=mUdPC/Zc8jOj+LQYMtJZ0IsCJFmwN6mnkenGPRzbU6c=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=ZSKRkvrJSLy3JMUHG9kXP2Oj5isQuIIEsPOnAu7lX9qP/SyIaksgWPQdb9t1rk4Hz
-	 WyMYDqUp83ieEQcZ0KPTcx6dtoJp3zZ9PyUqTB5n9BeiQ+FNwoQY+f7bkGWL/JeLaT
-	 d2hqwMcOoizEkiM40Yq1LELy1I0+2yS2EvVEuDJzMujcrd4L8oj9c74kWwfHHqoukn
-	 V2JCtApgI1bJVgjMowxh/gQk/UOkK6JxtouZZPf4BnXRmc6tjJMsR1LokPLq5KKsH8
-	 q1aZb+9muIzvUBG8ckq/O0eSdDjw1DTU1Q5XFbRJv8Sn8mMxW3hk2DAPIYt2DXbt/e
-	 c4gqMPz2Plumw==
+	s=k20201202; t=1765807175;
+	bh=F/G/9D/MfKM0tJrztBRflOEn1hJgcQ9gnt2LlbM8maA=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=Yp/pMdAs8qpvfkWrpXzDYmo4xrzmz+SzLR2HCgK05ukKvTVlrpAecmEhbUr0krhPD
+	 Y9+arISqYmJw4nv32BN5dzwtpNjGaE7XVQ6+yWKvA4A+NjqZ2SetCZL2gBCrscz9vh
+	 wDo7ZNi7crnMHJQZkQaidxnI1EhbtcsXTIKOjN+G37QD/tKG4VJMQaKf1mmuxeCDN9
+	 alUv0X19Vat8lf7wJysqHicI4jXwBrX0tqa8ZQjxAYYNi+l0WvEZ7+9E5h6whD5MhG
+	 REjRy7a2lKXT2L06Z5tKtQh963WgaTYXNXDYJf9XCLD5lfh9bMGnqnRCY+UqyWmxdU
+	 wFLhnZL+Fyyfw==
 From: Mark Brown <broonie@kernel.org>
-To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Magnus Damm <magnus.damm@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Cc: linux-spi@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
-References: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: Re: (subset) [PATCH 00/13] Add DMA support for RZ/T2H RSPI
-Message-Id: <176580717199.161463.3915595459908387302.b4-ty@kernel.org>
-Date: Mon, 15 Dec 2025 22:59:31 +0900
+To: Haixu Cui <quic_haixcui@quicinc.com>, virtualization@lists.linux.dev, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251208020830.5225-2-krzysztof.kozlowski@oss.qualcomm.com>
+References: <20251208020830.5225-2-krzysztof.kozlowski@oss.qualcomm.com>
+Subject: Re: [PATCH] spi: virtio: Fix confusing cleanup.h syntax
+Message-Id: <176580717392.161463.3784278976785359258.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:33 +0900
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -63,14 +58,16 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Mon, 01 Dec 2025 15:42:16 +0200, Cosmin Tanislav wrote:
-> The DMA controller can be used to transfer data to and from the SPI
-> controller without involving the CPU for each word of a SPI transfer.
+On Mon, 08 Dec 2025 03:08:31 +0100, Krzysztof Kozlowski wrote:
+> Initializing automatic __free variables to NULL without need (e.g.
+> branches with different allocations), followed by actual allocation is
+> in contrary to explicit coding rules guiding cleanup.h:
 > 
-> Add support for DMA mode, and do some other cleanups while touching the
-> same code.
-> 
-> The dts changes in this series depend on the DMA series [1].
+> "Given that the "__free(...) = NULL" pattern for variables defined at
+> the top of the function poses this potential interdependency problem the
+> recommendation is to always define and assign variables in one statement
+> and not group variable definitions at the top of the function when
+> __free() is used."
 > 
 > [...]
 
@@ -80,28 +77,8 @@ Applied to
 
 Thanks!
 
-[01/13] spi: rzv2h-rspi: fix rzv2h_rspi_transfer_one() indentation
-        commit: fb0140774aff45b8dc326987cc1da89484ecb081
-[02/13] spi: rzv2h-rspi: remove call to spi_finalize_current_transfer()
-        commit: 9e4830b35dc0d522f45e1ec3ee5b1ff1648afe1b
-[03/13] spi: rzv2h-rspi: do not set SPI_TRANS_FAIL_IO
-        commit: 218917659df165cff72439480929e68a6e127b55
-[04/13] spi: rzv2h-rspi: use device-managed APIs
-        commit: b73ac782828f27c2217a17bd26aa8710769f032d
-[05/13] spi: rzv2h-rspi: store RX interrupt in state
-        commit: 28b590bd4c6a051ec61cf286a46a8b14846e6fcf
-[06/13] spi: rzv2h-rspi: set MUST_RX/MUST_TX
-        commit: 6f9026b5a18acdf190d1622831b100aacfca0eb3
-[07/13] spi: rzv2h-rspi: set TX FIFO threshold to 0
-        commit: a886baaaa6e12a9b7d5a9687d11d3b895f1b87c9
-[08/13] spi: rzv2h-rspi: enable TX buffer empty interrupt
-        commit: d49eea07de5851e1b8941ad6b6179be7ec36a986
-[09/13] spi: rzv2h-rspi: split out PIO transfer
-        commit: 1e5e10df8b9be71ca64435cbe7c96b189e5ee293
-[10/13] dt-bindings: spi: renesas,rzv2h-rspi: document optional support for DMA
-        commit: 163345e356722e98ba57cd120787d6e991da7b1d
-[11/13] spi: rzv2h-rspi: add support for DMA mode
-        commit: fa08b566860bca8ebf9300090b85174c34de7ca5
+[1/1] spi: virtio: Fix confusing cleanup.h syntax
+      commit: e6268db46c173b18e5b2f4fc0c8a5c0aaaee61ea
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
