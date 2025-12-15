@@ -1,77 +1,77 @@
-Return-Path: <linux-spi+bounces-11912-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11913-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F40CBEFF6
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 17:46:36 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F960CBEFE2
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 17:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA53630BB618
-	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:39:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 63FA33002E85
+	for <lists+linux-spi@lfdr.de>; Mon, 15 Dec 2025 16:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216FB334389;
-	Mon, 15 Dec 2025 16:38:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6312F336EDD;
+	Mon, 15 Dec 2025 16:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="v+T8RzjO"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="iUsJpGZX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300E2311C17
-	for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 16:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BFA93346B7
+	for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 16:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765816723; cv=none; b=gJARjdnpPFDj/86/JaPf4dUJ/avGb5t01D040T0JD5tS/GZFXAvPMlPumVvrziqga5CJr2gaaGBeNSuiUYnj4FRmU6ZHox+aJ+/egK03j5luzbw5o78q+VHqlmK5OA8k+XZ0jXvjzqLHHMFMpkHrlZWpGyOxWZykLmI+8ZJch/o=
+	t=1765816726; cv=none; b=hb4JuhDL1lHc21BoVp2SopH2uLvnA7dE0sOkfrdDfOiMok2RHBXTFH1zZqfSWzUQQS4yoCIeIeqiZxvvzVFjhZX9GVBqLYnyHs49lnI/JLk64/bsUzQ7UnKz3BQapaMq9oFu8aFf8GY6qB0cwNoMyrh6lUrcNfBdaubnaP5tn1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765816723; c=relaxed/simple;
-	bh=KckEDwOpPTvVDuV6vEp85iQKEd6lVbIzeIrpO820OvY=;
+	s=arc-20240116; t=1765816726; c=relaxed/simple;
+	bh=Mw38vMoCtsN1M3uLp9FBjOW1Fc/flVcfne0jEO3XE6c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oHI9Z7uh2chPuKzrsY6DsboJDLSsdiLzyJAv5D0x/ciF8PoBnNas+eUOp5BTqf/eHWM0nOW3omY4cjD97frcIP7sYsr9amPiMh8JApVS+NJGIHKV2VUBCSGh6V7gbEkYo/mn3rbMbBbJ6ERNqQ+EhhS9ycnTmvQvaZQz7i6o7ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=v+T8RzjO; arc=none smtp.client-ip=209.85.128.48
+	 MIME-Version; b=uQjt4aBcL/Emi73leEv/t0TBsJQEBQ2Y7/euf82WOGzjoc79ZnrJcYO+0G+B/UpENL/MMh/uW5xdPg4jN/xO1q73uSYZzXTus/SLoVAgcARKGJELrVCqwEqu4xQjpb7cZE9NYDepaWhNRAhK6Y6gb8OHXyS2wMsd4MXEkrp0txc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=iUsJpGZX; arc=none smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so29220805e9.1
-        for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 08:38:38 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47a8195e515so30234995e9.0
+        for <linux-spi@vger.kernel.org>; Mon, 15 Dec 2025 08:38:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1765816717; x=1766421517; darn=vger.kernel.org;
+        d=sartura.hr; s=sartura; t=1765816719; x=1766421519; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Glxh1+4wMOAEOdPMYe7TVA1/ll/sUwlQUZ1Z0+HONCM=;
-        b=v+T8RzjODpQ2o7XMuoOGoo26SSMjx6obFhRx1WllniiTrhMuXJbcM//TfBZBcR/Ka/
-         g+hDI8INtxekK1pvWAzhJ8ObK2Ja2zlYBIAtc11s2rFb9C2fvjzrSJQGl1ECLR1/c+ju
-         ETmZ6hzDDCNv5aOrlTLwjlSTw5hurjSZRkI8/NxGcEo3hJPzHVk6amLwpNldSF9xjiu1
-         zgahaIHce3vgT3My/TcIxJDCjVgozsuUB0rRsyTh9ocDsVFWmEgc2S/eT4pKaNeFpNos
-         vFJjsEduyB0oLFdK4zLfbFY2OSLX7gBayxbx9cJs9PYlEin87d24+LCvdrMg0q6a+eZw
-         Rdbw==
+        bh=7cr536UDgS92jlWZeDNjEl4kPxUbLD36ZKIS2o6rIwQ=;
+        b=iUsJpGZX682GOZg0dTxwZ4ZZoHNesPQ7M7vW2QQE12+WBjlxzK8UMiYx4T/uOclL2u
+         R7l3gYGEDTWZa0KjaLP6cY1JNsNcO6sQbhXW/KDZqDBGTUK4HqRWEb2+dndM4yJx+NUd
+         JK1nf1td7frr+LoBRNFWq2NRbuQVh5lys3XUdBySClcaJ7DBrR+LczNnwj55gd5LdyN3
+         OHBDwsF3ahAzySoppmxMd5CnOO/W5Bx1Jqtm//wBShRyCSmFkbIbX1qHi8MkHHZrsXrR
+         0mjNYd/Hi/SnMzY9/aNvWBb4FCHtW2jCue7iG7l7Vnz38IeIOXuncaXMsVTud1bGbIcR
+         ixGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765816717; x=1766421517;
+        d=1e100.net; s=20230601; t=1765816719; x=1766421519;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Glxh1+4wMOAEOdPMYe7TVA1/ll/sUwlQUZ1Z0+HONCM=;
-        b=WKVbQQdOrqSot6lTdPk28FZXOlO2r6oaiVgWebNDik1QDSvaKgD5QwP8eM54bKqwsQ
-         eKDzb0UUParQyhQSyhLYBgQKF1Pxj56ChyB6asHr/DwbyyvJLujNT44XhBgmOAL7ZvPO
-         Wclk7mCZXzBJEsWduDxCQQqAMRVGM5nN20DXaxAY9nXoKkv6YyjvGpKXMCw2cPexASrC
-         sH+sb1GtbQNyIpKFf5JQp5lFETkdJgIYxa/LiODHlAgs7vyApiWSNZztbploFpwzzS6Q
-         iDpUZZOuTlZnVY1uCXuUI2rxd1WSafjOTMPPqCU8OwOW0LlZwy7G5LOhFx4xEngTMn0y
-         EyPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ0l+JJUJCJsx0RaEJUsQGJT6w/KKxhhoYVqJMOl9yvyFKUFUGaQAgIyrRgXz0ndeFDSNwjiQK7FE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylJ9mYKmTvX+JtbmcJk1lFOaANRck9xF5bEGEn3FrzuccKfd12
-	6Y54f54pXHdr1mvxGZ7BpD3q83elZ7Ypjwx+nhPhP68oAuRyh0+qVPN6azu/QGiu8sY=
-X-Gm-Gg: AY/fxX6EuVXEbjQtBXBs1keatN1djZo4k7KGZaE3tNYO6MvlRBvANaDMS5urcfVK6kL
-	LxTxJBeTRFrKF1DLghBOT8nMK8ko7arXgBdHkULOSpAXt1d0NeE+gwXaFF1bbmEGLOoN2ZJdljP
-	sNXdnREfvyvXLwIZMjK3iJ4hzJ8r/4f4p52LzbLtZZvR1ioa4suNVgdsCg7b7zarlbFzezqTgln
-	35ZenBGMRjELRdyugm8VSv4Kqp8ky+EMHDkAraJmZncXQzbEKBl3HRLPqlhBxY0G7kdBxAWcpth
-	zfhY+xpe57r7w+yEMcZ3TBmxSZQoA3G6YFtcUwP72rPD05lpSBW4nZ/Qvc8Efn1/C37PijdkZW/
-	vV1/ekvoRiMKJaeH6Oq7lAp3CjkX9rW/fDb8+cfPHjz1kgSIt+dGxlZYr28f4iKtupZ4nHuUsqq
-	UeO2bo9DtCUaoeENZD+TBLnDunzEga02XgfeX7cyr1o8e1
-X-Google-Smtp-Source: AGHT+IET494SX2l9gCFBDAsNgva9GdCaocHF5w6Fqopjo065ROPc9sjb2/YbJQBUdoy8LPQteXLhmg==
-X-Received: by 2002:a05:600c:a31a:b0:47a:9165:efc4 with SMTP id 5b1f17b1804b1-47a9165f157mr97992715e9.33.1765816716425;
-        Mon, 15 Dec 2025 08:38:36 -0800 (PST)
+        bh=7cr536UDgS92jlWZeDNjEl4kPxUbLD36ZKIS2o6rIwQ=;
+        b=eY2HuOUO5CDhdfrcAemsSMsPRu1i/1f8zA5ZqJGtqki6BJTVGHAydpICXl3EzULO5X
+         Cpyhk54q2N3Ra/f4L1BJvWCk3AHd2HExzwOP07iamPmCAeeB49g4riROgdsZvFsd/AAq
+         OBR7rADeLgcGdSf00dAspEMYNIl71m5VM86Yc9KYxmyezfn0Yxa8dwhk0e7IeDcuKltf
+         Iuf08yz+BcJX7c6mYSKCxLfhQ/mxJ2P1zS1f5u7C8fx5kO7JtVbE97HfsQCiWuYusd41
+         LqZRoLcFgo3/Xf54hzRefMHMQZ3d02bbUmeZGTgstxwhkSn6zyvZ69/AzY/2mDLc3WJU
+         8Qvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXvRnzTdOuX4EqLa0/9L/jO9T+zpq18YeBLS6cV1t9VNMDyGuKIMkz9+AG1NSd1I9kJeYp+6jBdyZU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6C8C3A97ka2Vhz5eui5nawJ5yfjGYXoZulSlNBlvkyPXfWirF
+	wzpMQveGIIC9VL8t7uTAmELyuUi34KNTke/s4nE3yXDNN1Ez4pynJSZsTkrCerABdYY=
+X-Gm-Gg: AY/fxX6fNwAUEjVP0FmHZ6oMOAupqTIfyue310AjaV5HE5ZEOfXK9E1lsxgcx8tN7fH
+	2fe3KRIk2TdlN3oN5Z8ICh6ClNyvCwPRLoOTIFzJLR/yJFnIhlidKYLUI5m7iBpwogGdB3Ikvk3
+	iyw7jZGQngI98rrS1udTK8Zd0p4zA4ODpuwaAATnYEu/cZVKTs9EQ7V2gIApQPXSaKT1dWUc1F6
+	5dg27dDY30QuZhgT7TEDY8wa02tYdiKioa9Z43frOEaDKK6vc6K7/87U3Tj7pDwAtckP2Zwu9zI
+	ifEyv6bbNLFto5qJ0UTihKYBm96V74tNVLOiTrK0nA4hPWOBiNe20T1DctU/4Zjxa/3TJL/OW7D
+	G1EwqHDx9diWLcbXm0pJZGPOSYLGvdXtRKdiYcbtydz4j+aqig06giXIBKuhtQcfQbPV2zM4zyB
+	kIOnAhg09IefRt/ujrIzpUfo3ecuoLFW1xv0hvfRb4HFy7
+X-Google-Smtp-Source: AGHT+IGvG/TSfxfhjYvvmATvH3ZbvzWkRJjCKvDqMhA7t3M2U7NK4AtPk3nLm/dPEELgL3u0/Oj/YQ==
+X-Received: by 2002:a05:600c:524e:b0:46e:48fd:a1a9 with SMTP id 5b1f17b1804b1-47a8f915c70mr115135515e9.33.1765816718894;
+        Mon, 15 Dec 2025 08:38:38 -0800 (PST)
 Received: from fedora (cpezg-94-253-146-254-cbl.xnet.hr. [94.253.146.254])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-47a8f74b44csm192209725e9.3.2025.12.15.08.38.34
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-47a8f74b44csm192209725e9.3.2025.12.15.08.38.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 08:38:36 -0800 (PST)
+        Mon, 15 Dec 2025 08:38:38 -0800 (PST)
 From: Robert Marko <robert.marko@sartura.hr>
 To: robh@kernel.org,
 	krzk+dt@kernel.org,
@@ -124,9 +124,9 @@ To: robh@kernel.org,
 	mwalle@kernel.org
 Cc: luka.perkov@sartura.hr,
 	Robert Marko <robert.marko@sartura.hr>
-Subject: [PATCH v2 04/19] dt-bindings: arm: move AT91 to generic Microchip binding
-Date: Mon, 15 Dec 2025 17:35:21 +0100
-Message-ID: <20251215163820.1584926-4-robert.marko@sartura.hr>
+Subject: [PATCH v2 05/19] dt-bindings: arm: microchip: move SparX-5 to generic Microchip binding
+Date: Mon, 15 Dec 2025 17:35:22 +0100
+Message-ID: <20251215163820.1584926-5-robert.marko@sartura.hr>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251215163820.1584926-1-robert.marko@sartura.hr>
 References: <20251215163820.1584926-1-robert.marko@sartura.hr>
@@ -138,46 +138,131 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Create a new binding file named microchip.yaml, to which all Microchip
-based devices will be moved to.
+Now that we have a generic Microchip binding, lets move SparX-5 as well as
+there is no reason to have specific binding file for each SoC series.
 
-Start by moving AT91, next will be SparX-5.
+The check for AXI node was dropped.
 
 Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 ---
- .../bindings/arm/{atmel-at91.yaml => microchip.yaml}       | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
- rename Documentation/devicetree/bindings/arm/{atmel-at91.yaml => microchip.yaml} (98%)
+ .../bindings/arm/microchip,sparx5.yaml        | 67 -------------------
+ .../devicetree/bindings/arm/microchip.yaml    | 22 ++++++
+ 2 files changed, 22 insertions(+), 67 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
 
-diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/microchip.yaml
-similarity index 98%
-rename from Documentation/devicetree/bindings/arm/atmel-at91.yaml
-rename to Documentation/devicetree/bindings/arm/microchip.yaml
-index 88edca9b84d2..3c76f5b585fc 100644
---- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+diff --git a/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml b/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
+deleted file mode 100644
+index 9a0d54e9799c..000000000000
+--- a/Documentation/devicetree/bindings/arm/microchip,sparx5.yaml
++++ /dev/null
+@@ -1,67 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/arm/microchip,sparx5.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Microchip Sparx5 Boards
+-
+-maintainers:
+-  - Lars Povlsen <lars.povlsen@microchip.com>
+-
+-description: |+
+-   The Microchip Sparx5 SoC is a ARMv8-based used in a family of
+-   gigabit TSN-capable gigabit switches.
+-
+-   The SparX-5 Ethernet switch family provides a rich set of switching
+-   features such as advanced TCAM-based VLAN and QoS processing
+-   enabling delivery of differentiated services, and security through
+-   TCAM-based frame processing using versatile content aware processor
+-   (VCAP)
+-
+-properties:
+-  $nodename:
+-    const: '/'
+-  compatible:
+-    oneOf:
+-      - description: The Sparx5 pcb125 board is a modular board,
+-          which has both spi-nor and eMMC storage. The modular design
+-          allows for connection of different network ports.
+-        items:
+-          - const: microchip,sparx5-pcb125
+-          - const: microchip,sparx5
+-
+-      - description: The Sparx5 pcb134 is a pizzabox form factor
+-          gigabit switch with 20 SFP ports. It features spi-nor and
+-          either spi-nand or eMMC storage (mount option).
+-        items:
+-          - const: microchip,sparx5-pcb134
+-          - const: microchip,sparx5
+-
+-      - description: The Sparx5 pcb135 is a pizzabox form factor
+-          gigabit switch with 48+4 Cu ports. It features spi-nor and
+-          either spi-nand or eMMC storage (mount option).
+-        items:
+-          - const: microchip,sparx5-pcb135
+-          - const: microchip,sparx5
+-
+-  axi@600000000:
+-    type: object
+-    description: the root node in the Sparx5 platforms must contain
+-      an axi bus child node. They are always at physical address
+-      0x600000000 in all the Sparx5 variants.
+-    properties:
+-      compatible:
+-        items:
+-          - const: simple-bus
+-
+-    required:
+-      - compatible
+-
+-required:
+-  - compatible
+-  - axi@600000000
+-
+-additionalProperties: true
+-
+-...
+diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b/Documentation/devicetree/bindings/arm/microchip.yaml
+index 3c76f5b585fc..910ecc11d5d7 100644
+--- a/Documentation/devicetree/bindings/arm/microchip.yaml
 +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
-@@ -1,19 +1,16 @@
- # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- %YAML 1.2
- ---
--$id: http://devicetree.org/schemas/arm/atmel-at91.yaml#
-+$id: http://devicetree.org/schemas/arm/microchip.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Atmel AT91.
-+title: Microchip platforms
- 
- maintainers:
+@@ -10,6 +10,7 @@ maintainers:
    - Alexandre Belloni <alexandre.belloni@bootlin.com>
    - Claudiu Beznea <claudiu.beznea@microchip.com>
    - Nicolas Ferre <nicolas.ferre@microchip.com>
++  - Lars Povlsen <lars.povlsen@microchip.com>
  
--description: |
--  Boards with a SoC of the Atmel AT91 or SMART family shall have the following
--
  properties:
    $nodename:
-     const: '/'
+@@ -238,6 +239,27 @@ properties:
+           - const: microchip,lan9668
+           - const: microchip,lan966
+ 
++      - description: The Sparx5 pcb125 board is a modular board,
++          which has both spi-nor and eMMC storage. The modular design
++          allows for connection of different network ports.
++        items:
++          - const: microchip,sparx5-pcb125
++          - const: microchip,sparx5
++
++      - description: The Sparx5 pcb134 is a pizzabox form factor
++          gigabit switch with 20 SFP ports. It features spi-nor and
++          either spi-nand or eMMC storage (mount option).
++        items:
++          - const: microchip,sparx5-pcb134
++          - const: microchip,sparx5
++
++      - description: The Sparx5 pcb135 is a pizzabox form factor
++          gigabit switch with 48+4 Cu ports. It features spi-nor and
++          either spi-nand or eMMC storage (mount option).
++        items:
++          - const: microchip,sparx5-pcb135
++          - const: microchip,sparx5
++
+       - description: Kontron KSwitch D10 MMT series
+         items:
+           - enum:
 -- 
 2.52.0
 
