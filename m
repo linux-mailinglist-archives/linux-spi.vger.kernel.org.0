@@ -1,134 +1,98 @@
-Return-Path: <linux-spi+bounces-11940-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11941-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 762F8CC3309
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 14:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E1524CC39E3
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 15:34:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6F7103004467
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 13:26:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 601E63007A81
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 14:34:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09C3B3557F5;
-	Tue, 16 Dec 2025 13:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03BF347FCF;
+	Tue, 16 Dec 2025 14:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fFwjwqyl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sjaqvgEE"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89538354AF1;
-	Tue, 16 Dec 2025 13:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D52346E73;
+	Tue, 16 Dec 2025 14:34:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765890711; cv=none; b=JJqjVcrzVs6ePmYLduXmlxXfnRcZNuN0e89qpUznwgkDPFJjFeqn3DZV3e2pdY4I/B+RgMHli6ReqCEZZkb0za/mqCIUgP38fP/PQzSYY7TkWxFRn3XytXs9fllG6I7M+3pEXFGU6q457V8W8/fOATc9Mp1YGcxGL4ropPps7rE=
+	t=1765895682; cv=none; b=S2YYI7VKP3P2Rc5mH0ZlLtmN9qUoZRKaI568oaEX3RLvbz592nTYW7WFaEx+2rhHvzp/9xiXkxmKhZ2p5X6T+3SUK/o6vuswJIXgxK8+RYV8Ka8S2whEfw/5xEOQsyxl480wFPFmRG+DGo2MWZPgNpWbMYc0a7hR78BvgmmAOeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765890711; c=relaxed/simple;
-	bh=uK7rtQd0fuH8HIq2iyTTKTpcKJsEkMoXU53XE1O8rzg=;
-	h=From:Date:Content-Type:MIME-Version:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=WjqNvnPVSnnLYiNDt9GKiqMAKsWDOG/gLl3KPDJ8QB7RZCSLCzVw1Z6uGsIVJrJKVreTbmuj7Kx7qRtlcKRDF6le3uEkRXGbxKKR7iHhCIHBTZ7EQqDQ9Jn1go3aD7Zm0KsRDqI/fv5sK2ufufz8docbp0UhoOQH0To2SvwJUOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fFwjwqyl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB05BC19423;
-	Tue, 16 Dec 2025 13:11:50 +0000 (UTC)
+	s=arc-20240116; t=1765895682; c=relaxed/simple;
+	bh=S6esN3wft2T5E6VFVjabpJYJD3uugA8OjhnQ5Fszg8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=i+sSzwtnNae5FyEIfwilOE5IcA8jZ53048HlJlOWIg71N9hgdMcnVPJeOV1gq0iWrtrvnGsFd7CAFauL1diz6XqbKqxloRI5NvfM+IqtTKyGqVOvW0zqKWi9022JDPihykXZN8p5OzjUnC4Foa2ULR7tAqlzhhA66zS6IYh0BeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sjaqvgEE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2243C4CEF1;
+	Tue, 16 Dec 2025 14:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765890711;
-	bh=uK7rtQd0fuH8HIq2iyTTKTpcKJsEkMoXU53XE1O8rzg=;
-	h=From:Date:Cc:To:In-Reply-To:References:Subject:From;
-	b=fFwjwqyl4XciRQVPx8XogJowdRcsdYKb/ioKdv1BlYgi1o+jrg3aT4TAjJOxcokcI
-	 QsSoL7E/aTwp0Xx89fUuxiHPnEWOL+3YP75h9bjRELSdSMWlSEQ92eq4Dd4ceSznxM
-	 FA0++iF6bDiu+t9pjncqus1HTUPK3svYbIJYzU9lKuMSr/WEguQljrDJAZRNzhNg42
-	 v7hCHoWhSvks4wsNhavYOp/zj1CynIbu8P4b+tzQRYE66RX9T0NwB8sBSiXWwnDEBo
-	 MIlWjd8LzSrypRzNesJoMN6k5blOrxuig+/T5bgwizw08Jd3RqQ5mQlMx9Ug7dba8M
-	 js45kMZa3qkiw==
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 16 Dec 2025 07:11:49 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1765895682;
+	bh=S6esN3wft2T5E6VFVjabpJYJD3uugA8OjhnQ5Fszg8s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sjaqvgEEeY2Elte8EJHJvLjQXlkPMAhfG+Eqb843WcyWkiNi/bl4nt9YFsJF4Q9x1
+	 KE/IqNWYMUmaLcel8GCMuGCqbpA7ndsgJR12B6eI3QJ7uzdv8yTO/3n9/4gRGpDGnO
+	 RgSbTyHcTsqt/Z9/FG+WOA3f9YJDo7tLKdyS4KrsD8hJ1hdS+Hmx+AvJw4+fllV/tA
+	 EmXMtyQpqsQrRrABltaw6RaWxJW5ZTZutvP6VHar2R3RuWpmqnloQ//SW2n5YqnWRa
+	 CNj7spWONpmwQ9IleOKU9PikFj6kLq3BteDthcUCYJ5b8acRMx0m3GCWz/5m8kYN2g
+	 jC6D28fNqvZww==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id D468A1AC568D; Tue, 16 Dec 2025 23:34:38 +0900 (JST)
+Date: Tue, 16 Dec 2025 23:34:38 +0900
+From: Mark Brown <broonie@kernel.org>
+To: "Dutta, Anurag" <a-dutta@ti.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Siddharth Vadapalli <s-vadapalli@ti.com>, linux-spi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] spi: cadence-quadspi: Parse DT for flashes with the
+ rest of the DT parsing
+Message-ID: <aUFt_hLak5QNg4ai@sirena.co.uk>
+References: <20251204-spi-cadence-qspi-runtime-pm-imbalance-v2-1-10af9115d531@kernel.org>
+ <176580718260.161463.4539075429059025833.b4-ty@kernel.org>
+ <82ffe3bc-6789-43b5-a48c-a1f490a70c64@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: netdev@vger.kernel.org, linusw@kernel.org, vkoul@kernel.org, 
- pabeni@redhat.com, jirislaby@kernel.org, lars.povlsen@microchip.com, 
- linux-arm-kernel@lists.infradead.org, claudiu.beznea@tuxon.dev, 
- kuba@kernel.org, mturquette@baylibre.com, Steen.Hegelund@microchip.com, 
- mwalle@kernel.org, tudor.ambarus@linaro.org, devicetree@vger.kernel.org, 
- UNGLinuxDriver@microchip.com, edumazet@google.com, 
- linux-clk@vger.kernel.org, andi.shyti@kernel.org, olivia@selenic.com, 
- conor+dt@kernel.org, luka.perkov@sartura.hr, richard.genoud@bootlin.com, 
- linux-hwmon@vger.kernel.org, krzk+dt@kernel.org, 
- wsa+renesas@sang-engineering.com, Ryan.Wanner@microchip.com, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- alexandre.belloni@bootlin.com, lee@kernel.org, linux@roeck-us.net, 
- davem@davemloft.net, gregkh@linuxfoundation.org, 
- kavyasree.kotagiri@microchip.com, nicolas.ferre@microchip.com, 
- andrew+netdev@lunn.ch, romain.sioen@microchip.com, sboyd@kernel.org, 
- linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
- linux-serial@vger.kernel.org, daniel.machon@microchip.com, 
- dmaengine@vger.kernel.org, richardcochran@gmail.com, 
- herbert@gondor.apana.org.au, charan.pedumuru@microchip.com, 
- linux-crypto@vger.kernel.org, linux-i2c@vger.kernel.org, 
- radu_nicolae.pirea@upb.ro
-To: Robert Marko <robert.marko@sartura.hr>
-In-Reply-To: <20251215163820.1584926-1-robert.marko@sartura.hr>
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
-Message-Id: <176589052274.1815136.7513475493879599819.robh@kernel.org>
-Subject: Re: [PATCH v2 01/19] include: dt-bindings: add LAN969x clock
- bindings
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1R4mcgewwj78Qo1g"
+Content-Disposition: inline
+In-Reply-To: <82ffe3bc-6789-43b5-a48c-a1f490a70c64@ti.com>
+X-Cookie: Think big.  Pollute the Mississippi.
 
 
-On Mon, 15 Dec 2025 17:35:18 +0100, Robert Marko wrote:
-> Add the required LAN969x clock bindings.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> ---
-> Changes in v2:
-> * Rename file to microchip,lan9691.h
-> 
->  include/dt-bindings/clock/microchip,lan9691.h | 24 +++++++++++++++++++
->  1 file changed, 24 insertions(+)
->  create mode 100644 include/dt-bindings/clock/microchip,lan9691.h
-> 
+--1R4mcgewwj78Qo1g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Tue, Dec 16, 2025 at 09:38:01AM +0530, Dutta, Anurag wrote:
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+> I was under the impression that we are agreeing on this solution :
+> https://lore.kernel.org/all/20251212072312.2711806-1-a-dutta@ti.com/
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+I think we should do both, there's no need to do so much of the init
+work if the DT setup is just broken so the device can never possibly
+instantiate.
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+--1R4mcgewwj78Qo1g
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  pip3 install dtschema --upgrade
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlBbfoACgkQJNaLcl1U
+h9Ay0wf+J++UL9gR2qnh2NOoaQkn7QDp8fiEs6/A29kt6PM321Tr8MjDEgSJ/15h
+FA6c9xUhGW8SW4mQQ9A3t9nKqU5XHwMWWuhCCoDcw4JyStIyedJ3GlBbXdJ3CA9k
+Jy1q6GGzQ/fMTE+zLdooHFkBq9tFBRDKtucLpMd6vO9bCfzk++D5g8kqlKhCCs8k
+OStaTa+wcBUu342PanFXPxTDVMDxFg5IBAGZ0nMUyYhuMTpF+jWrAKoksktxyidy
+p9JridZfyOfiOQKTQi2VAKFVQz82ONuyuaYAxpF23M0URIfeqz8DRS22qWC17JUp
+nSKAfHhNFh+1Kl8a2s1PPPMFh+YD6Q==
+=NE0p
+-----END PGP SIGNATURE-----
 
-This patch series was applied (using b4) to base:
- Base: attempting to guess base-commit...
- Base: tags/next-20251215 (best guess, 14/15 blobs matched)
- Base: tags/next-20251215 (use --merge-base to override)
-
-If this is not the correct base, please add 'base-commit' tag
-(or use b4 which does this automatically)
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/microchip/' for 20251215163820.1584926-1-robert.marko@sartura.hr:
-
-arch/arm64/boot/dts/microchip/sparx5_pcb135_emmc.dtb: / (microchip,sparx5-pcb135): compatible: ['microchip,sparx5-pcb135', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb135'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb135.dtb: / (microchip,sparx5-pcb135): compatible: ['microchip,sparx5-pcb135', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb135'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb134.dtb: / (microchip,sparx5-pcb134): compatible: ['microchip,sparx5-pcb134', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb134'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb134_emmc.dtb: / (microchip,sparx5-pcb134): compatible: ['microchip,sparx5-pcb134', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb134'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-arch/arm64/boot/dts/microchip/sparx5_pcb125.dtb: / (microchip,sparx5-pcb125): compatible: ['microchip,sparx5-pcb125', 'microchip,sparx5'] is valid under each of {'items': [{'const': 'microchip,sparx5-pcb125'}, {'const': 'microchip,sparx5'}], 'maxItems': 2, 'minItems': 2, 'type': 'array'}, {}
-	from schema $id: http://devicetree.org/schemas/arm/microchip.yaml
-
-
-
-
-
+--1R4mcgewwj78Qo1g--
 
