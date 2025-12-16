@@ -1,90 +1,103 @@
-Return-Path: <linux-spi+bounces-11948-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11949-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A2F8CC45C1
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 17:43:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AB7CCC46C9
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 17:51:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2DD29301A712
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 16:37:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 19CFE3007EE1
+	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 16:46:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38347314A7E;
-	Tue, 16 Dec 2025 16:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9568A3195FD;
+	Tue, 16 Dec 2025 16:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QWZdWyYf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aMz7uwpD"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A3A3126BE;
-	Tue, 16 Dec 2025 16:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D823195E6;
+	Tue, 16 Dec 2025 16:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765903068; cv=none; b=R+Cjc1QNPr5QevkUyx/6Oof68zhewD9eKY0bqSeyuKXnYQZBTDfEGq777yaWWDZIdKwLcdNbtaJirqrD4Eib2OjgrNMGDiLTIv5KcWESp+ZjUOD84LRNoKhil0XZIMbZB2jjG59lnBsgrxN4rHI0/yyVn/dEKlxTbskWdmDVwww=
+	t=1765903597; cv=none; b=h7+27+0V352MmGT4QQIJqIINvLT9nfGAuhiDJ4PchtNdivxIPa2GBjVK4Zy+GxF0DU4UHaqxWnLuxkxRZtEoqOmn4SB8eLLcX4PS4aA4+fYxWhy5PKlaV958Cot/4QbjtEEj6abjaBgojt/CHgqSBoHvyLt0YeOEXe3CMSS9oJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765903068; c=relaxed/simple;
-	bh=nYJWKZc8hGDqabxo7wfURuONOr3X91wkOJ4WYpHZzrI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PIkyO1OEmH06MPq4ZJioCHoOz1Rli39+1iG93XzgVijZxEdmoFE3tDR0zWLOQDs8hRofK+oiZmaeIOQLPY5YxCfHczZGA9OtMEqSmcKcBRS1R180pDH8P9j5nvfOSG+7g+jCbdjd0gv3bpSDFNNuSYIgNkXdivry44SYaI0BTzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QWZdWyYf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C81C4CEF1;
-	Tue, 16 Dec 2025 16:37:46 +0000 (UTC)
+	s=arc-20240116; t=1765903597; c=relaxed/simple;
+	bh=UNSRNeBiaj3Rry5J7rpo+9jk7tXOJzVaBHlmdHHL6GQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=isADHmsNO6/jKyy8aYWSc+4PiYOk545TK4np6VArjmnzaeIYztZFV18jI2EHRLglHxtFp6YvglnfXMKjJwrKonMt4hpDM/FiaGprbSKmX1BgIQneXNxKliG03rUy+pUzjFItGKXGItFd5Edmlb19aMc6ceuIupLh5lQ6NtL8zF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aMz7uwpD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A850C4CEF1;
+	Tue, 16 Dec 2025 16:46:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765903068;
-	bh=nYJWKZc8hGDqabxo7wfURuONOr3X91wkOJ4WYpHZzrI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QWZdWyYftoYqPB9H+jeYCrtipMpt766hW667M/8VGFaFB6wo9t3kWRMjIOyDs54sg
-	 Ubkum2P8Qnc9YL3o5IMy9Kk9x4uY3/VEHgoXLipGNS7h5irL1Bk4z7X08VZ85pITo4
-	 +yOHIfCZuUOuVYBVdOxL7mX2pVqkInhnKAxDGpSWc8NrI9VkvLkSFsB9fmq/ryN/M3
-	 oscwj8mqHCwijK1ZxW9WO+fBPVjHh/BYO0kztRMAzTl1qBE2ks0biwkm/8IiYWjPaf
-	 CBvb1k52Wmv43oOeZEmlz9OCdI1Qy4WEQ/4QKD9JT10lS0O68XPLpJvZDk8Cr417m9
-	 CAqoD90++wv4g==
-Date: Tue, 16 Dec 2025 16:37:44 +0000
-From: Conor Dooley <conor@kernel.org>
-To: CL Wang <cl634@andestech.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, tim609@andestech.com
-Subject: Re: [PATCH V3 1/3] dt-bindings: spi: Add support for ATCSPI200 SPI
- controller
-Message-ID: <20251216-outgoing-unfocused-12f4e850aa71@spud>
-References: <20251215132349.513843-1-cl634@andestech.com>
- <20251215132349.513843-2-cl634@andestech.com>
+	s=k20201202; t=1765903597;
+	bh=UNSRNeBiaj3Rry5J7rpo+9jk7tXOJzVaBHlmdHHL6GQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=aMz7uwpDOS8jcT7ByQo/F0gSxOsvd3ADD8dn4twiU3VojJjZqFs6Cliu1+bbKhuFN
+	 DWT/B4oPIjpJqLuuyVLw+IPFazTOgHJqF627ME1nKW3tk6LU0mcBh2qNgDCmBGWxn6
+	 2HzNigE1thZRsDbMRwI7IIXOtcHa+ZwMZkhTXESFX5x7BpIP3xeqzObs7kDdSvurWh
+	 dU69Kkj0RwfHiV9KVz61JOQjtW58Bg1gLQOTdmHqgX5eJfNUcln8+IDemVDOcn9/h1
+	 4MV0UExndT1dZ9UoLsNGm9VEjELK9LXeaXVt3PgoUzzFYctdxxq6fQRwU4mtIUf4p7
+	 8TAVib8cccv6Q==
+From: Mark Brown <broonie@kernel.org>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Erwan Leray <erwan.leray@foss.st.com>, 
+ Fabrice Gasnier <fabrice.gasnier@foss.st.com>, 
+ Alain Volmat <alain.volmat@foss.st.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251215-stm32-spi-mp2x-dt-updates-v1-0-464a5fd20f13@foss.st.com>
+References: <20251215-stm32-spi-mp2x-dt-updates-v1-0-464a5fd20f13@foss.st.com>
+Subject: Re: (subset) [PATCH 0/3] spi: st: add power-domains on stm32mp2x
+Message-Id: <176590359301.183097.12758319202580831902.b4-ty@kernel.org>
+Date: Tue, 16 Dec 2025 16:46:33 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SnLKxpP1VyA0uivt"
-Content-Disposition: inline
-In-Reply-To: <20251215132349.513843-2-cl634@andestech.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
+On Mon, 15 Dec 2025 13:26:19 +0100, Alain Volmat wrote:
+> This series add the possibility to indicate a power-domains for an spi
+> instance and set the related property for all spi instances on
+> stm32mp2x.
+> 
+> 
 
---SnLKxpP1VyA0uivt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to
 
-On Mon, Dec 15, 2025 at 09:23:47PM +0800, CL Wang wrote:
-> Document devicetree bindings for the Andes ATCSPI200 SPI controller.
->=20
-> Signed-off-by: CL Wang <cl634@andestech.com>
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-pw-bot: not-applicable
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Thanks!
 
---SnLKxpP1VyA0uivt
-Content-Type: application/pgp-signature; name="signature.asc"
+[1/3] dt-bindings: spi: st,stm32-spi: add 'power-domains' property
+      commit: f4acea9eef704607d1a950909ce3a52a770d6be2
 
------BEGIN PGP SIGNATURE-----
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaUGK2AAKCRB4tDGHoIJi
-0lT7AP43tH7JLEaYJsTrK+NQJUHYluUXxjG9fIEg/fauciKtFgD/UHrYYleLRbWO
-LyEOqWhar7w1tSf5lNk2ZeWdhw8J+gw=
-=ay8m
------END PGP SIGNATURE-----
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---SnLKxpP1VyA0uivt--
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
