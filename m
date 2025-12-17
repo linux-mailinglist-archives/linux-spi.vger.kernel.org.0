@@ -1,87 +1,104 @@
-Return-Path: <linux-spi+bounces-11975-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11976-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8225CC5879
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 00:53:35 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A41ACC5D33
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 03:51:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 703233013EC1
-	for <lists+linux-spi@lfdr.de>; Tue, 16 Dec 2025 23:53:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AC2A33010ADC
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 02:51:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9F533FE18;
-	Tue, 16 Dec 2025 23:53:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B59211706;
+	Wed, 17 Dec 2025 02:51:04 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D785D2AEF5;
-	Tue, 16 Dec 2025 23:53:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.201.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD73B18027;
+	Wed, 17 Dec 2025 02:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765929202; cv=none; b=Me4NqsWUo0L1g7h0RvCURhhlEKMWsk9EOrjEJGxcizBVeEi09Gk4Tf40ZpPAgjYBjKSe+Bgb86kohiVxQuQ7audjnAKV4fknwXAbeCbrY5B289SndUHn4I5KQk8eyFUWaiTPrVzksjSJptFan4uVxklTPpvHhQ6LftBnqgRNwEI=
+	t=1765939864; cv=none; b=QpkB6X6+nS7d9H9Efzzb1cW+E2MhIwSG2QAk5D5CDQLl5c43lgY4VEhtqBmuw3VRq3iqAexy74LRkJWwEXNWOzS58z4lZASjYyj4kaMH3LMwyehkisCbHCUv0Oa98BMSapO0sUtB86dUAPfykFe2eHHsCK2QYDhUrBV9QuOGrDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765929202; c=relaxed/simple;
-	bh=4R5pP+9fNQ621zzG/hIpJ2sC2WnkVrGLlokwDyF6LWM=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=ocW8sMFCqVemjrIdun5o0uJN+sYp0BWUqT9DiDj6nBcgdBNFYnWTDpLsXIxDZktMd6ML4joQ1HoYSICRqCNBnsGjw11jBtdUYQdPT1EMHLJfCnHwKO3USyNWOQDhi/xjvMwxIJgrzZlkC/j9VeZ9IaLJt80dSC9xztD1Dluc+Fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=walle.cc; arc=none smtp.client-ip=159.69.201.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=walle.cc
-Received: from localhost (unknown [IPv6:2a02:810b:4320:1000:4685:ff:fe12:5967])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.3ffe.de (Postfix) with ESMTPSA id 189D966;
-	Wed, 17 Dec 2025 00:44:22 +0100 (CET)
+	s=arc-20240116; t=1765939864; c=relaxed/simple;
+	bh=7Rkg3yuMCP7VSzFdSTO3LHDBeQ8KZ8MA1w9hFH9/Xp4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hQXtxxQ9/dGEICEoh79aaTF6D3Evrj1tDXELGjrgsQsSAZCq4XoP9Wve5q+PAJ3HB4jsfbvnAuZ2PU9lQxRu/voO0dA+3cr+nvIOMIBs+d15sWOV40/7bLUE6jDgBbJw5/WM2cuzOv3e4X5dfoIp179hk5Bmp2fQHnQQ7xNEIZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-03 (Coremail) with SMTP id rQCowAAnSuGCGkJpnTb1AA--.10388S2;
+	Wed, 17 Dec 2025 10:50:42 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: broonie@kernel.org,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com
+Cc: linux-spi@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] spi: stm32-qspi: Remove unneeded semicolon
+Date: Wed, 17 Dec 2025 10:37:21 +0800
+Message-Id: <20251217023721.1684244-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 17 Dec 2025 00:44:21 +0100
-Message-Id: <DF01GRNQ41ZQ.JP9UG9WD02QL@kernel.org>
-Subject: Re: [PATCH v2 03/19] dt-bindings: arm: AT91: relicense to dual
- GPL-2.0/BSD-2-Clause
-Cc: <luka.perkov@sartura.hr>
-From: "Michael Walle" <mwalle@kernel.org>
-To: "Robert Marko" <robert.marko@sartura.hr>, <robh@kernel.org>,
- <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
- <alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
- <Steen.Hegelund@microchip.com>, <daniel.machon@microchip.com>,
- <UNGLinuxDriver@microchip.com>, <herbert@gondor.apana.org.au>,
- <davem@davemloft.net>, <vkoul@kernel.org>, <linux@roeck-us.net>,
- <andi.shyti@kernel.org>, <lee@kernel.org>, <andrew+netdev@lunn.ch>,
- <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
- <linusw@kernel.org>, <olivia@selenic.com>, <radu_nicolae.pirea@upb.ro>,
- <richard.genoud@bootlin.com>, <gregkh@linuxfoundation.org>,
- <jirislaby@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
- <richardcochran@gmail.com>, <wsa+renesas@sang-engineering.com>,
- <romain.sioen@microchip.com>, <Ryan.Wanner@microchip.com>,
- <lars.povlsen@microchip.com>, <tudor.ambarus@linaro.org>,
- <charan.pedumuru@microchip.com>, <kavyasree.kotagiri@microchip.com>,
- <devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
- <dmaengine@vger.kernel.org>, <linux-hwmon@vger.kernel.org>,
- <linux-i2c@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
- <linux-serial@vger.kernel.org>, <linux-usb@vger.kernel.org>,
- <linux-clk@vger.kernel.org>
-X-Mailer: aerc 0.20.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-3-robert.marko@sartura.hr>
-In-Reply-To: <20251215163820.1584926-3-robert.marko@sartura.hr>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAAnSuGCGkJpnTb1AA--.10388S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZFWDuF4rXw4DXw43Gw18uFg_yoWDJwc_CF
+	1DGr1Ik34qkryDt3W7KryrJr9xZa1DXanYqrs2qFZ8A3yDX3WUu3y8ZFnrXw47Zw4qka97
+	C3ZrXw1ayr13KjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbs8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r1q
+	6r43MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
+	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
+	wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
+	v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
+	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
+	ZEXa7VUbLFxUUUUUU==
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-On Mon Dec 15, 2025 at 5:35 PM CET, Robert Marko wrote:
-> As it is preferred to have bindings dual licensed, lets relicense the AT9=
-1
-> bindings from GPL-2.0 only to GPL-2.0/BSD-2 Clause.
->
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
+semantic patch at scripts/coccinelle/misc/semicolon.cocci.
 
-Acked-by: Michael Walle <mwalle@kernel.org>
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+---
+ drivers/spi/spi-stm32-qspi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
--michael
+diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
+index 2a0ee96786fa..d1df66875809 100644
+--- a/drivers/spi/spi-stm32-qspi.c
++++ b/drivers/spi/spi-stm32-qspi.c
+@@ -153,7 +153,7 @@ static void stm32_qspi_read_fifo(void *val, void __iomem *addr, u8 len)
+ 		break;
+ 	case sizeof(u8):
+ 		*((u8 *)val) = readb_relaxed(addr);
+-	};
++	}
+ }
+ 
+ static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
+@@ -167,7 +167,7 @@ static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
+ 		break;
+ 	case sizeof(u8):
+ 		writeb_relaxed(*((u8 *)val), addr);
+-	};
++	}
+ }
+ 
+ static int stm32_qspi_tx_poll(struct stm32_qspi *qspi,
+-- 
+2.25.1
+
 
