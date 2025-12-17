@@ -1,47 +1,82 @@
-Return-Path: <linux-spi+bounces-11976-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11977-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A41ACC5D33
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 03:51:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEBECC6424
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 07:31:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AC2A33010ADC
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 02:51:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 997CE30C0583
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 06:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B59211706;
-	Wed, 17 Dec 2025 02:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111EA2E4247;
+	Wed, 17 Dec 2025 06:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3yiQRL+"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD73B18027;
-	Wed, 17 Dec 2025 02:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8612E54AA
+	for <linux-spi@vger.kernel.org>; Wed, 17 Dec 2025 06:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765939864; cv=none; b=QpkB6X6+nS7d9H9Efzzb1cW+E2MhIwSG2QAk5D5CDQLl5c43lgY4VEhtqBmuw3VRq3iqAexy74LRkJWwEXNWOzS58z4lZASjYyj4kaMH3LMwyehkisCbHCUv0Oa98BMSapO0sUtB86dUAPfykFe2eHHsCK2QYDhUrBV9QuOGrDw=
+	t=1765952815; cv=none; b=dYHpwRkamYfQsEc6GlQ8VHzlZ/q67PUxUcxn+WBl73inj1u+I6u7HR93jGhRc3x6NJ0doAoPxsNjDf1NXkozD9HB0OfsJ+smK2sNFXmIpHRfsOMWelvRb65wJRuoxGO9B2VfwvZAYEG6NWgx/TdO//SqRXD47Vn2201Duw++ADc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765939864; c=relaxed/simple;
-	bh=7Rkg3yuMCP7VSzFdSTO3LHDBeQ8KZ8MA1w9hFH9/Xp4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hQXtxxQ9/dGEICEoh79aaTF6D3Evrj1tDXELGjrgsQsSAZCq4XoP9Wve5q+PAJ3HB4jsfbvnAuZ2PU9lQxRu/voO0dA+3cr+nvIOMIBs+d15sWOV40/7bLUE6jDgBbJw5/WM2cuzOv3e4X5dfoIp179hk5Bmp2fQHnQQ7xNEIZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost (unknown [124.16.138.129])
-	by APP-03 (Coremail) with SMTP id rQCowAAnSuGCGkJpnTb1AA--.10388S2;
-	Wed, 17 Dec 2025 10:50:42 +0800 (CST)
-From: Chen Ni <nichen@iscas.ac.cn>
-To: broonie@kernel.org,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com
-Cc: linux-spi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Chen Ni <nichen@iscas.ac.cn>
-Subject: [PATCH] spi: stm32-qspi: Remove unneeded semicolon
-Date: Wed, 17 Dec 2025 10:37:21 +0800
-Message-Id: <20251217023721.1684244-1-nichen@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1765952815; c=relaxed/simple;
+	bh=tk/vYTSu9kExYfYBF4YugpomB9Axi5NBZ14ZaDI0yXg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hNVRTRr1ap1kk9QQf7fFHIgw7JNqr5C7xtdtfeF7jiStUD1K0iD7sR+FtsVQODkcZswIo5ZIhGqYAvNwzIjvtaifqpvlOFfmmNqVZ5GezrRgZw2O62iIy9F8u7XtoJp/De7Js/8+NEnOlu4PjugEhCprbX18+slq5NY0NhTMSZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3yiQRL+; arc=none smtp.client-ip=209.85.210.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-7bc248dc16aso4470163b3a.0
+        for <linux-spi@vger.kernel.org>; Tue, 16 Dec 2025 22:26:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765952813; x=1766557613; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dhMQODQXuVw+9I7B8O7Ta9ufPwTrKJPDLY/J8KwmSds=;
+        b=R3yiQRL+q8/XyaZj8APlL4R+rFzCDEoEj0/jweoDq4EiwICAVxXFFboVOjLxq88t92
+         4r2wGE2ItT39UVcFgrX0Yb1ZphOBXyyT9b3yh6rXRkDFE5u/GxuXYW8H5fCCax2QJ/NH
+         xsvv2fjXD9ypp06LS7ZXak82lmfHzT4hpEOULz78fhwtZojrfIwLLNt0me+ea4Na8TRg
+         b76fxpmNz3UhdoK/J7cjaAj7BNGLYUjmtd0ZvyE+oSO98TtWvWnulwuD9ySWiHon2ecO
+         c/6Sxo3ACSG0euRslVjX7xq/Sfh062i2DOy0Hdj4MjpDpY/1IlIg2QVnqhzsq8ve2P8l
+         ygcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765952813; x=1766557613;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dhMQODQXuVw+9I7B8O7Ta9ufPwTrKJPDLY/J8KwmSds=;
+        b=gLznLTJr0RfeRZHcmukXPFi9OqP3QHRzx1IoGElsamuyz/oI80wVEXabBig5KVAWhw
+         TOg8VEwdcW2W9HGbCvXx1MjvGKpFk1NlG/BHsr4Wp1WH4nRzz/WM+5LAWsYvNj17t6gM
+         NiVkVJA50iuBeLIALVex1+6DSvnXf4UXGbdiGUKHq8SgGClAB9nIMXTPEMh+XYgbIDy1
+         /KPzDrstbCHHjmtUNiPC5KIM5MT5VgO+lx+EooFQYk6M8yrfCtbTJGHt+yiLEsK28wVM
+         j1t47Es3m8RsQrDLKX1S7bCDpGpdghjB+6bU8KxPfJBj2p/DkwwA0odwvyG20DInOjc4
+         vlTQ==
+X-Gm-Message-State: AOJu0Yw0E2+Do4ATVLfOLChZkrJLNzArbYu9AAk/Wzq/qx7Spj6A6Qld
+	8jplp/ZerJQnmzstKf3jCOI+79oqY7FERLm0T8aSFtDLsz1MgUAbly8lybgZz14A
+X-Gm-Gg: AY/fxX6xZo/1yqHYsgcW7v4Kc+0ySFxrpxOx5AeiWnHpkrcxac7P3DIKyvUJHrrlY2j
+	lYP2wlbXH0yoUHEmas0T7/dFXiS2nUDjq1qZazYXXJDSG/ijIkCalAghVr0LMIVeDlZ3/HdpbO9
+	Em1YJv1jjazfAtuWWof6fEvQuVCoQTXeuJc8643eDsm5vOje7e1e+gu0lwQqT7YVsGbzb9MeMQY
+	QTWuKu3H3C0vOvqFEHFBpykI7uWuvx8l4pew/H4XDMmx6MwDSMh4+kt5uEjdhBk4kL/LiTW/3UX
+	ZFESeg9dNg9Oug7bOv2FuhWtZ/idhFoIE0xm6tMiv4ZBs1QXj33rrgqKnuRW6YsSTjJM348cGMF
+	vUqnjkYZTx2BMFwqilGMiK0ByKlQhEkt+cnHRDvk4cZLpHeMTaVLDSD3hFg==
+X-Google-Smtp-Source: AGHT+IG8nJa+/YH4r/N97cqa0KCYtA8hNL5PMjMN2gJjpkl4umwwPNNsr92hA/6zBa1bvBKBCaG6hA==
+X-Received: by 2002:a05:6a00:3694:b0:7b8:7f5d:95aa with SMTP id d2e1a72fcca58-7f667b2590fmr14466928b3a.27.1765952813263;
+        Tue, 16 Dec 2025 22:26:53 -0800 (PST)
+Received: from ryzen ([2601:644:8000:8e26::c20])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7fcb87427besm1537163b3a.14.2025.12.16.22.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 22:26:52 -0800 (PST)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-spi@vger.kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	Mark Brown <broonie@kernel.org>,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] spi: realtek-rtl-snand: assign of_node instead of device
+Date: Tue, 16 Dec 2025 22:26:35 -0800
+Message-ID: <20251217062635.37764-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -49,56 +84,28 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAAnSuGCGkJpnTb1AA--.10388S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZFWDuF4rXw4DXw43Gw18uFg_yoWDJwc_CF
-	1DGr1Ik34qkryDt3W7KryrJr9xZa1DXanYqrs2qFZ8A3yDX3WUu3y8ZFnrXw47Zw4qka97
-	C3ZrXw1ayr13KjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbs8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r1q
-	6r43MxkIecxEwVAFwVW8JwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-	C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-	wI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-	v20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-	jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43
-	ZEXa7VUbLFxUUUUUU==
-X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
-semantic patch at scripts/coccinelle/misc/semicolon.cocci.
+This driver is OF only. No need for device_set_node.
 
-Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/spi/spi-stm32-qspi.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/spi/spi-realtek-rtl-snand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32-qspi.c b/drivers/spi/spi-stm32-qspi.c
-index 2a0ee96786fa..d1df66875809 100644
---- a/drivers/spi/spi-stm32-qspi.c
-+++ b/drivers/spi/spi-stm32-qspi.c
-@@ -153,7 +153,7 @@ static void stm32_qspi_read_fifo(void *val, void __iomem *addr, u8 len)
- 		break;
- 	case sizeof(u8):
- 		*((u8 *)val) = readb_relaxed(addr);
--	};
-+	}
- }
+diff --git a/drivers/spi/spi-realtek-rtl-snand.c b/drivers/spi/spi-realtek-rtl-snand.c
+index 741cf2af3e91..6b857742b301 100644
+--- a/drivers/spi/spi-realtek-rtl-snand.c
++++ b/drivers/spi/spi-realtek-rtl-snand.c
+@@ -400,7 +400,7 @@ static int rtl_snand_probe(struct platform_device *pdev)
+ 	ctrl->mem_ops = &rtl_snand_mem_ops;
+ 	ctrl->bits_per_word_mask = SPI_BPW_MASK(8);
+ 	ctrl->mode_bits = SPI_RX_DUAL | SPI_RX_QUAD | SPI_TX_DUAL | SPI_TX_QUAD;
+-	device_set_node(&ctrl->dev, dev_fwnode(dev));
++	ctrl->dev.of_node = dev->of_node;
  
- static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
-@@ -167,7 +167,7 @@ static void stm32_qspi_write_fifo(void *val, void __iomem *addr, u8 len)
- 		break;
- 	case sizeof(u8):
- 		writeb_relaxed(*((u8 *)val), addr);
--	};
-+	}
+ 	return devm_spi_register_controller(dev, ctrl);
  }
- 
- static int stm32_qspi_tx_poll(struct stm32_qspi *qspi,
 -- 
-2.25.1
+2.52.0
 
 
