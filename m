@@ -1,123 +1,93 @@
-Return-Path: <linux-spi+bounces-11980-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-11981-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666C4CC7539
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 12:27:52 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6063CC757C
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 12:30:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8317B3060F11
-	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 11:21:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C966E3004631
+	for <lists+linux-spi@lfdr.de>; Wed, 17 Dec 2025 11:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B5C433C1A2;
-	Wed, 17 Dec 2025 10:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD2C338592;
+	Wed, 17 Dec 2025 10:34:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YNnqs2JC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rw1d9LND"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E8A33B969
-	for <linux-spi@vger.kernel.org>; Wed, 17 Dec 2025 10:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A9C2773D8;
+	Wed, 17 Dec 2025 10:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765966322; cv=none; b=CKR7FUgxxKrjMUOyPEU9GlrIEtMx/s6UnkHLHAAy+/fjgLh7JYPXEx4XNrwKxaPY2d4P3jQgXR0X++SAdQXRarMfUlfoCOJfveQW4sLeu26EaokxUFviPBte30L+4VCMe9mJN6kwFrSNjwuuapM8z+OtCpaCRsrLuvna/iNYPzU=
+	t=1765967693; cv=none; b=ZlX4rxNVqvh9lWhxRmc1mB/yThY/v9ApSdGrQ1zj9O6LOh4CntE0QuRd1J7wvJ1NKNXgr457bFDTw1HFHaA8CgpIMPmZMQyG0nOIvCVh5VmfZ3QrtoM1efeeV7TqSyITi03B7bEwb6Xmq1XmInNPNmfNpTXNXFhrJ07tg0TdEzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765966322; c=relaxed/simple;
-	bh=TmUYZB8WjESDVweOp5hzlAfaWP1RU/QdK0bqBK+51BI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KoxuTi/xjEcRcgpMpetIepvWMzu8pnMOwTQAmaRj/61396KeCK7dSJeEqdv9aJFUtNxB+wWyfcLnyl9wgWkgNTapW2E1Lklb5g5iW6qt7Ci1Uxn4n/K8bh8qlVSo19jA62IYR+3EifUgOfvZGQFxw7oyBiyN4I7sSMWSHLopDqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=YNnqs2JC; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a09d981507so3515305ad.1
-        for <linux-spi@vger.kernel.org>; Wed, 17 Dec 2025 02:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1765966316; x=1766571116; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K04ow0eNGFdOpSpME/SmZeUSWAE32cTHhjE42HTO9TQ=;
-        b=YNnqs2JC7Z2mbTUrpQZqxpTXfsFsO+r3K9RE/OM6XnqNf3Y6EVfYsdryCRk8pEQKpR
-         hHYt7N7tamX/GudQeP8AleaDNsW7YrbuxoIS1PNqZdxciSxsU7lDQjS7XobuO9cl5/rK
-         EhvBxxxkEOoV8afQLUs8BQk95Jt3KLeLVCvI0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765966316; x=1766571116;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K04ow0eNGFdOpSpME/SmZeUSWAE32cTHhjE42HTO9TQ=;
-        b=rs/BkHuiIBzlJ2F3hTzh5ei2bq2X93HofuN3YP0reivuaKOfzuGdR5cum78uvyturq
-         sbgj+nSV2q6N/bwY4CbRhMytwS1QIHFVjb5qHeOdlVG6kGkBQoo3LJcorAIruKxUkx00
-         TKg0HzF5dtMSVO8PTuQOhhmdur8AGWVa//+0unn20I+mEmy7PNCoOPEiAIyJukoHWzwa
-         xhuCwmUJ9Eacgl+Hn5NUk7D9EpW6q97wb10VWUBzwQbPrYNkHRGnaRyPooZcZz6AM5KT
-         7CyFn7aEfAbiMiYcgztUYmuYFVsuWB7eR7gh+s3N8jkn6zUZPDW2fyQxpljhxq0DRgNS
-         SsvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUsEFAOBnqkIvPtHXIxLN0uhgB6uLgW0+8ccQ9uN1yA1wotBWv/U/vgH2qkXrM3lvaHqEPibeXhoAA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEVy3Cxbdz3qfmxcxIWJPGBBrVCepfsTre1bG5JyFsfJWEkZfR
-	0hesjHIO0F3luZjtJXzfMB8nRdgGUCCTzi79PWWBi7DcRlmu976lqEeUuKzd88+ONQ==
-X-Gm-Gg: AY/fxX7zqd1iqfnUA1TT7H+c/Xb8uHjr0G7i+s9TvzWGtI+OYHER8msVkyqXs6jkl3+
-	SX0DGpwsaiqhIxfPhXk+suEeJn01h1BbjbM1l1xA5d7/VpzmDd/shNBosWV8lfx4ar6WZpXnPk9
-	Evo+lr46zct9j2pcjSfFoURCh0gyY0jsP3uZVc+hPtdhI2RtkJcIWMBw2p/2fV/hgs2mJYIVtxi
-	Je/arqrmsCmFcQKjvGirZXWhQ9OPSx1k07K3XqwT/yvb3Za7rhYx6hKDEx8VMBh8ygawS2gFBLU
-	nf4PYUbbcoVMruMD1ArwuqcLmZK7hWqCE8zbU4V274EfD+MTbjl92BI3jXZllyPqvNNgkp2Clhn
-	6NzgmIxKNp1dUe/5lVPwGyEVGrgybRkJz1C+fOgFO+GoyRBl6f66c+9AhiZxscnpJGjmUu4od/M
-	kcDk/3dV3J5mHZi4XpoEerokzTkwKt9J+NnZyfOmONvRHn5girT3JF7Wali8XsJSrfmNdH
-X-Google-Smtp-Source: AGHT+IH9JDk9/8ttnmED8uX+Mmzi2jbUa2ALm/TceQ9Kmj2oqUNGhg7IR2LAST5VvPsW7hnAHuK+Yg==
-X-Received: by 2002:a17:902:ea0f:b0:2a0:9238:881d with SMTP id d9443c01a7336-2a092388d07mr158621885ad.15.1765966316255;
-        Wed, 17 Dec 2025 02:11:56 -0800 (PST)
-Received: from fshao-p620.tpe.corp.google.com ([2a00:79e0:201d:8:6cf9:c1ec:793:b8d8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a0cf143804sm102912045ad.73.2025.12.17.02.11.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Dec 2025 02:11:55 -0800 (PST)
-From: Fei Shao <fshao@chromium.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Fei Shao <fshao@chromium.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-spi@vger.kernel.org
-Subject: [PATCH] spi: mt65xx: Use IRQF_ONESHOT with threaded IRQ
-Date: Wed, 17 Dec 2025 18:10:47 +0800
-Message-ID: <20251217101131.1975131-1-fshao@chromium.org>
-X-Mailer: git-send-email 2.52.0.305.g3fc767764a-goog
+	s=arc-20240116; t=1765967693; c=relaxed/simple;
+	bh=Foy6zGnD7BQC3a1gu0XohNgG2wyPR6aTb8JJIyQ/qiU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gwjaahkdV3DPviX+lhOa27xEAZFqjvkZD5sualOm7GvSm1BqxsLegLa1aOuvBWA7pcri1Ak/mwr3pP39ZiTRpX5WQTq1EvQT7KvtIuEpM5bDpxc475TKncHTFHbw35sdZWfGkfQBQtrlfrQgH4dExjh2jy8W0+1tu44bO5KsgL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rw1d9LND; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9795DC4CEF5;
+	Wed, 17 Dec 2025 10:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765967693;
+	bh=Foy6zGnD7BQC3a1gu0XohNgG2wyPR6aTb8JJIyQ/qiU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rw1d9LNDUVdRDMGygn0tHVsslWJPk6AJrjxeZhfMfgKDHgG7z1SrsmRUnUh3cpug/
+	 OgxUAXLihwj/7lb2UYsvFG0X1hD893wqd5aAfjv918eeV3u4NnhCc06Hye0lkNpni4
+	 raQEy/8juAkOLY+WFJB/uhsAyf7VGaGGISnHC5PMXB6kOyXTfy82rbwSHkMu0Q3WBC
+	 PRI/OletBehiWydtxP0GE2eV/01oEBrwxlaGahrzsPja/Uo3IWKBWgVya3pqKF8GTL
+	 rNLlHx6QxP2scvBx/Wn0WhnOKy09JtdWBB69u9kuaWoCd59XwmtbVtvdjC0Jrs3Uar
+	 W9nQk/uidy24w==
+Date: Wed, 17 Dec 2025 10:34:47 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-spi@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] spi: realtek-rtl-snand: assign of_node instead of device
+Message-ID: <3e3742de-0560-4699-ad4c-edce992b866f@sirena.org.uk>
+References: <20251217062635.37764-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="waMK6jt8bPXLcFNw"
+Content-Disposition: inline
+In-Reply-To: <20251217062635.37764-1-rosenp@gmail.com>
+X-Cookie: To err is human, to moo bovine.
 
-This driver is migrated to use threaded IRQ since commit 5972eb05ca32
-("spi: spi-mt65xx: Use threaded interrupt for non-SPIMEM transfer"), and
-we almost always want to disable the interrupt line to avoid excess
-interrupts while the threaded handler is processing SPI transfer.
-Use IRQF_ONESHOT for that purpose.
 
-In practice, we see MediaTek devices show SPI transfer timeout errors
-when communicating with ChromeOS EC in certain scenarios, and with
-IRQF_ONESHOT, the issue goes away.
+--waMK6jt8bPXLcFNw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fei Shao <fshao@chromium.org>
----
+On Tue, Dec 16, 2025 at 10:26:35PM -0800, Rosen Penev wrote:
+> This driver is OF only. No need for device_set_node.
+>=20
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
 
- drivers/spi/spi-mt65xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+What's the benefit here?  This creates a barrier to adding support for
+other interfaces and I can't identify a problem it solves.
 
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 4b40985af1ea..90e5813cfdc3 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -1320,7 +1320,7 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 
- 	ret = devm_request_threaded_irq(dev, irq, mtk_spi_interrupt,
- 					mtk_spi_interrupt_thread,
--					IRQF_TRIGGER_NONE, dev_name(dev), host);
-+					IRQF_ONESHOT, dev_name(dev), host);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register irq\n");
- 
--- 
-2.52.0.305.g3fc767764a-goog
+--waMK6jt8bPXLcFNw
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlCh0YACgkQJNaLcl1U
+h9AOCwf9HnrL5HbZElONyDgwLp5BOonL83bHDz0WKTT9Hp3GtvXDZZ3udvxRw48w
+wYbl85Qn1evDO8pxBbjEd6XDUR9WftEbNoDxsMgnBJSwtdJAnfClLXnuJRT0C8e1
+HFu3MEeR4JH+A9z1w9s26tpAQsGKy7fBCyCpICdJRf9/BJVv8tTxMi0mw6g7F4mX
+yavMU7BR5sbVWIiFmcQlIJndnkqx+EFukTQba7Z/uXVfjsuPe4XKUbVr3EW3DcRE
+H6AP+CFtlWxVCqOEauniCFhpXDA8eTz5phcJTIkr/biemi34Z0rJqoGaJFfzTEHQ
+n+uWL6fK27CvDsrG85APnDqNHVXE+A==
+=8BTn
+-----END PGP SIGNATURE-----
+
+--waMK6jt8bPXLcFNw--
 
