@@ -1,60 +1,50 @@
-Return-Path: <linux-spi+bounces-12008-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12012-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1286FCCB338
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 10:37:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36FE8CCB792
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 11:49:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E25173092F26
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 09:33:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2F378307D45E
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 10:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8643328E7;
-	Thu, 18 Dec 2025 09:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13A233342E;
+	Thu, 18 Dec 2025 10:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aKwYji/f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zp1x4Lx5"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48CD3321B9;
-	Thu, 18 Dec 2025 09:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87ABF332EC6;
+	Thu, 18 Dec 2025 10:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766050369; cv=none; b=Kud7pKPlwt3DH8g6ppeLF/pwdlg49HvNO6FOgaeRq8p9oQmWlBbgHaLe3czmNpNa3LOo6P74UeFI4/O8R0yQPraf9WMDrbqS34GNkh0NK//8TMRtfCWpDPpSHnt7V6770Y1k9lZjiWJsct8jN9OZvoOtJPyCoHxk5/17U23ZXC4=
+	t=1766054692; cv=none; b=hnG9UeAMyGCMrAfK6+FcILl1FGhCbH0GoNB30SXttSF9wzFIjA0erABZ4SaYwk66dSazqpwP1lX4F2LAwikFkdfRLDoR4rcBoEfgkGOPXrn4mjUqT2+0UnVdA775IIYWCdowJYHNCWU20JJaMWn7NLakED+ow0jEryKF9JQ9LuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766050369; c=relaxed/simple;
-	bh=81UJb/tDyeaP+qvZ6Zz59Q3gkULX3YPSvT8fk2ia0Pc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=fcZNy1AXaukOdKtcYrIYuUWttB+lIinMq0Jl53mpiPW0ZO8Eh6iZd726/hdA7hTQ7V1n9Djebb8LB4pfNvpNUrfLvKBglUZG5YiSx/WIvTfo+NNcfClxyu/kxuH1GbFRLbHUngRlEkj2shkW5Y5oP9QpD6E4nw055pA9bYwivGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aKwYji/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86B31C4CEFB;
-	Thu, 18 Dec 2025 09:32:46 +0000 (UTC)
+	s=arc-20240116; t=1766054692; c=relaxed/simple;
+	bh=lpXuaQHHVW5PLk1j9U3yjeo2gCC8MFxHOWMOLB3RRtQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=r1SOsT2yAxNWYqvkbsb6phKSjwTl6jwkSxy9P5oy5GwBTcIDlBjC8tbyleyPRIXZIPo27iOVaCd9EVfoWsEhWf2IT3r9QuTiRVNgQlUMEj1is8S4mvCcOYrVnTswB2wYUCcVl3SsLAo65ggSLW7qJ76BAFjXO3BD4rFUfimX1c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zp1x4Lx5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 30795C4CEFB;
+	Thu, 18 Dec 2025 10:44:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766050369;
-	bh=81UJb/tDyeaP+qvZ6Zz59Q3gkULX3YPSvT8fk2ia0Pc=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=aKwYji/f8E+1YmeQiWeg2bkwx1HWEbIxjhnET+XKiEKP4jdCqXokC70raZmnFfEAU
-	 Fn936QbztgdaopG6l0bdvRHiPJaPIeYOylJtVwjNR0S/xWy+G9lRTQ9N+J9haW0P6P
-	 q3VrmZWidEbQTZaA3wNmY6oX/fYl8si2eANWlxC/7ioY6gyvYmzTBWDldmq7D1vi17
-	 GaoxQSt49+pR4GFUxUkZZF/tZbOcW0QOsfj1Gnrbusxsjkp4c6Ek8w/2JdxqO5ARTc
-	 cMM6nTSB8OVyOPq5f6R7J5+0WyLfZkK1to9XAcjKbylBC8y9gUUmtCaQeeSg/wzQlo
-	 jPQ6JqY/1JfiQ==
-From: Mark Brown <broonie@kernel.org>
-To: Han Xu <han.xu@nxp.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Haibo Chen <haibo.chen@nxp.com>
-Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, Krzysztof Kozlowski <krzk@kernel.org>, 
- Frank Li <Frank.Li@nxp.com>
-In-Reply-To: <20251216-xspi-v7-0-282525220979@nxp.com>
-References: <20251216-xspi-v7-0-282525220979@nxp.com>
-Subject: Re: [PATCH v7 0/2] Add support for NXP XSPI
-Message-Id: <176605036628.87569.2326741752652519619.b4-ty@kernel.org>
-Date: Thu, 18 Dec 2025 09:32:46 +0000
+	s=k20201202; t=1766054692;
+	bh=lpXuaQHHVW5PLk1j9U3yjeo2gCC8MFxHOWMOLB3RRtQ=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Zp1x4Lx58rqIody3uzOQXoO19E9y8PisYdzwK3gnjW8s0wi98AlRr+WdoO3CeEyOK
+	 eiIPo60FTddQe7KXEOyiJ0L4gYdkNm7CTG7apnYhwKCZQZBpm+NN2Lpzyzk+6IVXUp
+	 VU8cQhnFnPcpgrdA60jYnxBbwieA/Axk7QaVza73TcqUSl4JYaWiH4ox7LdEZy1U05
+	 JG6NeVFBZvOfy+FFOjbQ5GdOx2tpq8AtiScDjwsso8dH0RJK838mnWzHpvdy6wuV2y
+	 r1UVef9ZSsVP2fjURUdlHGKVHq0madp1nrdL6CAgn03AB60zlDIOqXsHzfOp7OHarQ
+	 +U53DqhEcCEmw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2076ED6ACE1;
+	Thu, 18 Dec 2025 10:44:52 +0000 (UTC)
+From: Mateusz Litwin via B4 Relay <devnull+mateusz.litwin.nokia.com@kernel.org>
+Subject: [PATCH 0/2] spi: cadence-quadspi: Prevent indirect read timeouts
+Date: Thu, 18 Dec 2025 11:44:30 +0100
+Message-Id: <20251218-cqspi_indirect_read_improve-v1-0-0ccb17c62f67@nokia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,55 +52,111 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-47773
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAA7bQ2kC/x3MTQqDMBAG0KvIrBswI6U/V5ESwmRsv0VjnIgI4
+ t0bunybd1BVg1Z6dgeZbqiYc4O/dCSfmN/qkJqJe7569jcnSy0IyAmmsgbTmAK+xeZN3f0Re05
+ +GoSF2lBMJ+z/fXyd5w8T8+N1bQAAAA==
+X-Change-ID: 20251217-cqspi_indirect_read_improve-89a02d1f3c2c
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mateusz Litwin <mateusz.litwin@nokia.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766054690; l=3752;
+ i=mateusz.litwin@nokia.com; s=20251217; h=from:subject:message-id;
+ bh=lpXuaQHHVW5PLk1j9U3yjeo2gCC8MFxHOWMOLB3RRtQ=;
+ b=PfYb0I5mcehJmdt4hx0RGEckQL0RhsTf5wXt6QTTtjtBfuFQCn4RpBHV2BZABSKK5Kyk5v9r6
+ I3A94MIWMQUCgEVeiHSrw3hzL1ImHDZlfvo7+thlBGakN4GB9v6Odgq
+X-Developer-Key: i=mateusz.litwin@nokia.com; a=ed25519;
+ pk=9NV76cwWrtwYUektOrK/ht9GTzmhtkqSvghr3Td4hM4=
+X-Endpoint-Received: by B4 Relay for mateusz.litwin@nokia.com/20251217 with
+ auth_id=579
+X-Original-From: Mateusz Litwin <mateusz.litwin@nokia.com>
+Reply-To: mateusz.litwin@nokia.com
 
-On Tue, 16 Dec 2025 11:20:12 +0800, Haibo Chen wrote:
-> XSPI is a flexible SPI host controller which supports up to
-> 2 external devices (2 CS). It support Single/Dual/Quad/Octal
-> mode data transfer.
-> 
-> The difference between XSPI and Flexspi is XSPI support
-> multiple independent execution environments (EENVs) for HW
-> virtualization with some limitations. Each EENV has its own
-> interrupt and its own set of programming registers that exists
-> in a specific offset range in the XSPI memory map.
-> The main environment (EENV0) address space contains all of the
-> registers for controlling EENV0 plus all of the general XSPI
-> control and programming registers. The register mnemonics for
-> the user environments (EENV1 to EENV4) have "_SUB_n" appended
-> to the mnemonic for the corresponding main-environment register.
-> 
-> [...]
+Hello,
 
-Applied to
+On the Stratix10 platform, indirect reads can become very slow due to lost
+interrupts and/or missed `complete()` calls, causing
+`wait_for_completion_timeout()` to expire.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Three issues were identified:
+1) A race condition exists between the read loop and IRQ `complete()`
+   call:
+   An IRQ can call `complete()` after the inner loop ends, but before
+   `reinit_completion()`, losing the completion event and leading to
+   `wait_for_completion_timeout()` expire. This function will not return
+   an error because `bytes_to_read` > 0 (indicating data is already in the
+   FIFO) and the final `ret` value is overwritten by
+   `cqspi_wait_for_bit()` return value (indicating request completion),
+   masking the timeout.
 
-Thanks!
+   For test purpose, logging was added to print the count of timeouts and
+   the outer loop count.
+   $ dd if=/dev/mtd0 of=/dev/null bs=64M count=1
+   [ 2232.925219] cadence-qspi ff8d2000.spi: Indirect read error timeout
+    (1) loop (12472)
+   [ 2236.200391] cadence-qspi ff8d2000.spi: Indirect read error timeout
+    (1) loop (12460)
+   [ 2239.482836] cadence-qspi ff8d2000.spi: Indirect read error timeout
+    (5) loop (12450)
+   This indicates that such an event is rare, but possible.
+   Tested on the Stratix10 platform.
 
-[1/2] spi: dt-bindings: nxp,imx94-xspi: Document imx94 xspi
-      commit: 64ba616741bcfc4c7ef1ed856179328300ca0422
-[2/2] spi: add driver for NXP XSPI controller
-      commit: 29c8c00d9f9db5fb659b6f05f9e8964afc13f3e2
+2) The quirk assumes the indirect read path never leaves the inner loop on
+   SoCFPGA. This assumption is incorrect when using slow flash. Disabling
+   IRQs in the inner loop can cause lost interrupts.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+3) The `CQSPI_SLOW_SRAM` quirk disables `CQSPI_REG_IRQ_IND_COMP` (indirect
+   completion) interrupt, relying solely on the `CQSPI_REG_IRQ_WATERMARK`
+   (FIFO watermark) interrupt. For small transfers sizes, the final data
+   read might not fill the FIFO sufficiently to trigger the watermark,
+   preventing completion and leading to wait_for_completion_timeout()
+   expiration.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+Two patches have been prepared to resolve these issues.
+-  [1/2] spi: cadence-quadspi: Prevent lost complete() call during
+   indirect read
+   Moving `reinit_completion()` before the inner loop prevents a race
+   condition. This might cause a premature IRQ complete() call to occur;
+   however, in the worst case, this will result in a spurious wakeup and
+   another wait cycle, which is preferable to waiting for a timeout.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-  [2/2] spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk if flash is
+   slow
+   Re-enabling `CQSPI_REG_IRQ_IND_COMP` interrupt resolves the problem for
+   small reads and removes the disabling of interrupts, addressing the
+   issue with lost interrupts. This marginally increases the IRQ count.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+   Test:
+   $ dd if=/dev/mtd0 of=/dev/null bs=1M count=64
+   Results from the Stratix10 platform with mt25qu02g flash.
+   FIFO size in all tests: 128
 
-Thanks,
-Mark
+   Serviced interrupt call counts:
+   Without `CQSPI_SLOW_SRAM` quirk: 16 668 850
+   With `CQSPI_SLOW_SRAM` quirk: 204 176
+   With `CQSPI_SLOW_SRAM` and this patch: 224 528
+
+Patch 2/2: Delivers a substantial read‑performance improvement for the
+Cadence QSPI controller on the Stratix10 platform. Patch 1/2: Applies to
+all platforms and should yield a modest performance gain, most noticeable
+with large `CQSPI_READ_TIMEOUT_MS` values and workloads dominated by many
+small reads.
+
+---
+Mateusz Litwin (2):
+      spi: cadence-quadspi: Prevent lost complete() call during indirect read
+      spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk if flash is slow
+
+ drivers/spi/spi-cadence-quadspi.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
+---
+base-commit: f4acea9eef704607d1a950909ce3a52a770d6be2
+change-id: 20251217-cqspi_indirect_read_improve-89a02d1f3c2c
+
+Best regards,
+-- 
+Mateusz Litwin <mateusz.litwin@nokia.com>
+
 
 
