@@ -1,48 +1,48 @@
-Return-Path: <linux-spi+bounces-12017-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12016-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B8E6CCB801
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 11:54:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02472CCB7AD
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 11:49:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6BBC0309AF21
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 10:49:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A1459301A9AC
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 10:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE01322DC0;
-	Thu, 18 Dec 2025 10:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DBF331210;
+	Thu, 18 Dec 2025 10:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Qft3dtD6"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="ZbOLpyDf"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650CA32F74A;
-	Thu, 18 Dec 2025 10:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=91.207.212.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D04322DC0;
+	Thu, 18 Dec 2025 10:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.182.106
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766054951; cv=fail; b=qUZk6h8y/bpHlAx2eEyRrAm5ef40jzUCQbmNPHCuKE9YuC83YhDAClJu3Zq69Nz9UAKxgUuxayuo0l1iYgl6qrdY10ezOS1UNYgMCebh2sXQT4fVugKxJrDOGhDsT+Ci4cHggeVPXv7DAXsv84Yq713Ca4CBYqtawFmnDN4XAWk=
+	t=1766054942; cv=fail; b=Jalro6VlW3JwClK1zPyOxA4FzpnAuG9si2U4QD7dfK+2vGPQ64F6ScIkr8y8KD83XJoo5W2fceuUK6/Wqq/QJ/QsPgu6ZH+IG4Mlk+XVaM0NT7P5Lst/RjsZrRrIPy2lqxGyD7C9v+sv7H4Jhzhvfl0JVAAMdhFloIa8pNoT6/U=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766054951; c=relaxed/simple;
-	bh=1cDzkghdYvYMGOBhWf9DbxZ6s5J0VKakHUIRgQuz65Y=;
+	s=arc-20240116; t=1766054942; c=relaxed/simple;
+	bh=WLJ4U7X+t2NjoKk7W1/S4D/d3hver4K6CDSK06rDFBs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=Ec+CWlMa6n2IvBhKu9lpxOzBBNBmpNtIGbeEWR6PYiuDD3pYkigX0K2rOE/Cd3FYSpjHrOEEzI21WxQOVIeBVvXK39zRKlEatI0KQDKl6fKvbjKG+8/Odk4ejxRYEq/kBF9Gn5lT83rYF+hBLDoROhdZiNcL5dvKwogpEbbf5OI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=Qft3dtD6; arc=fail smtp.client-ip=91.207.212.93
+	 In-Reply-To:To:CC; b=bzy4DW5HgguqJyqwEQXVrqFhJLa2UXoQvYCzZQbpraMMVbxo2l/4xJK9j3OdBaVndP/4//Agt1G9dHKFLFtvroeLuDbz7UAYomXdKtKCt45ANsCZcLVk+CxBMYjlKwxCjkJIBtgnGNT2ENLj+V/tFo/e1wN4sY6jC3h0FegdiWg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=ZbOLpyDf; arc=fail smtp.client-ip=185.132.182.106
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BIAWQPG2519515;
-	Thu, 18 Dec 2025 11:48:54 +0100
-Received: from gvxpr05cu001.outbound.protection.outlook.com (mail-swedencentralazon11013019.outbound.protection.outlook.com [52.101.83.19])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b3de1qe4r-1
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BIAiIPf2694328;
+	Thu, 18 Dec 2025 11:48:51 +0100
+Received: from am0pr02cu008.outbound.protection.outlook.com (mail-westeuropeazon11013039.outbound.protection.outlook.com [52.101.72.39])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 4b4estge6q-1
 	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 18 Dec 2025 11:48:54 +0100 (CET)
+	Thu, 18 Dec 2025 11:48:51 +0100 (CET)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cCJ9ehZdAfEo1VZqzNCp+hTAQVKF7vCnc03Bra/Npikcu63TE6hfXnZ4UYkOg9lNf3W0JPOYCSHZG3WzK+kQ0hasQ+77oNrvQL4BQXCKRbopLH8y8EBfjM/YtSn3dNy83kw1/sZBzgckdkuPjl6u5YSANDn4rW+FZ08OEDAobfsi3opmwlBO9evT1A5oGObZUhGC8MuxTVurV0jxK00JaQfP1boJRCmF/J9im1H94jncmGQdlq+MqNf2e506rPoHAs28Jx4m+4hKuJRo5+HDaKF29KZcVaFlwMm2MEz0NncexF7nUkge2BjSk9V/ujOOGkQteCDjJySETT49kvFrhg==
+ b=rsCBPF/KGOSKdVp3yg+CtLd1R6uevbdI16vyZ9lCE3nLBLfSXwCHS+8UfSS8/RbarjjQ7D6mfSOqanc8dIoE0IknUa1LYfc6wCEYP99BZj7UTU6+AEghy7jIRiaJBr5f0qjUsqT2pZNzPlu8+GTL9WsfFj0ravvfv8XKvLgozkPw22Y8hwaY4vrQEbL1lWq2/vT9EesULhn+xG1z7be0E2tAhc5XtEslwZqYhMPgRAl0Sx7z8Gr8z/rFh1mh8tc/n2aTf9W38DQWJTpKctKCkJyBihcd8T7KgVa/tIhTiqklNwQ60goPEAJ7ApDTnmGK/R9NZD/Kv5DRy9GGMxbxMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dv25XXedadBoBoiURd8dfLWQQ6X2CA9xxAEi/0bH9TQ=;
- b=ndcqYhypkpecxFYuKO6HGAZCs69z49KAjQkLHdyDu13zu3QXLH0PAnmx/k6m+EyZ0mBTijvwVxgd7/D+pey1wQ1Ht2C5/1Nh77s5rKf8c7Vsbw0mt+dlz4T9T/bLenhcM04IrysOtt1yCjgLGnvJilUtucschxUV4fPFAvksoPAHKfOPAsv22mXA4cxYvlxjUx/RWHucjgSAuDNN7pEcMBB34i1b8WmurCOjrTY1hhEv9e4x1u+Ta3eqhFgagH0HHFbxo1LyBWwf4dPQmfy5LNk8DcYB0B2lTBNWu6quwdKqfvgUX0Ok/Ub+MNORapjLu+biVSC4GregqBihr9hQow==
+ bh=GTdOjoUTe+POBvl854/wkgwu/9d7NJKuLPeBBZkOHOc=;
+ b=J3JuISq8FZHnVlm+l+E9XmivhzYl5Htjx5TIx771Lt57G5IlxFfcmY77PldMdEeCAxXVFMde5mQUkvbUjKgdBuomZtf3T8RLBTj19SXr41SON2Bh7nZOaU4fcav3P96gkHFn7xhsvJJGtG3vghkiq6CpIBWqSw1KMxVUV81hmPlwP9436n0k5sBSbM0t6LL1nkD9AdLAA7w7VCcgIyHIhWPVNkURe/a6TEm8LjxAlwXY8jgmYub6Y6AdFE6WEEBvDglFlL1RFvQ/BKEuAoWpJjYE+oyI92X9mN5o+YxWePdbmyZ3VSBGcrOLiKr1/BTcd0rwEIrqJ8ciulI7KG9A0A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
  164.130.1.59) smtp.rcpttodomain=gmail.com smtp.mailfrom=foss.st.com;
  dmarc=fail (p=none sp=none pct=100) action=none header.from=foss.st.com;
@@ -50,18 +50,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dv25XXedadBoBoiURd8dfLWQQ6X2CA9xxAEi/0bH9TQ=;
- b=Qft3dtD6K8RRHY4fiwV69tAAv8rAHag4diKHvke8X7oNjLciGQwabYo6iyYH+8WxzTvhMnAs5u3z4SO1RxLn6Sl6isoMHSsByGYFRCEpV/lwWPas7BFWsn7CjRiPaGRjW5g4Re+zTpg+3YWoXgMld7++ZKYYDi4+65ub2ksxVNg1wnp5DE4N2oBbMxZgrh/bkgf8w1MM9v/VqNf/AVcjE4/QT2LalyBwdpBOHrep4rYRMWWjJId92zRJPTmTz2etdFA5GIcK/0VQov5cggRVP9F6+JSgemFj2XqHGoXfKMLBaPo7PSW7IY2IYxmmhSaez9fjeovsEB4eyBkuZuC5wg==
-Received: from DB8P191CA0025.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:130::35)
- by VE1PR10MB3855.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:16e::17) with
+ bh=GTdOjoUTe+POBvl854/wkgwu/9d7NJKuLPeBBZkOHOc=;
+ b=ZbOLpyDfhWiqaUJDfbScYSRkMOiFOrw3WqZIlzq/x/Ol5POAYPElWNrSPjn7xCv6HJL4iPNMAHCha2Mx+Rz4H0U7/K7Cj5geeYTZnFJiA9FXE00+/gfe2DxbSL8zPv5a/ouoaxmCPdH3rgJUd0fsvEQdt++Be4YI6OJH2qG6ac46jAS/wgi/AFjjcuFd6azIUVQMCxIKDYfaHXis/35k2xp9AsJynu/vH9qXtYEUM7vU79fOAPWf85PrnVREWT/to2j7Ju9iPZZydhvPSE15NSxW+/RFvO5PrSgpyTBV3EI58eYAf1F974Mbt0yxk+H/kXT6OU3IKg+wyS614hbSrA==
+Received: from DB8P191CA0013.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:130::23)
+ by DU0PR10MB5922.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:3b6::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.7; Thu, 18 Dec
- 2025 10:48:46 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Thu, 18 Dec
+ 2025 10:48:49 +0000
 Received: from DB1PEPF000509F7.eurprd02.prod.outlook.com
- (2603:10a6:10:130:cafe::f2) by DB8P191CA0025.outlook.office365.com
- (2603:10a6:10:130::35) with Microsoft SMTP Server (version=TLS1_3,
+ (2603:10a6:10:130:cafe::34) by DB8P191CA0013.outlook.office365.com
+ (2603:10a6:10:130::23) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.6 via Frontend Transport; Thu,
- 18 Dec 2025 10:48:46 +0000
+ 18 Dec 2025 10:48:47 +0000
 X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 164.130.1.59)
  smtp.mailfrom=foss.st.com; dkim=none (message not signed)
  header.d=none;dmarc=fail action=none header.from=foss.st.com;
@@ -71,18 +71,19 @@ Received-SPF: Fail (protection.outlook.com: domain of foss.st.com does not
 Received: from smtpO365.st.com (164.130.1.59) by
  DB1PEPF000509F7.mail.protection.outlook.com (10.167.242.153) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9434.6 via Frontend Transport; Thu, 18 Dec 2025 10:48:46 +0000
+ 15.20.9434.6 via Frontend Transport; Thu, 18 Dec 2025 10:48:48 +0000
 Received: from STKDAG1NODE2.st.com (10.75.128.133) by smtpo365.st.com
  (10.250.44.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 18 Dec
- 2025 11:49:34 +0100
+ 2025 11:49:35 +0100
 Received: from localhost (10.252.25.7) by STKDAG1NODE2.st.com (10.75.128.133)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 18 Dec
- 2025 11:48:45 +0100
+ 2025 11:48:46 +0100
 From: Alain Volmat <alain.volmat@foss.st.com>
-Date: Thu, 18 Dec 2025 11:48:29 +0100
-Subject: [PATCH v2 3/4] spi: stm32: perform small transfer in polling mode
+Date: Thu, 18 Dec 2025 11:48:30 +0100
+Subject: [PATCH v2 4/4] ARM: dts: stm32: add spi1 sleep state pinctrl on
+ stm32mp157c-ev1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -91,7 +92,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-ID: <20251218-stm32-spi-enhancements-v2-3-3b69901ca9fe@foss.st.com>
+Message-ID: <20251218-stm32-spi-enhancements-v2-4-3b69901ca9fe@foss.st.com>
 References: <20251218-stm32-spi-enhancements-v2-0-3b69901ca9fe@foss.st.com>
 In-Reply-To: <20251218-stm32-spi-enhancements-v2-0-3b69901ca9fe@foss.st.com>
 To: Mark Brown <broonie@kernel.org>,
@@ -109,236 +110,108 @@ X-ClientProxiedBy: STKCAS1NODE1.st.com (10.75.128.134) To STKDAG1NODE2.st.com
  (10.75.128.133)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB1PEPF000509F7:EE_|VE1PR10MB3855:EE_
-X-MS-Office365-Filtering-Correlation-Id: d856a747-50a3-404f-4315-08de3e230510
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509F7:EE_|DU0PR10MB5922:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25c972f0-4664-4a99-4d80-08de3e2306aa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024|7416014;
+	BCL:0;ARA:13230040|1800799024|82310400026|376014|7416014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VHBTeXJuRU5JcWhFamZ3dC9RZmhscFhEa0hyWHROWjFtc2U2aVptUnlTWUFP?=
- =?utf-8?B?bmpEbXBOUFBRY0dSU1lPR0kzMHJmc3Z4ZUk1ZWFYeHdhRFN2dTcxU0ZxaUJS?=
- =?utf-8?B?RjR6WVpsNTE0dTZWTkRtQUh0RG1QaEFSMThxampNZUhHMnlUbGE0YVdmdytL?=
- =?utf-8?B?b3ZxQkZ4TGhhUDVrdjREN1Q4emZaZHYxc0ZXZE5OOWxmcW45R0kxU0ROc3Y1?=
- =?utf-8?B?eG0ycFlTWkZEVllPdlBQRm9OMlkxS1puYS93YUFLNFVQeUIrZWV2KzNvenp5?=
- =?utf-8?B?Mlp4TXdYR3JVUGRuUzFvRUQ3VnNGZDVkcmcwdUIwL1lDblloUWRZbnZlU0tJ?=
- =?utf-8?B?OS81aGJyVHdCRVBjTWEvZFZZMjZMQnB2SVkxSE1xTHpSQ2VaU0hTQUFRdkVM?=
- =?utf-8?B?NTU0Z001U1g3d1I4d3FMM0ZHSnVWRTdsT3dKcnljNXdxeVFrTk80U0VGc2M1?=
- =?utf-8?B?OWY0S24yaXVDMXNZbi9TemVMRmhqMEE4am1MN2FUUFlUQTZOYUFGL3RmOVpy?=
- =?utf-8?B?Tkh6NmpQVXVVb0tYT1UzVmI3OU9qbVQwVUVJYTFQbHFIM1FGc2RaSUVycEU1?=
- =?utf-8?B?WWJBL2Fuc2ZPM2NXcjJFSkNMVzVmSTU4dXhTMlNzdzRzaW1meDVRajVNbzVK?=
- =?utf-8?B?Rkh5ckV1d0ZmbUVNbkYvSCt3YUFha21mWnpZSEpyRUs0aTYwNThXSXM3aDc0?=
- =?utf-8?B?VGNTblkwekwzSStQNllDby8zdENrL1V0QXNSOExiWEkyZGRzbGdONGRLVlVz?=
- =?utf-8?B?eEc3WHMyeThxNWhGZmZjY0JuTWg2K3lZQ0FmYUhhSXNUdlZjcVNkT1kvQVpo?=
- =?utf-8?B?cCtCOGRVL1RGVHQzRm5nWnh6KzFwZnJsNnVjT1lwQ3JEa3g2MUN3MnVVQWlQ?=
- =?utf-8?B?UisxUWZ5L2djRVJHLzFFVE5GSmNLUHlBUzNSaEJzUzFBTlM1aWF4cXJBQlRX?=
- =?utf-8?B?ZlZqMDJ0bEIyczZzdytvdDVKd3FtUFU4QWpCZit5SXpHSG4yclZiTFhqSHVp?=
- =?utf-8?B?SHhqZkFCZjcrZ0lMRVFHN2I5ZmVOY0VVQ2hiQjVrSG8xSnVDTXpPU2p0YU5G?=
- =?utf-8?B?QWpDQWlzZW01Y1EyUkgwYXI1Z0FIVTduckdLZGhoeVRLMjJlN2s2cFFmZU11?=
- =?utf-8?B?dys1ZXV1aittNlkwK2FzbUxGRDVvTmExR3M4MDFrY1puenNXeW5qcitsNHhT?=
- =?utf-8?B?WHU3cjBJeERCRit0emxPK1BQc2R5RzZMV0FxZWZUNnVXUzQzR3AwY29FQ3JT?=
- =?utf-8?B?L1lxTWs3azdwNDFEQ0RreVovVHllVlE5cU9RdjYxR0w3RDNaTGkyUit0Sk02?=
- =?utf-8?B?TDRKT1BoQ0FTdTRKT1owUWxwSmtMbEttcUM2cTJ0a1BPNS8ycFVCSGIyWEow?=
- =?utf-8?B?bDkvVVZLcEJ5L0cxZGcyL1p2QVkvb0xxKzF5aFBtaGgwRFhveXVobTdwWGJt?=
- =?utf-8?B?MVRHRUpuVVowWVhqZ1hmeEpoUHNOZEdjZG5ESzlmd0xvemRCdE9DdWtaNThq?=
- =?utf-8?B?Yk02cDRybnpKT255NVVmQlhRVnBlVkZscERZeGlBU3c5THFtYWJRdlFQMEdB?=
- =?utf-8?B?OXkreWJNajhOSkR2ZjFoa3AyMkFzM0Q3eFNjNWMzWjRNNDlBbDNha3NqZWdB?=
- =?utf-8?B?Q1VqdTMvT09sdzFhUGZCU0FLdDh5WVdrcFl6Rm8xUWhTUGY1MUJlckE0WXgz?=
- =?utf-8?B?QmJLd3EvZXliaDd6VkJKb01hMFNKekVDZGVKZE1zY1pNeE9yWFIzZXg1MnVW?=
- =?utf-8?B?V1VHR2p3MXN5VHhxcUdLdGJiZm1sRDg2S2U3MUpCQWY4SlVxdEEzNHRpZ05t?=
- =?utf-8?B?MGN0V04xSmtKRnRQUEtHbVNhOXV6R1NUS2pKa2taMlB0TEthY3lKT1ZsWGtn?=
- =?utf-8?B?K0FKQjV1RHUycTZzaWx1Q0J2Y2lDOGNndjRnY2lOM00wdkZNZFo5SmFuT2No?=
- =?utf-8?B?OGNKdHMxSXh4c0pYRGVXenJ3YktsTjlaVExkRytpQ3dpb2kxNEJTT0cxTDhT?=
- =?utf-8?B?a2xpMmN1dlg5RmROdnFxRTRKbXhtSXFyajBCNUR6UXZJVUJabnAzbmpsWHBZ?=
- =?utf-8?B?a3pqV2NkQURjaVgrd3g1K3lZaVREdTlaa3Rzdzh5OGxwL0xnWEY1SXNqdGxn?=
- =?utf-8?Q?5Fsc=3D?=
+	=?utf-8?B?VU9uTXdRUkg4QTd0M1JvU3pydGN2c1NvVjJ5SVhRZHA5c2dNcUVReEFaUnlQ?=
+ =?utf-8?B?Qk9ZdUw3RzNmYzRHQW1VNEZoczF0aWxWM3pIc29uOEVnaTFqZzhDQWozUW1w?=
+ =?utf-8?B?bXdpcHJZQmRwVXB5OGpweE9MTWVhbGxXVXhMaDZwQkFubmVVbFVKQlZ2anRs?=
+ =?utf-8?B?eVdicWt5SUJSUnBubklmUG5US3NvSDM1UFEzUGN4eFlOcGFGSSt5NVBOeit6?=
+ =?utf-8?B?cTBNNUNQMEVXYWQxUlErWDV4R3JmQnNxTDArZ0xUaUo4ZnpnWWRlRmNST3ov?=
+ =?utf-8?B?TGNlQ1R5VjNvSEM3VEpZWG4weWovdUhLeFdCOWhzclg4SmJ2SnArWm5udFU2?=
+ =?utf-8?B?U0tKUHZIN0pIaU9iZU94ajliVlpUeENQVUZVUFRuQXlzeTZRam1oWXRnQUpO?=
+ =?utf-8?B?cnMwV0RTNkVmQ05BdllnZzY3aHFsbFJKSlpUQWc0UDFwVzhPL1dFb2ZPbE1k?=
+ =?utf-8?B?Y0dTaGtnQitmekIvWXBtQXI0c1FUWFEzVUhGTGFqcWx1YndPa1ErSlFNUEIx?=
+ =?utf-8?B?UU5nNWIrZEIwUmhXdjA1TTJIZDRNbTlFUkNOU1hSK0RFZ3ZCT2NZMXJMSXV2?=
+ =?utf-8?B?S24rVmtjVmY3YUpheWV3anB5bHFreHMzNy9FNXFmeW1Qci9kUUVaajhQeWNa?=
+ =?utf-8?B?eEROZEZHR2E5bzRKU1FCaGRTR0VDTUZBVys0a1RScHJJd3lTazU4bFBtdnRy?=
+ =?utf-8?B?SzRsckdMVVM0ZmhncDNTZkE1dnhhZnc1ZGhlckdQYitQZW0zR09ILzVtWTRB?=
+ =?utf-8?B?SnZKK2dGeG42d2ppZ3Nsa3BpWllFZjdxQ0ZKNVRVbHIyZ2NKODV2c1IrclBO?=
+ =?utf-8?B?ejVqWVhmcFpjWkxvOGljTmhiaXhwUDNJdVo1UnNJNHBkMFU0TFY5U0NGeHhC?=
+ =?utf-8?B?ZERiOXcyOHZydmYzQnNDQXVKWCtvZEZyRkdvdnFneHQwOGt4RXJRVE1vcnlr?=
+ =?utf-8?B?cmFwallxRHBkYlJBL1VkSDdtbGlaOGhSQ1poSlRnd0czYUI1WWQ4blJzS2tB?=
+ =?utf-8?B?elBMMmdlbEhKV3U4QnU4QmhocHdWWHo1NE5xcEhDUGVmWEl2em83S3N1OUk1?=
+ =?utf-8?B?cXpEU3JNU2JGZTIzWGw2NHJFMFFNZzVMbnhMamcxMnZSZGdXdUFaWjgzVS9W?=
+ =?utf-8?B?RDBxWXBxYmpObDQ1Z0xNL2pvOWhLVHdLb25ydGtuemo2bENWTHN6RzIyY1or?=
+ =?utf-8?B?TlJLWkNmWTdMMVZyajhqWFU2TUdRNlZuNkRpUVNJRXd3cWhZY012aXM5eVdu?=
+ =?utf-8?B?QWNzcHpBRmVvY09aQk5YTXI3Vy9ZMncyUVREUUtNbU9YV1dYZEJRaW0vV1Ar?=
+ =?utf-8?B?dnRmL1VVenFEY2kwL01YeHh4d0lyWUdWRlpoekozMEp0dC9wWE5ST3JYU2Fq?=
+ =?utf-8?B?VkJ2aFRlU3JWZWwxMklxTE5wYWVROVpEMGQ3UFdWRkFJVnFrenJwVHpwOW9E?=
+ =?utf-8?B?RjNMUnRscHlzWS9HSkQzVUwrdmFJK2Jzc1MxeEJ4ZUpjUWRlM1FzdEYzRFAv?=
+ =?utf-8?B?eVJ2YlE3S2hIU1RDNktTUUVZbjdZYy8zR1g3aEtnYm40QUZVamxBUXdRSG5p?=
+ =?utf-8?B?N1l6bmNwUkRCMU9lMkdjbnlkSG03OURLWXVKUHJBVXlRd04rbFdLR0dmRTdI?=
+ =?utf-8?B?eVBIbUtsOG9sU3hPK1RPMklqb0xCRXZpbGdQSExQelZyamN4VXlXTTRvb2dZ?=
+ =?utf-8?B?K3FkRlh1LzU0ODkwSllacC82em02WmN3M1AvVFVFUXBmdFM4R0ZZUG5OWGR1?=
+ =?utf-8?B?bVVhYm9QRjZibWFqYkl2QndNTCtJZ2ZVUHNNbDQ1a01WYTFuMWYyNTR1ckto?=
+ =?utf-8?B?dmNXWDU0bytDVTNrZE9zVkNTZ3R3bktTYzZ1SkdLaWdxZXlvN1Z1c08zR01O?=
+ =?utf-8?B?YTZ5VklNMU1CdmI4N1R3L2ZtSDl2UGhrbk1ueU9WSUpoVGxjanZLWnNpUCtv?=
+ =?utf-8?B?VEpZRVorL0RBV29KSDVYdkhiem1oZmdYMzhyVWtHYldiMXNJSzk5NkIvT1ZX?=
+ =?utf-8?B?R3Nac280TDdmM21lZDNrT0xCUlNsUEQ0TjJYQkkrY3FoeklVdmtSbG9EZGp1?=
+ =?utf-8?B?dEdhRmxtUmk2WkJFcmJvUmM1TE1IVUZTd2hpU3VMSEtNK0Z0Mk1IaWZ1aU9R?=
+ =?utf-8?Q?Ec6I=3D?=
 X-Forefront-Antispam-Report:
-	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024)(7416014);DIR:OUT;SFP:1101;
+	CIP:164.130.1.59;CTRY:IT;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:smtpO365.st.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(376014)(7416014)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: foss.st.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 10:48:46.1813
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 10:48:48.8617
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d856a747-50a3-404f-4315-08de3e230510
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25c972f0-4664-4a99-4d80-08de3e2306aa
 X-MS-Exchange-CrossTenant-Id: 75e027c9-20d5-47d5-b82f-77d7cd041e8f
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=75e027c9-20d5-47d5-b82f-77d7cd041e8f;Ip=[164.130.1.59];Helo=[smtpO365.st.com]
 X-MS-Exchange-CrossTenant-AuthSource:
 	DB1PEPF000509F7.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR10MB3855
-X-Authority-Analysis: v=2.4 cv=JeOxbEKV c=1 sm=1 tr=0 ts=6943dc16 cx=c_pps
- a=yGpyVr8xkxB+PwK9r0fouA==:117 a=d6reE3nDawwanmLcZTMRXA==:17
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB5922
+X-Proofpoint-ORIG-GUID: lXlyLj6c_IPUBzccTwIEG8G0aWCst1bc
+X-Proofpoint-GUID: lXlyLj6c_IPUBzccTwIEG8G0aWCst1bc
+X-Authority-Analysis: v=2.4 cv=Htp72kTS c=1 sm=1 tr=0 ts=6943dc13 cx=c_pps
+ a=pv+iSUMxSX8tKyfHAWeKVg==:117 a=d6reE3nDawwanmLcZTMRXA==:17
  a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=HjypFGx7bZcA:10 a=IkcTkHD0fZMA:10
  a=wP3pNCr1ah4A:10 a=s63m1ICgrNkA:10 a=KrXZwBdWH7kA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=PamUOCDZJ7i4i8YjnSMA:9
+ a=VkNPw1HP01LnGYTKEx00:22 a=8b9GpE9nAAAA:8 a=LcYmuGOQLzMn2Ft58YMA:9
  a=QEXdDO2ut3YA:10 a=T3LWEMljR5ZiDmsYVIUa:22
-X-Proofpoint-GUID: Fx-DTzfYwAxCNwfMNjkF4WbHtLpoIcdW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE4MDA4OCBTYWx0ZWRfXzt5EZPRj/IOy
- FDbNYoGDSljPEW0nCxvpmGD5Yl81OAY1JZ/kVZSLTsbYGCbjeil9mYsTCK7zEhU2tre4ffRW4HW
- yUcvjbBk2vcLV26Qt0Kgu+qZusvOO/IgSrnuCCmxGFWw+iMlxWLxmF5BKIv9T42TW3jpuJFajQt
- NP2vDaYDIbFXztC/H92f29jOQiOlIGc5U2G6o6n46E5ZBeVQIHoKodAYXKa22AyjWbrKceSCgsU
- rb8sLwPiX4w3/AkWtNEfIIk0o6Xz7CUWXsYRlsU6dWhh9aWpBR/wYaMkQsoWSqM0RZ2jy1qH9p4
- 1OcbH3pk+XEVVR6i2OQXFuOwE9tfktEVtSakts+JMmQ1S2yu6sURLAeQY+as2ifwwVWG+LMyYoL
- oqpkH8xaWFyjfcux1jOdLraFa68k+w==
-X-Proofpoint-ORIG-GUID: Fx-DTzfYwAxCNwfMNjkF4WbHtLpoIcdW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE4MDA4OCBTYWx0ZWRfXzp+U8iDanG0F
+ Li/pflYBPoTwITGx66YbQ0ftIp5Bdcu1pfwtHtWG0olk9a2i/kjsKcDFt1oSzDMb+4jrQCLxC9I
+ KIcJOFN17m8Vua4KWGf1aq+wo1nZr37MGNY/9ZqHUVBHL3+vQigIuz1nxNN0owHId3WgRsrRFgq
+ 4BB/kNQiD8f9gOtJzT5hBAMluk507AvNqTkEk5PyFEVTcx9DR79Wb4svwCcBJoSxOATrHC0oR68
+ tQRWCCIG+8Cvt7dQLqKlvxkEBRb4sa6l6sCO2xFTjHcOAWfHwA5UmUJRnufhblXw8yEcUZnK+7y
+ bSIVjbWmJnsv9yWtnj9eYMfojY/bVnukc76saFJsXEhom3c2PDPQ1Z9Bd+zlXR+iLEPTQuysWWa
+ uEf72IbzxIavar7xtnKS7X5FrrE7xw==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-18_01,2025-12-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- suspectscore=0 spamscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ malwarescore=0 phishscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 impostorscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512180088
 
-In case of interrupt based transfer, when the transfer is very
-small, relying on interrupts leads to lower performances than if
-the transfer were done using polling on the registers.
-
-Add a module parameter "polling_limit_us" to indicate the threshold
-in us from which a transfer would be done polling the registers rather
-than relying on interrupts.
+Add the sleep state of the spi1 instance on stm32mp157c-ev1.
 
 Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 ---
- drivers/spi/spi-stm32.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ arch/arm/boot/dts/st/stm32mp157c-ev1.dts | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-index ced6d7b215b9..8f8968383ad0 100644
---- a/drivers/spi/spi-stm32.c
-+++ b/drivers/spi/spi-stm32.c
-@@ -202,6 +202,10 @@
- #define STM32_SPI_HOST_MODE(stm32_spi) (!(stm32_spi)->device_mode)
- #define STM32_SPI_DEVICE_MODE(stm32_spi) ((stm32_spi)->device_mode)
+diff --git a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+index 8f99c30f1af1..4e46d58bf61f 100644
+--- a/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
++++ b/arch/arm/boot/dts/st/stm32mp157c-ev1.dts
+@@ -296,8 +296,9 @@ &sdmmc3 {
+ };
  
-+static unsigned int polling_limit_us = 30;
-+module_param(polling_limit_us, uint, 0664);
-+MODULE_PARM_DESC(polling_limit_us, "maximum time in us to run a transfer in polling mode\n");
-+
- /**
-  * struct stm32_spi_reg - stm32 SPI register & bitfield desc
-  * @reg:		register offset
-@@ -266,6 +270,7 @@ struct stm32_spi;
-  * @dma_rx_cb: routine to call after DMA RX channel operation is complete
-  * @dma_tx_cb: routine to call after DMA TX channel operation is complete
-  * @transfer_one_irq: routine to configure interrupts for driver
-+ * @transfer_one_poll: routine to perform a transfer via register polling
-  * @irq_handler_event: Interrupt handler for SPI controller events
-  * @irq_handler_thread: thread of interrupt handler for SPI controller
-  * @baud_rate_div_min: minimum baud rate divisor
-@@ -291,6 +296,7 @@ struct stm32_spi_cfg {
- 	void (*dma_rx_cb)(void *data);
- 	void (*dma_tx_cb)(void *data);
- 	int (*transfer_one_irq)(struct stm32_spi *spi);
-+	int (*transfer_one_poll)(struct stm32_spi *spi);
- 	irqreturn_t (*irq_handler_event)(int irq, void *dev_id);
- 	irqreturn_t (*irq_handler_thread)(int irq, void *dev_id);
- 	unsigned int baud_rate_div_min;
-@@ -1355,6 +1361,55 @@ static int stm32fx_spi_transfer_one_irq(struct stm32_spi *spi)
- 	return 1;
- }
+ &spi1 {
+-	pinctrl-names = "default";
++	pinctrl-names = "default", "sleep";
+ 	pinctrl-0 = <&spi1_pins_a>;
++	pinctrl-1 = <&spi1_sleep_pins_a>;
+ 	status = "disabled";
+ };
  
-+/**
-+ * stm32h7_spi_transfer_one_poll - transfer a single spi_transfer by direct
-+ *				   register access without interrupt usage
-+ * @spi: pointer to the spi controller data structure
-+ *
-+ * It must returns 0 if the transfer is finished or 1 if the transfer is still
-+ * in progress.
-+ */
-+static int stm32h7_spi_transfer_one_poll(struct stm32_spi *spi)
-+{
-+	unsigned long flags;
-+	u32 sr;
-+
-+	spin_lock_irqsave(&spi->lock, flags);
-+
-+	stm32_spi_enable(spi);
-+
-+	/* Be sure to have data in fifo before starting data transfer */
-+	if (spi->tx_buf)
-+		stm32h7_spi_write_txfifo(spi);
-+
-+	if (STM32_SPI_HOST_MODE(spi))
-+		stm32_spi_set_bits(spi, STM32H7_SPI_CR1, STM32H7_SPI_CR1_CSTART);
-+
-+	sr = readl_relaxed(spi->base + STM32H7_SPI_SR);
-+	/* Keep writing / reading while waiting for the end of transfer */
-+	while (spi->tx_len || spi->rx_len || !(sr & STM32H7_SPI_SR_EOT)) {
-+		if (spi->rx_len && (sr & (STM32H7_SPI_SR_RXP | STM32H7_SPI_SR_RXWNE |
-+					  STM32H7_SPI_SR_RXPLVL)))
-+			stm32h7_spi_read_rxfifo(spi);
-+
-+		if (spi->tx_len && (sr & STM32H7_SPI_SR_TXP))
-+			stm32h7_spi_write_txfifo(spi);
-+
-+		sr = readl_relaxed(spi->base + STM32H7_SPI_SR);
-+
-+		/* Clear suspension bit if necessary */
-+		if (sr & STM32H7_SPI_SR_SUSP)
-+			writel_relaxed(sr & STM32H7_SPI_SR_SUSP, spi->base + STM32H7_SPI_IFCR);
-+	}
-+
-+	spin_unlock_irqrestore(&spi->lock, flags);
-+
-+	stm32h7_spi_disable(spi);
-+	spi_finalize_current_transfer(spi->ctrl);
-+
-+	return 0;
-+}
-+
- /**
-  * stm32h7_spi_transfer_one_irq - transfer a single spi_transfer using
-  *				  interrupts
-@@ -2026,6 +2081,24 @@ static int stm32_spi_transfer_one_setup(struct stm32_spi *spi,
- 	return ret;
- }
- 
-+/**
-+ * stm32_spi_can_poll - detect if poll based transfer is appropriate
-+ * @spi: pointer to the spi controller data structure
-+ *
-+ * Returns true is poll is more appropriate, false otherwise.
-+ */
-+static bool stm32_spi_can_poll(struct stm32_spi *spi)
-+{
-+	unsigned long hz_per_byte, byte_limit;
-+
-+	/* Evaluate the transfer time and use polling if applicable */
-+	hz_per_byte = polling_limit_us ?
-+		      DIV_ROUND_UP(8 * USEC_PER_SEC, polling_limit_us) : 0;
-+	byte_limit = hz_per_byte ? spi->cur_speed / hz_per_byte : 1;
-+
-+	return (spi->cur_xferlen < byte_limit) ? true : false;
-+}
-+
- /**
-  * stm32_spi_transfer_one - transfer a single spi_transfer
-  * @ctrl: controller interface
-@@ -2058,6 +2131,8 @@ static int stm32_spi_transfer_one(struct spi_controller *ctrl,
- 
- 	if (spi->cur_usedma)
- 		return stm32_spi_transfer_one_dma(spi, transfer);
-+	else if (spi->cfg->transfer_one_poll && stm32_spi_can_poll(spi))
-+		return spi->cfg->transfer_one_poll(spi);
- 	else
- 		return spi->cfg->transfer_one_irq(spi);
- }
-@@ -2216,6 +2291,7 @@ static const struct stm32_spi_cfg stm32h7_spi_cfg = {
- 	 * SPI access hence handling is performed within the SPI interrupt
- 	 */
- 	.transfer_one_irq = stm32h7_spi_transfer_one_irq,
-+	.transfer_one_poll = stm32h7_spi_transfer_one_poll,
- 	.irq_handler_thread = stm32h7_spi_irq_thread,
- 	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
- 	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
-@@ -2245,6 +2321,7 @@ static const struct stm32_spi_cfg stm32mp25_spi_cfg = {
- 	 * SPI access hence handling is performed within the SPI interrupt
- 	 */
- 	.transfer_one_irq = stm32h7_spi_transfer_one_irq,
-+	.transfer_one_poll = stm32h7_spi_transfer_one_poll,
- 	.irq_handler_thread = stm32h7_spi_irq_thread,
- 	.baud_rate_div_min = STM32H7_SPI_MBR_DIV_MIN,
- 	.baud_rate_div_max = STM32H7_SPI_MBR_DIV_MAX,
 
 -- 
 2.34.1
