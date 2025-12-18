@@ -1,180 +1,172 @@
-Return-Path: <linux-spi+bounces-12022-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12025-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17452CCD595
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 20:12:01 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10BDFCCDB47
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 22:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CB812305A628
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 19:08:37 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C40493023E99
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 21:35:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F1A4312825;
-	Thu, 18 Dec 2025 19:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4FC2F3622;
+	Thu, 18 Dec 2025 21:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="nbqjjhJz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rwzfUog8"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012070.outbound.protection.outlook.com [40.93.195.70])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5C730F532
-	for <linux-spi@vger.kernel.org>; Thu, 18 Dec 2025 19:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766084917; cv=fail; b=iWe3vXrmjzxaJIv8H4BBrUNrQ99F+JJctecIvf8qYMGsz4UxKJJKSipBbP03uFaTsTUOrd2ZrXZxbyHCW0OlFSe70bhuW58tLmDbnWMyBoaJZ0vCiTxmjvMPfT/G+zbI0xJauxGtH8yTJwXKkJocV92zaOrmH2HjCRJDIVFHyaA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766084917; c=relaxed/simple;
-	bh=ALf2bUiun45CnICjo8IoIeJ+ZOdbH5blMFhfQUgDTc4=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OwsfYL68vcjnF+5QCzvFPH+yIge+3g/chp6YlgCYAuHVwcMdN3Duq5JAZQoRKaJ6rnwCyTm/96uOIBdP90n0kcwkEaFFB2lfFrdl95kfpbdrtTDeDJAf7bYfG2RJUfTJEKlJ14G869x0OMyTmJBhdcNFMtfxpRotFUtUnIDLpHE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=nbqjjhJz; arc=fail smtp.client-ip=40.93.195.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FmXao6FCxf+OjupOh6YiP723xaD3LHoxUfeThDJBZP8mtGNyrY1u9CyGCbi3JjyE3t7rMPe0AorVg5tYieLJJPZYf3FEgbeMbwc6Ogr1cwaAJ6DRqAOcuWXlHGobpgEmpOAZBveqKUk0bwtdn3QpNiOiyC8UpwpPCc+0YZ9JvkwVi//j5wdlsXAnY3SBG6Fp53vXYu652kpK4M4dHBu5/e9v7rBex+XStNIN9HM+3Uvki4Ek6ePDEFHAxu3x7cSenZLb1QYKeCbeUlw5Jhr/W9ocsOURBQ7/C8CmqWaXRUwn2hHhXjBR91MrSQoUKai1wxshLXGu60FmDsq35FoGnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qy+0DLYMcxeelzv9B/nBdXEFo64pf4KBhuTSjbRVVNc=;
- b=eYzwyZw5oB8gRupsvFVwNQz7TJWtponmvbh5/a6+0ijQ5bpiP7QNqFqLajKVSLupY5dwvUa6yBheBSHqWUpjpRFdCAbsGrjchjeSqLVP4Mc3vXb1G26UA9YkUFPlwMQpRyJ55bGIlT0admWAFFQaQ8WRa/C1mjG4TQY3jaK3XhSW3Ntipr1SX7NvcldPvjMqUiQ9VODmdcWSkCwiPXYQZYTW6sOvID0viOvXo6a7DhCgFsdeOCsZsTFM7Pr5CfmY/L9inwKWfAGakFr8rEGhqDQieno5VfzGghxWOk1V5N+hhfW/VqOphaSISJqiDrvSACSsuki/qptILPzKQ+jzUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
- (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
- (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qy+0DLYMcxeelzv9B/nBdXEFo64pf4KBhuTSjbRVVNc=;
- b=nbqjjhJzb6U6p2fPOxmIASzcAR9Q+VeG1PCmBxlEBUg00U9jCLmZ9yTyeUhvkGlKOJB2cXnequpFohTKU6QY66aVNqHL2XidB3mxPQmtT23ASAqwz5femWJBvwW3tK3tx6NaB9S6dbAtOLI0pXJhxGNAgj6wuWzUIRkYnRE0SyA=
-Received: from SA9PR10CA0012.namprd10.prod.outlook.com (2603:10b6:806:a7::17)
- by DS0PR10MB7296.namprd10.prod.outlook.com (2603:10b6:8:f8::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.8; Thu, 18 Dec
- 2025 19:08:33 +0000
-Received: from SA2PEPF00003F61.namprd04.prod.outlook.com
- (2603:10b6:806:a7:cafe::5b) by SA9PR10CA0012.outlook.office365.com
- (2603:10b6:806:a7::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.6 via Frontend Transport; Thu,
- 18 Dec 2025 19:08:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- SA2PEPF00003F61.mail.protection.outlook.com (10.167.248.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9434.6 via Frontend Transport; Thu, 18 Dec 2025 19:08:31 +0000
-Received: from DFLE215.ent.ti.com (10.64.6.73) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 18 Dec
- 2025 13:08:25 -0600
-Received: from DFLE206.ent.ti.com (10.64.6.64) by DFLE215.ent.ti.com
- (10.64.6.73) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 18 Dec
- 2025 13:08:25 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE206.ent.ti.com
- (10.64.6.64) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Thu, 18 Dec 2025 13:08:25 -0600
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5BIJ8Pua3863343;
-	Thu, 18 Dec 2025 13:08:25 -0600
-Date: Thu, 18 Dec 2025 13:08:25 -0600
-From: Nishanth Menon <nm@ti.com>
-To: "He, Guocai (CN)" <Guocai.He.CN@windriver.com>
-CC: "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "broonie@kernel.org"
-	<broonie@kernel.org>, "afd@ti.com" <afd@ti.com>
-Subject: Re: [BUG][RT][ti-j72xx] spi: cadence-quadspi: boot failed with
- rtmutex deadlock detected
-Message-ID: <20251218190825.oeucrspxenta2oix@steadfast>
-References: <CO6PR11MB558695EFB87C578370014430CDABA@CO6PR11MB5586.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCCE258EC2;
+	Thu, 18 Dec 2025 21:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766093708; cv=none; b=BJf9nlp5Qr1I9uE+nA02PEJTC3/c+uKaRgm3dYmLQirgacBmJfnU6Nq8bySrgD3kd1I1HveVJDDSVZl0/6Bxy4OijfPIFdlPuO0A2ONJUhzttTEvRK4lEWsvFRAoeLIcWAllccEQ7FGreAh2Zw+7ud04LgmkggG9VWCtPH8iHaE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766093708; c=relaxed/simple;
+	bh=CaTsMkKJSLp90vMn5/MV0Z5pzDnd9h/1Sh1EfZProTA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=RlGmNbGI8Gc9bUmKaDUthzgzO6Ycdoeaxj2bL2UCFaLUQ/UwV9zUEbGp/TvFN39uW/zmp+iYsd09yeGr/K2b6nfTya0Sh3/6FgqK4Z/Rf+rP20GAWKwDI0a8jN2rHrc0s0+qnr/vDXRhLFXI9W/uIUSMb95bX/pe65RcCp00Ie0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rwzfUog8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70344C4CEFB;
+	Thu, 18 Dec 2025 21:35:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766093708;
+	bh=CaTsMkKJSLp90vMn5/MV0Z5pzDnd9h/1Sh1EfZProTA=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=rwzfUog89eFHQS/LqHxJu+V8rVSKvQPQMqVHT7SpN/ltQecrdkM0dx1wU04MkQsD9
+	 OZwGSo8CUrJij8loyZL2qxB+1GmFqXyhuTcFhqMWQ2RWSKQQThnm8g4vC0vy6rR9oh
+	 9AHCX59Xw/lNODFFdyUz8JGVNmR+fgOGIEP1I75lV0zndFXc+dZgV5EC6UQzCTNW4j
+	 xZAkF1Xm8e5Fe4ui6zqVkcC9kFh24bQy06RxEPyW8wbk6HW8my20ma++M+pRyHf6aj
+	 XAh+kzss0+Z7oMMLjN18ypNlMK0c/FZShgplVIWMsIKC2kiPCCuXSGQMJjD/TK+ib6
+	 RkHcy76nOizjw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 603B2D6E2B7;
+	Thu, 18 Dec 2025 21:35:08 +0000 (UTC)
+From: Mateusz Litwin via B4 Relay <devnull+mateusz.litwin.nokia.com@kernel.org>
+Subject: [PATCH v2 0/2] spi: cadence-quadspi: Prevent indirect read
+ timeouts
+Date: Thu, 18 Dec 2025 22:33:03 +0100
+Message-Id: <20251218-cqspi_indirect_read_improve-v2-0-396079972f2a@nokia.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CO6PR11MB558695EFB87C578370014430CDABA@CO6PR11MB5586.namprd11.prod.outlook.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF00003F61:EE_|DS0PR10MB7296:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6e49f69-a143-412b-c732-08de3e68d562
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?5GeSfWeezU+co4FHCy+Tp+NQXrEIxYzdHhe9O5Ok5i5xMYNT70cphEQ5C/MI?=
- =?us-ascii?Q?cwo6M1os7y2vWj4ojesidFhwDhRmkxCD0nIzjKEyODt+vmDF+bwoZZ1RuO1B?=
- =?us-ascii?Q?wHloGDnaGTl4JkyTpgQ93cucSbf9N2Zw6Ygh+btcQOZACaQ0jnHaVoCd+Awb?=
- =?us-ascii?Q?KzndkC8rJYvi3LAhryyWQ3BwuujLNRYqnveL6WIE/9vwrrUu0AFWgonWyouj?=
- =?us-ascii?Q?PzSnTUEiXHwOAmhcUwW9A7msGLOkGcMcLxIeem37XKEzMGgE77n9P5ubSAH5?=
- =?us-ascii?Q?lN/lSUi//aBJpYh6u8X5kGJh5dt6obYXBFBE74eOzkTfpdVOmsHozGF4oRrd?=
- =?us-ascii?Q?2ZP197KKVeTSnEsi5Pt3YXjShjh6dbi2aw9A5EDb0ZQ5Gd42e6JfRM1DeMLh?=
- =?us-ascii?Q?KstrBhXSrVtRtcpYd4lDJb/69P89p3M3Grv4h9kMfZ0uTZHO8a4kQAoz5hMC?=
- =?us-ascii?Q?/Fc02X4+g8ldzfuoo7B366Xdsl3dAx+9kkr5hH/3Zp3pwIKYdxA8UXCJaneb?=
- =?us-ascii?Q?hKt0LLQFKHCDoQzBcFS+6Qh4nkiNhEeBLjTJzgDXIAobGdM1JYwhlWgSjwGh?=
- =?us-ascii?Q?mJCaNerRjdFkAhEQpSFD/lR9/4aAtVosRZUuJGL7SH7GeiVk2oV6yYatHjFM?=
- =?us-ascii?Q?OyYGhaY9ydImj+ArSCB3wq2kqOdmvex4k/rDAI+L4PD+UM1T8+3voqxn8kEj?=
- =?us-ascii?Q?8uDySmMHj81kR1pbWykRXmNmhxdmse3b7z3e+EzXtRm+5Y8290G7OCqCNP6K?=
- =?us-ascii?Q?gQOQq7v2yAS2mK7q5xlRdRIDz2SnY9mQuTFH7vho9vyKeno1wOiwFvxw6m5a?=
- =?us-ascii?Q?mUJKitNOBCArDrtSRlLbZCtf+qPiKyZIhfUandfFXPCdIQ0PVX949Rsho7x6?=
- =?us-ascii?Q?O7iwZGRaQImOXVn2z1Mrt5jjFySsaiE7wBP+ySAB/JqsfejtXdh82wkQCuJi?=
- =?us-ascii?Q?aRt6qq5yAqhr7RLDk6X03ikNlxfTrfjg4baMvFhbHUUZsb/s+2aHkBgIP5vO?=
- =?us-ascii?Q?216d97NC6Rv3WZY2IDlb+kdwVEQPWZA1JZZTuctAhx3dUU+mRz0pBavVCZgY?=
- =?us-ascii?Q?ZHk+dtYE9TZKqqrWebKnDMXdunMNjx82bmA8V5QRKsZ686O4uQDMlcIMh/KH?=
- =?us-ascii?Q?hQx9hi5O8G6KYJrN7bie1/5y23Ehwh8b6ZQpJIsxy1Ux45DrMUtXZcC86WsJ?=
- =?us-ascii?Q?p1zk4OHR5fJQeO6ee9dhBJTFHm5iUljlxatKKhzspNp0nkNzftF0CQJh4qG0?=
- =?us-ascii?Q?6qn51W9UrrFktp4O5pBHcvo76pDU5L6gQ79XK9M3EmidLEzr9iceoRizbI5Z?=
- =?us-ascii?Q?PakRKVnhNKdjB4ALkrl8eqZcfxNrtaNAKGcmXssgg0MiCKzp3WaIBdP5As6Q?=
- =?us-ascii?Q?XSfmRXpjWItY91TDWxBhXzuwzGVum7A7ZkSzxKt3bGN5+lH84ik2N3JE1N/y?=
- =?us-ascii?Q?J7Qs8IfU6UDLtV9ywiYBeGum1/ltlmD4nCGsaiAQopGA251zHzHFOmvy1LiI?=
- =?us-ascii?Q?4+W+YNejY0tdrU0MmZaiC+AEG+SRD6++ZU78jNm8cdB/uNsOLJQf649JWm9v?=
- =?us-ascii?Q?ktrPI7JiziOoAa6hpN4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Dec 2025 19:08:31.0461
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6e49f69-a143-412b-c732-08de3e68d562
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SA2PEPF00003F61.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7296
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABBzRGkC/33NQQrCMBCF4auUrI0kEdvqyntIKXEytYM0iZMSl
+ NK7GwtuXf5v8b1FJGTCJM7VIhgzJQq+hNlVAkbr7yjJlRZGmaM2upHwTJF68o4YYe4Zretpihw
+ yyvZklXF6OIABUYTIONBr069d6ZHSHPi9nWX9XX9u+9fNWiqpAG66gdoMdXPx4UF2D2ES3bquH
+ y1iqp/GAAAA
+X-Change-ID: 20251217-cqspi_indirect_read_improve-89a02d1f3c2c
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mateusz Litwin <mateusz.litwin@nokia.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766093707; l=4079;
+ i=mateusz.litwin@nokia.com; s=20251217; h=from:subject:message-id;
+ bh=CaTsMkKJSLp90vMn5/MV0Z5pzDnd9h/1Sh1EfZProTA=;
+ b=4gOiQ6sTA5Z0Y52V7Dh370eZc0dLGPtTFoZoWleFNuEK9vv24KVq+y7qNQ59+Ouz0g42Xuv9a
+ tNmZ6PYH901B0IgtMhri9+FgMNvVFtB5NqqPxPlGc46U90l/rA9q0kv
+X-Developer-Key: i=mateusz.litwin@nokia.com; a=ed25519;
+ pk=9NV76cwWrtwYUektOrK/ht9GTzmhtkqSvghr3Td4hM4=
+X-Endpoint-Received: by B4 Relay for mateusz.litwin@nokia.com/20251217 with
+ auth_id=579
+X-Original-From: Mateusz Litwin <mateusz.litwin@nokia.com>
+Reply-To: mateusz.litwin@nokia.com
 
-On 08:21-20251217, He, Guocai (CN) wrote:
-> Hi all,
-> 
-> I am seeing an reproducible issue in
-> drivers/spi/spi-cadence-quadspi.c on TI J72xx platform.
-> 
-> Kernel:
->   v6.1/standard/preempt-rt/ti-sdk-6.1/ti-j7xxx
->   (based on Linux v6.1.159 PREEMPT_RT)
+Hello,
 
-^^ sounds like TI vendor kernel?
+On the Stratix10 platform, indirect reads can become very slow due to lost
+interrupts and/or missed `complete()` calls, causing
+`wait_for_completion_timeout()` to expire.
 
-> 
-> Platform:
->   TI J72xx
->   QSPI controller: Cadence QuadSPI
-> 
+Three issues were identified:
+1) A race condition exists between the read loop and IRQ `complete()`
+   call:
+   An IRQ can call `complete()` after the inner loop ends, but before
+   `reinit_completion()`, losing the completion event and leading to
+   `wait_for_completion_timeout()` expire. This function will not return
+   an error because `bytes_to_read` > 0 (indicating data is already in the
+   FIFO) and the final `ret` value is overwritten by
+   `cqspi_wait_for_bit()` return value (indicating request completion),
+   masking the timeout.
 
-Will be good to discuss vendor kernel issues in e2e.ti.com please.
-unless you can reproduce this issue on upstream stable or mainline, this
-might be the wrong forum for discussion.
+   For test purpose, logging was added to print the count of timeouts and
+   the outer loop count.
+   $ dd if=/dev/mtd0 of=/dev/null bs=64M count=1
+   [ 2232.925219] cadence-qspi ff8d2000.spi: Indirect read error timeout
+    (1) loop (12472)
+   [ 2236.200391] cadence-qspi ff8d2000.spi: Indirect read error timeout
+    (1) loop (12460)
+   [ 2239.482836] cadence-qspi ff8d2000.spi: Indirect read error timeout
+    (5) loop (12450)
+   This indicates that such an event is rare, but possible.
+   Tested on the Stratix10 platform.
 
+2) The quirk assumes the indirect read path never leaves the inner loop on
+   SoCFPGA. This assumption is incorrect when using slow flash. Disabling
+   IRQs in the inner loop can cause lost interrupts.
+
+3) The `CQSPI_SLOW_SRAM` quirk disables `CQSPI_REG_IRQ_IND_COMP` (indirect
+   completion) interrupt, relying solely on the `CQSPI_REG_IRQ_WATERMARK`
+   (FIFO watermark) interrupt. For small transfers sizes, the final data
+   read might not fill the FIFO sufficiently to trigger the watermark,
+   preventing completion and leading to wait_for_completion_timeout()
+   expiration.
+
+Two patches have been prepared to resolve these issues.
+-  [1/2] spi: cadence-quadspi: Prevent lost complete() call during
+   indirect read
+   Moving `reinit_completion()` before the inner loop prevents a race
+   condition. This might cause a premature IRQ complete() call to occur;
+   however, in the worst case, this will result in a spurious wakeup and
+   another wait cycle, which is preferable to waiting for a timeout.
+
+-  [2/2] spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk if flash is
+   slow
+   Re-enabling `CQSPI_REG_IRQ_IND_COMP` interrupt resolves the problem for
+   small reads and removes the disabling of interrupts, addressing the
+   issue with lost interrupts. This marginally increases the IRQ count.
+
+   Test:
+   $ dd if=/dev/mtd0 of=/dev/null bs=1M count=64
+   Results from the Stratix10 platform with mt25qu02g flash.
+   FIFO size in all tests: 128
+
+   Serviced interrupt call counts:
+   Without `CQSPI_SLOW_SRAM` quirk: 16 668 850
+   With `CQSPI_SLOW_SRAM` quirk: 204 176
+   With `CQSPI_SLOW_SRAM` and this patch: 224 528
+
+Patch 2/2: Delivers a substantial read‑performance improvement for the
+Cadence QSPI controller on the Stratix10 platform. Patch 1/2: Applies to
+all platforms and should yield a modest performance gain, most noticeable
+with large `CQSPI_READ_TIMEOUT_MS` values and workloads dominated by many
+small reads.
+
+---
+Changes in v2:
+- Correct the IRQ mask corresponding to the SLOW_SRAM quirk.
+  This was prepared and tested on Linux kernel version 6.6, but
+  wrongly applied to version 6.20.
+- I apologize for this oversight.
+- Link to v1: https://lore.kernel.org/r/20251218-cqspi_indirect_read_improve-v1-0-0ccb17c62f67@nokia.com
+
+---
+Mateusz Litwin (2):
+      spi: cadence-quadspi: Prevent lost complete() call during indirect read
+      spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk if flash is slow
+
+ drivers/spi/spi-cadence-quadspi.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
+---
+base-commit: f4acea9eef704607d1a950909ce3a52a770d6be2
+change-id: 20251217-cqspi_indirect_read_improve-89a02d1f3c2c
+
+Best regards,
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-https://ti.com/opensource
+Mateusz Litwin <mateusz.litwin@nokia.com>
+
+
 
