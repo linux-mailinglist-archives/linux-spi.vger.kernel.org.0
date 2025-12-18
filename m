@@ -1,51 +1,51 @@
-Return-Path: <linux-spi+bounces-12024-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12023-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62CE0CCDB44
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 22:35:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 542FBCCDB41
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 22:35:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 295C630142EC
-	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 21:35:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED1BA3012BFC
+	for <lists+linux-spi@lfdr.de>; Thu, 18 Dec 2025 21:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4052F12D6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC162F12C1;
 	Thu, 18 Dec 2025 21:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvgq32XY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2cY2zQ9"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD3D25B1C7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC6E22FF22;
 	Thu, 18 Dec 2025 21:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766093708; cv=none; b=SUbGmHfrtLZ7CSRzNjvC/hUx+gjBG7AP4aHKGfCllGx7ut1Wx36cRffBunGPc3T4ApIJRrwCa8wfSmJ05Do5z5nrvMdhJSLCyNvenB55S7Dd17HSSRvPDNpzNMUVxmXwhWQAHUHO6uA6ufdq3MKlrxv63xdNe1HrXDC2YIO9RmE=
+	t=1766093708; cv=none; b=pF1gc8Mb2V+v5czF1limD8Oo6nldICdYS1uuRhAFXoONuMnsuMoXEHt28Tu7slB0XWa76d0SokWzER/3PHkKttA1zvVlloL4b9BHfIEcIkQC6u6JsNbjzgpUFlZAC1grv0OmTtEoo2I6oWB0U1s4auu/dhdmg1vjGhmAtizEzkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1766093708; c=relaxed/simple;
-	bh=txWkiyg3Z8eS/PIVrBrgfuE9ehKupN4/25/Ee8h+gjk=;
+	bh=aNJKD+H4SDel+n3Ym+ayxndaXEysHiHcGbEbOfhibCY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qSWI7I3dsGa3WcYSIhXiXjO4TAwYej2kJGM1ke3VMF8MGQoalKPPsGC3p7hHGyVqzL6EY8noSTliFpfXOAPYRCGY/AmwvGdwmJbEn+XsderbmbcbGRARUvd4LPaoq2mt+4IeyrbowlgvUmHWHn61MJZVXihNg+kNOnlc3BbPaw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvgq32XY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A608C116D0;
+	 In-Reply-To:To:Cc; b=Mvh2l1nW8F+QMmafWhHvpQJIylH2e5Pw4JLg9LuuBzlE1HLLziSIb+QWGHohMhz8jeaf+ai71TsI08reHe39k4rXhV9OugmBh1aGQy+od98tE7IQ1GfefU+zop5/TXtJrdCjBmwPkMzSADmeoymj8QHBGC+7M6oBOW19lF4dcz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2cY2zQ9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9415EC16AAE;
 	Thu, 18 Dec 2025 21:35:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1766093708;
-	bh=txWkiyg3Z8eS/PIVrBrgfuE9ehKupN4/25/Ee8h+gjk=;
+	bh=aNJKD+H4SDel+n3Ym+ayxndaXEysHiHcGbEbOfhibCY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=mvgq32XYAs3h1lKHK7oa/WVJ2q2aD59UaglWFQte7NNvayvEl8QhWHz1AcmXFwzcX
-	 EAXUKs/V6zLj8WLfWx1CxsqMLUo8TFmyEXP8LtVmnTKVCGdofmvbw4XX5hqMFf2fZm
-	 /s9RhWyQzZuQbzJQIAPzbL+X5KMWxtzT0PTTBrUa2hmIWIIQ2aWrVKNBtfi+CEQacz
-	 fX3qPWOJIBdHp5td45DNr7nd0ZCisQUTL+k9XnjdJDz2rX6zqMHXmtAEaeOCy6O3xD
-	 VuqgkBNAyXhvhC1e42mdwimnTNPsgUlIH9aPkCqcyQVPYf62oFXeYeWjgWbzTW2lno
-	 wHR1fT+HV2ECQ==
+	b=M2cY2zQ9sXE7XpUkVljpPu/TMbW8F6kH9mWmXZ9YIdmD86YTzBnpgkS8nv6sjL01C
+	 R5NfCH8N1/22DheWxoV9mB9pVSX0gaA28EsfW+kaF+hkZlZugKL1wEnxHZAOX6en0W
+	 x6ykOHZPezaSLcjAaqDdrhhSbYiELEY+FRn3z/iJqyQDswdNC36N/r9lQG6FFk6w1l
+	 hPxdZF/gOlhS3vfzvilZ863oxfw+lC8dKt4ZygtuYYT++fbR9xd8VQ3M9AMCJoYg1U
+	 SMcSQZsESNZVgj3nz8e89RjThviUN+gzldaGoChq1SCu9iYL7yuraWFf7NCYWpnDKS
+	 FpgwpAMxExQHA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 707F3D711C6;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8155ED711C7;
 	Thu, 18 Dec 2025 21:35:08 +0000 (UTC)
 From: Mateusz Litwin via B4 Relay <devnull+mateusz.litwin.nokia.com@kernel.org>
-Date: Thu, 18 Dec 2025 22:33:04 +0100
-Subject: [PATCH v2 1/2] spi: cadence-quadspi: Prevent lost complete() call
- during indirect read
+Date: Thu, 18 Dec 2025 22:33:05 +0100
+Subject: [PATCH v2 2/2] spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk
+ if flash is slow
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -54,18 +54,18 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251218-cqspi_indirect_read_improve-v2-1-396079972f2a@nokia.com>
+Message-Id: <20251218-cqspi_indirect_read_improve-v2-2-396079972f2a@nokia.com>
 References: <20251218-cqspi_indirect_read_improve-v2-0-396079972f2a@nokia.com>
 In-Reply-To: <20251218-cqspi_indirect_read_improve-v2-0-396079972f2a@nokia.com>
 To: Mark Brown <broonie@kernel.org>
 Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Mateusz Litwin <mateusz.litwin@nokia.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766093707; l=2014;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1766093707; l=3156;
  i=mateusz.litwin@nokia.com; s=20251217; h=from:subject:message-id;
- bh=idoBq4rF6Q69PiKVn5u/tYsDt9xIXPjO/l/HiqJtOWY=;
- b=6r95aUUM4dSqa65hhpy12h1ymd/dXj56QaT8LzPcDE1Rlq88MbJov48zh0UmGrsIGps1+x7PP
- 6oPn3ZuSCluDSv0taiStN2nhtXj4gh3VA4E/4eb9OKXCrpdq055UGLn
+ bh=wODUxc561XQK+ZcLXkwgTN2v7/VBU9osHmZCWSMuTWI=;
+ b=kTLBLwJL1bPgEYaPRi1b7+gXIXL8+q8UpI3JXHdAEpYQgF3LToeISPaGKMku3x/g6xEBCWSNt
+ P/pRtBdHieXC8/vzBIm885QNqZRwLORs4x7hmm5bY4C/n3MPJvvy/VW
 X-Developer-Key: i=mateusz.litwin@nokia.com; a=ed25519;
  pk=9NV76cwWrtwYUektOrK/ht9GTzmhtkqSvghr3Td4hM4=
 X-Endpoint-Received: by B4 Relay for mateusz.litwin@nokia.com/20251217 with
@@ -75,53 +75,88 @@ Reply-To: mateusz.litwin@nokia.com
 
 From: Mateusz Litwin <mateusz.litwin@nokia.com>
 
-A race condition exists between the read loop and IRQ `complete()` call.
-An interrupt could call the complete() between the inner loop and
-reinit_completion(), potentially losing the completion event and causing
-an unnecessary timeout. Moving reinit_completion() before the loop
-prevents this. A premature signal will only result in a spurious wakeup
-and another wait cycle, which is preferable to waiting for a timeout.
+CQSPI_SLOW_SRAM quirk on the Stratix10 platform causes fewer interrupts,
+but also causes timeouts if a small block is used or if flash devices are
+slower than or equal in speed to SRAM's read operations. Adding the
+CQSPI_REG_IRQ_IND_COMP interrupt would resolve the problem for small
+reads, and removing the disabling of interrupts would resolve the issue
+with lost interrupts.
+This marginally increases IRQ count. Tests show that this will cause only
+a few percent more interrupts.
+
+Test:
+$ dd if=/dev/mtd0 of=/dev/null bs=1M count=64
+Results from the Stratix10 platform with mt25qu02g flash.
+FIFO size in all tests: 128
+
+Serviced interrupt call counts:
+Without CQSPI_SLOW_SRAM quirk: 16 668 850
+With CQSPI_SLOW_SRAM quirk: 204 176
+With CQSPI_SLOW_SRAM and this commit: 224 528
 
 Signed-off-by: Mateusz Litwin <mateusz.litwin@nokia.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/spi/spi-cadence-quadspi.c | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index a390b1815fde..02d1ff53e61d 100644
+index 02d1ff53e61d..958788e0dac0 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -769,6 +769,7 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 	readl(reg_base + CQSPI_REG_INDIRECTRD); /* Flush posted write. */
+@@ -300,6 +300,9 @@ struct cqspi_driver_platdata {
+ 					 CQSPI_REG_IRQ_IND_SRAM_FULL	| \
+ 					 CQSPI_REG_IRQ_IND_COMP)
  
- 	while (remaining > 0) {
-+		ret = 0;
- 		if (use_irq &&
- 		    !wait_for_completion_timeout(&cqspi->transfer_complete,
- 						 msecs_to_jiffies(CQSPI_READ_TIMEOUT_MS)))
-@@ -781,6 +782,14 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 		if (cqspi->slow_sram)
- 			writel(0x0, reg_base + CQSPI_REG_IRQMASK);
- 
-+		/*
-+		 * Prevent lost interrupt and race condition by reinitializing early.
-+		 * A spurious wakeup and another wait cycle can occur here,
-+		 * which is preferable to waiting until timeout if interrupt is lost.
-+		 */
-+		if (use_irq)
-+			reinit_completion(&cqspi->transfer_complete);
++#define CQSPI_IRQ_MASK_RD_SLOW_SRAM	(CQSPI_REG_IRQ_WATERMARK	| \
++					 CQSPI_REG_IRQ_IND_COMP)
 +
- 		bytes_to_read = cqspi_get_rd_sram_level(cqspi);
+ #define CQSPI_IRQ_MASK_WR		(CQSPI_REG_IRQ_IND_COMP		| \
+ 					 CQSPI_REG_IRQ_WATERMARK	| \
+ 					 CQSPI_REG_IRQ_UNDERFLOW)
+@@ -381,7 +384,7 @@ static irqreturn_t cqspi_irq_handler(int this_irq, void *dev)
+ 	else if (!cqspi->slow_sram)
+ 		irq_status &= CQSPI_IRQ_MASK_RD | CQSPI_IRQ_MASK_WR;
+ 	else
+-		irq_status &= CQSPI_REG_IRQ_WATERMARK | CQSPI_IRQ_MASK_WR;
++		irq_status &= CQSPI_IRQ_MASK_RD_SLOW_SRAM | CQSPI_IRQ_MASK_WR;
  
- 		if (ret && bytes_to_read == 0) {
-@@ -813,7 +822,6 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
- 		}
+ 	if (irq_status)
+ 		complete(&cqspi->transfer_complete);
+@@ -757,7 +760,7 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 	 */
  
- 		if (use_irq && remaining > 0) {
--			reinit_completion(&cqspi->transfer_complete);
- 			if (cqspi->slow_sram)
- 				writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
+ 	if (use_irq && cqspi->slow_sram)
+-		writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
++		writel(CQSPI_IRQ_MASK_RD_SLOW_SRAM, reg_base + CQSPI_REG_IRQMASK);
+ 	else if (use_irq)
+ 		writel(CQSPI_IRQ_MASK_RD, reg_base + CQSPI_REG_IRQMASK);
+ 	else
+@@ -775,13 +778,6 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 						 msecs_to_jiffies(CQSPI_READ_TIMEOUT_MS)))
+ 			ret = -ETIMEDOUT;
+ 
+-		/*
+-		 * Disable all read interrupts until
+-		 * we are out of "bytes to read"
+-		 */
+-		if (cqspi->slow_sram)
+-			writel(0x0, reg_base + CQSPI_REG_IRQMASK);
+-
+ 		/*
+ 		 * Prevent lost interrupt and race condition by reinitializing early.
+ 		 * A spurious wakeup and another wait cycle can occur here,
+@@ -820,11 +816,6 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 			remaining -= bytes_to_read;
+ 			bytes_to_read = cqspi_get_rd_sram_level(cqspi);
  		}
+-
+-		if (use_irq && remaining > 0) {
+-			if (cqspi->slow_sram)
+-				writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
+-		}
+ 	}
+ 
+ 	/* Check indirect done status */
 
 -- 
 2.43.0
