@@ -1,55 +1,55 @@
-Return-Path: <linux-spi+bounces-12039-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12040-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4BCBCD19A9
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Dec 2025 20:25:12 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BF88CD19AF
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Dec 2025 20:25:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 05D713055E22
-	for <lists+linux-spi@lfdr.de>; Fri, 19 Dec 2025 19:23:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1C80F305A174
+	for <lists+linux-spi@lfdr.de>; Fri, 19 Dec 2025 19:23:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF9E342500;
-	Fri, 19 Dec 2025 19:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768ED342513;
+	Fri, 19 Dec 2025 19:23:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pWsuPRBx"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZhHE4gt3"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AEE33FE36
-	for <linux-spi@vger.kernel.org>; Fri, 19 Dec 2025 19:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAB833F8BB;
+	Fri, 19 Dec 2025 19:23:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766172213; cv=none; b=O4Tnlb85SxoiOLCctZ9sUaH1mbybjvsxFcQUWCsyXBD4XtflgZG+TBm3SHLItw05hJ52XCucnwplrI4hVUaPA7/SzgZOdOjAKXaHjeDDk6TfafmRPO4PCjtUxDDybZoLch0C9TGjjNFQAppExodXpgDNxsuqx2AVucvX5xulSh8=
+	t=1766172215; cv=none; b=qqCRZAXQxbKZuigzJgpiEQNX5QaAFAbX+xwGCzw2M6h9qtBmbJ7u9qyBfdCIxdvUTQXkkANSXQFLKyXvuXzjwvML966nBjjnDiB87n+eOv7aOe+5JDIAz6IqfaTvskwvcxS0L+C2V/B1jeDGzFFbe5tvgzFFY6BqAAlVQBCl0lg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766172213; c=relaxed/simple;
-	bh=9b0L7zvgjoq3vB85KTuQ0hEKRh6+gto0s+EPwekHgIM=;
+	s=arc-20240116; t=1766172215; c=relaxed/simple;
+	bh=4HLN4eEUc8jtN8p7gYjJlCzKWetlTySmNUckYiNNvyo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dvmzymPmv59GPHC5Y5yC8tpjOlmd/Cz8gl+srEbEALl7hTDmNmWHh77PYy4M2ZzjibdVN0HQaLbn6UsONmgWESdlXHbi5YWEnTwEYIma1BLkSgkuPlqcRgHaU/dRPRE47CcXtJtOdEUoM2lhniplxK5NClZ7xBJQD4iYwge7JCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pWsuPRBx; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=XNsWN6C4hxOQDeWcPnSULrNAwCw51WABWWKW8P0DtA9YbK8lUm8y64h+M2XE9y4XhCYWPYISROUChHL5Lhy1NMNBI5vsZHbBhsKgyCNMZfkrICVc7q6ht1CsTRwJSGIPfR1u/39QBZrwQ5912eMCoKeCtibo5VbTWLeKecjQva8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZhHE4gt3; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 639E2C1B20F;
-	Fri, 19 Dec 2025 19:23:05 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id D9D0F4E40B7D;
+	Fri, 19 Dec 2025 19:23:31 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 2269C6071D;
-	Fri, 19 Dec 2025 19:23:30 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A42DB10AA981B;
-	Fri, 19 Dec 2025 20:23:27 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id B0ECC6071D;
+	Fri, 19 Dec 2025 19:23:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 70646102F0BC0;
+	Fri, 19 Dec 2025 20:23:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1766172209; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1766172210; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=MJHGZZNMdeJVGktGftmqJKyOTlwEgokSeVQPziFIuBs=;
-	b=pWsuPRBxQUCCvu+3vOPs0Aj9/BN+k+IgDdpKbTW4tHvTElJyQ/XBNwmXhhe1131ZVOf8+T
-	GwnlDw9KY7EmwavwjYhQnjwn0xtEYjRVM8hIVDYnFd6FE6ZeClbr0cD5NonZFlXsq+yRAO
-	bAvifaiNDGOCF2CULEMpgg15/Q91v2uEPOnubBIf9q1gDomzzDwYaGwgXobtI3aZCOCpQO
-	clr+WU6eR7fNDHMKOBu7SOTNIc76+zGu79+F8F0o9U3UsyutGJFe+buNJESagNL0g/xuie
-	ddgFb1+yzR0tJZObfDc2F12zBdTLNub0uR5aK2x+Jeofz1vFyqPcbr8WiYQkAw==
+	bh=QNJbnESKqjEsiJlavsE5GSotm9cq+dbTnrHbs5KBhwU=;
+	b=ZhHE4gt3g1dURnaxbkDeFYAJAGfIz9tR441HyQghlp2K9H1BorGy3CRKDfDQnGXvveEWJw
+	HfzourDRkz9Rxni9R5EKL16YGZSuv10tlGFfDiS4BCXyD2CO//Yzlyed3UOboCtrhRefVN
+	xDuWAWkP3RHtfSnvlgVfoUKfFweeszMYP1RNxEvPG50elzOCvH3/aASJum1L0nPQEl+bdj
+	x5zU/61sjbID1SF2VzL8x/umQE1GvlBtZlC+jEKWDNKaxVYQxWQby5yPE5l4Rn2OBU2XBS
+	f4pfyM47p4kq3KUWPtVNXjk/b+/8jElXcuTUkA/srM77WwKhPioJq588mCLEVQ==
 From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Fri, 19 Dec 2025 20:22:12 +0100
-Subject: [PATCH 10/13] spi: cadence-qspi: Add a flag for controllers
- without indirect access support
+Date: Fri, 19 Dec 2025 20:22:13 +0100
+Subject: [PATCH 11/13] spi: cadence-qspi: Make sure write protection is
+ disabled
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251219-schneider-6-19-rc1-qspi-v1-10-8ad505173e44@bootlin.com>
+Message-Id: <20251219-schneider-6-19-rc1-qspi-v1-11-8ad505173e44@bootlin.com>
 References: <20251219-schneider-6-19-rc1-qspi-v1-0-8ad505173e44@bootlin.com>
 In-Reply-To: <20251219-schneider-6-19-rc1-qspi-v1-0-8ad505173e44@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -79,71 +79,52 @@ X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
 Renesas RZ/N1 QSPI controllers embed the Cadence IP with some
-limitations/simplifications. One of the is that only direct access is
-supported, none of the registers related to indirect writes are
-populated, so create a flag to avoid these accesses and make sure only
-direct accessors are called.
+modifications. For instance, they feature a write protection of the
+direct mapping at the controller level, with this feature all data
+writes to the AHB region are aborted.
+
+Despite the fact that the flag setting write protection is disabled by
+default, Bootloaders may (and actually do) set it, so mark this feature
+as being available with a specific flag to, if applicable, make sure it
+is disabled.
 
 Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index 3972bca5c4a9..340f7a186d92 100644
+index 340f7a186d92..ef036a65c628 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -47,6 +47,7 @@ static_assert(CQSPI_MAX_CHIPSELECT <= SPI_DEVICE_CS_CNT_MAX);
- #define CQSPI_SUPPORT_DEVICE_RESET	BIT(8)
+@@ -48,6 +48,7 @@ static_assert(CQSPI_MAX_CHIPSELECT <= SPI_DEVICE_CS_CNT_MAX);
  #define CQSPI_DISABLE_STIG_MODE		BIT(9)
  #define CQSPI_DISABLE_RUNTIME_PM	BIT(10)
-+#define CQSPI_NO_INDIRECT_MODE		BIT(11)
+ #define CQSPI_NO_INDIRECT_MODE		BIT(11)
++#define CQSPI_HAS_WR_PROTECT		BIT(12)
  
  /* Capabilities */
  #define CQSPI_SUPPORTS_OCTAL		BIT(0)
-@@ -1429,7 +1430,8 @@ static ssize_t cqspi_read(struct cqspi_flash_pdata *f_pdata,
- 	if (ret)
- 		return ret;
+@@ -218,6 +219,8 @@ struct cqspi_driver_platdata {
+ #define CQSPI_REG_IRQSTATUS			0x40
+ #define CQSPI_REG_IRQMASK			0x44
  
--	if (cqspi->use_direct_mode && ((from + len) <= cqspi->ahb_size))
-+	if ((cqspi->use_direct_mode && ((from + len) <= cqspi->ahb_size)) ||
-+	    (cqspi->ddata && cqspi->ddata->quirks & CQSPI_NO_INDIRECT_MODE))
- 		return cqspi_direct_read_execute(f_pdata, buf, from, len);
++#define CQSPI_REG_WR_PROT_CTRL			0x58
++
+ #define CQSPI_REG_INDIRECTRD			0x60
+ #define CQSPI_REG_INDIRECTRD_START_MASK		BIT(0)
+ #define CQSPI_REG_INDIRECTRD_CANCEL_MASK	BIT(1)
+@@ -1647,6 +1650,10 @@ static void cqspi_controller_init(struct cqspi_st *cqspi)
+ 		       cqspi->iobase + CQSPI_REG_INDIRECTWRWATERMARK);
+ 	}
  
- 	if (cqspi->use_dma_read && ddata && ddata->indirect_read_dma &&
-@@ -1630,19 +1632,20 @@ static void cqspi_controller_init(struct cqspi_st *cqspi)
- 	/* Disable all interrupts. */
- 	writel(0, cqspi->iobase + CQSPI_REG_IRQMASK);
- 
--	/* Configure the SRAM split to 1:1 . */
--	writel(cqspi->fifo_depth / 2, cqspi->iobase + CQSPI_REG_SRAMPARTITION);
-+	if (!(cqspi->ddata && cqspi->ddata->quirks & CQSPI_NO_INDIRECT_MODE)) {
-+		/* Configure the SRAM split to 1:1 . */
-+		writel(cqspi->fifo_depth / 2, cqspi->iobase + CQSPI_REG_SRAMPARTITION);
-+		/* Load indirect trigger address. */
-+		writel(cqspi->trigger_address,
-+		       cqspi->iobase + CQSPI_REG_INDIRECTTRIGGER);
- 
--	/* Load indirect trigger address. */
--	writel(cqspi->trigger_address,
--	       cqspi->iobase + CQSPI_REG_INDIRECTTRIGGER);
--
--	/* Program read watermark -- 1/2 of the FIFO. */
--	writel(cqspi->fifo_depth * cqspi->fifo_width / 2,
--	       cqspi->iobase + CQSPI_REG_INDIRECTRDWATERMARK);
--	/* Program write watermark -- 1/8 of the FIFO. */
--	writel(cqspi->fifo_depth * cqspi->fifo_width / 8,
--	       cqspi->iobase + CQSPI_REG_INDIRECTWRWATERMARK);
-+		/* Program read watermark -- 1/2 of the FIFO. */
-+		writel(cqspi->fifo_depth * cqspi->fifo_width / 2,
-+		       cqspi->iobase + CQSPI_REG_INDIRECTRDWATERMARK);
-+		/* Program write watermark -- 1/8 of the FIFO. */
-+		writel(cqspi->fifo_depth * cqspi->fifo_width / 8,
-+		       cqspi->iobase + CQSPI_REG_INDIRECTWRWATERMARK);
-+	}
- 
++	/* Disable write protection at controller level */
++	if (cqspi->ddata && cqspi->ddata->quirks & CQSPI_HAS_WR_PROTECT)
++		writel(0, cqspi->iobase + CQSPI_REG_WR_PROT_CTRL);
++
  	/* Disable direct access controller */
  	if (!cqspi->use_direct_mode) {
+ 		reg = readl(cqspi->iobase + CQSPI_REG_CONFIG);
 
 -- 
 2.51.1
