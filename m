@@ -1,115 +1,123 @@
-Return-Path: <linux-spi+bounces-12059-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12060-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF4E0CD2C57
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Dec 2025 10:37:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC55CCD2D08
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Dec 2025 11:13:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 73D523009F15
-	for <lists+linux-spi@lfdr.de>; Sat, 20 Dec 2025 09:36:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF8B53015872
+	for <lists+linux-spi@lfdr.de>; Sat, 20 Dec 2025 10:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22B7302773;
-	Sat, 20 Dec 2025 09:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B4C30648A;
+	Sat, 20 Dec 2025 10:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgxVDZjl"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="eEIN8UDX"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35D14A35;
-	Sat, 20 Dec 2025 09:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242F33054D0
+	for <linux-spi@vger.kernel.org>; Sat, 20 Dec 2025 10:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766223411; cv=none; b=UdM+7qASXZaYr0tR/JbuqfrpT4kmmvyXIC48BeShYFi8P3y2zK3RgboSDv2wlwt8Rb6Sx4Hk8Y5tXABWxU+k05T1MJFfD5I08wgnPMxTnVNhe0JYK1XV/DxrDmKuERanIdZYeXF7nMG/1130v5sVhQIAL0T/JwdSzblaHWp1GkI=
+	t=1766225597; cv=none; b=S8ZD3hCyBmnxL+D6HFa3s6M2FKaHrYhAD17CRZWp/Yw+MQiJYx70xWl9tFfjZWVIsjZPozAKP5VIk56ETgV5QIRmnMOO1febDDbwWC/rHV3kPHuQcBEE3WFBrX5bY/fWWioPJHpRIi6GgfVGx1XmRnLLzpafDQ98dwE85fR2qSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766223411; c=relaxed/simple;
-	bh=QOvv/T1GkTwBLvIOmgnWChvdwKFUOXir6r1DlwNXLPY=;
+	s=arc-20240116; t=1766225597; c=relaxed/simple;
+	bh=gAuOBF3f0hkBgiPiqamaBypeCsXH+DhyKhilcONbXUU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g41jNuEAOeComvLkbyjp2TdiZkx2Gbaj5indtyVoPSEFSPYvNejiIEh8tzqQiSrTYHlVxLCVFoG0v9vS4XVirpiGHQtgsyEOu1SF0+JHqNCfo3jmOwvNg+o32uvEV8I0NLrcMZKFczrqGtLY25RLN3TT8EvvlFVJdNOLgM0wIKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UgxVDZjl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81AC0C4CEF5;
-	Sat, 20 Dec 2025 09:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766223411;
-	bh=QOvv/T1GkTwBLvIOmgnWChvdwKFUOXir6r1DlwNXLPY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UgxVDZjls3ACYi1NpRxei6Hp1UEsL6kyv095NGkULlZ0qMYXP0yY7g1//DlErYAw3
-	 CjeumAuY2BTgqgMcHqfk6CZf5kUUJAl8jaRMIHODtn1CPd7wbXenlQ2fB0wdrREzBn
-	 o2ZVD398rlzktvXU3lm1CxpbwHPhtkErt5kksIPcoRyHjaYGY8TVVONsQ9eBqLzonm
-	 GvroYMCNz1TKYApMP97GynIWPOpgk3kESY6x2wCValbaJTBIuxPzJZqnAXBrhnssiu
-	 e02xHwSRh2L+gXkThEHmAig+EKBHw6dqJEHSFh4gMZwuUXR+udFVDK1UF2R87XJamD
-	 6ntnPjYWLP8cQ==
-Date: Sat, 20 Dec 2025 10:36:46 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Vaishnav Achath <vaishnav.a@ti.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	=?utf-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>, Wolfram Sang <wsa+renesas@sang-engineering.com>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Santhosh Kumar K <s-k6@ti.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Pascal Eberhard <pascal.eberhard@se.com>, 
-	linux-spi@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	 Content-Type:Content-Disposition:In-Reply-To; b=O8npean3tWpxJ1HnUbOjFRZm3T+UjfTgsZ/CzFTKNxrsO0LZvxT2C6dhDse1PVfRua0DIquw9kaHT6qGSIgfPGdbeYLP/aFOHAhXJOq4/DunMAwIMHP3ynLjr8mwtipnPYSzw55BBSptVqTJIFIEtMaXjimYG2Q9XODYJGETEdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=eEIN8UDX; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=F1SZ
+	nX8uTYw4RU9sPUVygoFCAsfV6eHNib4IP/t81Ng=; b=eEIN8UDXxIH+rs30AwRY
+	CIL1rwiDribOOibHmkn6NLZp0HGGX3Sgsc9gvumblHPuaqWN+JOkwPAmxuTPjBTA
+	A/3eW5ylnaFuTboCsyep7ogL/G1aBO8UJkZ7oKYXx1SndOIT+9uenUSN3qDee9J7
+	4inf6khdqJxdW2tKSaYIbTfvLy87W4YDVlnv2oy7WWOEgBtZp2ub4rmXimn89XBe
+	z8lL/CGiVwNBveGOvmVAdJfBiEBItxm077mjsjATxTFhb1OJToE8NFiB2I5mGnRs
+	/WrhL+60bSIh5Hyo/ec2LT9rgJG9slYxp22PnvYKJiAMvz1D1UdGiBa7KhOprlMO
+	lA==
+Received: (qmail 3057683 invoked from network); 20 Dec 2025 11:13:11 +0100
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Dec 2025 11:13:11 +0100
+X-UD-Smtp-Session: l3s3148p1@TgXycF9GQIoujnvT
+Date: Sat, 20 Dec 2025 11:13:09 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Vaishnav Achath <vaishnav.a@ti.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	=?utf-8?B?SGVydsOp?= Codina <herve.codina@bootlin.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Santhosh Kumar K <s-k6@ti.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Pascal Eberhard <pascal.eberhard@se.com>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 13/13] ARM: dts: r9a06g032: Describe the QSPI controller
-Message-ID: <20251220-shapeless-mussel-of-temperance-2c4874@quoll>
+Subject: Re: [PATCH 01/13] spi: dt-bindings: cdns,qspi-nor: Add Renesas
+ RZ/N1D400 to the list
+Message-ID: <aUZ2tbK8fMoY4AZ9@shikoro>
 References: <20251219-schneider-6-19-rc1-qspi-v1-0-8ad505173e44@bootlin.com>
- <20251219-schneider-6-19-rc1-qspi-v1-13-8ad505173e44@bootlin.com>
+ <20251219-schneider-6-19-rc1-qspi-v1-1-8ad505173e44@bootlin.com>
+ <20251220-sexy-feathered-gorilla-3a6aab@quoll>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KFHGkTmyD5jx9cyi"
 Content-Disposition: inline
-In-Reply-To: <20251219-schneider-6-19-rc1-qspi-v1-13-8ad505173e44@bootlin.com>
+In-Reply-To: <20251220-sexy-feathered-gorilla-3a6aab@quoll>
 
-On Fri, Dec 19, 2025 at 08:22:15PM +0100, Miquel Raynal (Schneider Electric) wrote:
-> Add a node describing the QSPI controller.
-> There are 2 clocks feeding this controller:
-> - one for the reference clock
-> - one that feeds both the ahb and the apb interfaces
-> As the binding expect either the ref clock, or all three (ref, ahb and
-> apb) clocks, it makes sense to provide the same clock twice.
-> 
-> Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
-> ---
->  arch/arm/boot/dts/renesas/r9a06g032.dtsi | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/renesas/r9a06g032.dtsi b/arch/arm/boot/dts/renesas/r9a06g032.dtsi
-> index 8debb77803bb..a6f4670f5c45 100644
-> --- a/arch/arm/boot/dts/renesas/r9a06g032.dtsi
-> +++ b/arch/arm/boot/dts/renesas/r9a06g032.dtsi
-> @@ -66,6 +66,20 @@ soc {
->  		#size-cells = <1>;
->  		ranges;
->  
-> +		qspi0: spi@40005000 {
-> +			compatible = "renesas,r9a06g032-qspi", "renesas,rzn1-qspi", "cdns,qspi-nor";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			reg = <0x40005000 0x1000>, <0x10000000 0x10000000>;
 
-reg is always the second property.
+--KFHGkTmyD5jx9cyi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +			interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks = <&sysctrl R9A06G032_CLK_QSPI0>, <&sysctrl R9A06G032_HCLK_QSPI0>,
-> +				 <&sysctrl R9A06G032_HCLK_QSPI0>;
-> +			clock-names = "ref", "ahb", "apb";
-> +			cdns,fifo-width = <4>;
-> +			cdns,trigger-address = <0>;
-> +			status = "disabled";
-> +		};
-> +
->  		rtc0: rtc@40006000 {
->  			compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
->  			reg = <0x40006000 0x1000>;
 
-Even nodes around tend to agree...
+> > +      - items:
+> > +          - const: renesas,r9a06g032-qspi
+>=20
+> This should be enum, knowing how Renesas adds more devices.
 
-Best regards,
-Krzysztof
+In general, yes...
 
+>=20
+> > +          - const: renesas,rzn1-qspi
+
+=2E.. but this platform is old. We are at N2 meanwhile. Extremly likely
+that no more N1 variants come out. And the other existing ones cannot
+run Linux (no SDRAM interface). I think const is fine in this case.
+
+
+--KFHGkTmyD5jx9cyi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmlGdrEACgkQFA3kzBSg
+KbYePg/8DJVXcRtDO6h5KAW0kqvin1jUALsHySkAu7Eu3i+HHRXTOKHEvotlaS7k
+dthQirpnE9EItGiNuCpJ7M5hHTLcgBL2hILThtgJfhcY+UbRoCFs21+ASw3Z3Cqq
+XPXMLpGUwVZ7QLipPuFJjdrjJnMAuSdD12cdZ/Wkf3VSiCJiMSgw0/5OPu4YgleQ
+NNRf32p37pVT+kY73TdkeCNGWKbE43/Xiyn1DWEfqrGZ7+8wYZf0PqrvidAuHT3N
+hwzytpsYPQLTvTq6vbABIMTLZ3W2d6bdfbMIG8lvF3Dn9bh5t8XWp7E8EZ8+P3DD
+QUHx3PhfKApPtYkH5QcIgKKBWEr1vdiRF2XAN5WHXdOGMbVIxdK+zA3uQfz3oivc
+CCXmcd06fYxWQsTPsK1z8d9pdz6QOmUfOnF5trDJF98yaXstXOw2eosAsAQNIfdy
+lGZJnxecoQLnT/TDUBqw/PmlyBUG3n13nLPav5+Df6sBsRvP7hmMScTbSFh19t4n
+jiDHPBSO3vPf3VBtxPpKD68avPfA92dVGdStF6hCNDMWsBPhbww1f4v+zNTs4qD0
+i0YJESq/3F51Ad2s31SgHm5nkRv+eybv3nYVwmHq8IqV9+hGemJBQ6ooDE/2RIM7
+CrOixMM7DrPn5kqlV4mbNpS0HyFvI0y461cIYawSudWtZav2+7s=
+=rMG6
+-----END PGP SIGNATURE-----
+
+--KFHGkTmyD5jx9cyi--
 
