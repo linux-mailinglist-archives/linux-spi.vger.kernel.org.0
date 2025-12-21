@@ -1,45 +1,46 @@
-Return-Path: <linux-spi+bounces-12064-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12065-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 830BECD3F07
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 12:05:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5B0CD3F0D
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 12:05:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ED7F130010DC
+	by sea.lore.kernel.org (Postfix) with ESMTP id D4C24300B901
 	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 11:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14BBF28A701;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1989328C869;
 	Sun, 21 Dec 2025 11:05:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqr4B5LG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ci0ELuQm"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D503A3A1E60;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D508817B43F;
 	Sun, 21 Dec 2025 11:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766315120; cv=none; b=uppBhF50fymEhM0PQsjT3hANfsFiZ9/3c8ECN1MDa70De2Arwqfx+qNAC4FukepS7KXpcvs3tXnxu3VveGrtD5Ye6OjfUeh3fK1iHSQg32fBOJzO1EFamGPR82xdW48xYD/pCgo49SX8oIsv8ojyvKV0yuNJ3vlqfpsSY55XsbQ=
+	t=1766315120; cv=none; b=dY0lZTUxK5QPrTk6xQAzu89ZYqrLmWvYAc2aRuIH4cyt3QIi44gygWKrE3Kf9aKke1gq/QLIPhK8IhY6WrAYDc/o1G7usQ72gtLYrc7ekXcpx5RCflvLgO1G9NUHZgIzxcfYVM1X8GW5Boa8jpqXcbnyhM6/yUJe78APso5L41Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1766315120; c=relaxed/simple;
-	bh=Nz3+VHR47YCuwduLdUUzntSPalUFZ+BG9nDzXt1o60E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bTRC7qj0Zlo9GaaKKPCDfI4Tf1LTW8i7Y/wcESDCXkYBv9OCuGW0isfAxUA2SVBBPqiTm4de3fjjcIbbou0Bhizc0PnWWbISAGQ8ppj2HenHySQ7vCYZyOJnbWzcOawNBjHnwl8WSfDZvU1vvEMhLITxV6WL7Bs09iPmKYNM3r0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqr4B5LG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 566F9C116C6;
+	bh=SgM8LmbKsO/V0BAs72Ln5nuOFUP4AR1J+W8Vnt8HIOI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pciLR1jCY9JYcR6d7Ud3xz66Pq0rcoTo9v42sBF18Y/2vy9f6YSg6z29MaN22Y4rsetbV1DHY+cRsocbPVJQlbWb7Epd6wKMYDpWiTKBDmy92KPOrm8J4S9tIUcr0e0gnsDeYJh43fkrh0O+X3yq2Ph4O5MBB6KT1H8wDt8ofYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ci0ELuQm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53289C4CEFB;
 	Sun, 21 Dec 2025 11:05:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1766315119;
-	bh=Nz3+VHR47YCuwduLdUUzntSPalUFZ+BG9nDzXt1o60E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=jqr4B5LG5KvlEkHo7eM2Pv4kQhvlIRCRVAi1VmIBEKlRNBZuaRX0XdVXFvrQtZnlT
-	 zAUZwyXj/PWWCZKoTr7wILTrzwYrunkKBYSNJVOkv9APCv61PVroCrJiU0eaDSitO1
-	 +RL54HIp4tnV1KsBjIVhNgFhLkjVm1JlpzB1hcrJn/Uz3gJo+sjplO/j/HF+cYmN8r
-	 e3mjY4CP3vz/NrZ2NcMQrKRjv2TpmS6mE2D7DBY4p7Y3Puk8OvWINp+S9dkdX7ao/p
-	 xRn7s6ZnS7AcKxrilXoF4ARoZQw7JGNFgs969J5XyyNW/G6GydJuO/p2DhUJIU7vyn
-	 X6eTiJFYIDTfA==
+	bh=SgM8LmbKsO/V0BAs72Ln5nuOFUP4AR1J+W8Vnt8HIOI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ci0ELuQmRBVBp53Sh75c5jhe1Fb1nawO/JXgGalOJqmBUS5EPw7EwpyP3oq868NqP
+	 988tnyH0+H2KzxTr2l21ORdoWKhF2GoQkkaYeVR4RpYUmqqi0u1wrFmR4wJwdnGqVm
+	 QIhSbzw3osVPD5QM5DEWyxnKkFMxo7IDA9xP98TrNtS75S/FCkfBd1osamnkqsiJOc
+	 /DZAGf2Zr+cG+YxrkO0vsdHHK2x+l4boymMqetrdUyvuZXdmvDVIuQ5cXFM+BDAwzs
+	 r2TLvhO9a0FktHtqxlQeHaWXPFAxmfYdDbXncVpYJ0UIx8V6sSGZYqbqD1y0lkZC8O
+	 Hx2NDbuCg3Tvg==
 Received: by wens.tw (Postfix, from userid 1000)
-	id 3488B5FDFB; Sun, 21 Dec 2025 19:05:17 +0800 (CST)
+	id 3ECE25FCB3; Sun, 21 Dec 2025 19:05:17 +0800 (CST)
 From: Chen-Yu Tsai <wens@kernel.org>
 To: Chen-Yu Tsai <wens@kernel.org>,
 	Jernej Skrabec <jernej@kernel.org>,
@@ -54,10 +55,12 @@ Cc: Andre Przywara <andre.przywara@arm.com>,
 	linux-sunxi@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] arm64: allwinner: a523: Support SPI controllers
-Date: Sun, 21 Dec 2025 19:05:07 +0800
-Message-ID: <20251221110513.1850535-1-wens@kernel.org>
+Subject: [PATCH 1/4] spi: dt-bindings: sun6i: Add compatibles for A523's SPI controllers
+Date: Sun, 21 Dec 2025 19:05:08 +0800
+Message-ID: <20251221110513.1850535-2-wens@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251221110513.1850535-1-wens@kernel.org>
+References: <20251221110513.1850535-1-wens@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -66,52 +69,49 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi folks,
+The A523 has four SPI controllers. One of them supports MIPI DBI mode
+in addition to standard SPI.
 
-This series adds support for the SPI controllers found in the Allwinner
-A523 SoC family. The SPI controller is almost the same as the ones in
-previous generations, except that it moved the "RX buffer count"
-register field to a separate register, and that register now reports
-the total count for RX buffer and FIFO.
+Compared to older generations, this newer controller now has a combined
+counter for the RX FIFO ad buffer levels. In older generations, the
+RX buffer level was a separate bitfield in the FIFO status register.
 
-In practice the driver has never cared about the buffer count, but if
-any implementation were to use it, this counts as a non-backward
-compatible change.
+In practice this difference is negligible. The buffer is mostly
+invisible to the implementation. If programmed I/O transfers are limited
+to the FIFO size, then the contents of the buffer seem to always be
+flushed over to the FIFO. For DMA, the DRQ trigger levels are only tied
+to the FIFO levels. In all other aspects, the controller is the same as
+the one in the R329.
 
-Also, one of the SPI controllers supports DBI mode, acting as a display
-interface. There is no infrastructure for DBI interface controllers in
-the kernel, so only a separate compatible is added for it.
+Add new compatible strings for the new controllers.
 
-Patch 1 adds compatible strings for the new variants.
+Signed-off-by: Chen-Yu Tsai <wens@kernel.org>
+---
+ .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml      | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Patch 2 adds driver support for the new SPI controller variant.
-
-Patch 3 adds device nodes for the SPI controllers to the dtsi file,
-along with pinmux settings for spi0 on the PC pins, a common usage for
-SPI-NOR flashes to boot from.
-
-Patch 4 enables the SPI-NOR flash found on the Radxa Cubie A5E.
-
-
-Please take a look and try it out.
-
-
-Thanks
-ChenYu
-
-
-Chen-Yu Tsai (4):
-  spi: dt-bindings: sun6i: Add compatibles for A523's SPI controllers
-  spi: sun6i: Support A523's SPI controllers
-  arm64: dts: allwinner: sun55i: Add SPI controllers
-  arm64: dts: allwinner: t527: orangepi-4a: Enable SPI-NOR flash
-
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml |  4 +
- .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 94 +++++++++++++++++++
- .../dts/allwinner/sun55i-t527-orangepi-4a.dts | 15 +++
- drivers/spi/spi-sun6i.c                       | 11 ++-
- 4 files changed, 120 insertions(+), 4 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+index 3b47b68b92cb..1b91d1566c95 100644
+--- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
++++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
+@@ -17,6 +17,7 @@ properties:
+   compatible:
+     oneOf:
+       - const: allwinner,sun50i-r329-spi
++      - const: allwinner,sun55i-a523-spi
+       - const: allwinner,sun6i-a31-spi
+       - const: allwinner,sun8i-h3-spi
+       - items:
+@@ -35,6 +36,9 @@ properties:
+           - const: allwinner,sun20i-d1-spi-dbi
+           - const: allwinner,sun50i-r329-spi-dbi
+           - const: allwinner,sun50i-r329-spi
++      - items:
++          - const: allwinner,sun55i-a523-spi-dbi
++          - const: allwinner,sun55i-a523-spi
+ 
+   reg:
+     maxItems: 1
 -- 
 2.47.3
 
