@@ -1,112 +1,93 @@
-Return-Path: <linux-spi+bounces-12068-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12069-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E49DCD3F1C
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 12:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E68BCD41D5
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 16:10:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 612403010CD0
-	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 11:05:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 569EA3007631
+	for <lists+linux-spi@lfdr.de>; Sun, 21 Dec 2025 15:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F299292B54;
-	Sun, 21 Dec 2025 11:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD852FF144;
+	Sun, 21 Dec 2025 15:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdXw/GcX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+U+PK0o"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0120A207A32;
-	Sun, 21 Dec 2025 11:05:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB701D47B4;
+	Sun, 21 Dec 2025 15:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766315120; cv=none; b=U43utSpFTikoA6P8pgotXL/lvlGElBiCxtdovi8w5Db6dLl15op2I9+D+A/ncBv7iIISeB5IgjQcvzHKa6OLaxTp914vui3IHu9AXNiPnZca3swPR9LLkStHCoWYQcSHbdvM4S+n9tWP1IUwFIOwA1mklyzNtb52vWhCExDq1UE=
+	t=1766329848; cv=none; b=XT4g9LM5uJmezacFCshbRIi8LwlvE0Htj+pNCrChabi0yQSzqeNnSlhHqESzy4wh0BnLnrIC+sgWKyrUQBkCJaYCWpa6y75J8eCCg1Yxc+2UwzMZww6WB+1tCiucs9yYqTyJQUE5gAUnpDCHoupuDf1bQU02Q0k3MtL7rOJcvwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766315120; c=relaxed/simple;
-	bh=WIWtUvOCXqllobCBnum35H1c/nzaFuG9Bf2t7pmwke8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ns+Qfix1kvLqTUXUuCqDnv0XM5Xcg2nBXRYZaMV6qgj6o90AtMU3olCQhk+yoQD8SgA0LX9nUORht3OTkY0kOH6YjAhKefJ4wqmcvGqiWTlw0wvR3xPPbQAgIN7AiswJcK3fnRleUECAHN60suqqrkmca18qAp6eh3GA4BBjOiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdXw/GcX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74E52C19421;
-	Sun, 21 Dec 2025 11:05:19 +0000 (UTC)
+	s=arc-20240116; t=1766329848; c=relaxed/simple;
+	bh=wqazjEUfhNgRi4xDXNm830yr+KxJQkTCkXxzr4Piqy4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k9W4gxRXlg0Pmal1prAjTSKaVVWv8B3OjFQgEoyP0TGpBNlkXWxmGQYbrZkLPopIT3DikyYuZ3dEhOWakmJU4kI2jLDmnMc0OEFLDdpVHhT71EqIgdNdmXLDzcr5mUhuT1TIA2VXzATOCtnvkzG5lG1kOI1jRtilm2AhxektScU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+U+PK0o; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 814F4C4CEFB;
+	Sun, 21 Dec 2025 15:10:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766315119;
-	bh=WIWtUvOCXqllobCBnum35H1c/nzaFuG9Bf2t7pmwke8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RdXw/GcX/Plbh9yviOIp+D7R73fpZzTGKvozTLxjXdP3f8OtJz+UdndQUKskJWTd0
-	 VikTloCkvRmaDve4AqT8n0MOyg86SO9MdwzprKMMmOUWWGeWskO0qTGCYa5zLkI/4U
-	 V0m0MH7YtMz1/ebRfT/69PdYSZGNrCGXZFg+G0uOvfHRNbJ2NO9pRawHW9vLhmNoiE
-	 tXcNE/S4YOX+n5raBFuL8rR0OP4VEmmJbEBwcPh66IWHUSDIDjljmab7rBQdO+jl1d
-	 WLcaLbW386OU+JabmttYqN0EeYMyu3FKzM4WYx1eVBdWHSkDNCkYNhORG/NUGH5kPI
-	 dax1zsgEr+l1g==
-Received: by wens.tw (Postfix, from userid 1000)
-	id 5FDF85FE52; Sun, 21 Dec 2025 19:05:17 +0800 (CST)
-From: Chen-Yu Tsai <wens@kernel.org>
-To: Chen-Yu Tsai <wens@kernel.org>,
-	Jernej Skrabec <jernej@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mark Brown <broonie@kernel.org>
-Cc: Andre Przywara <andre.przywara@arm.com>,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-sunxi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] arm64: dts: allwinner: t527: orangepi-4a: Enable SPI-NOR flash
-Date: Sun, 21 Dec 2025 19:05:11 +0800
-Message-ID: <20251221110513.1850535-5-wens@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251221110513.1850535-1-wens@kernel.org>
+	s=k20201202; t=1766329848;
+	bh=wqazjEUfhNgRi4xDXNm830yr+KxJQkTCkXxzr4Piqy4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z+U+PK0oznX66bMrSrirIwA2bNDNTWhEx3AjQ9eOpUwquC6fFMr9bLy0JXYII+aeB
+	 zgDJJ59bjJpKg11XxsWaPmtBDDwXhkOQmGyURkJUxUhHuvaZEmd1rJ3wfbDY0sMU6G
+	 5037UhP86ccwFU6hAqV9SKMPA1Y8kdxOcAL7SQhUVrknWrBgwDLsyJvv85s/3dM1k6
+	 UP0WqDrhFMsoCqZZ2+vioKhy/rNz+cFeYW+mfaZoaVZP5SyPQB45mlGmHEG3hmSuWv
+	 KSJ+BKuHJR+epfuZ5pokz798brKVABpph//Fx6wyarz67c1xunRE3bROBxdiUEccJp
+	 ETXaEs8cFB2ug==
+Date: Sun, 21 Dec 2025 16:10:44 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Chen-Yu Tsai <wens@kernel.org>
+Cc: Jernej Skrabec <jernej@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Mark Brown <broonie@kernel.org>, Andre Przywara <andre.przywara@arm.com>, 
+	linux-spi@vger.kernel.org, devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] spi: dt-bindings: sun6i: Add compatibles for A523's
+ SPI controllers
+Message-ID: <20251221-tunneling-intelligent-dogfish-d44a01@quoll>
 References: <20251221110513.1850535-1-wens@kernel.org>
+ <20251221110513.1850535-2-wens@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251221110513.1850535-2-wens@kernel.org>
 
-The Orangepi 4A has a SPI-NOR flash connected to spi0 on the PC pins.
-The HOLD and WP pins are not connected, and are instead pulled up by the
-supply rail.
+On Sun, Dec 21, 2025 at 07:05:08PM +0800, Chen-Yu Tsai wrote:
+> The A523 has four SPI controllers. One of them supports MIPI DBI mode
+> in addition to standard SPI.
+> 
+> Compared to older generations, this newer controller now has a combined
+> counter for the RX FIFO ad buffer levels. In older generations, the
+> RX buffer level was a separate bitfield in the FIFO status register.
+> 
+> In practice this difference is negligible. The buffer is mostly
+> invisible to the implementation. If programmed I/O transfers are limited
+> to the FIFO size, then the contents of the buffer seem to always be
+> flushed over to the FIFO. For DMA, the DRQ trigger levels are only tied
+> to the FIFO levels. In all other aspects, the controller is the same as
+> the one in the R329.
+> 
+> Add new compatible strings for the new controllers.
+> 
+> Signed-off-by: Chen-Yu Tsai <wens@kernel.org>
+> ---
+>  .../devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml      | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Enable spi0 and add a device node for the SPI-NOR flash.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Signed-off-by: Chen-Yu Tsai <wens@kernel.org>
----
- .../dts/allwinner/sun55i-t527-orangepi-4a.dts     | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/allwinner/sun55i-t527-orangepi-4a.dts b/arch/arm64/boot/dts/allwinner/sun55i-t527-orangepi-4a.dts
-index 9e6b21cf293e..055be86e5fae 100644
---- a/arch/arm64/boot/dts/allwinner/sun55i-t527-orangepi-4a.dts
-+++ b/arch/arm64/boot/dts/allwinner/sun55i-t527-orangepi-4a.dts
-@@ -400,6 +400,21 @@ &rtc {
- 	assigned-clock-rates = <32768>;
- };
- 
-+&spi0  {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&spi0_pc_pins>, <&spi0_cs0_pc_pin>;
-+	status = "okay";
-+
-+	flash@0 {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "jedec,spi-nor";
-+		reg = <0>;
-+		spi-max-frequency = <20000000>;
-+		vcc-supply = <&reg_cldo1>;
-+	};
-+};
-+
- &uart0 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&uart0_pb_pins>;
--- 
-2.47.3
+Best regards,
+Krzysztof
 
 
