@@ -1,140 +1,109 @@
-Return-Path: <linux-spi+bounces-12074-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12075-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D78EACD60A2
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Dec 2025 13:49:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D703CD6CAB
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Dec 2025 18:18:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 531D930115F0
-	for <lists+linux-spi@lfdr.de>; Mon, 22 Dec 2025 12:48:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 584F730039FB
+	for <lists+linux-spi@lfdr.de>; Mon, 22 Dec 2025 17:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B775F2DE70B;
-	Mon, 22 Dec 2025 12:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448323093AC;
+	Mon, 22 Dec 2025 17:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jFINYE8K"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F42D313E36
-	for <linux-spi@vger.kernel.org>; Mon, 22 Dec 2025 12:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 136572C08C2;
+	Mon, 22 Dec 2025 17:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766407715; cv=none; b=Gq7ldnLTOfcpSpXNZc9hICpLDOZg+HruwHjf/I5OTdwEtLdQjtMYPYIleqvZ+f9JMT+Uf844u26NokU31OL3zG8sHrJzREv/RpG9LqkVk9s7bf+KOQYa/E6PWm6evN67F0QlcIRoExLBARG/sCH/4lsbqTPsNd1LvRq0jOUguFw=
+	t=1766423875; cv=none; b=p4abmRdWM6Z0v7L5hbpliqv5+I1QLzR6Pf4ntO4YlSqWYn7e/wOvhhZG0ITRvxyEU+U4l6T4deW/jbEF229H30GQUX4RkISCrO08nhFzetd118bb0tzKQCBDkOrVw+8sJsi4j7jFQOpW0lcvAJEOc3KXbYYF+XNksCToeQIwHXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766407715; c=relaxed/simple;
-	bh=Xp2JxaURk7cqCR/j5M2KjzDOwxRykTFTwS1VU/qCsh8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hFnzaWP02MmZjVNw58eksJmkgg7kUWjksO7p884tMsGHZtMetKLv3EH3ONxYlAgCsP3vhTaquBtUfhYrMlVC4oGYwa1/RM8cpfGaD1LIw6DhtLFkNZUc4aqgQLQndcUAo09rKCYj6XxlYwbbEEFma+0+KiXpG7wUcjsJkVd9Ipo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-559a4d6b511so448258e0c.0
-        for <linux-spi@vger.kernel.org>; Mon, 22 Dec 2025 04:48:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766407712; x=1767012512;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VgM9E2RUaWwSmEYTs8cEM73rjhci1votspeG4LjZ3Jk=;
-        b=WwVFFAUU/KQBijox8qQPCY69LrQ6w9PIH4MMMJNF0nHp4B2/fl7LcvKDi8UJ+FjkZp
-         JqiaCCKnLEo0w/woEX63wDiJGxUWA1mtast46ovkps9oWRHBv8kshY8VrzoNYcuI3nrQ
-         09ccqrFU6jZzGHCXGHPvnzhy2xEpo0nEb+FCVYn8SXCwOe1YlXnow8P2duP3wDmTNllX
-         erZv8jjgtFGCBewtrMIEMAdYFQwnuyvR2ybrpRnJ1u8SPVYoQLojNubMjFoSiu8O2ZfY
-         BegIu87UTDz0ca7nrP6cjk/mlNKFdqlqDorgXFBvz6v34GepFz8Zjkny1X3dHAqVt1DW
-         1ZTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ/8qxI9jXOoF38tSppyZMvtufHsT2fFU5iGGomRCJ+toBf3qkku0Azbo/CzqQbvbdCp5JcCkh+rQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0sjgjc8FuPUlA5zn3WmZXgzqWlN1O1hFF/gZfUZbB7urOP6R+
-	kgyC+zH5c81+5NVGwUJ+f0RqB1D/bqCIkkPPKAzAo6GSLUZ6i2pqgEi6Ga6/dBjW
-X-Gm-Gg: AY/fxX502w+FbmoMhVgypyBLiOUodklZ5zBibXEBHXHQ6mXa8zwf55gxRLIKjXLQbSL
-	m/tiObX+YRZAi0B+QvWCgVpH5XgrA6RYh22bFUc9jA42dVC9Ob7sZENKlfaWBraCgMj6lzUsI9W
-	MM1i0N+fWcgysKERQhEh5iXorRUNl4OsoWYVwXvCrZ/PIvZKm1sgDHyCGdNvLswheF87RwVzLYQ
-	8vjbGGz7zmwYXvn5v4USqFkmssJAmWN1ZHeWHo+uNlrrZ5aw4q5xLUJDdIK7Kl1oHQWofQZIebX
-	xxUmrrZKbqpgwS7NiO8U0VleztexLSzRyJakXz1LIyWjF/Kys0zxznmOGJhNTUeidEJktT3Rx27
-	H7g65B8gTpyqyLLlX4+PgBR19glD3WhG9iJOlnyJuVqKz5FVeGCIk3DsZRaHVMJurI2SjYfPRGL
-	n6YdzsZ6T/1C/34BviYW2fXlHE7dx+fqW6sIWR92zytsdN+DHXA1sT
-X-Google-Smtp-Source: AGHT+IGcd5TpxjyuH9vx09wiFpdYU3DB+zqv3P1PyFJ/kabjUDQdrMc/kOHg6qEuLD8Ki9A43oVZKg==
-X-Received: by 2002:a05:6122:7c6:b0:55b:305b:4e45 with SMTP id 71dfb90a1353d-5615beb3bd3mr2906927e0c.17.1766407712209;
-        Mon, 22 Dec 2025 04:48:32 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5615cf27fe6sm3585276e0c.0.2025.12.22.04.48.32
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Dec 2025 04:48:32 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-56021b53e9eso1066883e0c.2
-        for <linux-spi@vger.kernel.org>; Mon, 22 Dec 2025 04:48:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUE4EzEEqrRwU9K6JgfC+Y6lqSivn3ElBzrDuIxLHu0dQN3yU5CidY0Mf7Utv82Lrhv7aoex5ln0m4=@vger.kernel.org
-X-Received: by 2002:a05:6122:a04:b0:55b:180f:fed6 with SMTP id
- 71dfb90a1353d-5615be677b9mr2876994e0c.13.1766407711710; Mon, 22 Dec 2025
- 04:48:31 -0800 (PST)
+	s=arc-20240116; t=1766423875; c=relaxed/simple;
+	bh=QOPog1YfYI90StUev6z08ROZmYBb9PrYSSSaMZnFZ+s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ko6kRtMPYJyb5LPWS8HKirE+LAjyAq1hisdbjlZao7EDgW+11S2zvBWxljI3nzsC4GgSwU4EmgBJFiZQtIBHhVWDM7B5AA16iKA2uOOVkwouvg0qzozgDHUainJJhpyrSSmog8FC9bZl4lYVbsY6CFcpIh10dyKjmHZUQF14RmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jFINYE8K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 828EBC4CEF1;
+	Mon, 22 Dec 2025 17:17:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766423874;
+	bh=QOPog1YfYI90StUev6z08ROZmYBb9PrYSSSaMZnFZ+s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jFINYE8KYwvcfYuyjdl/b6hv5LyI8pyAHMGb7wjXwv/a2jN45PELDtVbvB+cO2/7S
+	 bZ3eP+b2YeSUFs0Jt3pHgrnbsxAbPLcIxN0hh+z0lKoDRAKdz2a+ogept/fiSnrRsO
+	 FU46Wxei7kFvFOTLekv0h1NP1yg4zb5PfSZLRCqR7xk8dWRWuv586n/ghKB0pTHT/z
+	 du8d+kNpLy7MrrwML6FCqqsXp0rpSEg12CzmeED88cUyA9Go2WbQfNWg3MPqB6M9Mn
+	 mjSvThDqbi1sXGadFMVVy0RE+nOJQuRI04lkj3+9EAqSG4UAVfa3aKdnvr19fYKw//
+	 BYGUtY+EDFOag==
+From: Mark Brown <broonie@kernel.org>
+To: Jernej Skrabec <jernej@kernel.org>, 
+ Samuel Holland <samuel@sholland.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@kernel.org>
+Cc: Andre Przywara <andre.przywara@arm.com>, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20251221110513.1850535-1-wens@kernel.org>
+References: <20251221110513.1850535-1-wens@kernel.org>
+Subject: Re: (subset) [PATCH 0/4] arm64: allwinner: a523: Support SPI
+ controllers
+Message-Id: <176642387228.913099.2681822678465821683.b4-ty@kernel.org>
+Date: Mon, 22 Dec 2025 17:17:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251219-schneider-6-19-rc1-qspi-v1-0-8ad505173e44@bootlin.com> <20251219-schneider-6-19-rc1-qspi-v1-7-8ad505173e44@bootlin.com>
-In-Reply-To: <20251219-schneider-6-19-rc1-qspi-v1-7-8ad505173e44@bootlin.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 22 Dec 2025 13:48:20 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVBwZW1JCrtpYe7mc55FzEv0BZOWC5NNNVejxXSzDLCpQ@mail.gmail.com>
-X-Gm-Features: AQt7F2orBW9lxEBIu81Xb5vtVrPMESy_KNg1aazPhtOsl5NUSmaZ5WtqS55gX-s
-Message-ID: <CAMuHMdVBwZW1JCrtpYe7mc55FzEv0BZOWC5NNNVejxXSzDLCpQ@mail.gmail.com>
-Subject: Re: [PATCH 07/13] spi: cadence-qspi: Fix probe error path and remove
-To: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Vaishnav Achath <vaishnav.a@ti.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	=?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Santhosh Kumar K <s-k6@ti.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Pascal Eberhard <pascal.eberhard@se.com>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
-Hi Miquel,
+On Sun, 21 Dec 2025 19:05:07 +0800, Chen-Yu Tsai wrote:
+> This series adds support for the SPI controllers found in the Allwinner
+> A523 SoC family. The SPI controller is almost the same as the ones in
+> previous generations, except that it moved the "RX buffer count"
+> register field to a separate register, and that register now reports
+> the total count for RX buffer and FIFO.
+> 
+> In practice the driver has never cared about the buffer count, but if
+> any implementation were to use it, this counts as a non-backward
+> compatible change.
+> 
+> [...]
 
-On Fri, 19 Dec 2025 at 20:23, Miquel Raynal (Schneider Electric)
-<miquel.raynal@bootlin.com> wrote:
-> The probe has been modified by many different users, it is hard to track
-> history, but for sure its current state is partially broken. One easy
-> rule to follow is to drop/free/release the resources in the opposite
-> order they have been queried.
->
-> Fix the labels, the order for freeing the resources, and add the
-> missing DMA channel step. Replicate these changes in the remove path as
-> well.
->
-> Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+Applied to
 
-Thanks for your patch!
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-> --- a/drivers/spi/spi-cadence-quadspi.c
-> +++ b/drivers/spi/spi-cadence-quadspi.c
+Thanks!
 
-> @@ -1995,7 +1995,7 @@ static int cqspi_probe(struct platform_device *pdev)
->         ret = cqspi_setup_flash(cqspi);
->         if (ret) {
->                 dev_err(dev, "failed to setup flash parameters %d\n", ret);
-> -               goto probe_setup_failed;
-> +               goto disable_controller;
+[1/4] spi: dt-bindings: sun6i: Add compatibles for A523's SPI controllers
+      commit: e0c8755d44eb85afd40100586076c3dc4b62ee3b
+[2/4] spi: sun6i: Support A523's SPI controllers
+      commit: c81f30bde5b0449d9d82d31a66f0ffd608e610b5
 
-FTR, this conflicts with commit 9f0736a4e136a6eb ("spi: cadence-quadspi:
-Parse DT for flashes with the rest of the DT parsing") in spi/for-next.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
->         }
->
->         host->num_chipselect = cqspi->num_chipselect;
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Gr{oetje,eeting}s,
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-                        Geert
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
+Thanks,
+Mark
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
