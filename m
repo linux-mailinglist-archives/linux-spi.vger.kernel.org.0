@@ -1,165 +1,110 @@
-Return-Path: <linux-spi+bounces-12086-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12087-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E989ACD8D7E
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 11:37:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF26CCD8F4B
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 11:50:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 182A9304A103
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 10:35:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BE68930B6D0B
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 10:44:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D24352FAD;
-	Tue, 23 Dec 2025 10:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACFC1B4F0A;
+	Tue, 23 Dec 2025 10:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="GF2uS7wi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bB9Gi0xH"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884EB34FF45
-	for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 10:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F41315D3E;
+	Tue, 23 Dec 2025 10:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766486113; cv=none; b=MSECZQIQf8FQxq/NYbP81tun3EEv6t1wUtpDdMvLWjGu9GaEAysfGUNKD6ZVNo1hUOgVe8jrsbIqGAB2K6iBZAeu/ENEReCK4FrAXS33gIxtGFaOKNRZxSPopkFA2CA7GtdF3WhcgcI7aj9oAGkPq88NhN0N3hyKPkKEnBhktpE=
+	t=1766486520; cv=none; b=Flct4cLCdURbg07kAxhl2uOx1R/RUCvk33P45GHt3Z5RT7gZimLRM4CRefCteCzKqxdmodtPlJ894wTqEqzSaCweP2zgugLsICWiQyCvCfMC9JSq2Z2Z+j9s9Tgx9kJBbRhKU40H8nfYw+fQNuDHApOyateCX7QN+QwubxY6EtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766486113; c=relaxed/simple;
-	bh=nhnhn/ujbA1yivMUlMSXRd1v6Sz4LmmXkvWUytEJhUI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PAH6rOX+1awbRjYsjCv9weEVkgpvKDqh9MzI+r47BZ+yPOxPDwEH+WYzFwdMWxVkRf9YWRKpFoisU4MKXPB6Mqmo+rBlx4PTLxxQLA2zIsuwNjYOXIzsECvM4+34tuCFiiypvjnB1cZg1Tqftf4r1H+/A0W1oDczl5/DUptVG/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=GF2uS7wi; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b73a9592fb8so913592566b.1
-        for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 02:35:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1766486106; x=1767090906; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
-        b=GF2uS7wiRyhBmf1kLR0gIF3Rip3N0z7rurwMgvhBqXkpElhZHM//c4ztfkOfl34VXQ
-         1X14GkorXLzezj84xr2Y/dQLW+EfbQhQVOVhtnuM3M454FOIn2PNXJXS36N8bH/whQBV
-         zY0fHit1GfAmUbUyKlPfmB88R6AoVgxYJryPviR3Xhc9pr/mmX1utNgHaFZ5HiT/+TFT
-         EPfJeiatuCcTI+Wko2Rrfq/cDBpi0ycNUhFAp5hGmFIf/u3Ol72pdr/MxF3qgwek5A2i
-         SlQTW3sCFS0UxINftvR9ief03PbV1fiyjZferC+QgdFvMpknr46FIg9k8YC+cFlkaq8w
-         fJHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766486106; x=1767090906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
-        b=GdCXm/CBhNUm9fPffhl+Sl9CrY6wDsmuvWngRaHmYAApBAevInzHOh+jepZ2pl2sOl
-         5ArmJFqclzZj0Ox8pCA3JjWo/s7+8wnbdkpXdPogvs8yu93i7km0nWZE+VdABlns+brF
-         75TEOkmR3jveZrLCCwd6HYtlZDPTgPlgK0g1eVXsBng5HuAJpLHKbvx29bnrhEUW4KyO
-         z25tZPX3wyQLWezTcmYjwSMkNpmh9EL3vTWx083TwrlVTk75rnFxGkHQjwjq2R99miYP
-         6yvuRiAQ6H+8Qu2iQldsefRM89TMRU4ZH6ctbLN84//r35drpQD5OMQum3B101kXxTdJ
-         0vAA==
-X-Forwarded-Encrypted: i=1; AJvYcCVHfbOpsKE18ZyRNNHcz9g+zsll+ApKBMZuExSKJ0vtZ2+bZTDaTJpdNtrvQ4Cj+N0MJvqZYWUI5hI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJ+pUu6jDW6GcSyMgDbVqvFLMuEdq8cI23AvpYqcKy83RJG1yw
-	T1ps45VXw5/s/GyNZ7D0qNscGGH2vi8Myu3RGLkSh3LWIKJ2bpym6yb8Hc5IBKBACjeG/YjP20B
-	vBvsr2DTzdh+699qIeV9i4uWRDBaTamSHJSXsRZk+MA==
-X-Gm-Gg: AY/fxX6mNScTbi6yKavOQYMuxmKokeQYGoRQ0qgoDal8r0JOiaT520z+4ZvPGdV02cV
-	VsAY6i4IxCgrApg8VlCVrDuWJshyTtlCagjEacM9BcsCwJ/Afc+b2962LdzuTSa1B10l6jXxYUF
-	1T5Y7ByfvvjvF6gJHwZ09cPGoAlyq6OiVTpli0FtTBDNbMjxJhvre4U8vmYO25IlYxL9r4BftjB
-	1IIu/9wGS2CXb2y2A5WnZfk6S6cBpKzi/kG8vWy8MxyZnbAttIiRx6f7qcygpMNG8giBT0y+jFC
-	zBazz2v6lsZtqb4u/qmjjVdaDlCUIu4sYIhyDz/Tez4I3GdcmA==
-X-Google-Smtp-Source: AGHT+IEJHssgBNa10sdxlMZ0RfBcXjnBKXrp4KRUpqNBX0cKMLRNtJZXOvlDmXwgBRgg1wr13xel6K2BxjWOkHuOL+E=
-X-Received: by 2002:a17:907:a45:b0:b81:ec7c:31fd with SMTP id
- a640c23a62f3a-b81ec7c321bmr332573366b.13.1766486105902; Tue, 23 Dec 2025
- 02:35:05 -0800 (PST)
+	s=arc-20240116; t=1766486520; c=relaxed/simple;
+	bh=UFw3iIBjIOQhDLXO7EWczIafIBrzpn1pV/Yc2YaQ6Rs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=ZE/v6AdLiwEHD3vui/NovcjOJz4g++p0acdAQWWQWgXpPBKMFft9SLUJWb639FtgryZzR2D4r16YDNyN/ekqP5QSo3/UO1Z0MGsrkwZj680t0h9aeyxIxmRN1GO5SsjF8ZdPhbhKr9Am3Bjs/jRtwTrsbXAzhQSwVWvqw8h/e30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bB9Gi0xH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD325C113D0;
+	Tue, 23 Dec 2025 10:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766486519;
+	bh=UFw3iIBjIOQhDLXO7EWczIafIBrzpn1pV/Yc2YaQ6Rs=;
+	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
+	b=bB9Gi0xH+Xstu+d5D3qkSvWf/MUNfAXsJcn2rD7o/ZTbUNdYIZZLYXOaSgMbqZFSB
+	 kOP4uO/cbfu+RhxgUbDUsG7rfpkKG60bPoJg8nHF0N6+504HLM2L6ebCF+cMehQl68
+	 QreicZhaSonuMnCL+ZadqXii0AG9//fztuqbcnUQq2PtIPtacx4sXMOSBAXNs6wvKR
+	 z0u9Dnx7xoJ7k8udqSPzt+1XHRCZqWkHN2PcuILSb4WL9vQ8Z/CpkAQx4USmsFN0M/
+	 jCL6oqXmSupgKj7+4MGECsd4hwlwo+EuQb5+chk1IJQhIpaK+LSUCZhRYVMaSHKKHO
+	 w/v8zKYPH5HVg==
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251215163820.1584926-1-robert.marko@sartura.hr>
- <20251215163820.1584926-18-robert.marko@sartura.hr> <20251216-endorse-password-ae692dda5a9c@spud>
-In-Reply-To: <20251216-endorse-password-ae692dda5a9c@spud>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 23 Dec 2025 11:34:55 +0100
-X-Gm-Features: AQt7F2rp1ybXWw2BWzfekoJJeczrMeV1nO2lvHuguNeXKU1awsBcuKjFcFE-_B8
-Message-ID: <CA+HBbNF-=W7A3Joftsqn+A6s170sqOZ77jpS105s5HPqkskQzA@mail.gmail.com>
-Subject: Re: [PATCH v2 18/19] dt-bindings: arm: microchip: document EV23X71A board
-To: Conor Dooley <conor@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
-	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
-	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
-	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
-	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 23 Dec 2025 11:41:52 +0100
+Message-Id: <DF5J7H0BSBTK.362ZAJTRBK6U1@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v7 3/9] software node: allow referencing firmware nodes
+Cc: "'Bartosz Golaszewski'" <brgl@kernel.org>, "'Bartosz Golaszewski'"
+ <bartosz.golaszewski@linaro.org>, <andriy.shevchenko@linux.intel.com>,
+ <andy@kernel.org>, <broonie@kernel.org>, <ckeepax@opensource.cirrus.com>,
+ <david.rhodes@cirrus.com>, <djrscally@gmail.com>,
+ <gregkh@linuxfoundation.org>, <heikki.krogerus@linux.intel.com>,
+ <krzk@kernel.org>, <linus.walleij@linaro.org>,
+ <linux-acpi@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+ <linux-spi@vger.kernel.org>, <mstrozek@opensource.cirrus.com>,
+ <p.zabel@pengutronix.de>, <patches@opensource.cirrus.com>,
+ <rafael@kernel.org>, <rf@opensource.cirrus.com>,
+ <sakari.ailus@linux.intel.com>
+To: "Jiawen Wu" <jiawenwu@trustnetic.com>
+References: <02fd01dc73df$3b641bf0$b22c53d0$@trustnetic.com>
+ <CAMRc=Mf2A++CHYcMdBi0bQ0DOAGLaSatQEOmu=aAEG_YjCqEWg@mail.gmail.com>
+ <030001dc73e8$56e38330$04aa8990$@trustnetic.com>
+ <CAMRc=Meugd9tEDefPnYHidDMTdCP+8fptVXNvqjSi1tjXPuVRA@mail.gmail.com>
+ <030101dc73f1$46a62b40$d3f281c0$@trustnetic.com>
+In-Reply-To: <030101dc73f1$46a62b40$d3f281c0$@trustnetic.com>
 
-On Tue, Dec 16, 2025 at 6:32=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
+On Tue Dec 23, 2025 at 10:48 AM CET, Jiawen Wu wrote:
+> On Tue, Dec 23, 2025 5:37 PM, Bartosz Golaszewski wrote:
+>> On Tue, Dec 23, 2025 at 9:44=E2=80=AFAM Jiawen Wu <jiawenwu@trustnetic.c=
+om> wrote:
+>> > And I temporarily added this line to fix it:
+>> >
+>> > diff --git a/include/linux/property.h b/include/linux/property.h
+>> > index 272bfbdea7bf..e30ef23a9af3 100644
+>> > --- a/include/linux/property.h
+>> > +++ b/include/linux/property.h
+>> > @@ -371,6 +371,7 @@ struct software_node_ref_args {
+>> >  (const struct software_node_ref_args) {                              =
+  \
+>> >         .swnode =3D _Generic(_ref_,                               \
+>> >                            const struct software_node *: _ref_, \
+>> > +                          struct software_node *: _ref_,       \
+>> >                            default: NULL),                      \
+>> >         .fwnode =3D _Generic(_ref_,                               \
+>> >                            struct fwnode_handle *: _ref_,       \
+>> >
+>>=20
+>> Ah I see, we'd assign struct software_node * to const struct
+>> software_node * and it used to work but with _Generic() we need the
+>> exact type. I agree with this approach, do you want to send a proper
+>> patch?
 >
-> On Mon, Dec 15, 2025 at 05:35:35PM +0100, Robert Marko wrote:
-> > Microchip EV23X71A board is an LAN9696 based evaluation board.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> >  Documentation/devicetree/bindings/arm/microchip.yaml | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b/Doc=
-umentation/devicetree/bindings/arm/microchip.yaml
-> > index 910ecc11d5d7..b20441edaac7 100644
-> > --- a/Documentation/devicetree/bindings/arm/microchip.yaml
-> > +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
-> > @@ -239,6 +239,14 @@ properties:
-> >            - const: microchip,lan9668
-> >            - const: microchip,lan966
-> >
-> > +      - description: The LAN969x EVB (EV23X71A) is a 24x 1G + 4x 10G
-> > +          Ethernet development system board.
-> > +      - items:
-> > +          - enum:
-> > +              - microchip,ev23x71a
-> > +              - microchip,lan9696
->
-> This looks wrong, unless "microchip,lan9696" is a board (which I suspect
-> it isn't).
+> It might be more appropriate for you to send the patch, and could also
+> check if there are any other missed details, like for fwnode...
+> I'm not very proficient in this field. :)
 
-Hi,
-No, LAN9696 is the exact SoC SKU used on the board.
-I will drop it in v3.
+There is already [1], which I queued up in the driver-core tree to send as =
+fix
+for -rc3.
 
-Regards
-Robert
->
-> > +          - const: microchip,lan9691
-> > +
-> >        - description: The Sparx5 pcb125 board is a modular board,
-> >            which has both spi-nor and eMMC storage. The modular design
-> >            allows for connection of different network ports.
-> > --
-> > 2.52.0
-> >
-
-
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+[1] https://lore.kernel.org/lkml/20251219083638.2454138-1-sakari.ailus@linu=
+x.intel.com/
 
