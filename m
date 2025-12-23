@@ -1,94 +1,160 @@
-Return-Path: <linux-spi+bounces-12098-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12099-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69047CD9DAB
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 16:51:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61ABECD9E48
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 17:04:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F22C130402FC
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 15:48:03 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 09F453035264
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 16:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F292517AF;
-	Tue, 23 Dec 2025 15:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LdtdZydW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6A8299947;
+	Tue, 23 Dec 2025 16:04:25 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142DB1494C2;
-	Tue, 23 Dec 2025 15:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A28F24E4A8
+	for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 16:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766504882; cv=none; b=Tl0HR7Bgy4LpUxbc70vRULiTk8EvxNuYBncYkiGcb+4rIE818E0q5gpJ4H8lvyxr2GUgO2yq9gw0h/X+LXzJnJvvy27y+3iI212i3fSqzSHxBNMjNK9S832/OrN3UaEaVDXdIlhAj8Yuqzl+y/zJmuNWovLaGKAksm8ZI7UqC7U=
+	t=1766505865; cv=none; b=Fh/Y43nISDppSs3U6djq/J4ld7aEHldFHU5YFGFOii/ne8OROH0injCeq5KWWyYgw0H8qzjBwYqN/8B/N5KQMI9Y9pH5vyBbtMq5egkLNvahl0PMJGo7DnpgIjGprYOOZem91FvZ+6Oh569MWxH7It/bF2I9WdhQVQYd+ogyaQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766504882; c=relaxed/simple;
-	bh=Mpr8HzWjcBxOU7Y5X3r2Q1rE7twn+RHWLYcnM80d8PI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=AV/avvhGyqYvmb/DoDcE/1wlKOrHhrDePcjOd/OW3ZhuXnuu6kUPHWq9tjlnhGoBCiWutXVLFs1NF8gy6oWWNzE+uAjuNjFQZ2RcVWS0XmUJ3upY5Adm4JapYlwf2W3ByjrjWJL8b1Dl/NcyLRosU8VhDQAahb/uFn2+q3Cg7vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LdtdZydW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61763C113D0;
-	Tue, 23 Dec 2025 15:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766504880;
-	bh=Mpr8HzWjcBxOU7Y5X3r2Q1rE7twn+RHWLYcnM80d8PI=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=LdtdZydWjDykDcQ8MwZe/WYc0An3swcSu7m3Zz40XZiFB8j1F4Wa377ckpn+gsy1C
-	 ld6XRBrr8TSgd0fLgqKOwAa2wNKWLwls2oxMe7aQDBIUxpP42n2Ciez4QmAp5ec30+
-	 Cx4SBhT8gYD19wllqRw2tb6WAxB3lmtIQ4UuKDdYBLlSOrwClin4W9k5J5eboUe6za
-	 TzH8qCowUXAai2tJGcM/ibzrTTnbFfDN3pTY8CCsjLny1/I+ezR85wowEzXj/Q9ufS
-	 c8v06YbiziWtwd0oCqeXcTqzDKoNFfw5HDHDjQ52LxhD8FIFiV7Z2ru7fTdbDepwIQ
-	 5zbXhKz1wn9iw==
-Received: from wens.tw (localhost [127.0.0.1])
-	by wens.tw (Postfix) with ESMTP id 54A5F5F86B;
-	Tue, 23 Dec 2025 23:47:57 +0800 (CST)
-From: Chen-Yu Tsai <wens@kernel.org>
-To: Jernej Skrabec <jernej@kernel.org>, 
- Samuel Holland <samuel@sholland.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Mark Brown <broonie@kernel.org>, 
- Chen-Yu Tsai <wens@kernel.org>
-Cc: Andre Przywara <andre.przywara@arm.com>, linux-spi@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-sunxi@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20251221110513.1850535-1-wens@kernel.org>
-References: <20251221110513.1850535-1-wens@kernel.org>
-Subject: Re: (subset) [PATCH 0/4] arm64: allwinner: a523: Support SPI
- controllers
-Message-Id: <176650487726.2524343.9774305641530243477.b4-ty@kernel.org>
-Date: Tue, 23 Dec 2025 23:47:57 +0800
+	s=arc-20240116; t=1766505865; c=relaxed/simple;
+	bh=tW8m0sz+TxMy7bagqa/CKCdA8ogTvNRf1HesjjfNDns=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YtboNKgO1CWSofhWVnCIpNGCk+iWDcQpcot6q8NgrwxA2DfTFfrUY+ZWoZd++bFy2szYuKmoYnMQHIvWA9nb2VEfXQ53Z88pHebBFon3MbmkvbAUqD3nG1itC91wx9HKqp25Jjeci4qT552m+DKDTfF/L98D2R09IoYXUhEZzh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-5dbd8bb36fcso4006358137.1
+        for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 08:04:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766505862; x=1767110662;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZUmrcjPrsJVbh8LyphvK5uHaAZlXwQPpsimX8t4O9kE=;
+        b=vKgRKwmphD+/UMOF4ecsdwzJP86g6hpNYYQ3aQusIvKL6uHyis43iIYLiVJ0n7qcw8
+         1UvPU0I7ZZnHWJ/hXiJoiZFTNul6LqCRrOucb8ePwUZhRRx6FLW3raxYOkI1ExTfqIz6
+         CXSPwx8yWhvGungdCHvBs2EvZR35Zw9VtPLIQr24hGERhOVOnFHZ5AE30bcwR5e0TUFS
+         AwswkJ5Cpe6TBIvf8+FvtRIe5VYUdAoW142OfdPmp4S12nxLxKgGrlbVTUQdtGdKxtmV
+         gMTetTI6QcqsxeYz+TI/WLx8Ymus+q4GfrkwiLHPLVvLP+PGJtvmtoZUQZwUCPsFlgX4
+         FSgA==
+X-Forwarded-Encrypted: i=1; AJvYcCUB8KWhJtXS4J2se23GXGxXssdqFkx8OgpfWMwI9F3auLZFaJtttAYrI8AcmNxAME+69e87GrYPtro=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv+XHB2Jn6tE0Nl6rExoWqMvrx5jKAbtwi9eLHeDYRj7jyNo1h
+	f2Z/p8Ewhpx1IbCKZyvlnrfiqvgGtCpYJ+tlqvTpsTG2d34+4XOZMejkUWJKDImxoSk=
+X-Gm-Gg: AY/fxX7Ki3uWcHC9grrm5LQfZbhkpzpTfmz3UygqZjAz1QxtCMdsy61O7pt5yKYnq9m
+	Cy1RFW36ORp1mzIlD7jl89uTXzKnsylL3bpXRKXi56sgazBBX4/spOae1BVbp53GZc6vM8Gd5sU
+	ZduKlDqNPkF6FiO0ILhp3ybNhT1vDFRBYH2PdXTnFKJ8xmp7T6uQgjdQv3bwFLVbV6akzmuEcGc
+	ofv/SLZlVEgfgAYfVMU4DJ3MqLvEFxIkQ548QzSppDNdzC13TvTCEO449DkHMOipoQLV/udXC46
+	HKkK90RgmnvuJgrhUVFpivplche4DYh3gtaiFi1EMAz70Hi/M/tZmJ1NKo2MPHEr++REVAsf5he
+	KSaT+ip4j1uYI0PGu3yhJX13JM1u3exAUkYqSxKkuUAMSuHXw/l3GMp6cO+ButWkDKis2NBThqt
+	GNPOBq/X3KCm92JA8fE4BDrUMtXkpUn3h+iBv5EWXzbP2tdw7X
+X-Google-Smtp-Source: AGHT+IE7bzqjlyW0lUfrZ6q1nO7cJ70M4J4ykwdh9WkoaHoHnoHROvhBh60Pq1lpha1MK2KCd1QHHQ==
+X-Received: by 2002:a05:6102:3710:b0:5db:3c3b:7767 with SMTP id ada2fe7eead31-5eb187045a8mr4513432137.16.1766505862284;
+        Tue, 23 Dec 2025 08:04:22 -0800 (PST)
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5eb1ac62fd0sm4533733137.9.2025.12.23.08.04.20
+        for <linux-spi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Dec 2025 08:04:21 -0800 (PST)
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-93f5910b06cso3115432241.0
+        for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 08:04:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV7U+zhWfALZabFYGQFEXSfUkHmhUKmKMUH8meFuqcEuTHpnq+7C2f7+A6Iu37iOW6tzI3p5YIz+L8=@vger.kernel.org
+X-Received: by 2002:a05:6122:1d91:b0:559:6b7f:b0f4 with SMTP id
+ 71dfb90a1353d-5615b851ddemr5491694e0c.5.1766505860287; Tue, 23 Dec 2025
+ 08:04:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3
+References: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
+ <20251201134229.600817-13-cosmin-gabriel.tanislav.xa@renesas.com>
+ <CAMuHMdWUPM=q7J_S_x7=CZoYxKm-v=7GGGkq9Nv0T14b8MBtpA@mail.gmail.com> <TYYPR01MB139556681F53AC66A668F7E4D85B5A@TYYPR01MB13955.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYYPR01MB139556681F53AC66A668F7E4D85B5A@TYYPR01MB13955.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 23 Dec 2025 17:04:09 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUeoC7OefbLd+0WihUtvV7zMtFREeor+V3efUitzcgiZw@mail.gmail.com>
+X-Gm-Features: AQt7F2r8FcJNMBmChD_xiGNEJI2gOR_iQl7z1azyYjzKxdOKv8tEtQ1DkplXGqY
+Message-ID: <CAMuHMdUeoC7OefbLd+0WihUtvV7zMtFREeor+V3efUitzcgiZw@mail.gmail.com>
+Subject: Re: [PATCH 12/13] arm64: dts: renesas: r9a09g077: wire up DMA support
+ for SPI
+To: Cosmin-Gabriel Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, "magnus.damm" <magnus.damm@gmail.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, 
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, 21 Dec 2025 19:05:07 +0800, Chen-Yu Tsai wrote:
-> This series adds support for the SPI controllers found in the Allwinner
-> A523 SoC family. The SPI controller is almost the same as the ones in
-> previous generations, except that it moved the "RX buffer count"
-> register field to a separate register, and that register now reports
-> the total count for RX buffer and FIFO.
-> 
-> In practice the driver has never cared about the buffer count, but if
-> any implementation were to use it, this counts as a non-backward
-> compatible change.
-> 
-> [...]
+Hi Cosmin,
 
-Applied to sunxi/dt-for-6.20 in local tree, thanks!
+On Tue, 23 Dec 2025 at 15:42, Cosmin-Gabriel Tanislav
+<cosmin-gabriel.tanislav.xa@renesas.com> wrote:
+> > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > On Mon, 1 Dec 2025 at 14:44, Cosmin Tanislav
+> > <cosmin-gabriel.tanislav.xa@renesas.com> wrote:
+> > > RZ/T2H (R9A09G077) has three DMA controllers that can be used by
+> > > peripherals like SPI to offload data transfers from the CPU.
+> > >
+> > > Wire up the DMA channels for the SPI peripherals.
+> > >
+> > > Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+> >
+> > Thanks for your patch!
+> >
+> > > --- a/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
+> > > +++ b/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
+> > > @@ -200,6 +200,8 @@ rspi0: spi@80007000 {
+> > >                         clocks = <&cpg CPG_CORE R9A09G077_CLK_PCLKM>,
+> > >                                  <&cpg CPG_MOD 104>;
+> > >                         clock-names = "pclk", "pclkspi";
+> > > +                       dmas = <&dmac0 0x267a>, <&dmac0 0x267b>;
+> > > +                       dma-names = "rx", "tx";
+> >
+> > RZ/T2H does not seem to have restrictions about which DMA controllers
+> > can be used by which SPI instance.  Hence shouldn't these point to
+> > all three DMA controllers?
+>
+> It does seem like there's no restriction about which DMA controller to
+> use.
+>
+> >     dmas = <&dmac0 0x267a>, <&dmac0 0x267b>,
+> >            <&dmac1 0x267a>, <&dmac1 0x267b>,
+> >            <&dmac2 0x267a>, <&dmac2 0x267b>;
+> >     dma-names = "rx", "tx", "rx", "tx", "rx", "tx";
+> >
+>
+> I was not aware that the DMA core supports this. I will add the other DMA
+> controllers to the list.
+>
+> > Note that this requires updating the DT bindings, as they currently
+> > restrict dma to two entries.
+>
+> dma-names:
+>   items:
+>     enum:
+>       - rx
+>       - tx
+>
+> This should work fine, right?
 
-[3/4] arm64: dts: allwinner: sun55i: Add SPI controllers
-      commit: 1bec3bd1f839f269dfdec3c635dd2afe15e30995
-[4/4] arm64: dts: allwinner: t527: orangepi-4a: Enable SPI-NOR flash
-      commit: bd14ba160bbe863e7b7bc489fd947ae1cdc03047
+Yes, dma-names is OK.  But currently dmas has "maxItems: 2".
 
-Best regards,
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-Chen-Yu Tsai <wens@kernel.org>
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
