@@ -1,160 +1,103 @@
-Return-Path: <linux-spi+bounces-12099-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12100-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61ABECD9E48
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 17:04:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB98CDA083
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 18:07:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 09F453035264
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 16:04:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CAABE302DB6B
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 17:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6A8299947;
-	Tue, 23 Dec 2025 16:04:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5662C346A1A;
+	Tue, 23 Dec 2025 17:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="plPED//w"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A28F24E4A8
-	for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 16:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E272346A18;
+	Tue, 23 Dec 2025 17:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766505865; cv=none; b=Fh/Y43nISDppSs3U6djq/J4ld7aEHldFHU5YFGFOii/ne8OROH0injCeq5KWWyYgw0H8qzjBwYqN/8B/N5KQMI9Y9pH5vyBbtMq5egkLNvahl0PMJGo7DnpgIjGprYOOZem91FvZ+6Oh569MWxH7It/bF2I9WdhQVQYd+ogyaQo=
+	t=1766509622; cv=none; b=QKTu5SPb3fGV0VqVEN7SGP5GhsKAALNCKpdDnaF7Dd7Me2HJRxagEetsPTQ6jxYS5mUyP9eEYH/kd5c4cYwYRH2FUnb617csIJmGbb5fcZ+XA9Qd5t2+9hywHjYItG/Vp2b1IMcJA3vY2p10sWrFizmlfOZGSzgdZEsUWkOrHKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766505865; c=relaxed/simple;
-	bh=tW8m0sz+TxMy7bagqa/CKCdA8ogTvNRf1HesjjfNDns=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YtboNKgO1CWSofhWVnCIpNGCk+iWDcQpcot6q8NgrwxA2DfTFfrUY+ZWoZd++bFy2szYuKmoYnMQHIvWA9nb2VEfXQ53Z88pHebBFon3MbmkvbAUqD3nG1itC91wx9HKqp25Jjeci4qT552m+DKDTfF/L98D2R09IoYXUhEZzh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-5dbd8bb36fcso4006358137.1
-        for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 08:04:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766505862; x=1767110662;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZUmrcjPrsJVbh8LyphvK5uHaAZlXwQPpsimX8t4O9kE=;
-        b=vKgRKwmphD+/UMOF4ecsdwzJP86g6hpNYYQ3aQusIvKL6uHyis43iIYLiVJ0n7qcw8
-         1UvPU0I7ZZnHWJ/hXiJoiZFTNul6LqCRrOucb8ePwUZhRRx6FLW3raxYOkI1ExTfqIz6
-         CXSPwx8yWhvGungdCHvBs2EvZR35Zw9VtPLIQr24hGERhOVOnFHZ5AE30bcwR5e0TUFS
-         AwswkJ5Cpe6TBIvf8+FvtRIe5VYUdAoW142OfdPmp4S12nxLxKgGrlbVTUQdtGdKxtmV
-         gMTetTI6QcqsxeYz+TI/WLx8Ymus+q4GfrkwiLHPLVvLP+PGJtvmtoZUQZwUCPsFlgX4
-         FSgA==
-X-Forwarded-Encrypted: i=1; AJvYcCUB8KWhJtXS4J2se23GXGxXssdqFkx8OgpfWMwI9F3auLZFaJtttAYrI8AcmNxAME+69e87GrYPtro=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv+XHB2Jn6tE0Nl6rExoWqMvrx5jKAbtwi9eLHeDYRj7jyNo1h
-	f2Z/p8Ewhpx1IbCKZyvlnrfiqvgGtCpYJ+tlqvTpsTG2d34+4XOZMejkUWJKDImxoSk=
-X-Gm-Gg: AY/fxX7Ki3uWcHC9grrm5LQfZbhkpzpTfmz3UygqZjAz1QxtCMdsy61O7pt5yKYnq9m
-	Cy1RFW36ORp1mzIlD7jl89uTXzKnsylL3bpXRKXi56sgazBBX4/spOae1BVbp53GZc6vM8Gd5sU
-	ZduKlDqNPkF6FiO0ILhp3ybNhT1vDFRBYH2PdXTnFKJ8xmp7T6uQgjdQv3bwFLVbV6akzmuEcGc
-	ofv/SLZlVEgfgAYfVMU4DJ3MqLvEFxIkQ548QzSppDNdzC13TvTCEO449DkHMOipoQLV/udXC46
-	HKkK90RgmnvuJgrhUVFpivplche4DYh3gtaiFi1EMAz70Hi/M/tZmJ1NKo2MPHEr++REVAsf5he
-	KSaT+ip4j1uYI0PGu3yhJX13JM1u3exAUkYqSxKkuUAMSuHXw/l3GMp6cO+ButWkDKis2NBThqt
-	GNPOBq/X3KCm92JA8fE4BDrUMtXkpUn3h+iBv5EWXzbP2tdw7X
-X-Google-Smtp-Source: AGHT+IE7bzqjlyW0lUfrZ6q1nO7cJ70M4J4ykwdh9WkoaHoHnoHROvhBh60Pq1lpha1MK2KCd1QHHQ==
-X-Received: by 2002:a05:6102:3710:b0:5db:3c3b:7767 with SMTP id ada2fe7eead31-5eb187045a8mr4513432137.16.1766505862284;
-        Tue, 23 Dec 2025 08:04:22 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5eb1ac62fd0sm4533733137.9.2025.12.23.08.04.20
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Dec 2025 08:04:21 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-93f5910b06cso3115432241.0
-        for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 08:04:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV7U+zhWfALZabFYGQFEXSfUkHmhUKmKMUH8meFuqcEuTHpnq+7C2f7+A6Iu37iOW6tzI3p5YIz+L8=@vger.kernel.org
-X-Received: by 2002:a05:6122:1d91:b0:559:6b7f:b0f4 with SMTP id
- 71dfb90a1353d-5615b851ddemr5491694e0c.5.1766505860287; Tue, 23 Dec 2025
- 08:04:20 -0800 (PST)
+	s=arc-20240116; t=1766509622; c=relaxed/simple;
+	bh=a7iKzo0baKsFuEJWlBvocLu5V2Z4KJqGciAOaeqgC5o=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=NyySW4sy4y7ZJfOlby/kRaGxEEcrOp5lxoXBYbPQGKdIH44EDzhSbye9AkoYKCQNxeJ3ykWidur+rjeOmHvo3fuDX3mhVf4Kcj9fA3IhLq0eVK1M5O2Yt7dZ28YfbzxnF2H4zHzTgXfxbOtfWsB93Ywf1h9jrbyBgHk6oz6WjVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=plPED//w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B96B6C116B1;
+	Tue, 23 Dec 2025 17:06:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766509621;
+	bh=a7iKzo0baKsFuEJWlBvocLu5V2Z4KJqGciAOaeqgC5o=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=plPED//w7d4lv+r6pj5zz/Ps3e1L5XuYsxUj125N2+Ay4xgLaX8s04kmeFnqA9FRC
+	 pteyHcoiv4CYi4jGAI9Gl2qmT78+wrlyQ6OInLRZMEUdqSRo+p2o6RT/wLAYA3Ho0I
+	 f232rroTKK+QGzSv+kS6eZgEXOIe6pqCYd0LRrX7h8jZah5Xc5TSixC714HDMLTQtk
+	 cnTz1eHAtY2jtxEPwDkMxsJ/1RueQ/n5312XXOmf8l7Cnq5nPcb5rK2zGNtrVWAJJb
+	 08F0NmQDSU4LwAbAkIaO6RqFbRep0xXrGi28XVqK+3cJL53/LWRL+FJRIJ8Z9ISeoG
+	 5V9h4B7fvoyLQ==
+From: Mark Brown <broonie@kernel.org>
+To: Anurag Dutta <a-dutta@ti.com>
+Cc: grmoore@opensource.altera.com, nm@ti.com, francesco@dolcini.it, 
+ s-vadapalli@ti.com, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ gehariprasath@ti.com, u-kumar1@ti.com
+In-Reply-To: <20251212072312.2711806-1-a-dutta@ti.com>
+References: <20251212072312.2711806-1-a-dutta@ti.com>
+Subject: Re: [PATCH 0/2] spi: cadence-quadspi: Fix probe error path and
+ logging
+Message-Id: <176650961941.445350.999359537968542547.b4-ty@kernel.org>
+Date: Tue, 23 Dec 2025 17:06:59 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251201134229.600817-1-cosmin-gabriel.tanislav.xa@renesas.com>
- <20251201134229.600817-13-cosmin-gabriel.tanislav.xa@renesas.com>
- <CAMuHMdWUPM=q7J_S_x7=CZoYxKm-v=7GGGkq9Nv0T14b8MBtpA@mail.gmail.com> <TYYPR01MB139556681F53AC66A668F7E4D85B5A@TYYPR01MB13955.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYYPR01MB139556681F53AC66A668F7E4D85B5A@TYYPR01MB13955.jpnprd01.prod.outlook.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 23 Dec 2025 17:04:09 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUeoC7OefbLd+0WihUtvV7zMtFREeor+V3efUitzcgiZw@mail.gmail.com>
-X-Gm-Features: AQt7F2r8FcJNMBmChD_xiGNEJI2gOR_iQl7z1azyYjzKxdOKv8tEtQ1DkplXGqY
-Message-ID: <CAMuHMdUeoC7OefbLd+0WihUtvV7zMtFREeor+V3efUitzcgiZw@mail.gmail.com>
-Subject: Re: [PATCH 12/13] arm64: dts: renesas: r9a09g077: wire up DMA support
- for SPI
-To: Cosmin-Gabriel Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Cc: Fabrizio Castro <fabrizio.castro.jz@renesas.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, "magnus.damm" <magnus.damm@gmail.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, 
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>, 
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
-Hi Cosmin,
+On Fri, 12 Dec 2025 12:53:10 +0530, Anurag Dutta wrote:
+> This series addresses issues in the cadence-quadspi driver's probe
+> error path:
+> 
+> Patch 1 fixes a clock disable imbalance that occurs when probe fails
+> after runtime PM is enabled, particularly when DMA request returns
+> -EPROBE_DEFER.
+> 
+> [...]
 
-On Tue, 23 Dec 2025 at 15:42, Cosmin-Gabriel Tanislav
-<cosmin-gabriel.tanislav.xa@renesas.com> wrote:
-> > From: Geert Uytterhoeven <geert@linux-m68k.org>
-> > On Mon, 1 Dec 2025 at 14:44, Cosmin Tanislav
-> > <cosmin-gabriel.tanislav.xa@renesas.com> wrote:
-> > > RZ/T2H (R9A09G077) has three DMA controllers that can be used by
-> > > peripherals like SPI to offload data transfers from the CPU.
-> > >
-> > > Wire up the DMA channels for the SPI peripherals.
-> > >
-> > > Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-> >
-> > Thanks for your patch!
-> >
-> > > --- a/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
-> > > +++ b/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
-> > > @@ -200,6 +200,8 @@ rspi0: spi@80007000 {
-> > >                         clocks = <&cpg CPG_CORE R9A09G077_CLK_PCLKM>,
-> > >                                  <&cpg CPG_MOD 104>;
-> > >                         clock-names = "pclk", "pclkspi";
-> > > +                       dmas = <&dmac0 0x267a>, <&dmac0 0x267b>;
-> > > +                       dma-names = "rx", "tx";
-> >
-> > RZ/T2H does not seem to have restrictions about which DMA controllers
-> > can be used by which SPI instance.  Hence shouldn't these point to
-> > all three DMA controllers?
->
-> It does seem like there's no restriction about which DMA controller to
-> use.
->
-> >     dmas = <&dmac0 0x267a>, <&dmac0 0x267b>,
-> >            <&dmac1 0x267a>, <&dmac1 0x267b>,
-> >            <&dmac2 0x267a>, <&dmac2 0x267b>;
-> >     dma-names = "rx", "tx", "rx", "tx", "rx", "tx";
-> >
->
-> I was not aware that the DMA core supports this. I will add the other DMA
-> controllers to the list.
->
-> > Note that this requires updating the DT bindings, as they currently
-> > restrict dma to two entries.
->
-> dma-names:
->   items:
->     enum:
->       - rx
->       - tx
->
-> This should work fine, right?
+Applied to
 
-Yes, dma-names is OK.  But currently dmas has "maxItems: 2".
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Gr{oetje,eeting}s,
+Thanks!
 
-                        Geert
+[1/2] spi: cadence-quadspi: Add error logging for DMA request failure
+      commit: b1f54d7143e0f527cca1091857a786e278d72184
+[2/2] spi: cadence-quadspi: Fix clock disable on probe failure path
+      commit: 1889dd2081975ce1f6275b06cdebaa8d154847a9
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
