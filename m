@@ -1,136 +1,144 @@
-Return-Path: <linux-spi+bounces-12079-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12080-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78BC4CD7E70
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 03:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D88E7CD866A
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 08:39:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6DB2C300C0CF
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 02:49:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5E8FC3014A3F
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 07:39:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984DF23D281;
-	Tue, 23 Dec 2025 02:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="T0cNgHeJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D3A2FDC2C;
+	Tue, 23 Dec 2025 07:39:33 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-pl1-f228.google.com (mail-pl1-f228.google.com [209.85.214.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4127C8460
-	for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 02:49:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C96A7241690;
+	Tue, 23 Dec 2025 07:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766458165; cv=none; b=XBi0mQWx1SjuU6sZ5vTIEgUnQ13/kgXkwGSDXLWnr2Oz3uesm/iIOMRml6B+lqv/nY1+dwcBiZoORsOd09xKiReifNqPwg2nYrJLBEV7HskOsC3AQmt5Io7tLxOspnStIYLxJoypXxLgZhmJEwOJYdkrkzZGYz7Ej3IkVl5cKGo=
+	t=1766475573; cv=none; b=PpqfSCQ9gRCz4Ca3qSC+CGuN3RKijT9ILLMKE+BsFVmgraWEkAfrBOnTkAuK9JBDYF8BEogf8FOHf148BMc/GbTPUVdt5Xq8iDeiLraA+8KMNHz1lKEhblMvigxakAX8RnlJ1Sj41Vh0oxYZpRUxdbDEk6RUnuJYrRnpobVffdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766458165; c=relaxed/simple;
-	bh=uipScwHb+CLYuATRfo1cLseXbi5OUaYc3FggMDKd2r8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sre0py8EmRmxoQ1szUAKHFipiGzDwhUZ2v+aduJa/wrciwD/JtM0rx9tfC0GBNY9a+5jyTWrFdT0Vt7QfVDW9eQUu2Q9MIJTAEdu0zjgAq+IeudwNe+LChkrXx9mR2nCCZckHQ0z/FY4BAidgkgkojKwzPEYu4QcumE153Y0evE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=T0cNgHeJ; arc=none smtp.client-ip=209.85.214.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f228.google.com with SMTP id d9443c01a7336-2a097cc08d5so9658905ad.0
-        for <linux-spi@vger.kernel.org>; Mon, 22 Dec 2025 18:49:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766458163; x=1767062963;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uipScwHb+CLYuATRfo1cLseXbi5OUaYc3FggMDKd2r8=;
-        b=I4yyvFmdYF6lc5J/h5bSjrbXAdSOMdmQOuWO+XEWQLUfqY4/mAvkau24i9lFCKYeYf
-         mqgvs5xajxi/n3LMsdKzjaJ4gHVsim15ei3sXmtJWT2O7k/ru1xfjq1VLV9xBFY4ICv2
-         Vo05Z7rYAmUfVUInpTNtOgtgEKvZXRCG6+VZFrsnb8EiQqfOKeh5ZbVFlpelHG52P3Th
-         5fki3Bm/NR1rVdfYincDuPW5F5gsz1Hy3HXss0YA+p7161bhvAwY05TsnrZzqSOxSgly
-         JlvMazcxIeUoI9CXc0z5pMcLR1Ayksr8Co7dq8mlbDYRLaMTpwvC6ejsUL77XTw4cd7b
-         VXNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoRKtmYzr1UqlkXmxZDDT5UVbJgixS1n0fuOayynbHZpiEV/gLU3Cm/UczgvaSiMfvmQNuQVeu6/Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk3eVxTqv2wo0x+g6rBn/fZLarnHeqv8v6iErcpITr/d7b0wW+
-	KwByRaP0NBgs0wDjpFuOfjLpvFtUvdXJWgdeyhii+IKnptoH8r617ilyPJs4pmSnbesu4F9xOTV
-	oAWmAJ6pimh8GCpGyq0s6hvrPW3ZBb08EWsfCMbmq+nTUJTsKr9lB3hCdJ6RJihkyFs1zylCekt
-	GAU9AoR6vmdvZSkdkokWfeJ+uOVq99drvitNLzGSjbRSC/qQKZ0OQ6znsyAkg2ET4KdVP8s7Mvg
-	k5OUtFjE8P2Zg==
-X-Gm-Gg: AY/fxX7ODDzYoSyeMl0d9Mi8dyibe4srYyoqScolegTkvhuW7HBmdnbL9TAFplHScYc
-	dv6+bRFqP202lvrN2Hi6N9t6lRH87Adb7b9jnXTQzazlieEe3KcK3g54LmCuh90Qs/l9M6RoNt9
-	hguT/ZDfEerLP6XJ249KGmNdRkTGvqmCClvTGk+3n19d63190JRMFkX4PijpLg4sciiDkNFHlTp
-	7Sn1vDtuFWhwNyBnytd60ESEx9EZ64LdmdeAYgyYUfLPqxSGYmGyTdLB67SylO5x+H+9zMNFrkA
-	HdrrUVGYBa5nyQSdR1Rg3XYGbu/bPlJMJZEY1zD81ENFVIwjmmk1OZ+Lk1KN3v36gfo59cDyZvf
-	AdT+hx+mLcqfagNDd+KtLnNUKZMwTohkZqOZBJp/4Iw2U8jtiEKXc2uw1FEVODiIlyrfiwasXSF
-	AoipZAbZ4PbkXd3GE40NtKVdJCgAnKASGY6K2Ft1r35Xc=
-X-Google-Smtp-Source: AGHT+IEXeBm5e8WLMDSAPdeuXi7qb3PG+CABrmWn3zISU+6tXyBTicBCC+c0ffyM3lt3MJIkkj/5/IPhdFK3
-X-Received: by 2002:a17:90b:2692:b0:340:e0f3:8212 with SMTP id 98e67ed59e1d1-34e921e719bmr8415162a91.8.1766458163483;
-        Mon, 22 Dec 2025 18:49:23 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-10.dlp.protect.broadcom.com. [144.49.247.10])
-        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-34e70dc3795sm2074499a91.6.2025.12.22.18.49.23
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Dec 2025 18:49:23 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2a1383d3480so15897135ad.3
-        for <linux-spi@vger.kernel.org>; Mon, 22 Dec 2025 18:49:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1766458162; x=1767062962; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uipScwHb+CLYuATRfo1cLseXbi5OUaYc3FggMDKd2r8=;
-        b=T0cNgHeJSyUUOWcErXmi4VWNBE9BfAn0WLh6PmQO7vddRpKzLxHqR/tOVQu3VNs9Q+
-         uw9xf4jD0PTeORhh2mCe+YeixoosNFkLR0i379m13BygOSy8ehzsjbDokuxIadTclHb8
-         nEno0yUR7/dULVMuO+nce0H/snPwWaMJmMgzY=
-X-Forwarded-Encrypted: i=1; AJvYcCVWMCpO+o/KsP5ImLKI99+Crq0TZOMU0dF7VQrGlIS2sbrvI3p5kUqXORu/lBpdK7CdSDcFVrrUlcg=@vger.kernel.org
-X-Received: by 2002:a05:693c:8399:20b0:2ae:5715:88ba with SMTP id 5a478bee46e88-2b05ec6fedbmr6176044eec.8.1766458161638;
-        Mon, 22 Dec 2025 18:49:21 -0800 (PST)
-X-Received: by 2002:a05:693c:8399:20b0:2ae:5715:88ba with SMTP id
- 5a478bee46e88-2b05ec6fedbmr6176036eec.8.1766458161121; Mon, 22 Dec 2025
- 18:49:21 -0800 (PST)
+	s=arc-20240116; t=1766475573; c=relaxed/simple;
+	bh=pfoqXMgUJnpcsP9gtPcdsMYzkDtZpzb3ZP/d7/KUILw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BtqaCTB/+tdsBofwt7ITmUoNtoBcCns7ZHON/3K1kQTRyCfu6jKNHFIyTIDw2es2iomlaQlpaJBCVRE9EmeEfO/SL2mhOIw1+H6jQe6qA46s7mSMlcV8QoEndLx8OWMGT4J6Mk+0tszdzKiZuYpL6K6Ptyfi9EMu8hXH/QT4rhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trustnetic.com; spf=pass smtp.mailfrom=trustnetic.com; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trustnetic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trustnetic.com
+X-QQ-mid:Yeas5t1766475553t425t50352
+Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [36.24.96.96])
+X-QQ-SSF:0000000000000000000000000000000
+From: =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
+X-BIZMAIL-ID: 5829142609458046819
+To: "'Bartosz Golaszewski'" <bartosz.golaszewski@linaro.org>
+Cc: <andriy.shevchenko@linux.intel.com>,
+	<andy@kernel.org>,
+	<brgl@kernel.org>,
+	<broonie@kernel.org>,
+	<ckeepax@opensource.cirrus.com>,
+	<dakr@kernel.org>,
+	<david.rhodes@cirrus.com>,
+	<djrscally@gmail.com>,
+	<gregkh@linuxfoundation.org>,
+	<heikki.krogerus@linux.intel.com>,
+	<krzk@kernel.org>,
+	<linus.walleij@linaro.org>,
+	<linux-acpi@vger.kernel.org>,
+	<linux-gpio@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>,
+	<linux-sound@vger.kernel.org>,
+	<linux-spi@vger.kernel.org>,
+	<mstrozek@opensource.cirrus.com>,
+	<p.zabel@pengutronix.de>,
+	<patches@opensource.cirrus.com>,
+	<rafael@kernel.org>,
+	<rf@opensource.cirrus.com>,
+	<sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v7 3/9] software node: allow referencing firmware nodes
+Date: Tue, 23 Dec 2025 15:39:12 +0800
+Message-ID: <02fd01dc73df$3b641bf0$b22c53d0$@trustnetic.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251217211026.173946-1-jonas.gorski@gmail.com> <CAHi4H7GOXjtVR-y9=dEiwizX14VcEp808fpKdB+x0J3HmYM8Ag@mail.gmail.com>
-In-Reply-To: <CAHi4H7GOXjtVR-y9=dEiwizX14VcEp808fpKdB+x0J3HmYM8Ag@mail.gmail.com>
-From: David Regan <dregan@broadcom.com>
-Date: Mon, 22 Dec 2025 18:49:10 -0800
-X-Gm-Features: AQt7F2r8qIhT4W0LWvw7-cg_eeyPidC2i08LRkEO7tqMaVG6cvFqneDM7GpcUmE
-Message-ID: <CAA_RMS4-U4kz7JVvB-N4B9RCK3Rh=9E-o0LctOsr-O7OEv19Zw@mail.gmail.com>
-Subject: Re: [PATCH] spi: bcm63xx-hsspi: add support for 1-2-2 read ops
-To: Jonas Gorski <jonas.gorski@gmail.com>
-Cc: Kursad Oney <kursad.oney@broadcom.com>, William Zhang <william.zhang@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Mark Brown <broonie@kernel.org>, 
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	David Regan <dregan@broadcom.com>, dregan@mail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Type: text/plain;
+	charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: zh-cn
+Thread-Index: Adxz28xSqTk+JEooSaWYdRA317rR+Q==
+X-QQ-SENDSIZE: 520
+Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: MZ9X7MyfBLbl3d5DzSyp3e0xrleDPfMxJsHN1cZ/HJutTQvJ/SDwN2S1
+	K+42Ta8k/eaXQVsXxZoPJqPLGrzQ/XIX9vSX2m3ENMEC8iKydw0okxSjxcLxs2pK2gdz8Jn
+	ypt7ciatnMUrrAMUGDVfItcZDIIrDECVXsgWH4pRwe6uB4y4E8KSKf4W9ywO3oIUp7QzSDM
+	nVZE+V2Yf7KZ2VpTaDhrdYBt5TrsAFL0cVWfcVZpTOGl6bKd9T7QBFm4qY19D4H6l8FdOD3
+	A/s3AITz0PCLHtjtWRkCkKy6LOHCL07GgW0QZw+gxjj+t8NNxM9acCmzm5y8VLsTNsJYM9N
+	oXeCLIjJJYJfjNtaZVVOpZwwOR5gh6eleS2AN7Y2Ivlfrvndy5rRbMp8zMo2Y6oowWcv/0H
+	1v7Y4OJa5QGVc2shT+d4FsXls/tDo9eohaampwLAZbttDBw+Y8nHD9tg/Ve/h3pIJJEkgcK
+	rm30j0RnCtMIUUZCproWQq2AZwO+/Rflmgubuiwo1ZkfDSPdNUjyS73fmeLlfk0gysTqS3c
+	mxen+sN6EarJFbv3gZvegSFgYaY9Xeon4jQhvFkPCGsbhLdrF2FNp95v2HZFJkUhCWl3CgU
+	QkSrmtS0W+y4GXHFqyN8ZaxQ7rVXdGRnA06VOgMoUphwCZFupD1t1A+Msp9TpVcmZ7/ivDS
+	1M8R01Yszr384MzQcc32WuKWbtClAGPJY6x1qIZTSEaC76lsmqbJeohMYubLeFOSaDSxkMP
+	QdFlNCaqAqcpTDLOSHa/fBfKIKc94+yCGH14jyPxhw38g8OmIFa/6bCC080QlX6hRg6WIry
+	Snk3axQWwG0u7rp7NBDLJhNJW+kBCezPDwTFX/MNN3zZLYxHHZN/uSy3wD68Zp/IaTZzYon
+	9zQfU7h4wu1WNKRywvDIvg2zFGXLBBnXGV/JgXlU54iyv6t52Jzbp4lsHRDtdQEiYaRCtE2
+	3o5N1FZlIq3kZGj2o3rvkE/er94KrJ4pKdEhXqhCUcDwDtiItBkizif2AZasJaKVepqw=
+X-QQ-XMRINFO: NyFYKkN4Ny6FuXrnB5Ye7Aabb3ujjtK+gg==
+X-QQ-RECHKSPAM: 0
 
-Hi Jonas,
+Hi Bartosz Golaszewski,
 
-On Mon, Dec 22, 2025 at 6:30=E2=80=AFPM William Zhang
-<william.zhang@broadcom.com> wrote:
->
-> Hi Jonas,
->
-> On Wed, Dec 17, 2025 at 1:10=E2=80=AFPM Jonas Gorski <jonas.gorski@gmail.=
-com> wrote:
-> >
-> > Add support for 1-2-2 read ops by separately calculating the switch fro=
-m
-> > single-bit to multi-bit, and then switching within the prepend data.
-> >
-> > This allows us to support single-bit write followed by multi-bit write
-> > followed by multi-bit read, and we do not need to reject 1-2-2 read
-> > operations anymore.
-> >
-> > Tested on BCM963268BU_P300 with custom fixup to allow 1-2-2 on the
-> > non-SDFP capable s25fl129p1 attached (which it actually supports):
-> >
-...
-> > 2.43.0
-> >
->
-> Acked-by: William Zhang <william.zhang@broadcom.com>
+> diff --git a/include/linux/property.h b/include/linux/property.h
+> index 50b26589dd70d1..272bfbdea7bf4a 100644
+> --- a/include/linux/property.h
+> +++ b/include/linux/property.h
+> @@ -355,19 +355,26 @@ struct software_node;
+>  
+>  /**
+>   * struct software_node_ref_args - Reference property with additional arguments
+> - * @node: Reference to a software node
+> + * @swnode: Reference to a software node
+> + * @fwnode: Alternative reference to a firmware node handle
+>   * @nargs: Number of elements in @args array
+>   * @args: Integer arguments
+>   */
+>  struct software_node_ref_args {
+> -	const struct software_node *node;
+> +	const struct software_node *swnode;
+> +	struct fwnode_handle *fwnode;
+>  	unsigned int nargs;
+>  	u64 args[NR_FWNODE_REFERENCE_ARGS];
+>  };
+>  
+>  #define SOFTWARE_NODE_REFERENCE(_ref_, ...)			\
+>  (const struct software_node_ref_args) {				\
+> -	.node = _ref_,						\
+> +	.swnode = _Generic(_ref_,				\
+> +			   const struct software_node *: _ref_,	\
+> +			   default: NULL),			\
+> +	.fwnode = _Generic(_ref_,				\
+> +			   struct fwnode_handle *: _ref_,	\
+> +			   default: NULL),			\
+>  	.nargs = COUNT_ARGS(__VA_ARGS__),			\
+>  	.args = { __VA_ARGS__ },				\
+>  }
 
-Tested-by: David Regan <dregan@broadcom.com>
+This change seems incompatible with my driver txgbe, since the software nodes
+are registered in " struct software_node * " but not " const struct software_node * ".
+
+So when I pulled the net-next-6.19-rc1 that merged this patch, to probe my driver.
+The error logs shows:
+ 
+[    5.243396] txgbe 0000:10:00.0 (unnamed net_device) (uninitialized): unable to attach SFP bus: -EINVAL
+[    5.243399] txgbe 0000:10:00.0: failed to init phylink
+[    5.576008] txgbe 0000:10:00.0: probe with driver txgbe failed with error -22
+[    6.109548] txgbe 0000:10:00.1 (unnamed net_device) (uninitialized): unable to attach SFP bus: -EINVAL
+[    6.109551] txgbe 0000:10:00.1: failed to init phylink
+[    6.442044] txgbe 0000:10:00.1: probe with driver txgbe failed with error -22
+ 
+
 
