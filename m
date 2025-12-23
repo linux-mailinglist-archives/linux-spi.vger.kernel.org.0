@@ -1,182 +1,165 @@
-Return-Path: <linux-spi+bounces-12085-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12086-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AA2BCD9137
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 12:20:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E989ACD8D7E
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 11:37:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CE1A6300F326
-	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 11:16:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 182A9304A103
+	for <lists+linux-spi@lfdr.de>; Tue, 23 Dec 2025 10:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7128F352929;
-	Tue, 23 Dec 2025 10:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D24352FAD;
+	Tue, 23 Dec 2025 10:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fKLFqC2U"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="GF2uS7wi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D487A3502B1;
-	Tue, 23 Dec 2025 10:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884EB34FF45
+	for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 10:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766484324; cv=none; b=SohFHcy9h83tXCfFK6L70m4Vf8N9zha+c0gSN+iyInkVK0lJz7BkzKxCj+/P19txr1+DJANej+QJ4WtAhQdtMngXG5+2WyOlP2rezi1rRDe/+wLM3OR7TuDS5/nQRJB3FkLLzZWBnB3HAhE5qVKNa4JGmvhTtkqkkKWou/sLVcY=
+	t=1766486113; cv=none; b=MSECZQIQf8FQxq/NYbP81tun3EEv6t1wUtpDdMvLWjGu9GaEAysfGUNKD6ZVNo1hUOgVe8jrsbIqGAB2K6iBZAeu/ENEReCK4FrAXS33gIxtGFaOKNRZxSPopkFA2CA7GtdF3WhcgcI7aj9oAGkPq88NhN0N3hyKPkKEnBhktpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766484324; c=relaxed/simple;
-	bh=/zYcG2xYSdYnuLSHKUx/IzmXhDPgwtNTHCfAvrduQQU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OcsQdNHKjoeMG2IS3TUxGLEzb1bdDASesp7MiQvrIIAEcOG1scjO2oEMOyZFkemtakvD0ZymNQ1cjNnoKUCaVkGVCdytRS5RGsNgezIFPhuCFtUayMsVMUPmGUU00JVh3vTOrDN8ZmjPC31C52RGPuGK0z1zuYIO/R4/Qu5tAJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fKLFqC2U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEDB3C19423;
-	Tue, 23 Dec 2025 10:05:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766484322;
-	bh=/zYcG2xYSdYnuLSHKUx/IzmXhDPgwtNTHCfAvrduQQU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fKLFqC2Uk/cCGXFRXMAn2Gzcw2zEpSryMzNseG+JvPxBF8EekqKOGdnG/KNk/s8/v
-	 HV4Y4xH1RZuMNpSqWtzbp5D1p4NZ3HMtz8kl1dGnfqkMmzAsxo8bNnfTs3Q4Kb3YuQ
-	 0fo0oiZxQGYse9MTDFSVEw6mrVUJg9J3MHYV2vOZ1Q+Ec7ixU5NGk4aJXwHAUsfOIS
-	 6z3ba3eJ5QoEmSPBLC9MnCHHm1EJ1Rj1v2tAGt/WCVSykxcD2rZRCXTdxbVOXzFVSt
-	 386BYtxKRVwG68h186xPxLf218r6+T+4G6tdkVYnTSXb9FG9Gdm4/N74J80viarGH5
-	 jxpDYjn7Vwgdg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Fei Shao <fshao@chromium.org>,
-	Mark Brown <broonie@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.18-6.12] spi: mt65xx: Use IRQF_ONESHOT with threaded IRQ
-Date: Tue, 23 Dec 2025 05:05:07 -0500
-Message-ID: <20251223100518.2383364-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251223100518.2383364-1-sashal@kernel.org>
-References: <20251223100518.2383364-1-sashal@kernel.org>
+	s=arc-20240116; t=1766486113; c=relaxed/simple;
+	bh=nhnhn/ujbA1yivMUlMSXRd1v6Sz4LmmXkvWUytEJhUI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PAH6rOX+1awbRjYsjCv9weEVkgpvKDqh9MzI+r47BZ+yPOxPDwEH+WYzFwdMWxVkRf9YWRKpFoisU4MKXPB6Mqmo+rBlx4PTLxxQLA2zIsuwNjYOXIzsECvM4+34tuCFiiypvjnB1cZg1Tqftf4r1H+/A0W1oDczl5/DUptVG/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=GF2uS7wi; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b73a9592fb8so913592566b.1
+        for <linux-spi@vger.kernel.org>; Tue, 23 Dec 2025 02:35:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1766486106; x=1767090906; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
+        b=GF2uS7wiRyhBmf1kLR0gIF3Rip3N0z7rurwMgvhBqXkpElhZHM//c4ztfkOfl34VXQ
+         1X14GkorXLzezj84xr2Y/dQLW+EfbQhQVOVhtnuM3M454FOIn2PNXJXS36N8bH/whQBV
+         zY0fHit1GfAmUbUyKlPfmB88R6AoVgxYJryPviR3Xhc9pr/mmX1utNgHaFZ5HiT/+TFT
+         EPfJeiatuCcTI+Wko2Rrfq/cDBpi0ycNUhFAp5hGmFIf/u3Ol72pdr/MxF3qgwek5A2i
+         SlQTW3sCFS0UxINftvR9ief03PbV1fiyjZferC+QgdFvMpknr46FIg9k8YC+cFlkaq8w
+         fJHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766486106; x=1767090906;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SWwHgDUayFaSdSqe2T6d6UFJFmjd2ZLae5KHc+yXH7I=;
+        b=GdCXm/CBhNUm9fPffhl+Sl9CrY6wDsmuvWngRaHmYAApBAevInzHOh+jepZ2pl2sOl
+         5ArmJFqclzZj0Ox8pCA3JjWo/s7+8wnbdkpXdPogvs8yu93i7km0nWZE+VdABlns+brF
+         75TEOkmR3jveZrLCCwd6HYtlZDPTgPlgK0g1eVXsBng5HuAJpLHKbvx29bnrhEUW4KyO
+         z25tZPX3wyQLWezTcmYjwSMkNpmh9EL3vTWx083TwrlVTk75rnFxGkHQjwjq2R99miYP
+         6yvuRiAQ6H+8Qu2iQldsefRM89TMRU4ZH6ctbLN84//r35drpQD5OMQum3B101kXxTdJ
+         0vAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVHfbOpsKE18ZyRNNHcz9g+zsll+ApKBMZuExSKJ0vtZ2+bZTDaTJpdNtrvQ4Cj+N0MJvqZYWUI5hI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ+pUu6jDW6GcSyMgDbVqvFLMuEdq8cI23AvpYqcKy83RJG1yw
+	T1ps45VXw5/s/GyNZ7D0qNscGGH2vi8Myu3RGLkSh3LWIKJ2bpym6yb8Hc5IBKBACjeG/YjP20B
+	vBvsr2DTzdh+699qIeV9i4uWRDBaTamSHJSXsRZk+MA==
+X-Gm-Gg: AY/fxX6mNScTbi6yKavOQYMuxmKokeQYGoRQ0qgoDal8r0JOiaT520z+4ZvPGdV02cV
+	VsAY6i4IxCgrApg8VlCVrDuWJshyTtlCagjEacM9BcsCwJ/Afc+b2962LdzuTSa1B10l6jXxYUF
+	1T5Y7ByfvvjvF6gJHwZ09cPGoAlyq6OiVTpli0FtTBDNbMjxJhvre4U8vmYO25IlYxL9r4BftjB
+	1IIu/9wGS2CXb2y2A5WnZfk6S6cBpKzi/kG8vWy8MxyZnbAttIiRx6f7qcygpMNG8giBT0y+jFC
+	zBazz2v6lsZtqb4u/qmjjVdaDlCUIu4sYIhyDz/Tez4I3GdcmA==
+X-Google-Smtp-Source: AGHT+IEJHssgBNa10sdxlMZ0RfBcXjnBKXrp4KRUpqNBX0cKMLRNtJZXOvlDmXwgBRgg1wr13xel6K2BxjWOkHuOL+E=
+X-Received: by 2002:a17:907:a45:b0:b81:ec7c:31fd with SMTP id
+ a640c23a62f3a-b81ec7c321bmr332573366b.13.1766486105902; Tue, 23 Dec 2025
+ 02:35:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.18.2
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20251215163820.1584926-1-robert.marko@sartura.hr>
+ <20251215163820.1584926-18-robert.marko@sartura.hr> <20251216-endorse-password-ae692dda5a9c@spud>
+In-Reply-To: <20251216-endorse-password-ae692dda5a9c@spud>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Tue, 23 Dec 2025 11:34:55 +0100
+X-Gm-Features: AQt7F2rp1ybXWw2BWzfekoJJeczrMeV1nO2lvHuguNeXKU1awsBcuKjFcFE-_B8
+Message-ID: <CA+HBbNF-=W7A3Joftsqn+A6s170sqOZ77jpS105s5HPqkskQzA@mail.gmail.com>
+Subject: Re: [PATCH v2 18/19] dt-bindings: arm: microchip: document EV23X71A board
+To: Conor Dooley <conor@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	claudiu.beznea@tuxon.dev, Steen.Hegelund@microchip.com, 
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+	linux@roeck-us.net, andi.shyti@kernel.org, lee@kernel.org, 
+	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, linusw@kernel.org, olivia@selenic.com, 
+	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, mturquette@baylibre.com, 
+	sboyd@kernel.org, richardcochran@gmail.com, wsa+renesas@sang-engineering.com, 
+	romain.sioen@microchip.com, Ryan.Wanner@microchip.com, 
+	lars.povlsen@microchip.com, tudor.ambarus@linaro.org, 
+	kavyasree.kotagiri@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-clk@vger.kernel.org, mwalle@kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Fei Shao <fshao@chromium.org>
+On Tue, Dec 16, 2025 at 6:32=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Mon, Dec 15, 2025 at 05:35:35PM +0100, Robert Marko wrote:
+> > Microchip EV23X71A board is an LAN9696 based evaluation board.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> >  Documentation/devicetree/bindings/arm/microchip.yaml | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/arm/microchip.yaml b/Doc=
+umentation/devicetree/bindings/arm/microchip.yaml
+> > index 910ecc11d5d7..b20441edaac7 100644
+> > --- a/Documentation/devicetree/bindings/arm/microchip.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/microchip.yaml
+> > @@ -239,6 +239,14 @@ properties:
+> >            - const: microchip,lan9668
+> >            - const: microchip,lan966
+> >
+> > +      - description: The LAN969x EVB (EV23X71A) is a 24x 1G + 4x 10G
+> > +          Ethernet development system board.
+> > +      - items:
+> > +          - enum:
+> > +              - microchip,ev23x71a
+> > +              - microchip,lan9696
+>
+> This looks wrong, unless "microchip,lan9696" is a board (which I suspect
+> it isn't).
 
-[ Upstream commit 8c04b77f87e6e321ae6acd28ce1de5553916153f ]
+Hi,
+No, LAN9696 is the exact SoC SKU used on the board.
+I will drop it in v3.
 
-This driver is migrated to use threaded IRQ since commit 5972eb05ca32
-("spi: spi-mt65xx: Use threaded interrupt for non-SPIMEM transfer"), and
-we almost always want to disable the interrupt line to avoid excess
-interrupts while the threaded handler is processing SPI transfer.
-Use IRQF_ONESHOT for that purpose.
+Regards
+Robert
+>
+> > +          - const: microchip,lan9691
+> > +
+> >        - description: The Sparx5 pcb125 board is a modular board,
+> >            which has both spi-nor and eMMC storage. The modular design
+> >            allows for connection of different network ports.
+> > --
+> > 2.52.0
+> >
 
-In practice, we see MediaTek devices show SPI transfer timeout errors
-when communicating with ChromeOS EC in certain scenarios, and with
-IRQF_ONESHOT, the issue goes away.
 
-Signed-off-by: Fei Shao <fshao@chromium.org>
-Link: https://patch.msgid.link/20251217101131.1975131-1-fshao@chromium.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
 
-LLM Generated explanations, may be completely bogus:
-
-### 4. SCOPE AND RISK ASSESSMENT
-
-- **Lines changed:** 1 line
-- **Files touched:** 1 file
-- **Complexity:** Trivially low - just a flag change
-- **Risk:** Very low
-
-The fix is:
-- **Obviously correct**: IRQF_ONESHOT is the documented standard for
-  threaded interrupts
-- **Small and contained**: One flag change
-- **Fixes a real bug**: Transfer timeout errors on real hardware
-
-Looking at the interrupt handler code:
-- `mtk_spi_interrupt` returns `IRQ_WAKE_THREAD` for non-SPIMEM transfers
-- Without IRQF_ONESHOT, the IRQ line stays enabled, allowing repeated
-  interrupts while the thread processes
-- This causes race conditions on `mdata->state` and transfer handling,
-  leading to timeouts
-
-### 5. USER IMPACT
-
-- **Who is affected:** Users of MediaTek SPI devices, particularly
-  ChromeOS users with embedded controllers
-- **Severity:** Medium-High - SPI transfer timeouts can cause
-  significant functionality issues
-- **Real-world impact:** Confirmed on MediaTek devices communicating
-  with ChromeOS EC
-
-### 6. DEPENDENCY CHECK
-
-The prerequisite commit `5972eb05ca32` ("spi: spi-mt65xx: Use threaded
-interrupt for non-SPIMEM transfer") was first included in **v6.12-rc1**.
-This means:
-- This fix is only applicable to 6.12.y stable trees and newer
-- Older stable trees (6.6.y, 6.1.y, 5.15.y) don't have the threaded IRQ
-  code, so this fix doesn't apply
-
-### 7. SUMMARY
-
-| Criterion | Assessment |
-|-----------|------------|
-| Fixes real bug | ✅ Yes - SPI transfer timeouts |
-| Obviously correct | ✅ Yes - standard pattern |
-| Small and contained | ✅ Yes - 1 line change |
-| Tested | ✅ Yes - real hardware testing |
-| Risk | ✅ Very low |
-| Dependencies | ✅ Clear - requires 5972eb05ca32 (v6.12+) |
-
-### Conclusion
-
-This commit is an excellent candidate for stable backporting:
-
-1. **Fixes a real, user-visible bug**: SPI transfer timeouts on MediaTek
-   hardware
-2. **Minimal change**: Single flag addition, no logic changes
-3. **Obviously correct**: IRQF_ONESHOT is the proper pattern for
-   threaded IRQs with hardirq handlers that return IRQ_WAKE_THREAD
-4. **Low risk**: Well-understood kernel mechanism with no side effects
-5. **Tested**: Confirmed to resolve the issue on real ChromeOS EC
-   hardware
-
-The only consideration is that this fix only applies to stable trees
-with kernel 6.12 or later (which contain the prerequisite threaded IRQ
-commit). For those trees, this is a straightforward, low-risk fix that
-resolves real hardware issues.
-
-**YES**
-
- drivers/spi/spi-mt65xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/spi/spi-mt65xx.c b/drivers/spi/spi-mt65xx.c
-index 4b40985af1ea..90e5813cfdc3 100644
---- a/drivers/spi/spi-mt65xx.c
-+++ b/drivers/spi/spi-mt65xx.c
-@@ -1320,7 +1320,7 @@ static int mtk_spi_probe(struct platform_device *pdev)
- 
- 	ret = devm_request_threaded_irq(dev, irq, mtk_spi_interrupt,
- 					mtk_spi_interrupt_thread,
--					IRQF_TRIGGER_NONE, dev_name(dev), host);
-+					IRQF_ONESHOT, dev_name(dev), host);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "failed to register irq\n");
- 
--- 
-2.51.0
-
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
