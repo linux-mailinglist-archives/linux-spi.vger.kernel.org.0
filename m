@@ -1,166 +1,94 @@
-Return-Path: <linux-spi+bounces-12119-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12120-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A279CDB1E5
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Dec 2025 02:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 371F9CDBFBB
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Dec 2025 11:24:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 029A830213FC
-	for <lists+linux-spi@lfdr.de>; Wed, 24 Dec 2025 01:59:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E8A0530AFDC7
+	for <lists+linux-spi@lfdr.de>; Wed, 24 Dec 2025 10:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A87287246;
-	Wed, 24 Dec 2025 01:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE35316193;
+	Wed, 24 Dec 2025 10:21:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DvP9FiFE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E12285CB6;
-	Wed, 24 Dec 2025 01:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA64313550;
+	Wed, 24 Dec 2025 10:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766541586; cv=none; b=IKiJ2DSGXD5D5ZOQ1L3wNFgnTVRzvfDOpzxcQ0P8ryzrFmpO0DfEJAG7zLPBmPdJ2s0WW8sx3HIvOi1NWEw67/1NaoAmRrZVAXTW3QXa6QzwScD9uneCeSgFJwjGYovkLlcZ/EFolOuzepox1kAkqQQNiVc8nNrSjJvkdLyq+Pc=
+	t=1766571673; cv=none; b=UPAdtUyyWDAUiQPcBKPKO6POHEUBIPzFJC+LNJLaeOWg2L3OFgqW2lws9aVAR2phweHX8jzOnUnW5OAu/ODB5ACmZxeSquaxJ2NRmZJa9xY44cnWo7itDR2uX9JHBJz9NPlVkAnBYJMGc13ckVFTaS1kdH4oBXGkiy3jnizNMNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766541586; c=relaxed/simple;
-	bh=bP6OzLvDhPIw8UzwOyVhjy9qPXvncOlFG/g8rgc0Xxc=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=bRl0B+qjGi8TVyVcoy3gArSempr/V0wm4yyRxxZ0flfbQaqbAq6npNLQ0CnjY144xp5TSWSwI+4BVhufZ0rwcvFtdf9Dol2WlPDGmhw6x+hsyahskD2ctbp9DtLWT/nRiPMP2gY5iYMCG4YwfDSOobrE9IBr+8jCW0Vyv5n4kTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trustnetic.com; spf=pass smtp.mailfrom=trustnetic.com; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=trustnetic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trustnetic.com
-X-QQ-mid:Yeas4t1766541573t010t35411
-Received: from 3DB253DBDE8942B29385B9DFB0B7E889 (jiawenwu@trustnetic.com [36.24.96.96])
-X-QQ-SSF:0000000000000000000000000000000
-From: =?utf-8?b?Smlhd2VuIFd1?= <jiawenwu@trustnetic.com>
-X-BIZMAIL-ID: 12084601525523118900
-To: "'Danilo Krummrich'" <dakr@kernel.org>
-Cc: "'Bartosz Golaszewski'" <brgl@kernel.org>,
-	"'Bartosz Golaszewski'" <bartosz.golaszewski@linaro.org>,
-	<andriy.shevchenko@linux.intel.com>,
-	<andy@kernel.org>,
-	<broonie@kernel.org>,
-	<ckeepax@opensource.cirrus.com>,
-	<david.rhodes@cirrus.com>,
-	<djrscally@gmail.com>,
-	<gregkh@linuxfoundation.org>,
-	<heikki.krogerus@linux.intel.com>,
-	<krzk@kernel.org>,
-	<linus.walleij@linaro.org>,
-	<linux-acpi@vger.kernel.org>,
-	<linux-gpio@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	<linux-sound@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>,
-	<mstrozek@opensource.cirrus.com>,
-	<p.zabel@pengutronix.de>,
-	<patches@opensource.cirrus.com>,
-	<rafael@kernel.org>,
-	<rf@opensource.cirrus.com>,
-	<sakari.ailus@linux.intel.com>,
-	"'Bartosz Golaszewski'" <brgl@kernel.org>,
-	"'Bartosz Golaszewski'" <bartosz.golaszewski@linaro.org>,
-	<andriy.shevchenko@linux.intel.com>,
-	<andy@kernel.org>,
-	<broonie@kernel.org>,
-	<ckeepax@opensource.cirrus.com>,
-	<david.rhodes@cirrus.com>,
-	<djrscally@gmail.com>,
-	<gregkh@linuxfoundation.org>,
-	<heikki.krogerus@linux.intel.com>,
-	<krzk@kernel.org>,
-	<linus.walleij@linaro.org>,
-	<linux-acpi@vger.kernel.org>,
-	<linux-gpio@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	<linux-sound@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>,
-	<mstrozek@opensource.cirrus.com>,
-	<p.zabel@pengutronix.de>,
-	<patches@opensource.cirrus.com>,
-	<rafael@kernel.org>,
-	<rf@opensource.cirrus.com>,
-	<sakari.ailus@linux.intel.com>
-References: <02fd01dc73df$3b641bf0$b22c53d0$@trustnetic.com> <CAMRc=Mf2A++CHYcMdBi0bQ0DOAGLaSatQEOmu=aAEG_YjCqEWg@mail.gmail.com> <030001dc73e8$56e38330$04aa8990$@trustnetic.com> <CAMRc=Meugd9tEDefPnYHidDMTdCP+8fptVXNvqjSi1tjXPuVRA@mail.gmail.com> <030101dc73f1$46a62b40$d3f281c0$@trustnetic.com> <DF5J7H0BSBTK.362ZAJTRBK6U1@kernel.org>
-In-Reply-To: <DF5J7H0BSBTK.362ZAJTRBK6U1@kernel.org>
-Subject: RE: [PATCH v7 3/9] software node: allow referencing firmware nodes
-Date: Wed, 24 Dec 2025 09:59:32 +0800
-Message-ID: <031401dc7478$f2246040$d66d20c0$@trustnetic.com>
+	s=arc-20240116; t=1766571673; c=relaxed/simple;
+	bh=ku5OdGWYGavTvfxthybhfXDigWzMuc6sN9BkMdAsfOo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AEp+RddQexxeh9dVVnCEV9OH8CLD6J+71KRH++4QcVq5AgWkYVhmFDNPBOYZVtHSCr1h+GX55P9v7PEJ+UzonDz1x7ual8nTWwEj9srkXCCs9RVQD1St7W64tutX47QYQSA2xaUpiiT1rRLUinTwgjYsoxBy8iWfkbfwp366RPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DvP9FiFE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36715C4CEFB;
+	Wed, 24 Dec 2025 10:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766571672;
+	bh=ku5OdGWYGavTvfxthybhfXDigWzMuc6sN9BkMdAsfOo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DvP9FiFEieaUa1XZkBvydCFVeXBtEYpa6DJ+ofow0D2KGuEiCDJfspiM8q+Q40K3y
+	 eSDwRjQg9p2bSWhf1ucxxVm9RqXzPHKXu+Xyi5Ikobwz8lJP9jGhL/bWgOFuuMA0Bq
+	 mswKTP8/X1DaDVr0SU4nwVFGvaIQedho/Vn2XyPet9o50eCPEfS/ftk9vVncZ44s2E
+	 a0H9rvBPgFTMctPWtC229fOJvL40X09lUTmg3IGpRpn1WQqfclPA1sjtubbkWzgMHR
+	 QKrz3dMbtBbD6DHTD/6CebYw3e68dtKxHY/h8rVQH4eO9zaMymAhTinziyeRibTQVQ
+	 29GtdaKscLlrg==
+Date: Wed, 24 Dec 2025 11:21:08 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org, 
+	lee@kernel.org, andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, linusw@kernel.org, Steen.Hegelund@microchip.com, 
+	daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, olivia@selenic.com, 
+	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, gregkh@linuxfoundation.org, 
+	jirislaby@kernel.org, broonie@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	lars.povlsen@microchip.com, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-clk@vger.kernel.org, luka.perkov@sartura.hr
+Subject: Re: [PATCH v3 01/15] include: dt-bindings: add LAN969x clock bindings
+Message-ID: <20251224-berserk-mackerel-of-snow-4cae54@quoll>
+References: <20251223201921.1332786-1-robert.marko@sartura.hr>
+ <20251223201921.1332786-2-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: zh-cn
-Thread-Index: AQIzaRfJPMiwz9071uYI3gJ0t6u2qwFWX8iGAiY76pIB9a+LsAJlPnfRAfA44Bm0M9/nYA==
-X-QQ-SENDSIZE: 520
-Feedback-ID: Yeas:trustnetic.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: M//muKyjQOU4LZpHac2tuoQLK7s9sl0rzCnwrd3FdjlvJHwJzl53pBpS
-	w6yhlldtqXViC71TMWuwapuWGHoNpyQ14BLToaqKBzRDYYfAu39JmwHFvN6LFWQ+ng7cfq4
-	jOha1tvZp5tZFW0uDVgGfb1ciymolOUovtKpeNALxp2Qy08Biw3Kjv9bsNnblR+h5Hertix
-	ShYNTUAKsFjkHP/vT3YTGnC7/EVaxGc20hi5j/SjgAvE6od0ljs7Of0ujp9rzYHSFASf9li
-	kWMmUUBhZHYCmfUzqF8NRieE+Su0WdXQwuyYN247hJQ5pIoYsDYag/wh3fdBX2aEXyU44wc
-	pwN+grtrwbx0HqWt0tQTKqU/ck+BOgRKGYd+oNolFryARk38Z3KYH1z5vpTrR6RayC8qhFF
-	YOXJJ+A4vnhr8vUIkOZCaUJKfzio9kvCBHSgoF42zBeP6O/ZoMlRr09Z/0xFjg2WkxCi1TX
-	950w57ApKpGFaQxqAoFLybDQ4LhjxJE1a9WbcWcze6XY2Bzv6fKxMM6ka6I3eTEJ4DLPA2b
-	/QLBhVG9W9kZFoos6hXIjWV8sbTavZfkdvizgenEPbH7/UreydV8PSzsLr+XCB/xBmly32Y
-	soR3i69XvyfGQwWo5Q+85d/pe1zVI5JLmUPxVPtuhxd9kpaaKD3AjNpn90aLUs5GiY0z3pD
-	+8zvsp31Tp+NO4CE1ZIhCNePauFOM7fuwyvSm9U6t7D6dDLuoJSt+DQkMemUmekeJOanWNe
-	mmqXjt0NOQW3kvpvJMz8z744PrOPNXHpgSeKApxI+zSiott1td6hNwSql14/v9dwwW7HH3o
-	08Q91HAhENnGOUziLOqVhVubQ1490GYRf5Vi+4SFuwjmPec25pUS1vdw4ZvED63tVYMfNlP
-	9R2QJUrB5S1/AxRM/pFgu/Z0b3ZbZOAW94gwM0ZENT0OE4Vxu/S60dORe9qSFUjO+e3RfcT
-	TH+aUYapAvWpcC2Pw1iT+m0R/wAJknc2491gbcwDqTMH2kzzqU/GY8wZWNG3HE7YhFAEQyC
-	f5Lh0kul5VtgDVchvl1UCFm36Nq3F8u9sYbOMWoQ==
-X-QQ-XMRINFO: MPJ6Tf5t3I/ylTmHUqvI8+Wpn+Gzalws3A==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251223201921.1332786-2-robert.marko@sartura.hr>
 
-On Tue, Dec 23, 2025 6:42 PM, Danilo Krummrich wrote:
-> On Tue Dec 23, 2025 at 10:48 AM CET, Jiawen Wu wrote:
-> > On Tue, Dec 23, 2025 5:37 PM, Bartosz Golaszewski wrote:
-> >> On Tue, Dec 23, 2025 at 9:44=E2=80=AFAM Jiawen Wu =
-<jiawenwu@trustnetic.com> wrote:
-> >> > And I temporarily added this line to fix it:
-> >> >
-> >> > diff --git a/include/linux/property.h b/include/linux/property.h
-> >> > index 272bfbdea7bf..e30ef23a9af3 100644
-> >> > --- a/include/linux/property.h
-> >> > +++ b/include/linux/property.h
-> >> > @@ -371,6 +371,7 @@ struct software_node_ref_args {
-> >> >  (const struct software_node_ref_args) {                          =
-      \
-> >> >         .swnode =3D _Generic(_ref_,                               =
-\
-> >> >                            const struct software_node *: _ref_, \
-> >> > +                          struct software_node *: _ref_,       \
-> >> >                            default: NULL),                      \
-> >> >         .fwnode =3D _Generic(_ref_,                               =
-\
-> >> >                            struct fwnode_handle *: _ref_,       \
-> >> >
-> >>
-> >> Ah I see, we'd assign struct software_node * to const struct
-> >> software_node * and it used to work but with _Generic() we need the
-> >> exact type. I agree with this approach, do you want to send a =
-proper
-> >> patch?
-> >
-> > It might be more appropriate for you to send the patch, and could =
-also
-> > check if there are any other missed details, like for fwnode...
-> > I'm not very proficient in this field. :)
->=20
-> There is already [1], which I queued up in the driver-core tree to =
-send as fix
-> for -rc3.
->=20
-> [1] =
-https://lore.kernel.org/lkml/20251219083638.2454138-1-sakari.ailus@linux.=
-intel.com/
+On Tue, Dec 23, 2025 at 09:16:12PM +0100, Robert Marko wrote:
+> Add the required LAN969x clock bindings.
 
-I apologize for not noticing this patch... I did something superfluous.
+I do not see clock bindings actually here. Where is the actual binding?
+Commit msg does not help me at all to understand why you are doing this
+without actual required bindings.
 
+Please use subject prefixes matching the subsystem. You can get them for
+example with 'git log --oneline -- DIRECTORY_OR_FILE' on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+Bindings never have a "include" prefix.
+
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
+Best regards,
+Krzysztof
 
 
