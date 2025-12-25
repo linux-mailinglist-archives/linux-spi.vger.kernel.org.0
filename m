@@ -1,248 +1,126 @@
-Return-Path: <linux-spi+bounces-12130-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12131-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5527ECDDAA0
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 11:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 994BBCDDC03
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 13:32:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2E10330694DA
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 10:26:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A8640301EF8E
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 12:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A7731A55B;
-	Thu, 25 Dec 2025 10:26:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B5431ED7D;
+	Thu, 25 Dec 2025 12:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="haN5wIAG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qj2bhIu1"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E58D31A7EF
-	for <linux-spi@vger.kernel.org>; Thu, 25 Dec 2025 10:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6C731ED78;
+	Thu, 25 Dec 2025 12:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766658385; cv=none; b=IablvXj8fysmBzxoSl8ttXwsYuNSgHSvz907AQNQcpxt7CwEztiz2+8nFQgR9XGd3Z47aPWptqUsO/1qkCO3o1FVbZtqFYc8tXm1KiNVbb10zBvOqdkI0JDgnkDOjeGlLuApNnu+BVmMVQWb+x6CI3g9KEv8NHQqRl56cA64+s8=
+	t=1766665953; cv=none; b=t//BBtq/5xVyd3QAsYOijKcAwB65RrTTer2Mct4/2U/tzbrSzFdt4i0BltuzbM4+e7iKOLQYbJpjRK+oy46x61Or30xMKzRF9pz1iyjzFMqb/Y0Iamv00NyWStx44Yp9jsKn9VNalflMBDOlxL9y9/79VC+KaOaRCHzw5TRr5qI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766658385; c=relaxed/simple;
-	bh=XDw0CicUcDyUIbwIo5vVTd2jTNcmyLEasGp4m1GbB4k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TLIznOLdfESSccT3Iql+H0DvJgXwNBGW+pUqpsqptY5iW4PaeA7Vsy4NM18VcFtjju/1iiD1fyw/Nv3Pw4dI7pM+Q2SMP8eDxRrTqF77aEcLfuvbzXm5FNkIzLNeZzujn/9Glr0tLGY1XOjACcSKDQyvBWe8PLaPEbwM22UCJlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=haN5wIAG; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b8052725de4so536660366b.0
-        for <linux-spi@vger.kernel.org>; Thu, 25 Dec 2025 02:26:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766658380; x=1767263180; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bbdavY/KGPzS+o6sMh5gv5dV0PnkFU7uBfyVWtnqgmE=;
-        b=haN5wIAGmIrPGmfirNaQHf+y8vIG8KfOrBx/mCeVC8Zg5UIkeJR1MmVWjiJylOjQv9
-         RA6IUdN7hMIWoI1LQXOo/xv/ymf+MgtWWjNkBCWGMJ1UJHO3gEi78kv9dEjdcI5pWGoK
-         3HnURzEKEiNNexq6bnjyTLaaWt+W4kd2bgytA7cn5IaIxTcH1mQPvh2DAp0EWXdKeVqn
-         dYpKadiLtDXACoT7nLmHB7hbsKqDBLKvcQM5+1XiLwXKTWR4ogdc7/VHPsmhtL3X8Hyx
-         2tbuZzvTFsL8hhpdLrZ2BO8J/G1khzE7wo8oDSSgfm/hFVDly4RpOKQLauPWvlPI9CNB
-         5CgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766658380; x=1767263180;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bbdavY/KGPzS+o6sMh5gv5dV0PnkFU7uBfyVWtnqgmE=;
-        b=g6qybHxEK+PF9qdy0n9MCNsGaeVOitCdYUr7SNdkW8YvIFv7YlmtFiW5EEWw8dVCMV
-         7U40wQaSQdOO/OlFsIx0NnMKcGNX6vPv/iGhMH8Jn0x+9de1uw+gy+Idx38KPEtW+GL9
-         Yaiu8FXEKoyA5N21Y0nNgNeUPQ3L3F/mqhrSo+z2Yo9tbR0GfXLxW42tjDvifN4wmpf+
-         ntJPSgav4i+MVtQWuh59xl3JI8vEvVfYPO5tnjvkg909IF0dnrJVp2h5egHOyANCFje8
-         EzlbJzi9/fAxXCX3h6eP/QqmKYOWYU2fwNrgj9mS2gFJTMpdWINKSjO2Yx1HP/s7bqrs
-         By4g==
-X-Forwarded-Encrypted: i=1; AJvYcCWeZNaZH/IeWTC3oAJpN8bjHoZ1/fh9kKizFLZsO+Jbk+Ku4I/cRZ6cQtHQCKACG0XGw1qY1StVhuw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEELM7mTvG1D0TgjQED94G/jY9gWxj7yM5uHIsO2Wra0cTO/LP
-	OlAmLhBh5IpOWe+ZM/2grYU33Iz5KPlyvRWwdulVewJvlnDU5LfBLHUr
-X-Gm-Gg: AY/fxX43CHNqCTDs9ddAq48EA9svfGhCu1EctRpn8LNw/eCHdXCML1UmQ+Xer+/QL8I
-	E/yCy8OmP6b3sRh/eEqFCWwOUyZhVPpNF+TQUx/iMdgSfM4KMtytx2WmW7d6YslWEmMmq1zLpEI
-	xdpiJXEiu7IFZd8CRSyEmKBQunA8AeGwE1J2VE4uUW62lthoW8QgSvvGbVXztFuIa428U60z5Gc
-	oLSIhx7ODD92J7vnsFGF0nIKyOHMmsj84mgt8zXqO1bEwP1w9G4f4Fl2n3q1ngUL/KaDtkTvCB0
-	3BwVkg6gtLkT9gsmCDUbSzqGJWViL++DOgm8ngiOfa4a2pQagCaCQgx9U/y5seYFpQHcLONHxVk
-	IvP3W72e2dszNZuD2UeZKTEuAOV8Oj8z7yJAdCtaF9urD3A3ynGik/yVa3wa2fwPN5zNSL06z34
-	t5XZ/0wMOqisqN5izbm+dA7va5xp5lDohHkylPufbpl0gFIJik3qmsdOGUPyJQr8PGniU=
-X-Google-Smtp-Source: AGHT+IGlygVhnf4kK96SyejVfTPYWiK9b3dzlGY8ni6rseZRXIsqfMGNRAnZDGe710l1R5Y4qNze3w==
-X-Received: by 2002:a17:907:7393:b0:b80:40d3:1fc6 with SMTP id a640c23a62f3a-b8040d3232cmr1371363266b.54.1766658379530;
-        Thu, 25 Dec 2025 02:26:19 -0800 (PST)
-Received: from localhost (dslb-002-205-018-238.002.205.pools.vodafone-ip.de. [2.205.18.238])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037ab86cesm2034844566b.19.2025.12.25.02.26.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Dec 2025 02:26:19 -0800 (PST)
-From: Jonas Gorski <jonas.gorski@gmail.com>
-To: Kamal Dasu <kamal.dasu@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Cc: Kamal Dasu <kdasu.kdev@gmail.com>,
-	linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: [PATCH 4/4] mips: bmips: dts: fix qspi register order
-Date: Thu, 25 Dec 2025 11:25:33 +0100
-Message-ID: <20251225102533.30772-5-jonas.gorski@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251225102533.30772-1-jonas.gorski@gmail.com>
-References: <20251225102533.30772-1-jonas.gorski@gmail.com>
+	s=arc-20240116; t=1766665953; c=relaxed/simple;
+	bh=95vdqLLNLzVGOuEXnO4RUjZHMcpAzuOvTLWFG7ZW3Cg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TDv8PHaIMWAwcM9x+CmnG8cautOY/I4XmbMaD/NeY/LjtHDZ3ip34uMx4CuEZcNrQos/vUsE1nw5fqs3fMH/blJmNnDmMYD07XYOrkpfxIGyEnGI4+j9Py1qSJlFLyL+hS2bzHKBsNswRcCwMcS0SRgdE3nOaK+Z6pLif4g8UgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qj2bhIu1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2632DC4CEF1;
+	Thu, 25 Dec 2025 12:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766665952;
+	bh=95vdqLLNLzVGOuEXnO4RUjZHMcpAzuOvTLWFG7ZW3Cg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Qj2bhIu1vmlPggCrwGhrRnPXZhopCth98WlqlTWnIeKLBKB3QZ/iHN/xWz5UD/Dvc
+	 ZvsWcb63JlbVmVRSS3jUJFA8wAMp2t+Lmf3FUhGOYhZd2Hb3DpJruGfwGppCAqCR6l
+	 /Z22SUc/sCUL24M21Ub3yQmt3LDJLN2WRkOq84NXQTU15plZ1e735Z2/Jop29sk2qY
+	 tMGG9OIoZgqq1uldcFAbAPPqzfkzXYxXhFGEx3G7AMADIAlUj4Si+54bfriiWsQR3a
+	 nKR6ifvFUpt2tGLWVl2bxfpXb23uV4TIVcGkyVt9uVGzY25C+tKOSY9cQPr8X8rACt
+	 VacamDEpcyOrQ==
+Message-ID: <40bdb779-2620-4c2f-b99e-ed7146e4da8f@kernel.org>
+Date: Thu, 25 Dec 2025 13:32:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: brcm,spi-bcm-qspi: allow hif_mspi as
+ alternative for mspi
+To: Jonas Gorski <jonas.gorski@gmail.com>,
+ Kamal Dasu <kamal.dasu@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc: Kamal Dasu <kdasu.kdev@gmail.com>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org
+References: <20251225102533.30772-1-jonas.gorski@gmail.com>
+ <20251225102533.30772-2-jonas.gorski@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251225102533.30772-2-jonas.gorski@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Align the register order to the schema. Fixes warnings like:
+On 25/12/2025 11:25, Jonas Gorski wrote:
+> Add "hif_mspi" as an alternative reg-name for brcm,spi-bcm-qspi, as
+> it is in use by BCM7xxx (BMIPS) device trees.
+> 
+> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 
-arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:0: 'cs_reg' is not one of ['hif_mspi', 'mspi']
-	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
-arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:1: 'bspi' was expected
-	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
-arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:2: 'bspi' is not one of ['intr_regs', 'intr_status_reg', 'cs_reg']
-	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
+Rather fix the DTS or provide reason why they cannot/should not be fixed.
 
-Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
----
- arch/mips/boot/dts/brcm/bcm7125.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7346.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7358.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7360.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7362.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7420.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7425.dtsi | 4 ++--
- arch/mips/boot/dts/brcm/bcm7435.dtsi | 4 ++--
- 8 files changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/arch/mips/boot/dts/brcm/bcm7125.dtsi b/arch/mips/boot/dts/brcm/bcm7125.dtsi
-index dd1cc3cda694..81ee0f49b645 100644
---- a/arch/mips/boot/dts/brcm/bcm7125.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7125.dtsi
-@@ -250,8 +250,8 @@ qspi: spi@443000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x443200 0x188 0x443000 0x50 0x440920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7346.dtsi b/arch/mips/boot/dts/brcm/bcm7346.dtsi
-index 21c7418aaf0d..6efb6347a2e4 100644
---- a/arch/mips/boot/dts/brcm/bcm7346.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7346.dtsi
-@@ -474,8 +474,8 @@ qspi: spi@413000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7358.dtsi b/arch/mips/boot/dts/brcm/bcm7358.dtsi
-index 63b3a42a8dc6..527406a5fa4d 100644
---- a/arch/mips/boot/dts/brcm/bcm7358.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7358.dtsi
-@@ -342,8 +342,8 @@ qspi: spi@413000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7360.dtsi b/arch/mips/boot/dts/brcm/bcm7360.dtsi
-index 9d89da400104..7ed6dbd145bf 100644
---- a/arch/mips/boot/dts/brcm/bcm7360.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7360.dtsi
-@@ -393,8 +393,8 @@ qspi: spi@413000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7362.dtsi b/arch/mips/boot/dts/brcm/bcm7362.dtsi
-index a0d15fcd3b81..194b6dd34eab 100644
---- a/arch/mips/boot/dts/brcm/bcm7362.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7362.dtsi
-@@ -389,8 +389,8 @@ qspi: spi@413000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7420.dtsi b/arch/mips/boot/dts/brcm/bcm7420.dtsi
-index a38041451faf..be4c9ba3d509 100644
---- a/arch/mips/boot/dts/brcm/bcm7420.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7420.dtsi
-@@ -311,8 +311,8 @@ qspi: spi@443000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x443200 0x188 0x443000 0x50 0x440920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7425.dtsi b/arch/mips/boot/dts/brcm/bcm7425.dtsi
-index c2b3ea21410d..8c476a20aea5 100644
---- a/arch/mips/boot/dts/brcm/bcm7425.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7425.dtsi
-@@ -485,8 +485,8 @@ qspi: spi@41c000 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x419920 0x4 0x41c200 0x188 0x41c000 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x41c200 0x188 0x41c000 0x50 0x419920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
-diff --git a/arch/mips/boot/dts/brcm/bcm7435.dtsi b/arch/mips/boot/dts/brcm/bcm7435.dtsi
-index 826731515f0b..328fafe7519b 100644
---- a/arch/mips/boot/dts/brcm/bcm7435.dtsi
-+++ b/arch/mips/boot/dts/brcm/bcm7435.dtsi
-@@ -501,8 +501,8 @@ qspi: spi@41d200 {
- 			compatible = "brcm,spi-brcmstb-qspi",
- 				     "brcm,spi-bcm-qspi";
- 			clocks = <&upg_clk>;
--			reg = <0x41a920 0x4 0x41d400 0x188 0x41d200 0x50>;
--			reg-names = "cs_reg", "hif_mspi", "bspi";
-+			reg = <0x41d400 0x188 0x41d200 0x50 0x41a920 0x4>;
-+			reg-names = "hif_mspi", "bspi", "cs_reg";
- 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
- 			interrupt-parent = <&spi_l2_intc>;
- 			interrupt-names = "mspi_done",
--- 
-2.43.0
-
+Best regards,
+Krzysztof
 
