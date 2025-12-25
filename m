@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-12131-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12132-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 994BBCDDC03
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 13:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57A76CDDC16
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 13:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A8640301EF8E
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 12:32:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BDEBD30115D6
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 12:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B5431ED7D;
-	Thu, 25 Dec 2025 12:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41AB831ED72;
+	Thu, 25 Dec 2025 12:34:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qj2bhIu1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzoeIFWv"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6C731ED78;
-	Thu, 25 Dec 2025 12:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D132F0C76;
+	Thu, 25 Dec 2025 12:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766665953; cv=none; b=t//BBtq/5xVyd3QAsYOijKcAwB65RrTTer2Mct4/2U/tzbrSzFdt4i0BltuzbM4+e7iKOLQYbJpjRK+oy46x61Or30xMKzRF9pz1iyjzFMqb/Y0Iamv00NyWStx44Yp9jsKn9VNalflMBDOlxL9y9/79VC+KaOaRCHzw5TRr5qI=
+	t=1766666067; cv=none; b=L+7f1LmHe3KPsbEDzbXp18kNJPyvuZChKXzBJoMSP7Xbcr9tBb5pilOLCMghe0py2fhDPatUFo6rxfcdegbupAkgj81wPUkzfdbOs+9ewGEvyUHXqEf2BOZaZkqlVfY9NDIoXMfs0aihgw6YLn3LLZ2zhGK0ZPCoX8RDOZeuE2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766665953; c=relaxed/simple;
-	bh=95vdqLLNLzVGOuEXnO4RUjZHMcpAzuOvTLWFG7ZW3Cg=;
+	s=arc-20240116; t=1766666067; c=relaxed/simple;
+	bh=Y0vwly0fOmcMXnn5LCSODAgBovhrJXlgMOOLiuau/7I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TDv8PHaIMWAwcM9x+CmnG8cautOY/I4XmbMaD/NeY/LjtHDZ3ip34uMx4CuEZcNrQos/vUsE1nw5fqs3fMH/blJmNnDmMYD07XYOrkpfxIGyEnGI4+j9Py1qSJlFLyL+hS2bzHKBsNswRcCwMcS0SRgdE3nOaK+Z6pLif4g8UgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qj2bhIu1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2632DC4CEF1;
-	Thu, 25 Dec 2025 12:32:28 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=MouxvkniDWQ4FkNlGEFgO2/jP2d+YQ1oP0mSAWsyQ7iLuiMkOt9W9Zx1nN5baM5zzuzj6FVs/zrQ7K0efnVs1JckOw4vDPjTWrazXWWTpkL3vd1BUSJ5cmPqEqt4G1v9VSG84oy8w/B8aZnI2lG+ImIzLzzm8rRBUr9ROgFikP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzoeIFWv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19978C4CEF1;
+	Thu, 25 Dec 2025 12:34:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766665952;
-	bh=95vdqLLNLzVGOuEXnO4RUjZHMcpAzuOvTLWFG7ZW3Cg=;
+	s=k20201202; t=1766666066;
+	bh=Y0vwly0fOmcMXnn5LCSODAgBovhrJXlgMOOLiuau/7I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Qj2bhIu1vmlPggCrwGhrRnPXZhopCth98WlqlTWnIeKLBKB3QZ/iHN/xWz5UD/Dvc
-	 ZvsWcb63JlbVmVRSS3jUJFA8wAMp2t+Lmf3FUhGOYhZd2Hb3DpJruGfwGppCAqCR6l
-	 /Z22SUc/sCUL24M21Ub3yQmt3LDJLN2WRkOq84NXQTU15plZ1e735Z2/Jop29sk2qY
-	 tMGG9OIoZgqq1uldcFAbAPPqzfkzXYxXhFGEx3G7AMADIAlUj4Si+54bfriiWsQR3a
-	 nKR6ifvFUpt2tGLWVl2bxfpXb23uV4TIVcGkyVt9uVGzY25C+tKOSY9cQPr8X8rACt
-	 VacamDEpcyOrQ==
-Message-ID: <40bdb779-2620-4c2f-b99e-ed7146e4da8f@kernel.org>
-Date: Thu, 25 Dec 2025 13:32:27 +0100
+	b=OzoeIFWvzEFKpkLFl4FnY85BXYcPNwann/lK0zXxDf4Gp7ez/h8CZfeHgTJ6YaPEJ
+	 TJcMSh83jUQZcLDYl0wqf5n6u0dau+QvMxTnrwk37tmzGTKq5G9V0a5gUAHfQNbREm
+	 yVSr/geEP4uBDJR/krhuvRbbRzdKMIllzi5WGNtmYwo6zY4iYMufWDBxH1NgEFbyPK
+	 g8OGACwhHn+ZiDKREERLjZnW31TdZc0PpewZvhiYw8MlX5vjWkzGzNVr3lWv/frZPq
+	 EhgD6cLEpQo5r2lr1ZSdXnetqbxZkoU1K9AA8sfsgMOZkX2UoSwY/hU5cjvnpfF8FN
+	 G3cIHT8lyT+EA==
+Message-ID: <df6d635e-15ba-4bd2-897f-7884579a972f@kernel.org>
+Date: Thu, 25 Dec 2025 13:34:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -119,7 +119,14 @@ On 25/12/2025 11:25, Jonas Gorski wrote:
 > 
 > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 
-Rather fix the DTS or provide reason why they cannot/should not be fixed.
+
+Also:
+
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
 Best regards,
 Krzysztof
