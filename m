@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-12132-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12133-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57A76CDDC16
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 13:34:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FEEFCDDC24
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 13:35:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BDEBD30115D6
-	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 12:34:28 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B6CF93021192
+	for <lists+linux-spi@lfdr.de>; Thu, 25 Dec 2025 12:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41AB831ED72;
-	Thu, 25 Dec 2025 12:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC85320386;
+	Thu, 25 Dec 2025 12:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OzoeIFWv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9liGzbC"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D132F0C76;
-	Thu, 25 Dec 2025 12:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF79831B824;
+	Thu, 25 Dec 2025 12:35:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766666067; cv=none; b=L+7f1LmHe3KPsbEDzbXp18kNJPyvuZChKXzBJoMSP7Xbcr9tBb5pilOLCMghe0py2fhDPatUFo6rxfcdegbupAkgj81wPUkzfdbOs+9ewGEvyUHXqEf2BOZaZkqlVfY9NDIoXMfs0aihgw6YLn3LLZ2zhGK0ZPCoX8RDOZeuE2Q=
+	t=1766666127; cv=none; b=JP6jrMRlppciHeE220gO+zmUuih5/ASAdYXwOXdQGrWT/NqgtwQRLgQz3/EHAIvGrGG0I+SvUGdgURieTW1B6MgKCJ1vIElX7yhjoSO5ygYqW1uAlD1zoPhnjcX/Ie8wYqGQCF1nNK9rXhn4eb5gZ0lK8ag3ILlHT4cLvKqUXYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766666067; c=relaxed/simple;
-	bh=Y0vwly0fOmcMXnn5LCSODAgBovhrJXlgMOOLiuau/7I=;
+	s=arc-20240116; t=1766666127; c=relaxed/simple;
+	bh=+vuBMibyabze3gYZvwPkDyuzvUQwmEe5MvGF5wEybDo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MouxvkniDWQ4FkNlGEFgO2/jP2d+YQ1oP0mSAWsyQ7iLuiMkOt9W9Zx1nN5baM5zzuzj6FVs/zrQ7K0efnVs1JckOw4vDPjTWrazXWWTpkL3vd1BUSJ5cmPqEqt4G1v9VSG84oy8w/B8aZnI2lG+ImIzLzzm8rRBUr9ROgFikP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OzoeIFWv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19978C4CEF1;
-	Thu, 25 Dec 2025 12:34:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=pQzz5f9ObXboCVTOMhPY/oAU/RL7tJKDYwYE3aWVy78UoCocdWaSS7IAM/dPZ3wmbNPHXjymlRVBX0GjpxBDphkoGBGXKOVGu8hzeR5l16CYXu+lgsFkxFJayngZ9OMxO4YYWTB1lsUG0peIFduIz/T/hYevgCzZCZBOqqUdV+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9liGzbC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD921C4CEF1;
+	Thu, 25 Dec 2025 12:35:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766666066;
-	bh=Y0vwly0fOmcMXnn5LCSODAgBovhrJXlgMOOLiuau/7I=;
+	s=k20201202; t=1766666126;
+	bh=+vuBMibyabze3gYZvwPkDyuzvUQwmEe5MvGF5wEybDo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OzoeIFWvzEFKpkLFl4FnY85BXYcPNwann/lK0zXxDf4Gp7ez/h8CZfeHgTJ6YaPEJ
-	 TJcMSh83jUQZcLDYl0wqf5n6u0dau+QvMxTnrwk37tmzGTKq5G9V0a5gUAHfQNbREm
-	 yVSr/geEP4uBDJR/krhuvRbbRzdKMIllzi5WGNtmYwo6zY4iYMufWDBxH1NgEFbyPK
-	 g8OGACwhHn+ZiDKREERLjZnW31TdZc0PpewZvhiYw8MlX5vjWkzGzNVr3lWv/frZPq
-	 EhgD6cLEpQo5r2lr1ZSdXnetqbxZkoU1K9AA8sfsgMOZkX2UoSwY/hU5cjvnpfF8FN
-	 G3cIHT8lyT+EA==
-Message-ID: <df6d635e-15ba-4bd2-897f-7884579a972f@kernel.org>
-Date: Thu, 25 Dec 2025 13:34:21 +0100
+	b=k9liGzbCArYjoHUVQKVQ96N0Iv1gsEsudK7lioooQolKoz/hpf7xv0klybSAcwqBE
+	 LzatWmIHqEIassiTDxxluxiGfBKC5+Pj1F4Aul+UMuSQz2tF8crsPOQeCK3T3TShB/
+	 UnxztnqujQib+eb1UuYfJcZFGnt+DtaxepZfPPMIiv6EhWyTUzPhB6ImbbvSjt2BZ9
+	 iWIRFrWgTsrlRUgAClbbrraZAaVv3uWmHHwMR1OLO8/l/zyvuODuFpvdNDAN5Nn4XE
+	 f5EpFd8uvIERsrL48BYTw0BEh5UhhWY6LZUatchpsOzJLgmvOQ0jjGRXUjUHqGCXGt
+	 kPqzqT32YHGJw==
+Message-ID: <a31ece17-aac6-4369-b2ed-efd76e8961fe@kernel.org>
+Date: Thu, 25 Dec 2025 13:35:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -48,8 +48,7 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] dt-bindings: brcm,spi-bcm-qspi: allow hif_mspi as
- alternative for mspi
+Subject: Re: [PATCH 4/4] mips: bmips: dts: fix qspi register order
 To: Jonas Gorski <jonas.gorski@gmail.com>,
  Kamal Dasu <kamal.dasu@broadcom.com>,
  Broadcom internal kernel review list
@@ -63,7 +62,7 @@ Cc: Kamal Dasu <kdasu.kdev@gmail.com>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org
 References: <20251225102533.30772-1-jonas.gorski@gmail.com>
- <20251225102533.30772-2-jonas.gorski@gmail.com>
+ <20251225102533.30772-5-jonas.gorski@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,24 +108,51 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251225102533.30772-2-jonas.gorski@gmail.com>
+In-Reply-To: <20251225102533.30772-5-jonas.gorski@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 25/12/2025 11:25, Jonas Gorski wrote:
-> Add "hif_mspi" as an alternative reg-name for brcm,spi-bcm-qspi, as
-> it is in use by BCM7xxx (BMIPS) device trees.
+> Align the register order to the schema. Fixes warnings like:
+> 
+> arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:0: 'cs_reg' is not one of ['hif_mspi', 'mspi']
+> 	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
+> arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:1: 'bspi' was expected
+> 	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
+> arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:2: 'bspi' is not one of ['intr_regs', 'intr_status_reg', 'cs_reg']
+> 	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
+
+Trim redundant parts. You do not need to paste schema path every time.
+Full path to DTB also is not really necessary, IMO.
+
 > 
 > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> ---
+>  arch/mips/boot/dts/brcm/bcm7125.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7346.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7358.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7360.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7362.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7420.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7425.dtsi | 4 ++--
+>  arch/mips/boot/dts/brcm/bcm7435.dtsi | 4 ++--
+>  8 files changed, 16 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/mips/boot/dts/brcm/bcm7125.dtsi b/arch/mips/boot/dts/brcm/bcm7125.dtsi
+> index dd1cc3cda694..81ee0f49b645 100644
+> --- a/arch/mips/boot/dts/brcm/bcm7125.dtsi
+> +++ b/arch/mips/boot/dts/brcm/bcm7125.dtsi
+> @@ -250,8 +250,8 @@ qspi: spi@443000 {
+>  			compatible = "brcm,spi-brcmstb-qspi",
+>  				     "brcm,spi-bcm-qspi";
+>  			clocks = <&upg_clk>;
+> -			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
+> -			reg-names = "cs_reg", "hif_mspi", "bspi";
+> +			reg = <0x443200 0x188 0x443000 0x50 0x440920 0x4>;
+> +			reg-names = "hif_mspi", "bspi", "cs_reg";
 
-
-Also:
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching. For bindings, the preferred subjects are
-explained here:
-https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
+So order is anyway broken by this change, thus you can as well rename it
+to mspi, right?
 
 Best regards,
 Krzysztof
