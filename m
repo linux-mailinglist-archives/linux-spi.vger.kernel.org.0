@@ -1,126 +1,122 @@
-Return-Path: <linux-spi+bounces-12144-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12145-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0387CDF8BC
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 12:17:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8546CDFE3D
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 16:14:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0FC8D30010E8
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 11:17:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6C9A5301028E
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 15:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A782311C10;
-	Sat, 27 Dec 2025 11:17:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2124E24E016;
+	Sat, 27 Dec 2025 15:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mp7Vf87Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="exbvYdwx"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CC92853E9;
-	Sat, 27 Dec 2025 11:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA9012F5A5;
+	Sat, 27 Dec 2025 15:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766834242; cv=none; b=uhe4DrJrk75m79+0UDM0BwCiS6ANvW8eGqYX61HQFEfOkNRvX2TeCyB52HECIZmkz9gpit9gLJBJZPpNBOm9V3HX24+XspYGkYfS8WhsqYG1ki22Y153sU81Fz3neAv+zZJS1aer2zUhlDQRjfymETOPyL6SLa1BDrPQ8tuDHWE=
+	t=1766848456; cv=none; b=vCAJ1e7CKjthb4LjmGT+9kkoN/nuUcfcUIaYRwrwWrsSfKhy1xc8pkyMVuEjFtyywq6G+RglR/zIiXoLcnz/xtDkOcymq8M9JhzHcp4YGIsNjAJBQLouL38NQU/cGOJtaRvfub7LKvJ8ks6UhBFdB3Zu07kTJ07xYaXmu4+CF8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766834242; c=relaxed/simple;
-	bh=mkTJBdGWaaGFXpk4ABan/EOXP8frmcAGWpzfe9DTQsY=;
+	s=arc-20240116; t=1766848456; c=relaxed/simple;
+	bh=ayGnvzGYTMOYZSbWIa1SXRKPdxDlB2oCn9u0AuNbJrQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RHdvuj2XjjAJUdzKsASVVjPnTmzXKv0m8dNl+CQdZxXSe1HLlFDbCXsKPV9eUur4dK/dm3kgTtrZHXIVqPBY4YsorIRmVKlu4yv2Nh+vm21pp69jPbjnRQ5XWJmIQCxnoGdp3RNTprAbmc/9KYc2Fx9On5/StfvYvCH++XGaa0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mp7Vf87Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9FCC4CEF1;
-	Sat, 27 Dec 2025 11:17:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766834241;
-	bh=mkTJBdGWaaGFXpk4ABan/EOXP8frmcAGWpzfe9DTQsY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mp7Vf87QB6NclKUBLSZgG25HwjCXi0w1BFQg/Xi32LC2n/3/VELl6cCodVL+Uaohv
-	 knt2f4OAFECmBI2yR6QaJKc4Fu3a0RgdjeQelMCbEngpVtwWKTYTsHw2W1Iz+bxEWv
-	 0zWs04mKwiyvgUvPwIasj1QjjKsDJq89hdt7OjelzvGxzL+3ihvEu5fdHBabQtgXr8
-	 DllSXXTp5/+fVCOegZ18LBeyKqUAgJDvKyYQhRds9kFnFYu05Qmf5FSqSpvj2eGiJS
-	 UXpqSihw//fBPaMJNj+nca6ZTcB88RkYwMxJpkTmCUhvWbKSEP90A++xF9C0FO43Cv
-	 F68a/aRlgpAVQ==
-Date: Sat, 27 Dec 2025 12:17:18 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com, 
-	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au, davem@davemloft.net, 
-	vkoul@kernel.org, andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
-	olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
-	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.org, 
-	mturquette@baylibre.com, sboyd@kernel.org, lars.povlsen@microchip.com, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-clk@vger.kernel.org, luka.perkov@sartura.hr
-Subject: Re: [PATCH v3 01/15] include: dt-bindings: add LAN969x clock bindings
-Message-ID: <20251227-splendid-striped-starfish-ece074@quoll>
-References: <20251223201921.1332786-1-robert.marko@sartura.hr>
- <20251223201921.1332786-2-robert.marko@sartura.hr>
- <20251224-berserk-mackerel-of-snow-4cae54@quoll>
- <CA+HBbNGym6Q9b166n-P=h_JssOHm0yfyL73JZ+G9P81muK=g4A@mail.gmail.com>
- <78bf252c-fd5e-4a36-b1a3-ca8ed26fde7a@kernel.org>
- <CA+HBbNG+ZVD6grGDp32Ninx7H1AyEbGvP0nwc0zUv94tOV8hYg@mail.gmail.com>
- <d210552f-c8bf-4084-9317-b743075d9946@kernel.org>
- <2025122516245554f59e2e@mail.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kLfjJ7m9qpYeWfrH5DnEGloIEuXbcsc5ppH8dO/8qyA7Dk1FUhTLo6IuVV2Hg36kT81f8UbOIMryibgrQoJLuJrTT9MyP32Kc0XiI4zWdX3ndqtVlE4U9807sdTUA5NFYl9Y7Ni5nXxMfSVpq7JyRln6tYwN/4jrvSX0AVvfKIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=exbvYdwx; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766848454; x=1798384454;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ayGnvzGYTMOYZSbWIa1SXRKPdxDlB2oCn9u0AuNbJrQ=;
+  b=exbvYdwxO1Thm2eK9HVa3tciGMCztmfwJwDAigh0xsFMImZ8x5CXW43A
+   uc/NAIFbwp7YcqHstI/mcS5WKRkPS5vociphE1iQu3V0izEzQpBHSj/wP
+   wKGCyixpdTfdRe13m194Dxkmb9e2TdZSczstvOzVysT+ZtOsEHsTTfUlM
+   joR3sjINNwfyXfjMLFlm+xClqRauK1tfYRmhacVttmi+AEuoSntjq+CH5
+   zmNsuNT/vGFVoXzIn+jDr6tQIn8ejMxakfRHo6CNvQJfFfHf9RIjKRJPU
+   qylWWksGBf6wjwyWi0rbNYUbrNsglVU+QqLQgOYbY6831fz5pFQGTwnvq
+   g==;
+X-CSE-ConnectionGUID: WhfAhOT6TXq76OfMkV90eg==
+X-CSE-MsgGUID: XUnXJ/f2RNyhqJAoJx2Q+w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11654"; a="68706781"
+X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
+   d="scan'208";a="68706781"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 07:14:13 -0800
+X-CSE-ConnectionGUID: Fz8pSKfGRN+9mMDadppbbw==
+X-CSE-MsgGUID: NwCboQ1dSzKyicwXdmCCjQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,180,1763452800"; 
+   d="scan'208";a="200586196"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.211])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2025 07:14:09 -0800
+Date: Sat, 27 Dec 2025 17:14:07 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: David Lechner <dlechner@baylibre.com>
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcelo Schmitt <marcelo.schmitt@analog.com>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v4 4/9] spi: add multi_lane_mode field to struct
+ spi_transfer
+Message-ID: <aU_3v5smP1AnsHCG@smile.fi.intel.com>
+References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
+ <20251219-spi-add-multi-bus-support-v4-4-145dc5204cd8@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <2025122516245554f59e2e@mail.local>
+In-Reply-To: <20251219-spi-add-multi-bus-support-v4-4-145dc5204cd8@baylibre.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Dec 25, 2025 at 05:24:55PM +0100, Alexandre Belloni wrote:
-> On 25/12/2025 09:47:34+0100, Krzysztof Kozlowski wrote:
-> > On 24/12/2025 15:01, Robert Marko wrote:
-> > > On Wed, Dec 24, 2025 at 2:05=E2=80=AFPM Krzysztof Kozlowski <krzk@ker=
-nel.org> wrote:
-> > >>
-> > >> On 24/12/2025 11:30, Robert Marko wrote:
-> > >>> On Wed, Dec 24, 2025 at 11:21=E2=80=AFAM Krzysztof Kozlowski <krzk@=
-kernel.org> wrote:
-> > >>>>
-> > >>>> On Tue, Dec 23, 2025 at 09:16:12PM +0100, Robert Marko wrote:
-> > >>>>> Add the required LAN969x clock bindings.
-> > >>>>
-> > >>>> I do not see clock bindings actually here. Where is the actual bin=
-ding?
-> > >>>> Commit msg does not help me at all to understand why you are doing=
- this
-> > >>>> without actual required bindings.
-> > >>>
-> > >>> I guess it is a bit confusing, there is no schema here, these are t=
-he
-> > >>> clock indexes that
-> > >>> reside in dt-bindings and are used by the SoC DTSI.
-> > >>
-> > >> I understand as not used by drivers? Then no ABI and there is no poi=
-nt
-> > >> in putting them into bindings.
-> > >=20
-> > > It is not included by the driver directly, but it requires these exact
-> > > indexes to be passed
-> > > so its effectively ABI.
-> >=20
-> > How it requires the exact index? In what way? I do not see anything in
-> > the gck driver using/relying on these values. Nothing. Please point me
-> > to the line which directly uses these values.... or how many times I
-> > will need to write this is not ABI?
-> >=20
->=20
-> The index here is the exact id that needs to be set in the PMC_PCR
-> register and so it is dictated by the hardware.
+On Fri, Dec 19, 2025 at 03:32:12PM -0600, David Lechner wrote:
+> Add a new multi_lane_mode field to struct spi_transfer to allow
+> peripherals that support multiple SPI lanes to be used with a single
+> SPI controller.
+> 
+> This requires both the peripheral and the controller to have multiple
+> serializers connected to separate data lanes. It could also be used with
+> a single controller and multiple peripherals that are functioning as a
+> single logical device (similar to parallel memories).
 
-So not a binding between Linux and DTS.
+...
 
-Best regards,
-Krzysztof
+>  	unsigned	cs_change:1;
+>  	unsigned	tx_nbits:4;
+>  	unsigned	rx_nbits:4;
+> +
+> +#define SPI_MULTI_LANE_MODE_SINGLE	0 /* only use single lane */
+> +#define SPI_MULTI_LANE_MODE_STRIPE	1 /* one data word per lane */
+> +#define SPI_MULTI_LANE_MODE_MIRROR	2 /* same word sent on all lanes */
+> +	unsigned	multi_lane_mode: 2;
+> +
+>  	unsigned	timestamped:1;
+
+Btw, have you checked the layout of these bitfields? Are they all in one 32-bit
+word or split? Dunno if `pahole` handles them, never actually paid attention
+before.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
