@@ -1,139 +1,93 @@
-Return-Path: <linux-spi+bounces-12141-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12143-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E4A8CDE819
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Dec 2025 09:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72055CDF884
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 12:10:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0EDAA3007684
-	for <lists+linux-spi@lfdr.de>; Fri, 26 Dec 2025 08:37:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B0253005BB9
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 11:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C008C314D02;
-	Fri, 26 Dec 2025 08:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C131D2F362A;
+	Sat, 27 Dec 2025 11:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b="ngacBzbR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZldIHC75"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09929314B82;
-	Fri, 26 Dec 2025 08:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.75.126.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B42F0C6E;
+	Sat, 27 Dec 2025 11:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766738276; cv=none; b=RFWnR1Q6m2Av7zVKw6caRJtqheyX10vghAlbWjvinpb5Gh2vnVY3iFTlk8wZje6VOLnzqHhmNiyvakRCunjZ1TMYLha02yRxz2UyTCKbF2LaTTgBZnTFCASTYRkeOpL/EYPNLjXguU6/sTAwrfDFxP/6D9FDpkoJwxOyFGImkrw=
+	t=1766833830; cv=none; b=K7fIKhvGCAAJuQ8BwnKtKhBnIqWhmi/w4AnbDNRDvdLeUrnQa55F5oNtzVCRNX7pkduVNNW3tdrtqlKbA0wW+wINa/t5JUJAjy1rvsumQHvc9KVVxRxGrMFeyt4kUNPScPHocczDFTyEJ5BIOgneZ4rK2WuloxlkX18mh2KASTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766738276; c=relaxed/simple;
-	bh=5mk1AqDXqYxiWM7jWOHmEJdxyWWdlPMbxkXnY5N9BDo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LMekkpXGnXUnTzk3YLkF1m4z8D9Q9LzxYVFfGL35cfo/0Y3PdrhXhNfKjpj8Fs5ZboFy5/4xbnmiG4DAqJb2BIuugywxkqKcM9LWSfkGGbPrD8XDs587OHH8Qtp9hx5Cuafc97iUYL6rVAE9VYeQAImmvwLfqijfp/KPVre31Lo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com; spf=pass smtp.mailfrom=realtek.com; dkim=pass (2048-bit key) header.d=realtek.com header.i=@realtek.com header.b=ngacBzbR; arc=none smtp.client-ip=211.75.126.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=realtek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=realtek.com
-X-SpamFilter-By: ArmorX SpamTrap 5.80 with qID 5BQ8bkDeB3311939, This message is accepted by code: ctloc85258
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=realtek.com; s=dkim;
-	t=1766738266; bh=ng2H3zL6NRfFerI1NxFjntwBYw3MU10vHUxtEwMlvWQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:
-	 Content-Transfer-Encoding:Content-Type;
-	b=ngacBzbR2uvG1QG4XYPJ0d55Tg5tI8HsCSozOkgyDUSLZMu56oxiHsh5wlyDQxZvE
-	 g5uYjrTdUqKUuHf7L4kEyy5TanNiDiI23SW9bJjcSIvd45hiC3OUkx70GuyBdkZLae
-	 1MuwABIXk3jT06tgaN0cl6PKc3teYd26z02dPcAMuLxh3nYcO1Dbv0RMDVrpfEpaDd
-	 q4rPntHdvfSIh7DoJlwZaGKjNwXI+fVU+vWbtoU43Uu0Q7U+W6T1NAAjxdMTqz4bW0
-	 Oz0KbK1Yazts5RehYqat3T39qyue6pMEZ4ZBx+YBzXj4SwSGvU4I6W/jY3NICo4hd5
-	 tRU2Ihd2s/+7A==
-Received: from mail.realtek.com (rtkexhmbs02.realtek.com.tw[172.21.6.41])
-	by rtits2.realtek.com.tw (8.15.2/3.21/5.94) with ESMTPS id 5BQ8bkDeB3311939
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 26 Dec 2025 16:37:46 +0800
-Received: from RTKEXHMBS03.realtek.com.tw (10.21.1.53) by
- RTKEXHMBS02.realtek.com.tw (172.21.6.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.10; Fri, 26 Dec 2025 16:37:44 +0800
-Received: from sw-server.localdomain (172.24.54.4) by
- RTKEXHMBS03.realtek.com.tw (10.21.1.53) with Microsoft SMTP Server id
- 15.2.1748.10 via Frontend Transport; Fri, 26 Dec 2025 16:37:44 +0800
-From: Oder Chiou <oder_chiou@realtek.com>
-To: <cezary.rojewski@intel.com>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <flove@realtek.com>, <shumingf@realtek.com>, <jack.yu@realtek.com>,
-        <derek.fang@realtek.com>, Oder Chiou <oder_chiou@realtek.com>
-Subject: [PATCH v11 2/4] spi: change of_find_spi_controller_by_node() gating to CONFIG_OF
-Date: Fri, 26 Dec 2025 16:39:09 +0800
-Message-ID: <20251226083909.1052641-1-oder_chiou@realtek.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1766833830; c=relaxed/simple;
+	bh=Pxinoarg3WZ7vUyqaSycBFfx07LX79J09U00W2RfA4g=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=SDhnd06cRK+qhAGiuxGGHih3Dpu/BuRGf3icIV0H5oMU7pSheNRUjiEWG+5kfVCH2BAN8U3Ei2g/rE1D4FUzaYdb46J1q88u3Pgvgi7KiwhG2dUmbwBCTOPXD5hZ+Tdk9WSZrTo03Zd8fAiHNk/UifEVr/BXJO8gM3JkPKEkX2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZldIHC75; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7575C4CEFB;
+	Sat, 27 Dec 2025 11:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766833829;
+	bh=Pxinoarg3WZ7vUyqaSycBFfx07LX79J09U00W2RfA4g=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ZldIHC75ahLfdHNkSyyAT6MQDEIs59IOKomRBR4QQJGsOO8vFk7bD2w15fNoFPxXn
+	 b8R2J2YraBdsxG+0h47v/Vdgw4CcHtwKGzTqSAlTDMvRoZIeOrMDjizVcdPGs9NfZm
+	 mXvD+UiX0DDV9OiNGgTm/xBCG4kr01oxkRoRzBDiP5F69fb0oxkJmYNjXGNU3MuwqM
+	 7LC/CMEc9QIi+HIUnLZ7OzSKB6OeePGgEdcxZ9rwuhAtdtkTnZqqd76+E5nfhSs6eC
+	 LYmHSSuwnT9m8kY6ESrF5ZbDScdy90XCBlFSmf8Twiv/PUwd9kiTQKFRx6O4ESpdWW
+	 y7J821PkJEtzA==
+Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
+	id 7C5791AC56B4; Sat, 27 Dec 2025 20:10:23 +0900 (JST)
+From: Mark Brown <broonie@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.19-rc2
+Date: Sat, 27 Dec 2025 11:10:18 +0000
+Message-Id: <20251227111023.7C5791AC56B4@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-Currently, the helper of_find_spi_controller_by_node() is gated under
-CONFIG_OF_DYNAMIC. This prevents drivers from using it in all CONFIG_OF
-configurations.
+The following changes since commit 9448598b22c50c8a5bb77a9103e2d49f134c9578:
 
-This patch moves the gating to CONFIG_OF, keeping the inline fallback
-returning NULL when Device Tree support is disabled.
+  Linux 6.19-rc2 (2025-12-21 15:52:04 -0800)
 
-Signed-off-by: Oder Chiou <oder_chiou@realtek.com>
----
- drivers/spi/spi.c       | 20 +++++++++++---------
- include/linux/spi/spi.h |  2 +-
- 2 files changed, 12 insertions(+), 10 deletions(-)
+are available in the Git repository at:
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index ecb5281b04a2..2badacc7a91c 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -4761,15 +4761,7 @@ EXPORT_SYMBOL_GPL(spi_write_then_read);
- 
- /*-------------------------------------------------------------------------*/
- 
--#if IS_ENABLED(CONFIG_OF_DYNAMIC)
--/* Must call put_device() when done with returned spi_device device */
--static struct spi_device *of_find_spi_device_by_node(struct device_node *node)
--{
--	struct device *dev = bus_find_device_by_of_node(&spi_bus_type, node);
--
--	return dev ? to_spi_device(dev) : NULL;
--}
--
-+#if IS_ENABLED(CONFIG_OF)
- /* The spi controllers are not using spi_bus, so we find it with another way */
- struct spi_controller *of_find_spi_controller_by_node(struct device_node *node)
- {
-@@ -4785,6 +4777,16 @@ struct spi_controller *of_find_spi_controller_by_node(struct device_node *node)
- 	return container_of(dev, struct spi_controller, dev);
- }
- EXPORT_SYMBOL_GPL(of_find_spi_controller_by_node);
-+#endif
-+
-+#if IS_ENABLED(CONFIG_OF_DYNAMIC)
-+/* Must call put_device() when done with returned spi_device device */
-+static struct spi_device *of_find_spi_device_by_node(struct device_node *node)
-+{
-+	struct device *dev = bus_find_device_by_of_node(&spi_bus_type, node);
-+
-+	return dev ? to_spi_device(dev) : NULL;
-+}
- 
- static int of_spi_notify(struct notifier_block *nb, unsigned long action,
- 			 void *arg)
-diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-index e6fdaf02386c..8bc616b00343 100644
---- a/include/linux/spi/spi.h
-+++ b/include/linux/spi/spi.h
-@@ -882,7 +882,7 @@ extern int devm_spi_register_controller(struct device *dev,
- 					struct spi_controller *ctlr);
- extern void spi_unregister_controller(struct spi_controller *ctlr);
- 
--#if IS_ENABLED(CONFIG_OF_DYNAMIC)
-+#if IS_ENABLED(CONFIG_OF)
- extern struct spi_controller *of_find_spi_controller_by_node(struct device_node *node);
- #else
- static inline struct spi_controller *of_find_spi_controller_by_node(struct device_node *node)
--- 
-2.52.0
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.19-rc2
 
+for you to fetch changes up to b005d618c8547b7dfb14e83a1b410a6a04ac36c6:
+
+  spi: cadence-quadspi: Prevent indirect read (2025-12-23 15:18:22 +0000)
+
+----------------------------------------------------------------
+spi: Fixes for v6.19
+
+We've got more fixes here for the Cadence QSPI controller, this time
+fixing some issues that come up when working with slower flashes on some
+platforms plus a general race condition.
+
+We also add support for the Allwinner A523, this is just some new
+compatibles.
+
+----------------------------------------------------------------
+Chen-Yu Tsai (2):
+      spi: dt-bindings: sun6i: Add compatibles for A523's SPI controllers
+      spi: sun6i: Support A523's SPI controllers
+
+Mark Brown (1):
+      spi: cadence-quadspi: Prevent indirect read
+
+Mateusz Litwin (2):
+      spi: cadence-quadspi: Prevent lost complete() call during indirect read
+      spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk if flash is slow
+
+ .../bindings/spi/allwinner,sun6i-a31-spi.yaml      |  4 ++++
+ drivers/spi/spi-cadence-quadspi.c                  | 23 +++++++++++-----------
+ drivers/spi/spi-sun6i.c                            | 11 +++++++----
+ 3 files changed, 22 insertions(+), 16 deletions(-)
 
