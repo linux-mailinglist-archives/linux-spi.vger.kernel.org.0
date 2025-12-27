@@ -1,93 +1,126 @@
-Return-Path: <linux-spi+bounces-12143-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12144-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72055CDF884
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 12:10:40 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0387CDF8BC
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 12:17:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2B0253005BB9
-	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 11:10:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0FC8D30010E8
+	for <lists+linux-spi@lfdr.de>; Sat, 27 Dec 2025 11:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C131D2F362A;
-	Sat, 27 Dec 2025 11:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A782311C10;
+	Sat, 27 Dec 2025 11:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZldIHC75"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mp7Vf87Q"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8B42F0C6E;
-	Sat, 27 Dec 2025 11:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CC92853E9;
+	Sat, 27 Dec 2025 11:17:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766833830; cv=none; b=K7fIKhvGCAAJuQ8BwnKtKhBnIqWhmi/w4AnbDNRDvdLeUrnQa55F5oNtzVCRNX7pkduVNNW3tdrtqlKbA0wW+wINa/t5JUJAjy1rvsumQHvc9KVVxRxGrMFeyt4kUNPScPHocczDFTyEJ5BIOgneZ4rK2WuloxlkX18mh2KASTE=
+	t=1766834242; cv=none; b=uhe4DrJrk75m79+0UDM0BwCiS6ANvW8eGqYX61HQFEfOkNRvX2TeCyB52HECIZmkz9gpit9gLJBJZPpNBOm9V3HX24+XspYGkYfS8WhsqYG1ki22Y153sU81Fz3neAv+zZJS1aer2zUhlDQRjfymETOPyL6SLa1BDrPQ8tuDHWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766833830; c=relaxed/simple;
-	bh=Pxinoarg3WZ7vUyqaSycBFfx07LX79J09U00W2RfA4g=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=SDhnd06cRK+qhAGiuxGGHih3Dpu/BuRGf3icIV0H5oMU7pSheNRUjiEWG+5kfVCH2BAN8U3Ei2g/rE1D4FUzaYdb46J1q88u3Pgvgi7KiwhG2dUmbwBCTOPXD5hZ+Tdk9WSZrTo03Zd8fAiHNk/UifEVr/BXJO8gM3JkPKEkX2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZldIHC75; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7575C4CEFB;
-	Sat, 27 Dec 2025 11:10:29 +0000 (UTC)
+	s=arc-20240116; t=1766834242; c=relaxed/simple;
+	bh=mkTJBdGWaaGFXpk4ABan/EOXP8frmcAGWpzfe9DTQsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RHdvuj2XjjAJUdzKsASVVjPnTmzXKv0m8dNl+CQdZxXSe1HLlFDbCXsKPV9eUur4dK/dm3kgTtrZHXIVqPBY4YsorIRmVKlu4yv2Nh+vm21pp69jPbjnRQ5XWJmIQCxnoGdp3RNTprAbmc/9KYc2Fx9On5/StfvYvCH++XGaa0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mp7Vf87Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F9FCC4CEF1;
+	Sat, 27 Dec 2025 11:17:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766833829;
-	bh=Pxinoarg3WZ7vUyqaSycBFfx07LX79J09U00W2RfA4g=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ZldIHC75ahLfdHNkSyyAT6MQDEIs59IOKomRBR4QQJGsOO8vFk7bD2w15fNoFPxXn
-	 b8R2J2YraBdsxG+0h47v/Vdgw4CcHtwKGzTqSAlTDMvRoZIeOrMDjizVcdPGs9NfZm
-	 mXvD+UiX0DDV9OiNGgTm/xBCG4kr01oxkRoRzBDiP5F69fb0oxkJmYNjXGNU3MuwqM
-	 7LC/CMEc9QIi+HIUnLZ7OzSKB6OeePGgEdcxZ9rwuhAtdtkTnZqqd76+E5nfhSs6eC
-	 LYmHSSuwnT9m8kY6ESrF5ZbDScdy90XCBlFSmf8Twiv/PUwd9kiTQKFRx6O4ESpdWW
-	 y7J821PkJEtzA==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 7C5791AC56B4; Sat, 27 Dec 2025 20:10:23 +0900 (JST)
-From: Mark Brown <broonie@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [GIT PULL] SPI fixes for v6.19-rc2
-Date: Sat, 27 Dec 2025 11:10:18 +0000
-Message-Id: <20251227111023.7C5791AC56B4@finisterre.sirena.org.uk>
+	s=k20201202; t=1766834241;
+	bh=mkTJBdGWaaGFXpk4ABan/EOXP8frmcAGWpzfe9DTQsY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mp7Vf87QB6NclKUBLSZgG25HwjCXi0w1BFQg/Xi32LC2n/3/VELl6cCodVL+Uaohv
+	 knt2f4OAFECmBI2yR6QaJKc4Fu3a0RgdjeQelMCbEngpVtwWKTYTsHw2W1Iz+bxEWv
+	 0zWs04mKwiyvgUvPwIasj1QjjKsDJq89hdt7OjelzvGxzL+3ihvEu5fdHBabQtgXr8
+	 DllSXXTp5/+fVCOegZ18LBeyKqUAgJDvKyYQhRds9kFnFYu05Qmf5FSqSpvj2eGiJS
+	 UXpqSihw//fBPaMJNj+nca6ZTcB88RkYwMxJpkTmCUhvWbKSEP90A++xF9C0FO43Cv
+	 F68a/aRlgpAVQ==
+Date: Sat, 27 Dec 2025 12:17:18 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com, 
+	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	vkoul@kernel.org, andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, UNGLinuxDriver@microchip.com, 
+	olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com, 
+	gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.org, 
+	mturquette@baylibre.com, sboyd@kernel.org, lars.povlsen@microchip.com, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-clk@vger.kernel.org, luka.perkov@sartura.hr
+Subject: Re: [PATCH v3 01/15] include: dt-bindings: add LAN969x clock bindings
+Message-ID: <20251227-splendid-striped-starfish-ece074@quoll>
+References: <20251223201921.1332786-1-robert.marko@sartura.hr>
+ <20251223201921.1332786-2-robert.marko@sartura.hr>
+ <20251224-berserk-mackerel-of-snow-4cae54@quoll>
+ <CA+HBbNGym6Q9b166n-P=h_JssOHm0yfyL73JZ+G9P81muK=g4A@mail.gmail.com>
+ <78bf252c-fd5e-4a36-b1a3-ca8ed26fde7a@kernel.org>
+ <CA+HBbNG+ZVD6grGDp32Ninx7H1AyEbGvP0nwc0zUv94tOV8hYg@mail.gmail.com>
+ <d210552f-c8bf-4084-9317-b743075d9946@kernel.org>
+ <2025122516245554f59e2e@mail.local>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <2025122516245554f59e2e@mail.local>
 
-The following changes since commit 9448598b22c50c8a5bb77a9103e2d49f134c9578:
+On Thu, Dec 25, 2025 at 05:24:55PM +0100, Alexandre Belloni wrote:
+> On 25/12/2025 09:47:34+0100, Krzysztof Kozlowski wrote:
+> > On 24/12/2025 15:01, Robert Marko wrote:
+> > > On Wed, Dec 24, 2025 at 2:05=E2=80=AFPM Krzysztof Kozlowski <krzk@ker=
+nel.org> wrote:
+> > >>
+> > >> On 24/12/2025 11:30, Robert Marko wrote:
+> > >>> On Wed, Dec 24, 2025 at 11:21=E2=80=AFAM Krzysztof Kozlowski <krzk@=
+kernel.org> wrote:
+> > >>>>
+> > >>>> On Tue, Dec 23, 2025 at 09:16:12PM +0100, Robert Marko wrote:
+> > >>>>> Add the required LAN969x clock bindings.
+> > >>>>
+> > >>>> I do not see clock bindings actually here. Where is the actual bin=
+ding?
+> > >>>> Commit msg does not help me at all to understand why you are doing=
+ this
+> > >>>> without actual required bindings.
+> > >>>
+> > >>> I guess it is a bit confusing, there is no schema here, these are t=
+he
+> > >>> clock indexes that
+> > >>> reside in dt-bindings and are used by the SoC DTSI.
+> > >>
+> > >> I understand as not used by drivers? Then no ABI and there is no poi=
+nt
+> > >> in putting them into bindings.
+> > >=20
+> > > It is not included by the driver directly, but it requires these exact
+> > > indexes to be passed
+> > > so its effectively ABI.
+> >=20
+> > How it requires the exact index? In what way? I do not see anything in
+> > the gck driver using/relying on these values. Nothing. Please point me
+> > to the line which directly uses these values.... or how many times I
+> > will need to write this is not ABI?
+> >=20
+>=20
+> The index here is the exact id that needs to be set in the PMC_PCR
+> register and so it is dictated by the hardware.
 
-  Linux 6.19-rc2 (2025-12-21 15:52:04 -0800)
+So not a binding between Linux and DTS.
 
-are available in the Git repository at:
+Best regards,
+Krzysztof
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.19-rc2
-
-for you to fetch changes up to b005d618c8547b7dfb14e83a1b410a6a04ac36c6:
-
-  spi: cadence-quadspi: Prevent indirect read (2025-12-23 15:18:22 +0000)
-
-----------------------------------------------------------------
-spi: Fixes for v6.19
-
-We've got more fixes here for the Cadence QSPI controller, this time
-fixing some issues that come up when working with slower flashes on some
-platforms plus a general race condition.
-
-We also add support for the Allwinner A523, this is just some new
-compatibles.
-
-----------------------------------------------------------------
-Chen-Yu Tsai (2):
-      spi: dt-bindings: sun6i: Add compatibles for A523's SPI controllers
-      spi: sun6i: Support A523's SPI controllers
-
-Mark Brown (1):
-      spi: cadence-quadspi: Prevent indirect read
-
-Mateusz Litwin (2):
-      spi: cadence-quadspi: Prevent lost complete() call during indirect read
-      spi: cadence-quadspi: Improve CQSPI_SLOW_SRAM quirk if flash is slow
-
- .../bindings/spi/allwinner,sun6i-a31-spi.yaml      |  4 ++++
- drivers/spi/spi-cadence-quadspi.c                  | 23 +++++++++++-----------
- drivers/spi/spi-sun6i.c                            | 11 +++++++----
- 3 files changed, 22 insertions(+), 16 deletions(-)
 
