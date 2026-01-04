@@ -1,156 +1,135 @@
-Return-Path: <linux-spi+bounces-12179-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12180-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAABBCEEDEE
-	for <lists+linux-spi@lfdr.de>; Fri, 02 Jan 2026 16:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4CF1CF13A1
+	for <lists+linux-spi@lfdr.de>; Sun, 04 Jan 2026 19:56:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9B326302049B
-	for <lists+linux-spi@lfdr.de>; Fri,  2 Jan 2026 15:27:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 43D5A300C6ED
+	for <lists+linux-spi@lfdr.de>; Sun,  4 Jan 2026 18:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02B922701CF;
-	Fri,  2 Jan 2026 15:27:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB767313E18;
+	Sun,  4 Jan 2026 18:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VlFGiiQg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IC7pSnzE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8393D26D4EF;
-	Fri,  2 Jan 2026 15:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBCE23AB90;
+	Sun,  4 Jan 2026 18:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767367671; cv=none; b=D94xRkL44mV0q5Tnx+3KYcl//VTztDzUxt9OIqtj0N1qyf9RqIywf6/epZJKWAEqzKUW/Xr+bVtycPWtQQGqRsr6qJvlFWRaxfwSDG+qPDuxcTMJwOKnxZH71ROwHM6GXJaPT41i0YpwSYvA5YaYob0olJMVKzqM9ZcKqHSggd4=
+	t=1767552955; cv=none; b=GuFsJaMsGb0giLUpW9LWxb/MAH0a1E8vj2DUUwVsaEQ04+e92REqndyHMr8VRet1cn3enEB3j9g/OALU6p4xafkzZyQNYMWh9+2agMdBvFZoU2vfIaPIurKv36yQOZc9AWHLRd8SicGqxMMhsTMN/N5TvmW5bBdaLtzM9Krzmug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767367671; c=relaxed/simple;
-	bh=SS2yV2DafXZ82Hx7kPgx/KxsyZ2YqKWv5FrorUnyBug=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jvrjyuTF53b3cMHqRFZ0Aqygnh8DyaU5FKk/NUSGM19eos3nEiKrNXl2Xz2pkvIy71GhGHwHj1Ofc2E/2fXxXpY1uIZsCW/HhlA+FgPSfj9HBz7W+nR+9uZCAnlYSap7ChMRZFZeQ66EolJukxtcLyfyow9yT+Gf2WOHQkBNT7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VlFGiiQg; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 0DC53C1C3B6;
-	Fri,  2 Jan 2026 15:27:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C6D1E606C7;
-	Fri,  2 Jan 2026 15:27:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id F036B113B0726;
-	Fri,  2 Jan 2026 16:27:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1767367659; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=XPS1mjvtZ+X94jm0JM9hHsjy2dgTByBQDp6LZfgUsSQ=;
-	b=VlFGiiQgyp4A1jr1xVk3EEGB85uX0RicBd+tpt6aBlXBJJU5VZFGs6HfjTaleC9IT9dWb7
-	jX6NkeMB0LJLHzQIrrQS4yM/1qqtyr/87Df1aMhUdLNwOZQkkcF2jM5DpztcXTVufyhI+5
-	2Tej944Nisw1cu2YXgteKsF2Q2UVlw5UHguPe8eFMuK5sPihb0Wm956X0UgjYfX3Pb33iP
-	sjtJ793m1Ixv9v8AeNS0VbMTUo9LGpXn2u67apY/pOeHcOD8CYKNTXq5sApIopOPQOBmuH
-	0C/zIB3QNzw2rWSJJWf4923tCBNJf6D0IXuXmSuTTGxCMo1Kdf/co5qh64vJHQ==
-From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
-To: Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
- Linus Walleij <linusw@kernel.org>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 11/13] MIPS: Add Mobileye EyeQ6Lplus evaluation board dts
-Date: Fri, 02 Jan 2026 16:27:34 +0100
-Message-ID: <2775216.vuYhMxLoTh@benoit.monin>
-In-Reply-To:
- <CAD++jL=7eU+jSHn0t2KKzHjipXYKoQreOdaHH8OcyriPmwHJQw@mail.gmail.com>
-References:
- <20251217-eyeq6lplus-v1-0-e9cdbd3af4c2@bootlin.com>
- <fe9e594f-9718-48b5-8208-fb567a54cae9@bootlin.com>
- <CAD++jL=7eU+jSHn0t2KKzHjipXYKoQreOdaHH8OcyriPmwHJQw@mail.gmail.com>
+	s=arc-20240116; t=1767552955; c=relaxed/simple;
+	bh=FsmYT4J2wneLygt9k8P00NIpU5dia1i3KeDHzRjOSyc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=lgfvFDzKAZwDcGA6St5eX6bKOdP+MVwaHH4l/sOU1c4j+lYovfr10IAm2fBzlfSJXDGj4skFvmbO4ms/jifC/r8K2IUywDv9rYz89ombyIprPL4YUOeHm6TQClcHYvriVUY//tBoqPy8FCTcXiKFi935b24K72bUvr5NPGslHYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IC7pSnzE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F5FC4CEF7;
+	Sun,  4 Jan 2026 18:55:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767552955;
+	bh=FsmYT4J2wneLygt9k8P00NIpU5dia1i3KeDHzRjOSyc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=IC7pSnzEclHGwg200X/YkdBBynq7odRScUs9ppZoZpZ5+vCC75MulNZG9xoNbQ7ea
+	 YHl+gfz24aU8DAk/01qqCzHWqgE5huqcVehQ7bOvjuf1C9PfOOiVV+8sKjo5PD0Ux8
+	 gufnEXHEZAj84Zw7OxxJ8epEP1/fFxR6HWqDntc0r/AZVBg5anq5l1wosBra4diGjh
+	 HemjiMkiYw9l4FXiTGEZzICBstLP/oFQ2Kp80I2pGwGdvs9cEXvi/gXm+jLpkn5ydQ
+	 PaFF0rRXFM7FglqmFWK1tATHw28PJZH5oZFT/U/eEwxFbtqt5UsOaoH8qU0JuS60fs
+	 dMLakUjvihl3Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3BC38380AA4F;
+	Sun,  4 Jan 2026 18:52:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v4 00/15] Add support for Microchip LAN969x
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176755275401.146974.3696343941489230641.git-patchwork-notify@kernel.org>
+Date: Sun, 04 Jan 2026 18:52:34 +0000
+References: <20251229184004.571837-1-robert.marko@sartura.hr>
+In-Reply-To: <20251229184004.571837-1-robert.marko@sartura.hr>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au, davem@davemloft.net,
+ vkoul@kernel.org, andi.shyti@kernel.org, lee@kernel.org,
+ andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, linusw@kernel.org, Steen.Hegelund@microchip.com,
+ daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+ olivia@selenic.com, radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, broonie@kernel.org,
+ lars.povlsen@microchip.com, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+ linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
+ linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+ luka.perkov@sartura.hr
 
-Hi Linus,
+Hello:
 
-On Thursday, 1 January 2026 at 23:42:36 CET, Linus Walleij wrote:
-> On Fri, Dec 19, 2025 at 4:57=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin@b=
-ootlin.com> wrote:
->=20
-> > In my particular case of a microcontroller acting as an SPI "relay" on =
-the
-> > evaluation board, what would be the best way to describe it? It connects
-> > the two SPI controllers of the SoC, one is a host and one is a target, =
-so
-> > it behave as an SPI target on one side and as an SPI host on the other.
-> >
-> > The trivial devices bindings seems to be dedicated to devices, thus not=
- for
-> > SPI hosts. Do I need a dedicated binding or did I miss something I could
-> > use for a trivial spidev slave?
->=20
-> That needs to be detailed and discussed with the SPI maintainer on the SPI
-> devel list. (Added.)
->=20
-> Can you illustrate with a picture or so what is going on here?
->=20
-> Yours,
-> Linus Walleij
->=20
-Here is what it looks like on the evaluation board of the EyeQ6Lplus:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-    +------------------------+          +------------------------+
-    | EyeQ6Lplus SoC         |          | Evaluation board MCU   |
-    |                        |          |                        |
-    |           +------------+          +------------+           |
-    |           | SPI host   |          | SPI target |           |
-    |           |            |          |            |           |
-    |           |        CLK >----------> CLK        |           |
-    |           |        SDO >----------> SDI        |           |
-    |           |        SDI <----------< SDO        |=C2=B7=C2=B7=C2=B7=C2=
-=B7=C2=B7      |
-    |           |        CS0 >----------> CS         |    =C2=B7      |
-    |           +------------+          +------------+    =C2=B7      |
-    |                        |          |                 =C2=B7 (1)  |
-    |           +------------+          +------------+    =C2=B7      |
-    |           | SPI target |          | SPI host   |    =C2=B7      |
-    |           |            |          |            |<=C2=B7=C2=B7=C2=B7=
-=C2=B7      |
-    |           |        CLK <----------< CLK        |           |
-    |           |        SDI <----------< SDO        |           |
-    |           |        SDO >----------> SDI        |           |
-    |           |        CS  <----------< CS0        |           |
-    |           +------------+          +------------+           |
-    |                        |          |                        |
-    +------------------------+          +------------------------+
+On Mon, 29 Dec 2025 19:37:41 +0100 you wrote:
+> This series adds support for the Microchip LAN969x switch SoC family.
+> 
+> Series is a bit long since after discussions in previous versions, it was
+> recommended[1][2] to add SoC specific compatibles for device nodes so it
+> includes the required bindings updates.
+> 
+> [1] https://lore.kernel.org/all/20251203-splendor-cubbyhole-eda2d6982b46@spud/
+> [2] https://lore.kernel.org/all/173412c8-c2fb-4c38-8de7-5b1c2eebdbf9@microchip.com/
+> [3] https://lore.kernel.org/all/20251203-duly-leotard-86b83bd840c6@spud/
+> [4] https://lore.kernel.org/all/756ead5d-8c9b-480d-8ae5-71667575ab7c@kernel.org/
+> 
+> [...]
 
-(1): The MCU, when the chip select is asserted on its SPI target, starts
-     a transaction on its SPI host side. It then copies data received by
-     the target side to the host side.
+Here is the summary with links:
+  - [v4,01/15] dt-bindings: usb: Add Microchip LAN969x support
+    (no matching commit)
+  - [v4,02/15] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,lan9691-flexcom
+    (no matching commit)
+  - [v4,03/15] dt-bindings: serial: atmel,at91-usart: add microchip,lan9691-usart
+    (no matching commit)
+  - [v4,04/15] dt-bindings: spi: at91: add microchip,lan9691-spi
+    (no matching commit)
+  - [v4,05/15] dt-bindings: i2c: atmel,at91sam: add microchip,lan9691-i2c
+    (no matching commit)
+  - [v4,06/15] dt-bindings: rng: atmel,at91-trng: add microchip,lan9691-trng
+    (no matching commit)
+  - [v4,07/15] dt-bindings: crypto: atmel,at91sam9g46-aes: add microchip,lan9691-aes
+    (no matching commit)
+  - [v4,08/15] dt-bindings: crypto: atmel,at91sam9g46-sha: add microchip,lan9691-sha
+    (no matching commit)
+  - [v4,09/15] dt-bindings: dma: atmel: add microchip,lan9691-dma
+    (no matching commit)
+  - [v4,10/15] dt-bindings: net: mscc-miim: add microchip,lan9691-miim
+    https://git.kernel.org/netdev/net-next/c/c303e8b86d9d
+  - [v4,11/15] dt-bindings: pinctrl: pinctrl-microchip-sgpio: add LAN969x
+    (no matching commit)
+  - [v4,12/15] arm64: dts: microchip: add LAN969x clock header file
+    (no matching commit)
+  - [v4,13/15] arm64: dts: microchip: add LAN969x support
+    (no matching commit)
+  - [v4,14/15] dt-bindings: arm: AT91: document EV23X71A board
+    (no matching commit)
+  - [v4,15/15] arm64: dts: microchip: add EV23X71A board
+    (no matching commit)
 
-With the spidev entries in the device tree, it is used to test that SPI
-of the SoC is working with `spidev_test`. So the MCU is part of the test
-harness found on the evaluation board.
-
-If the SPI signals of the SoC had been routed to a header, we could do the
-same test with jumper wires, directly connecting the host and the target.
-
-Best regards,
-=2D-=20
-Beno=C3=AEt Monin, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
 
