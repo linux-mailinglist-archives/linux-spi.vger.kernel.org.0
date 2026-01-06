@@ -1,113 +1,82 @@
-Return-Path: <linux-spi+bounces-12195-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12197-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 670DCCF99F3
-	for <lists+linux-spi@lfdr.de>; Tue, 06 Jan 2026 18:21:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BB90CFA565
+	for <lists+linux-spi@lfdr.de>; Tue, 06 Jan 2026 19:53:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F00773131C36
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jan 2026 17:13:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 312443063DAB
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jan 2026 18:52:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F86834251C;
-	Tue,  6 Jan 2026 17:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49DFA2FCC06;
+	Tue,  6 Jan 2026 18:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nm64cbVc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85447342177;
-	Tue,  6 Jan 2026 17:05:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203682F8BDF
+	for <linux-spi@vger.kernel.org>; Tue,  6 Jan 2026 18:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767719131; cv=none; b=N+vJOTWK3t2QAJrU/mSqKo7B72MC1Z4RNcEi9Q6cpFki0bYufPUALNoc3dsh+CcEtDQeCtQZ6KUbrD3Q+HWyMtgCiTBcDZscBQyg28nH8pun2A8PmPuhRUHYRnE8UCIphDybyJ+Ft+vLji2eh8Ah86OrXpBCZ6qmNzxuZ3E89qw=
+	t=1767724409; cv=none; b=RJZPBiQ2jCOXlzc3tfIHFeUXdV6K68nfPyRl6kHexIcfBYePatwTPVlCaOLR8e7mVMxQxgg9M7BEsJ/VR6B+4khdZW56iLCvzcrodyY4m1DYaYQXXVw9NKfs4hclskEcWxO/SFMx3Dv5mJqOg0si1dIdKiw3F/b1vqPuGyFQ6Yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767719131; c=relaxed/simple;
-	bh=FvvC6mlJwCFvpAh44L0gF6zkGXFMPkMCkLiTS9mJdKE=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DMxmckPltMdGSe+Ee9QuOJZk2jqkSpr12DFE5bsFJ+/iUUASJHmu25MK0SyEwYrKd+XAPNejH+0peaf+bFTZxzD7Cha0Lw6rdVTv4CmulfJcZZmcrOFWGC3z96Pxwr1iH/AVUSCWP7GPckUDVhwq4uaO9GNDdr5CobO4BL9+IVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.83])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dlyGW6FwSzJ46YJ;
-	Wed,  7 Jan 2026 01:05:23 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id B96AC40086;
-	Wed,  7 Jan 2026 01:05:25 +0800 (CST)
-Received: from localhost (10.195.245.156) by dubpeml100005.china.huawei.com
- (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 6 Jan
- 2026 17:05:25 +0000
-Date: Tue, 6 Jan 2026 17:05:21 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: Alain Volmat <alain.volmat@foss.st.com>
-CC: Mark Brown <broonie@kernel.org>, Maxime Coquelin
-	<mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	<linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-stm32@st-md-mailman.stormreply.com>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 1/4] drivers: spi: st: remove __maybe_unused for
- suspend/resume
-Message-ID: <20260106170521.00001668@huawei.com>
-In-Reply-To: <20260106-spi_st_maybe_unused_removal-v1-1-8f5ca7136e96@foss.st.com>
-References: <20260106-spi_st_maybe_unused_removal-v1-0-8f5ca7136e96@foss.st.com>
-	<20260106-spi_st_maybe_unused_removal-v1-1-8f5ca7136e96@foss.st.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1767724409; c=relaxed/simple;
+	bh=So0TTgZjZkCpE1mymMTXXYxcGGuGGoM2wsWXxjXUy24=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=FC+uCaS+7vuSMavsfZAmITvjsbKNawxCF11GG46FXO3LxxiPMVMhk5DQP4lFBTUy0nCfxuSrJWFIO2H16L95Gr70bhY1as4zAaGk81WEnHhrb8y/yDpibFmxoVxtS7Kbomh334f0k6c875EkHOh6LfAZj+JVUgkqueuAhP2bgog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nm64cbVc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF002C116C6;
+	Tue,  6 Jan 2026 18:33:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767724408;
+	bh=So0TTgZjZkCpE1mymMTXXYxcGGuGGoM2wsWXxjXUy24=;
+	h=Subject:From:Date:To:From;
+	b=nm64cbVcFfys2d9ueD8+t13oBwP7H7SbqYzo4Yc4317qmrVJe3HFYX/wRZYeWajvo
+	 o2tvDf3eRwvZW2pFQ3T+58kMhQs+4kOdyHA8jUTt+6aBjZnb2FgZ8pgr2FdMy5h57a
+	 JbHiVSRl0jxEwg3Ku12yEhTcCTcR/0ZjQ/VLHhM+5NW1x9dO75/nD1oHIutqNObJTK
+	 VoTGyzcrHDViBnHH+mWThzCoKaDEkaPnjhHr/KbZWaka6yFBOPPlqOZAsGya1hm1aI
+	 gzq1urHfPGWr2QNPSvZRrmYiNx4rHhVvmrbHO9ZRjVN0RGcCTA8zuWF2DdSIoDSDHD
+	 IzHSKaFFy8iZg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CEDD380CEEC;
+	Tue,  6 Jan 2026 18:30:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
- dubpeml100005.china.huawei.com (7.214.146.113)
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork summary for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176772420600.2094857.8436386779083459985.git-patchwork-summary@kernel.org>
+Date: Tue, 06 Jan 2026 18:30:06 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Tue, 6 Jan 2026 13:14:17 +0100
-Alain Volmat <alain.volmat@foss.st.com> wrote:
+Hello:
 
-> Remove useless __maybe_unused statements for suspend and resume
-> functions since this is now used via pm_ptr.
-Patch is fine, but reasoning not quite right. pm_ptr() allows
-the dropping of the structure without needing a __maybe_unused
-on that, but these are passed to the SYSTEM_SLEEP_PM_OPS()
-macro and that is using pm_sleep_ptr().
+The following patches were marked "accepted", because they were applied to
+broonie/spi.git (for-next):
 
-So tiny description change needed to reflect that. Probably
-mention the pm_sleep_ptr() is as part of the macro as that
-bit is not totally obvious.
+Series: drivers: spi: st: use pm_ptr and remove __maybe_unused
+  Submitter: Alain Volmat <alain.volmat@foss.st.com>
+  Committer: Mark Brown <broonie@kernel.org>
+  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1038948
+  Lore link: https://lore.kernel.org/r/20260106-spi_st_maybe_unused_removal-v1-0-8f5ca7136e96@foss.st.com
+    Patches: [1/4] drivers: spi: st: remove __maybe_unused for suspend/resume
+             [2/4] drivers: spi: stm32-ospi: avoid __maybe_unused and use pm_ptr
+             [3/4] drivers: spi: stm32-qspi: avoid __maybe_unused and use pm_ptr
+             [4/4] drivers: spi: stm32: avoid __maybe_unused and use pm_ptr
 
-Jonathan
 
+Total patches: 4
 
-> 
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
-> ---
->  drivers/spi/spi-st-ssc4.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-st-ssc4.c b/drivers/spi/spi-st-ssc4.c
-> index c07c61dc4938..b173ef70d77e 100644
-> --- a/drivers/spi/spi-st-ssc4.c
-> +++ b/drivers/spi/spi-st-ssc4.c
-> @@ -403,7 +403,7 @@ static int spi_st_runtime_resume(struct device *dev)
->  	return ret;
->  }
->  
-> -static int __maybe_unused spi_st_suspend(struct device *dev)
-> +static int spi_st_suspend(struct device *dev)
->  {
->  	struct spi_controller *host = dev_get_drvdata(dev);
->  	int ret;
-> @@ -415,7 +415,7 @@ static int __maybe_unused spi_st_suspend(struct device *dev)
->  	return pm_runtime_force_suspend(dev);
->  }
->  
-> -static int __maybe_unused spi_st_resume(struct device *dev)
-> +static int spi_st_resume(struct device *dev)
->  {
->  	struct spi_controller *host = dev_get_drvdata(dev);
->  	int ret;
-> 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
