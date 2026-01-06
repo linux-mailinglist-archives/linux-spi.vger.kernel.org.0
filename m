@@ -1,90 +1,113 @@
-Return-Path: <linux-spi+bounces-12194-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12195-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 449B2CF962D
-	for <lists+linux-spi@lfdr.de>; Tue, 06 Jan 2026 17:37:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 670DCCF99F3
+	for <lists+linux-spi@lfdr.de>; Tue, 06 Jan 2026 18:21:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B2995300F6A5
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jan 2026 16:37:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F00773131C36
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jan 2026 17:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD85321F39;
-	Tue,  6 Jan 2026 16:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u6ZkKAOS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F86834251C;
+	Tue,  6 Jan 2026 17:05:31 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB130274B42;
-	Tue,  6 Jan 2026 16:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85447342177;
+	Tue,  6 Jan 2026 17:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767717437; cv=none; b=ozO4iKTMoRcpMcJlXoZCVmj2EqX0Js5vyipvgLVB0YrSoQ5GVSkFuf8dayqfPLk+2cqKvJBMa/zMvtISp1+uA8kUrvYudYXiU0bnlo9FZdB/ah2W6pFg1oPoU58ZfgS8egmCm8OT9kynt4BJoaZXWv2kC2BFHMZSR+f11jRA1HI=
+	t=1767719131; cv=none; b=N+vJOTWK3t2QAJrU/mSqKo7B72MC1Z4RNcEi9Q6cpFki0bYufPUALNoc3dsh+CcEtDQeCtQZ6KUbrD3Q+HWyMtgCiTBcDZscBQyg28nH8pun2A8PmPuhRUHYRnE8UCIphDybyJ+Ft+vLji2eh8Ah86OrXpBCZ6qmNzxuZ3E89qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767717437; c=relaxed/simple;
-	bh=u4qncAIY/cpRgrdi2t4oOvG1OSeSwJkdTHwCR7W900k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IYzgHT71gynYQ789iov5OAR8vwQjK9cpCU3hsuSse/SDxSHcHIM7NalowXBt6OGuPWEYG2MCV/l7++gJry0OT5xD96l4Npj3yxfejx2TRaSmYsb8WCOirVAcaEVedkc3V9IYgl4a9tg76iyyZt2w+sPS+6quYF5E1Zb0kXrN8TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u6ZkKAOS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 401AAC116C6;
-	Tue,  6 Jan 2026 16:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767717437;
-	bh=u4qncAIY/cpRgrdi2t4oOvG1OSeSwJkdTHwCR7W900k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u6ZkKAOShyuovXO/a7H+sCFepZbp9x8KnS4i6Vh+IxmVVfenMtCtJSR/kNLpDuGMN
-	 gzVC/N4e0gVjCcVX9Afy0Zsowqof7aDW//XwoNWAfW4SJwDmwVnqBnTR7t3UM2ZsBI
-	 0nfud0Ubebv1YvPyVBrMfxVneb3b8KxjvVkHMsqEn+Ia04sGEr7kuTQ1mizC6aj/QS
-	 PYt97a+3cmk1XYl3m3G8c6qiCVIkcvnvbDkYmMQxF2EOPPerLzqgFTz3VrgaAgMpRj
-	 EDRtiohXJhDrfOrNNp3BJynoz3d86MFn5NtKoMM90y1iz9eLUz/Hlbo7TJWhqJYwyX
-	 i0Cc/gzGtlumA==
-Date: Tue, 6 Jan 2026 10:37:16 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	devicetree@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-iio@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Conor Dooley <conor+dt@kernel.org>
-Subject: Re: [PATCH v4 8/9] dt-bindings: iio: adc: adi,ad7380: add
- spi-rx-bus-width property
-Message-ID: <176771743572.2227331.2597115591316587546.robh@kernel.org>
-References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
- <20251219-spi-add-multi-bus-support-v4-8-145dc5204cd8@baylibre.com>
+	s=arc-20240116; t=1767719131; c=relaxed/simple;
+	bh=FvvC6mlJwCFvpAh44L0gF6zkGXFMPkMCkLiTS9mJdKE=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DMxmckPltMdGSe+Ee9QuOJZk2jqkSpr12DFE5bsFJ+/iUUASJHmu25MK0SyEwYrKd+XAPNejH+0peaf+bFTZxzD7Cha0Lw6rdVTv4CmulfJcZZmcrOFWGC3z96Pxwr1iH/AVUSCWP7GPckUDVhwq4uaO9GNDdr5CobO4BL9+IVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.83])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dlyGW6FwSzJ46YJ;
+	Wed,  7 Jan 2026 01:05:23 +0800 (CST)
+Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
+	by mail.maildlp.com (Postfix) with ESMTPS id B96AC40086;
+	Wed,  7 Jan 2026 01:05:25 +0800 (CST)
+Received: from localhost (10.195.245.156) by dubpeml100005.china.huawei.com
+ (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 6 Jan
+ 2026 17:05:25 +0000
+Date: Tue, 6 Jan 2026 17:05:21 +0000
+From: Jonathan Cameron <jonathan.cameron@huawei.com>
+To: Alain Volmat <alain.volmat@foss.st.com>
+CC: Mark Brown <broonie@kernel.org>, Maxime Coquelin
+	<mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	<linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-stm32@st-md-mailman.stormreply.com>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 1/4] drivers: spi: st: remove __maybe_unused for
+ suspend/resume
+Message-ID: <20260106170521.00001668@huawei.com>
+In-Reply-To: <20260106-spi_st_maybe_unused_removal-v1-1-8f5ca7136e96@foss.st.com>
+References: <20260106-spi_st_maybe_unused_removal-v1-0-8f5ca7136e96@foss.st.com>
+	<20260106-spi_st_maybe_unused_removal-v1-1-8f5ca7136e96@foss.st.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219-spi-add-multi-bus-support-v4-8-145dc5204cd8@baylibre.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
+ dubpeml100005.china.huawei.com (7.214.146.113)
+
+On Tue, 6 Jan 2026 13:14:17 +0100
+Alain Volmat <alain.volmat@foss.st.com> wrote:
+
+> Remove useless __maybe_unused statements for suspend and resume
+> functions since this is now used via pm_ptr.
+Patch is fine, but reasoning not quite right. pm_ptr() allows
+the dropping of the structure without needing a __maybe_unused
+on that, but these are passed to the SYSTEM_SLEEP_PM_OPS()
+macro and that is using pm_sleep_ptr().
+
+So tiny description change needed to reflect that. Probably
+mention the pm_sleep_ptr() is as part of the macro as that
+bit is not totally obvious.
+
+Jonathan
 
 
-On Fri, 19 Dec 2025 15:32:16 -0600, David Lechner wrote:
-> Add spi-rx-bus-width property to describe how many SDO lines are wired
-> up on the ADC. These chips are simultaneous sampling ADCs and have one
-> SDO line per channel, either 2 or 4 total depending on the part number.
 > 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 > ---
-> v4 changes:
-> * Change to use spi-rx-bus-width property instead of spi-lanes.
+>  drivers/spi/spi-st-ssc4.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> v3 changes:
-> * Renamed "buses" to "lanes" to reflect devicetree property name change.
-> ---
->  .../devicetree/bindings/iio/adc/adi,ad7380.yaml    | 23 ++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
+> diff --git a/drivers/spi/spi-st-ssc4.c b/drivers/spi/spi-st-ssc4.c
+> index c07c61dc4938..b173ef70d77e 100644
+> --- a/drivers/spi/spi-st-ssc4.c
+> +++ b/drivers/spi/spi-st-ssc4.c
+> @@ -403,7 +403,7 @@ static int spi_st_runtime_resume(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int __maybe_unused spi_st_suspend(struct device *dev)
+> +static int spi_st_suspend(struct device *dev)
+>  {
+>  	struct spi_controller *host = dev_get_drvdata(dev);
+>  	int ret;
+> @@ -415,7 +415,7 @@ static int __maybe_unused spi_st_suspend(struct device *dev)
+>  	return pm_runtime_force_suspend(dev);
+>  }
+>  
+> -static int __maybe_unused spi_st_resume(struct device *dev)
+> +static int spi_st_resume(struct device *dev)
+>  {
+>  	struct spi_controller *host = dev_get_drvdata(dev);
+>  	int ret;
 > 
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 
