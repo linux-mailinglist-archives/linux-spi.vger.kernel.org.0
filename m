@@ -1,57 +1,57 @@
-Return-Path: <linux-spi+bounces-12196-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12198-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BED0CFA865
-	for <lists+linux-spi@lfdr.de>; Tue, 06 Jan 2026 20:14:56 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49F5CCFAC23
+	for <lists+linux-spi@lfdr.de>; Tue, 06 Jan 2026 20:45:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA12530900C6
-	for <lists+linux-spi@lfdr.de>; Tue,  6 Jan 2026 18:25:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7A72D30186A2
+	for <lists+linux-spi@lfdr.de>; Tue,  6 Jan 2026 19:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6AD0362142;
-	Tue,  6 Jan 2026 18:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2082D641C;
+	Tue,  6 Jan 2026 19:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rq/W70gk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1oloWF2"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED5933A70E;
-	Tue,  6 Jan 2026 18:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A030F2C11CA;
+	Tue,  6 Jan 2026 19:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767723947; cv=none; b=SpILJHhq/H5F7TiNy1xjns5fmx1i5icolg71uFHiWCOc/TjwHz0ZN68ZOPVJcV/XktOfYWX9Oc6wjjOyxvzn+TtP9fRkqkB5LM9Hp1bdhYL9e0sUhjpS/xcnxFiEhzUnYso1W0FGd23My0N7aN9AOJYnsbv6upUemgM88FZpnNQ=
+	t=1767728553; cv=none; b=Nfaou/17bO4B5Iapk+uOY2pMUWRhCbS+Iv2XmNhsmBELthxscRC2S786c8F8RARclTw6yvrTaLaOTanAfbxtkt3BFK1vpZSXfJte576+BVegP9F72APqbVi3ldQVOWEW2YrzWVQ1Y8XjePzBZzby8JNm+rcCpN2gUjvvMqGbDzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767723947; c=relaxed/simple;
-	bh=slrVtXqGp2rp8qqJMjz0DpynF+Z6Or1Xuns3k46Q1B8=;
+	s=arc-20240116; t=1767728553; c=relaxed/simple;
+	bh=s+1JedlIyWeQqbDvglfgq6oP3kT0MW4kLflc5hfg6E0=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=bvWrTEVqQz3lfbaAQKTeW0Wb7z6sd6Zk4bCjVO+xv2DpQZVwlkSpkWHaFWe0MCeJ5ududleolRGt+ozLzduOpf5A0KUlGEZaml3oC6ihZBnVMXKzAUoEiF7On5nMGHTmiwWsLYiqDrtmVjfnF+mUQgd0h6x+7F+XA+Wxdt2RODw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rq/W70gk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D36CEC116C6;
-	Tue,  6 Jan 2026 18:25:45 +0000 (UTC)
+	 MIME-Version:Content-Type; b=qWNBKPGDWKhzUJeQyShL2J8n8B2iwWxeh/OcTAMv8uqiISH4ypClqUGctS/cllazlq3/weQXM8YAyn8FqcOoJ3nZ5dg49HPoe/gp0xsw8SC3+eh/HZZfhnz7lKfG6rcIcNpR7v5zmGHzejKkl78y4MQsJPQK2YNHHvXvaoSPmZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1oloWF2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0E92C19422;
+	Tue,  6 Jan 2026 19:42:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767723947;
-	bh=slrVtXqGp2rp8qqJMjz0DpynF+Z6Or1Xuns3k46Q1B8=;
+	s=k20201202; t=1767728553;
+	bh=s+1JedlIyWeQqbDvglfgq6oP3kT0MW4kLflc5hfg6E0=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Rq/W70gkO2HuPi2yJnnK1gFp7NtCie2ZrAlZQ37kEFnObCPHO69ZHUXn7r9VfI+5x
-	 9f0UdgZCrPIYV0/or6CkdnLp0AHqGatHy6Jcjt1z1okYaNQsg5vQUX8iJHfNEK4rje
-	 An7i1I3Z0Gay4gmzHrrxviHMf/XB70zmVfQw7Dgodz2WL4jmCLB+ZMEuaM9N3p2scy
-	 y3/F7Ne8pjcv1A4YF2NM30mC4RNyDbMPeTpbyXRHDD6WQnz1oeAGV17tmge2XC/gmw
-	 VB4yZE/VP/Qap7eqiLDx//H1ajk+74Z7ERkTORw93N8iO3a7pC5F9pGkXpabZfPhZ1
-	 nHQ2mY3eYNFgw==
+	b=B1oloWF2QRAYBT24LurkPclFX8FBgMjCnDDwa6f/qv+XyNFyULTFn8d5TisBXnXDR
+	 HDj5Nds9SgH4a6LWjtt+B+5rR4jpqActkBtTLLEZwvAQHBvMZMO7jEDlDdSRzJhFyu
+	 v7g69obHF/EpvjxP/EUhkJYSgK1aBHQvbxw7R+FaW1yvBxLACFPxO0+lEMzROF4V51
+	 TBdXG+ag6L1uUsLs1oFtYiKXky5wwIvU/lWg+9cSksZmPb2p0c2j0plNmiAubiSTWN
+	 yq3pPlZddZ2uh4spsHBce1u2VV2Kz4C7xVShR3ygXSxfgMPyAKo15mS5gWuqcFw4fi
+	 ST/ZY/qOwmLaw==
 From: Mark Brown <broonie@kernel.org>
-To: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Alain Volmat <alain.volmat@foss.st.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20260106-spi_st_maybe_unused_removal-v1-0-8f5ca7136e96@foss.st.com>
-References: <20260106-spi_st_maybe_unused_removal-v1-0-8f5ca7136e96@foss.st.com>
-Subject: Re: [PATCH 0/4] drivers: spi: st: use pm_ptr and remove
- __maybe_unused
-Message-Id: <176772394559.309686.18171199857083341971.b4-ty@kernel.org>
-Date: Tue, 06 Jan 2026 18:25:45 +0000
+To: cezary.rojewski@intel.com, lgirdwood@gmail.com, robh@kernel.org, 
+ krzk+dt@kernel.org, conor+dt@kernel.org, 
+ Oder Chiou <oder_chiou@realtek.com>
+Cc: linux-spi@vger.kernel.org, perex@perex.cz, linux-sound@vger.kernel.org, 
+ devicetree@vger.kernel.org, alsa-devel@alsa-project.org, flove@realtek.com, 
+ shumingf@realtek.com, jack.yu@realtek.com, derek.fang@realtek.com
+In-Reply-To: <cover.1767148150.git.oder_chiou@realtek.com>
+References: <cover.1767148150.git.oder_chiou@realtek.com>
+Subject: Re: [PATCH v11 0/4] ASoC: rt5575: Add the codec driver for the
+ ALC5575
+Message-Id: <176772855067.328192.13240221041944953554.b4-ty@kernel.org>
+Date: Tue, 06 Jan 2026 19:42:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,26 +62,38 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Tue, 06 Jan 2026 13:14:16 +0100, Alain Volmat wrote:
-> Update ST related SPI drivers in order to remove the __maybe_unused
-> statements on pm related functions thanks to the usage of pm_ptr.
+On Wed, 31 Dec 2025 10:35:01 +0800, Oder Chiou wrote:
+> This patch series adds support for the Realtek ALC5575 audio codec.
 > 
+> Changes in v11:
+> - Patch 1/4:
+>   - minor fixes
+> - Patch 2/4:
+>   - change of_find_spi_controller_by_node() gating to CONFIG_OF
+> - Patch 3/4:
+>   - nothing
+> - Patch 4/4:
+>   - achieve reverse-christmas-tree notation
+>   - remove formal version check
+>   - revise check whether the firmware boots from SPI or not
+>   - minor fixes
 > 
+> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
 Thanks!
 
-[1/4] drivers: spi: st: remove __maybe_unused for suspend/resume
-      commit: d4469e4ee5da0a93eabfcb89a8c6ecdf7cf1e9be
-[2/4] drivers: spi: stm32-ospi: avoid __maybe_unused and use pm_ptr
-      commit: 2a2d7187f5a7238582c2bbd4a6da7595c20e55a9
-[3/4] drivers: spi: stm32-qspi: avoid __maybe_unused and use pm_ptr
-      commit: 10a6d7507791a667fe1d327056ac3f72934cc7de
-[4/4] drivers: spi: stm32: avoid __maybe_unused and use pm_ptr
-      commit: 75d208bddcca55ec31481420fbb4d6c9703ba195
+[1/4] spi: export of_find_spi_controller_by_node()
+      commit: ee69f55eb183efb43da14cdad72910b1b1cc2932
+[2/4] spi: change of_find_spi_controller_by_node() gating to CONFIG_OF
+      commit: 037f8d896688bf3384eb6bf34e24e8fbc9f6e02d
+[3/4] ASoC: dt-bindings: realtek,rt5575: add support for ALC5575
+      commit: af4c0b951b18a8af73fa8541fabf1bf2484bba9b
+[4/4] ASoC: rt5575: Add the codec driver for the ALC5575
+      commit: c7ac7499ac5bb50ab3e00add121822c5c904bc91
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
