@@ -1,62 +1,65 @@
-Return-Path: <linux-spi+bounces-12200-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12201-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36AA0CFF5D9
-	for <lists+linux-spi@lfdr.de>; Wed, 07 Jan 2026 19:16:11 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B8B4CFF64C
+	for <lists+linux-spi@lfdr.de>; Wed, 07 Jan 2026 19:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8F8143008C49
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jan 2026 18:15:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5A62730239DD
+	for <lists+linux-spi@lfdr.de>; Wed,  7 Jan 2026 18:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449EF359F8E;
-	Wed,  7 Jan 2026 15:57:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98D53446B7;
+	Wed,  7 Jan 2026 18:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HgAKDX7H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cfK1G1cT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FF9BA3F;
-	Wed,  7 Jan 2026 15:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF8B318B86;
+	Wed,  7 Jan 2026 18:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767801446; cv=none; b=fl0NhgHir7EbLIe98o0LuaFeKc9f948B6UDH17wGUDi7rwZoMzAv2tSE61pLzyIPYegh64rU+7ucXBQ4+rZKHEweXQ0HGbUm1iMWc6vVRCCBXvUFsf2TOfeNEDr8sA+g0M+aCrosrN3NpVwI/yRVGMwIzXa8gWqKhoVD6c2m9iM=
+	t=1767809471; cv=none; b=Z+uvfrrfL8OeUZ/eCphl17TipAOrutMWaMkkqaSVnaj2W2xjCdsH4AhDPZPVIo1rbQ4Jm9G5tWQKMBGHRCRqkll3Mtx7olsdFdNMS0p1bj1u1FUZuVOaKwiYBsg1YNZ+LzSF5zG8JY0NRHP7fj4XXb6eIOyQonQGmLKGQft0efU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767801446; c=relaxed/simple;
-	bh=xWOFtg32OZw8Y8y9UrYrW6PJ2bzQbnugFJ29Z89+cnQ=;
+	s=arc-20240116; t=1767809471; c=relaxed/simple;
+	bh=yTNbHm4Elx5+p4958R6MqgcPSCwr1JI4nhgkqFvSTQk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZjxC7r/KSmPBcOZmXFuFpQYf1RND+RietPKtoCJP8m3UDBMBDYYMjyON60xfKxT0XT6qKRhFZEjC7nToYssYBLk0qsOZ9JhtKeZgweQFxeWZSWvKn8ABKlJPc3NDm8Ob6UwkegpIzgqYN8QtwGtuCKZPPwuan9Ut5FbDYtU4OdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HgAKDX7H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD0CC4CEF1;
-	Wed,  7 Jan 2026 15:57:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ullz0+xaSQQl8kfqBKBhxXehs3uf6htcOZz8vFBsxxa5WxjmyPmJS85AdNOUVbZ7kZqRFhDHxwPJZcghJAEncH9exxoMLQib4QPLARiIhCQumQ0YOQhkVueYobO+7rJLlol9xFmeYelBspkXTVElYp4U3IjtnVxsid4VOuwLOZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfK1G1cT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8804DC4CEF1;
+	Wed,  7 Jan 2026 18:11:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767801445;
-	bh=xWOFtg32OZw8Y8y9UrYrW6PJ2bzQbnugFJ29Z89+cnQ=;
+	s=k20201202; t=1767809471;
+	bh=yTNbHm4Elx5+p4958R6MqgcPSCwr1JI4nhgkqFvSTQk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HgAKDX7HaH5WXezhfMQ8mA48bStcgu6CsBZN0QDdU6QBpfQt2dJ/Mn8Ch7ZqpzYuN
-	 sG4Wa/LRWWD+cVeivB199Ig2x7dnNTdQzIflHQqr/eulvx5rUYAweEYEwK2+jSjGcZ
-	 UG/lWNnZTZ+r0Gg1ad2u/mX7bXajAmg4wZEuxF6vDLILa/+wZV0wft6NicZ3ZP4jiG
-	 pDqyEcXzr9C7Z96up6qgIIfEwjjqILtS4Z/LE/G1vt6t31uvAQcAs+XbTtZrs1UiQi
-	 JHco+PTQ9R9uauskHFoD1dRSKhwvF6c1QAg/FbyZ14sVUpz6wdRvaP1Y8T75Q2OFFg
-	 8bS7fRv27GQaw==
-Date: Wed, 7 Jan 2026 09:57:22 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-	linux-spi@vger.kernel.org,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-iio@vger.kernel.org,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Jonathan Cameron <jic23@kernel.org>, devicetree@vger.kernel.org,
-	Sean Anderson <sean.anderson@linux.dev>,
-	Michael Hennerich <michael.hennerich@analog.com>
-Subject: Re: [PATCH v4 2/9] spi: dt-bindings: add spi-{tx,rx}-lane-map
- properties
-Message-ID: <176780144202.1197510.11558178510570306104.robh@kernel.org>
-References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
- <20251219-spi-add-multi-bus-support-v4-2-145dc5204cd8@baylibre.com>
+	b=cfK1G1cTgD2fle+eiVWG8uWGL3DLjptNzOtIstqyjt6/KrCcdkcRIYkLMAFg5sqfU
+	 23DJAQ6Ihpdb0VBgZEj5n4w3P/+Tfctp8rOxcqAdwIfRgsibuGYiVVhEMNkpf5BavK
+	 hAE9zfUD/PvELOxL1BnKLd1mySP9UBmDoUgW70rAsQSmNsdrNvRd3AB9QCLwRqAK+j
+	 oxVc3cTy7pQnwCk8nZBquR6VX65USIoYM8/BhK/axE/pa5A6txZuUFQ/C+KsYl/Wdl
+	 MWyiwSl+/46epZ2ay12CbjJus5BTD4FfLSnKm9atA3rN+Tu5UGRZsB7JumYPu4T/PH
+	 iTN8bHn/qzmQA==
+Date: Wed, 7 Jan 2026 19:11:07 +0100
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Robert Marko <robert.marko@sartura.hr>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, lee@kernel.org, 
+	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	linusw@kernel.org, Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
+	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luka.perkov@sartura.hr, 
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v4 05/15] dt-bindings: i2c: atmel,at91sam: add
+ microchip,lan9691-i2c
+Message-ID: <aV6hp9_AbKm9IAP9@zenone.zhora.eu>
+References: <20251229184004.571837-1-robert.marko@sartura.hr>
+ <20251229184004.571837-6-robert.marko@sartura.hr>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -65,29 +68,45 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251219-spi-add-multi-bus-support-v4-2-145dc5204cd8@baylibre.com>
+In-Reply-To: <20251229184004.571837-6-robert.marko@sartura.hr>
 
+Hi Robert,
 
-On Fri, 19 Dec 2025 15:32:10 -0600, David Lechner wrote:
-> Add spi-tx-lane-map and spi-rx-lane-map properties to the SPI peripheral
-> device tree binding. These properties allow specifying the mapping of
-> peripheral data lanes to controller data lanes. This is needed e.g. when
-> some lanes are skipped on the controller side so that the controller
-> can correctly route data to/from the peripheral.
+On Mon, Dec 29, 2025 at 07:37:46PM +0100, Robert Marko wrote:
+> Document Microchip LAN969x I2C compatible.
 > 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
+> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Andi Shyti <andi.shyti@kernel.org>
+
+Just this patch merged to i2c/i2c-host.
+
+Thanks,
+Andi
+
 > ---
+> Changes in v4:
+> * Pick Acked-by from Andi
 > 
-> v4 changes:
-> - This replaces the data-lanes property from the previous revision. Now
->   there are separate properties for tx and rx lane maps. And instead of
->   being the primary property for determining the number of lanes, this
->   is only needed in special cases where the mapping is non-trivial.
-> ---
->  .../devicetree/bindings/spi/spi-peripheral-props.yaml      | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> Changes in v3:
+> * Pick Acked-by from Conor
 > 
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-
+>  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+> index e61cdb5b16ef..c83674c3183b 100644
+> --- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
+> @@ -26,6 +26,7 @@ properties:
+>                - microchip,sam9x60-i2c
+>        - items:
+>            - enum:
+> +              - microchip,lan9691-i2c
+>                - microchip,sama7d65-i2c
+>                - microchip,sama7g5-i2c
+>                - microchip,sam9x7-i2c
+> -- 
+> 2.52.0
+> 
 
