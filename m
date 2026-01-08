@@ -1,270 +1,193 @@
-Return-Path: <linux-spi+bounces-12219-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12220-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0F1CD04351
-	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 17:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74418D0447E
+	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 17:18:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0B52E3044597
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 15:59:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 426C8304D01D
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 16:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28E5E2DC336;
-	Thu,  8 Jan 2026 15:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7A5226D1E;
+	Thu,  8 Jan 2026 16:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="G3j41mTi"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="bsdKaEOv"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ot1-f67.google.com (mail-ot1-f67.google.com [209.85.210.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6BD2DB7AE
-	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 15:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1416423370F;
+	Thu,  8 Jan 2026 16:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767887853; cv=none; b=Wnufn/fUAT1UkWMsfzCx0r1a/alni7tJTeBhN9Bw662DA6nadbCA1ifo4TJzTavOgcOzcf7mmVvg4xaELiPUifgjtoKUkSlAvBb9jpmvYb92qF0AJ35JlMij4HGOxDfC4iLwFH94FjASE8ix2vVORq5QzkK5MXC8DsGb7zycqh8=
+	t=1767888792; cv=none; b=o3BuXtdh0LZixXhD6/ZTGGo2309aF23EUJRz5NblHC3h1I6Nsk5eQPkKMYhI9T2qMQdC6UeiTqMHPPrrfyquEp0q/Pdtjvz3PUKnXHiY6qqSkajMi8kcBPyOxybkQCZv3UA+r3mHIc026M+frzizngGBEqvieIeObd5KinNDkuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767887853; c=relaxed/simple;
-	bh=XcIRTAb5PFlqniPMsUHB2MwKn3jJ/O2F2bHm2pJVK/4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YCB0981+chTt2UcmyZ+MoViEdaroXeNGUk7GJXEOU0CTjUv49EPjp1ENGctlDplxfMjPWbuSjreOgf6eyYhRhDNY2RC5S97iswNd+lycAPzL50UJyLf3G1KKFLhTeLS3D6yLaJW6RY6kMqBBVNWh0zmqoQpwZvyEQTu4EqA3Jds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=G3j41mTi; arc=none smtp.client-ip=209.85.210.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ot1-f67.google.com with SMTP id 46e09a7af769-7c7545310b8so1821611a34.1
-        for <linux-spi@vger.kernel.org>; Thu, 08 Jan 2026 07:57:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1767887850; x=1768492650; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ChbNYybDAN+PlLSGQ3kv1WrtIpPyDTfLMW7/iZLxLus=;
-        b=G3j41mTiH9RcwOYuX7LMffkbdVh5ol8NDyZn83UCLVsWLWe05zy9ilbTAvrSd2CZvh
-         t1E6eLILdeV1xwCZ8z2fPt2WPrdc3QH7zwhSbOsc8tDCLQPcoKWV0xmCjFSjDq1vEOVP
-         u1RF1y66OJ1TAWDptOcak8rpW8CNUBzy3in0XoPt0nstEVSn8KcbfADWwgzxh0VFQHWu
-         NdFq5NP0LXtUMNb6VQMrH74SIEw5yvJsJwIvZGkTLVJVD9jIbFvtpiasC+W6JZGNwv6m
-         jwjhd5hUcz5vjI16T8zOsDoN6F+w9ljMPTtWyt2pqmHJ8xricXwxBXvsiE6x1zaBCJzx
-         cqNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767887850; x=1768492650;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ChbNYybDAN+PlLSGQ3kv1WrtIpPyDTfLMW7/iZLxLus=;
-        b=jGSRrsat1w0UcdMgxUjrwpBsZ3wxqvtAOii2gYH07O9er8/H3IoJb0Q07QAD/81fd5
-         Z1nej6W0PAat2qZNU5KTXMK+0Df1yrHxRrb3kck76nhjRAucWE/y3s4aTfaJMGQ18Xuv
-         Kg7q+eMif50HoB7ZFcl8aabW7c/XsJOP1oxSqSBcM9WQAunFXStdFo5S9H1AmY1Y4KGc
-         Yq/QBBJVTNFOtJVO4EyeZ78jKKCoNBmKDRJ4UjNfPABxmPOKuFq8CxEuJIxQaPNaMjQN
-         iOm76kpisikmtZh0NqRQGkDUD+COYHNdf1UKG9ADHXgd/sbwNqfNlmcoV5PT8zF8e4I+
-         dcLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVHxCIYYwdqH0bz5geqjzpoIrVaMT7gjInnzNK5HxzvkHiuUlQMmUK9yvew/ER5jFwo8AH/x7Xfzeo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYO5LicvQGtPJWmbV/gjZ4bbhdZeonDyqeQaGb1fsqGm/8Mr21
-	AnNEEt3AOj6fqTuafuDtjYlpJKqPO3bjEabOqQ7AOwtgCc7g1OFijSmHj8XdxCJJtDs=
-X-Gm-Gg: AY/fxX6HnFknKjM8z4jP4KW2ugjabs6Vljzr+ZKNYcPgNvOOe+u1cDFuaTuLGXfUosh
-	gCVKB9Zz2xptUf+5eo3BXrjepW6YiFLvzd/MRwP/2KN7k61yZmLlo5qrQsUazLemcnkRO0ZsA+l
-	obapmaY7QBXkOrCwSws5xjQ8POx7cKbAodfQs1brSuW9ICgbbCoOtQSt2m5itRCdBDqNy2xJ4Ho
-	lT1af6NejyNy66osCIlOOZ0tEotUPdgHVqoxYANTVvE0iEYCV/FQ3aP3R6XX7QEzCvoxFlNcXa6
-	HIIwXzpqZl58J3XUHSHbxSQf9zynooEy2K84Vt9o4pSdiYQAVbwJbd5rFXfbRtTwuPisaieNA6T
-	MfK0VfL5CFpoJUsdM6j5YEGhviASW9jPAIGtLZpQQWiCXjXpZcnvlfD1OS2gtsbWl5nrBCLo3MO
-	abOu9Ww00pnnmZxswPORLTOfWE5OEMjXXnbXys78oyGVvoC5lmkEe2T0+fAPWr
-X-Google-Smtp-Source: AGHT+IEqkm4LvUk8v6PJn4dMOjcEAKptGcqeUy22nLPhpl6cUZVQsY3c5PT1cLF07hCu1ja1uiQnug==
-X-Received: by 2002:a05:6830:6f83:b0:7b7:59c5:766c with SMTP id 46e09a7af769-7ce50bec1b5mr3163482a34.33.1767887850382;
-        Thu, 08 Jan 2026 07:57:30 -0800 (PST)
-Received: from ?IPV6:2600:8803:e7e4:500:c69c:7b5c:ce9b:24be? ([2600:8803:e7e4:500:c69c:7b5c:ce9b:24be])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ce478af813sm5732105a34.19.2026.01.08.07.57.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 07:57:29 -0800 (PST)
-Message-ID: <97096aa2-acf1-4e4b-b03b-b538c3c1cf27@baylibre.com>
-Date: Thu, 8 Jan 2026 09:57:29 -0600
+	s=arc-20240116; t=1767888792; c=relaxed/simple;
+	bh=kH8S9vP17GGJNWng1lDd1GpEYK1MC6zSkbNrZbInKvY=;
+	h=Message-ID:From:Date:Subject:MIME-Version:Content-Type:To:Cc; b=OYGPe0VCocqHNV7Sxi4kQSsiSyofDcHFXSyArqRPNO/0ww3qyxXHWPu3ul9VygF0r+K6woimwNMNw4fD03h0OWPdbR2FlNhx8Ty5AIK8Yk8cHOO451aV8h3T0MYn+Sode40Lnn6faABxlXnMitfGWpyQROiBBui7Nc4xgn+KWhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=bsdKaEOv; arc=none smtp.client-ip=162.62.57.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1767888782; bh=OoN0aYxSy/v3aNV/r7JQCUeLxofiSuOYROxXZTkm5h4=;
+	h=From:Date:Subject:To:Cc;
+	b=bsdKaEOvhiGoHTGVfRlFPb9j1XuV83QHshsF16SGmQ0ivzEE0V3CTrBoBufIllKeE
+	 3T0lD55wmL4jSDIjO8PAocyMTVFamFmHv01htuVoe1y8ZzP9XV5osaPnV6c9PlAfuj
+	 42duRa3N+S4qsXPwXOguaQ7xMqNIaz6kmrMW0uss=
+Received: from junjungu-PC.localdomain ([223.167.147.103])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id 340B1609; Fri, 09 Jan 2026 00:13:00 +0800
+X-QQ-mid: xmsmtpt1767888780tzdgmb5eh
+Message-ID: <tencent_4588081F26734D4306AEE239F31016318205@qq.com>
+X-QQ-XMAILINFO: NGZp1yYNf7Y+9RToujcwd5D/Zv0B/XmJIlzT98TCV8Lp1WtRygQ4GK0GXjcyyJ
+	 LYfkGRNG9nRukJp8CDCCjF8ie73LtiNdBW9m+Drq0eBDlOWfUwjR9QmyZYz63CIwd7rQEaHR8j0f
+	 weKc7SpCaTyzk2lBjCH2y1Hf6KZ3AoFswWvtcsZLMYPGcnuhHrH9tVirQLvVospC4+gvW4H1nEgZ
+	 XUsBF0uETXp8PiUgXpFGYPP6aiRE+iCEeQ8HAoAarZfe/PdyV4TzMEtqypbgtSaOUDXVvsTK6knH
+	 9fsZo+8HCjHuJ8CH3weXqkwpNuv3Hd9wECqWZd0QoNJp7RLIGv4gq3M/54aNRWP2mcFBE8IVrl6S
+	 w+6VjvpPjQP8szQouR4lQP1wlVQmOtFJ6nJCu7pIqFhbmZY3b1/9zE7/mMgjSnSmBopwARRbIzMT
+	 n0KJWF2+sJl9jDhijrl2RBC/rB7Xu2hfCgbTY9PQB0ifkm0vih+ZTnKoXBKNGhH7fgNrem5hIrkH
+	 HYfXXt3ylkOH1vxHIfwNS4bStOMVjjxY5rRrdH8YFpUXvbf97Py3zcTxLBxNKMSn6kgm6xGcLt8F
+	 MUQlOsecywHqdl+Pnmk4Epi3zXU3Ip3CRHh6V+KCKoxxmj7IusQ8ffi5rgdfvVejNIP0ZT3FAol6
+	 kC9SBdKJNxRaL1EK1Jp1FEphnb/O4z+GYDTp/h0LzbMNzby5nkYscJLupVSAGX5u6B31IldUW+8G
+	 nnYGVVo8GyMBA7Adm3YABE2wCyMkDLlq4kGR5k9bUscArpibU33A2A6pwyEXFnxaYPZsP4Dx8xyi
+	 iDkdvAWUICuVZSBGUFnIqAQpBAfXuT5NodrkupsD0EFOWGpgijee+jt6sYVMDPE1kVEUO+kT5ApU
+	 dLFBHoYhDeotAfrfGFvscnj1chrWUn5IxCuhtqABvbxtmUT6iHrFIICoLrS4Vna9AybLDrmDlECe
+	 fqmxt3J7nzvshNtFgXL059AaNJomkzQNlTmkahegPNhr/95Wulf+CanyHTgc2JRa/n6Qp8PYGGj8
+	 gRSYwhPodkcs/GCAeff0IpGsKpSSXu7q/YBT3kcBtk1kDDqyLK
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+From: Felix Gu <gu_0233@qq.com>
+Date: Fri, 09 Jan 2026 00:12:59 +0800
+Subject: [PATCH] spi: spi-sprd-adi: Fix double free in probe error path
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/9] spi: Documentation: add page on multi-lane support
-To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
- Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
- Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
- <20251219-spi-add-multi-bus-support-v4-5-145dc5204cd8@baylibre.com>
- <aV-lzD1BEVSkGjba@debian-BULLSEYE-live-builder-AMD64>
-Content-Language: en-US
-From: David Lechner <dlechner@baylibre.com>
-In-Reply-To: <aV-lzD1BEVSkGjba@debian-BULLSEYE-live-builder-AMD64>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-OQ-MSGID: <20260109-spi-sprd-adi-fix-v1-1-acb1825fbfb5@qq.com>
+X-B4-Tracking: v=1; b=H4sIAIrXX2kC/x2MQQqAIBBFryKzbkAlLLpKtEgdazYmChGEd29o8
+ Rbvwf8vNKpMDRb1QqWbG19ZxAwKwrnng5CjOFhtnTZ6xlZYqBH3yJj4waAn45Oxo08OZFYqSf4
+ v1633D+14ARpiAAAA
+X-Change-ID: 20260108-spi-sprd-adi-fix-c071bf124bf6
+To: Mark Brown <broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Felix Gu <gu_0233@qq.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767888780; l=3329;
+ i=gu_0233@qq.com; h=from:subject:message-id;
+ bh=kH8S9vP17GGJNWng1lDd1GpEYK1MC6zSkbNrZbInKvY=;
+ b=o8pabK1z+e5ByvtKpAz3hh/y4M2lmGdtpm9LlLN8Y+MOWmPYGgDHDlfEfOf0P8CzjrsAfJ+A0
+ 80VZOM8USADDfTW6I9uSSnmHfoCoy6c0rpuGBe9N0Goka4OhRWbtD+n
+X-Developer-Key: i=gu_0233@qq.com; a=ed25519;
+ pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
 
-On 1/8/26 6:40 AM, Marcelo Schmitt wrote:
-> Hi David,
-> 
-> Thanks for adding a doc for the multi-lane stuff.
-> Two minor comments inline.
-> 
-> Reviewed-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
-> 
-> On 12/19, David Lechner wrote:
->> Add a new page to Documentation/spi/ describing how multi-lane SPI
->> support works. This is uncommon functionality so it deserves its own
->> documentation page.
->>
->> Signed-off-by: David Lechner <dlechner@baylibre.com>
->> ---
->> v4 changes:
->> * New patch in v4.
->> ---
->>  Documentation/spi/index.rst               |   1 +
->>  Documentation/spi/multiple-data-lanes.rst | 217 ++++++++++++++++++++++++++++++
->>  2 files changed, 218 insertions(+)
->>
->> diff --git a/Documentation/spi/index.rst b/Documentation/spi/index.rst
->> index 824ce42ed4f0..2c89b1ee39e2 100644
->> --- a/Documentation/spi/index.rst
->> +++ b/Documentation/spi/index.rst
->> @@ -9,6 +9,7 @@ Serial Peripheral Interface (SPI)
->>  
->>     spi-summary
->>     spidev
->> +   multiple-data-lanes
->>     butterfly
->>     spi-lm70llp
->>     spi-sc18is602
->> diff --git a/Documentation/spi/multiple-data-lanes.rst b/Documentation/spi/multiple-data-lanes.rst
->> new file mode 100644
->> index 000000000000..b267f31f0bc8
->> --- /dev/null
->> +++ b/Documentation/spi/multiple-data-lanes.rst
->> @@ -0,0 +1,217 @@
->> +====================================
->> +SPI devices with multiple data lanes
->> +====================================
->> +
->> +Some specialized SPI controllers and peripherals support multiple data lanes
->> +that allow reading more than one word at a time in parallel. This is different
->> +from dual/quad/octal SPI where multiple bits of a single word are transferred
->> +simultaneously.
->> +
->> +For example, controllers that support parallel flash memories have this feature
->> +as do some simultaneous-sampling ADCs where each channel has its own data lane.
->> +
->> +---------------------
->> +Describing the wiring
->> +---------------------
->> +
->> +The ``spi-tx-bus-width`` and ``spi-rx-bus-width`` properties in the devicetree
->> +are used to describe how many data lanes are connected between the controller
->> +and how wide each lane is. The number of items in the array indicates how many
->> +lanes there are, and the value of each item indicates how many bits wide that
->> +lane is.
->> +
->> +For example, a dual-simultaneous-sampling ADC with two 4-bit lanes might be
->> +wired up like this::
-> At first, I thought calling these '4-bit lanes' was a bit confusing. I was
-> thinking about suggesting '4-wire lanes' but I guess 4-bit is more generic in
-> case we ever see a setup where data navigates through something besides wires.
-> 
->> +
->> +    +--------------+    +----------+
->> +    | SPI          |    | AD4630   |
->> +    | Controller   |    | ADC      |
->> +    |              |    |          |
->> +    |          CS0 |--->| CS       |
->> +    |          SCK |--->| SCK      |
->> +    |          SDO |--->| SDI      |
->> +    |              |    |          |
->> +    |        SDIA0 |<---| SDOA0    |
->> +    |        SDIA1 |<---| SDOA1    |
->> +    |        SDIA2 |<---| SDOA2    |
->> +    |        SDIA3 |<---| SDOA3    |
->> +    |              |    |          |
->> +    |        SDIB0 |<---| SDOB0    |
->> +    |        SDIB1 |<---| SDOB1    |
->> +    |        SDIB2 |<---| SDOB2    |
->> +    |        SDIB3 |<---| SDOB3    |
->> +    |              |    |          |
->> +    +--------------+    +----------+
->> +
->> +It is described in a devicetree like this::
->> +
->> +    spi {
->> +        compatible = "my,spi-controller";
->> +
->> +        ...
->> +
->> +        adc@0 {
->> +            compatible = "adi,ad4630";
->> +            reg = <0>;
->> +            ...
->> +            spi-rx-bus-width = <4>, <4>; /* 2 lanes of 4 bits each */
->> +            ...
->> +        };
->> +    };
->> +
->> +In most cases, lanes will be wired up symmetrically (A to A, B to B, etc). If
->> +this isn't the case, extra ``spi-rx-bus-width`` and ``spi-tx-bus-width``
->> +properties are needed to provide a mapping between controller lanes and the
->> +physical lane wires.
->> +
->> +Here is an example where a multi-lane SPI controller has each lane wired to
->> +separate single-lane peripherals::
->> +
->> +    +--------------+    +----------+
->> +    | SPI          |    | Thing 1  |
->> +    | Controller   |    |          |
->> +    |              |    |          |
->> +    |          CS0 |--->| CS       |
->> +    |         SDO0 |--->| SDI      |
->> +    |         SDI0 |<---| SDO      |
->> +    |        SCLK0 |--->| SCLK     |
->> +    |              |    |          |
->> +    |              |    +----------+
->> +    |              |
->> +    |              |    +----------+
->> +    |              |    | Thing 2  |
->> +    |              |    |          |
->> +    |          CS1 |--->| CS       |
->> +    |         SDO1 |--->| SDI      |
->> +    |         SDI1 |<---| SDO      |
->> +    |        SCLK1 |--->| SCLK     |
->> +    |              |    |          |
->> +    +--------------+    +----------+
->> +
->> +This is described in a devicetree like this::
->> +
->> +    spi {
->> +        compatible = "my,spi-controller";
->> +
->> +        ...
->> +
->> +        thing1@0 {
->> +            compatible = "my,thing1";
->> +            reg = <0>;
->> +            ...
->> +        };
->> +
->> +        thing2@1 {
->> +            compatible = "my,thing2";
->> +            reg = <1>;
->> +            ...
->> +            spi-tx-lane-map = <1>; /* lane 0 is not used, lane 1 is used for tx wire */
->> +            spi-rx-lane-map = <1>; /* lane 0 is not used, lane 1 is used for rx wire */
-> In this example, even though lane 0 is not used by thing2, it is being used by
-> thing1, right?
+The driver currently uses spi_alloc_host() to allocate the controller
+but registers it using devm_spi_register_controller().
 
-Yes, I can improve the comments to make it more clear.
+If devm_register_restart_handler() fails, the code jumps to the
+put_ctlr label and calls spi_controller_put(). However, since the
+controller was registered via a devm function, the device core will
+automatically call spi_controller_put() again when the probe fails.
+This results in a double-free of the spi_controller structure.
 
-> Just checking I understand it correctly.
-> 
->> +            ...
->> +        };
->> +    };
->> +
+Fix this by switching to devm_spi_alloc_host() and removing the
+manual spi_controller_put() call.
+
+Signed-off-by: Felix Gu <gu_0233@qq.com>
+---
+ drivers/spi/spi-sprd-adi.c | 33 ++++++++++-----------------------
+ 1 file changed, 10 insertions(+), 23 deletions(-)
+
+diff --git a/drivers/spi/spi-sprd-adi.c b/drivers/spi/spi-sprd-adi.c
+index 262c11d977ea..f25b34a91756 100644
+--- a/drivers/spi/spi-sprd-adi.c
++++ b/drivers/spi/spi-sprd-adi.c
+@@ -528,7 +528,7 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	pdev->id = of_alias_get_id(np, "spi");
+ 	num_chipselect = of_get_child_count(np);
+ 
+-	ctlr = spi_alloc_host(&pdev->dev, sizeof(struct sprd_adi));
++	ctlr = devm_spi_alloc_host(&pdev->dev, sizeof(struct sprd_adi));
+ 	if (!ctlr)
+ 		return -ENOMEM;
+ 
+@@ -536,10 +536,8 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	sadi = spi_controller_get_devdata(ctlr);
+ 
+ 	sadi->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+-	if (IS_ERR(sadi->base)) {
+-		ret = PTR_ERR(sadi->base);
+-		goto put_ctlr;
+-	}
++	if (IS_ERR(sadi->base))
++		return PTR_ERR(sadi->base);
+ 
+ 	sadi->slave_vbase = (unsigned long)sadi->base +
+ 			    data->slave_offset;
+@@ -551,18 +549,15 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	if (ret > 0 || (IS_ENABLED(CONFIG_HWSPINLOCK) && ret == 0)) {
+ 		sadi->hwlock =
+ 			devm_hwspin_lock_request_specific(&pdev->dev, ret);
+-		if (!sadi->hwlock) {
+-			ret = -ENXIO;
+-			goto put_ctlr;
+-		}
++		if (!sadi->hwlock)
++			return -ENXIO;
+ 	} else {
+ 		switch (ret) {
+ 		case -ENOENT:
+ 			dev_info(&pdev->dev, "no hardware spinlock supplied\n");
+ 			break;
+ 		default:
+-			dev_err_probe(&pdev->dev, ret, "failed to find hwlock id\n");
+-			goto put_ctlr;
++			return dev_err_probe(&pdev->dev, ret, "failed to find hwlock id\n");
+ 		}
+ 	}
+ 
+@@ -579,26 +574,18 @@ static int sprd_adi_probe(struct platform_device *pdev)
+ 	ctlr->transfer_one = sprd_adi_transfer_one;
+ 
+ 	ret = devm_spi_register_controller(&pdev->dev, ctlr);
+-	if (ret) {
+-		dev_err(&pdev->dev, "failed to register SPI controller\n");
+-		goto put_ctlr;
+-	}
++	if (ret)
++		return dev_err_probe(&pdev->dev, ret, "failed to register SPI controller\n");
+ 
+ 	if (sadi->data->restart) {
+ 		ret = devm_register_restart_handler(&pdev->dev,
+ 						    sadi->data->restart,
+ 						    sadi);
+-		if (ret) {
+-			dev_err(&pdev->dev, "can not register restart handler\n");
+-			goto put_ctlr;
+-		}
++		if (ret)
++			return dev_err_probe(&pdev->dev, ret, "can not register restart handler\n");
+ 	}
+ 
+ 	return 0;
+-
+-put_ctlr:
+-	spi_controller_put(ctlr);
+-	return ret;
+ }
+ 
+ static struct sprd_adi_data sc9860_data = {
+
+---
+base-commit: fc4e91c639c0af93d63c3d5bc0ee45515dd7504a
+change-id: 20260108-spi-sprd-adi-fix-c071bf124bf6
+
+Best regards,
+-- 
+Felix Gu <gu_0233@qq.com>
 
 
