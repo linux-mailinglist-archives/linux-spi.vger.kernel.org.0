@@ -1,128 +1,150 @@
-Return-Path: <linux-spi+bounces-12217-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12218-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F433D03B05
-	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 16:12:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46A1ED043D5
+	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 17:14:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8A25A30B6C33
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 14:43:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A665933FFCC7
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 15:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882313D7D92;
-	Thu,  8 Jan 2026 14:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B80422D9784;
+	Thu,  8 Jan 2026 15:57:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DlPEEBaV"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nB0oP2Gd"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f196.google.com (mail-oi1-f196.google.com [209.85.167.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636D12248B3
-	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 14:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D4524DCE3
+	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 15:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767883261; cv=none; b=M9RQTXRvsHfAqY65eO7cesJmsfJLao9G04MH5Az8iMFnKzOVAj3jSipDcJ5s8TpJqBWto0/HZRvtGH6S9/eUXGaizz28vD/Tlzt/WCxE0am/kc8pqUZm4MTLT+vdNxQZ3naoBS++REtR65IpWd4k0v+Bi2rXAvkhZlE1ZU4Rqak=
+	t=1767887822; cv=none; b=PDC7I6by7/L0eqiuNii2pw7QSFAhHDvA+6smsKRN7Rfpc2oF0d3HaFtMq8PaTz8WpLV2At+cWRWFt49bXsWOeeGAa0JaNSreR9Zq0fiu0nW3mfuXlm4wWSw84uruVwTAdsRYeF7FqIAe/QtaVqSI4n1ZuVrL0MMrd59WHLwtC0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767883261; c=relaxed/simple;
-	bh=VCvoKljqX3kZKrg0wl5o7D7vP2IqS4NfiwwNUjNseAA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=thy3UGBzVh1Lhq8SXgOckQp7cc93a8OQiyNl7p6FyXxznL1BQIWYZdYEQEbg1J68joqHp2y8YJJSEhWPVIqIJPZq2idjIcCcMPmFQ6Jd8ok9pKk8eIh5VFPqJ4oOGCkX4Iwi/tQOcjhnxsFBhxYfQGyopl44XFUeFIXbu8BXZ7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DlPEEBaV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B65C19425
-	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 14:41:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767883261;
-	bh=VCvoKljqX3kZKrg0wl5o7D7vP2IqS4NfiwwNUjNseAA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DlPEEBaVI+xP7JjLfS9LR7e7TGlmyC5TXYpt0PNmPihe3YioXsrVmtrq1bDvAbAlr
-	 DGQBoe0/BBqPxEDAat093atVemL+rsMNoS4kC49Pg9BpmAZgGRFiEkQdkSTLecOfG+
-	 poB3TiqB3KlW5jq1VyvVP3hp3sorPJDtMbWrYvxFO8lusCSeJyKRcPIrCqDY3ofN3a
-	 j77fZG3Y/Wr/xsiaSXRnJzZlY2y9ukAD9v5DlTjUi4i7Sd7nHzz0KYnoANhj8k8luW
-	 A1jJFXxGdReXBvIrTVbgWB83BJbBPTv2KiA8ytRN+HMBPxWAg09+sQor/s3ENg9Znp
-	 H7nY7A1BD5mtA==
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b734fcbf1e3so635189166b.3
-        for <linux-spi@vger.kernel.org>; Thu, 08 Jan 2026 06:41:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXTQA46FEDOX2SQ4D3b1eTUr/Tj8Fhgb7iNgxZ97qRe3wKkvnN9AmGD3Wv1zvT5DDDJJOs4WJXr9dY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZJ9YDcJ5wztO/mxi68/qHFer11jw8mjbfOsBrPKm/rZjNzlo/
-	o0EH1VqHYZs3qXHxk5EMNW8J8zPB9IRI/iTTAPSllf6gHVYhGbei11FlmfHKtgNXq+fdbMBR6Zd
-	EJfZtS5r7XW1ow0QBoy6UGeAKE1N7qQ==
-X-Google-Smtp-Source: AGHT+IHI33xhADwXbn0vf2H6UNw8erJbbT8WWPi8EUBJ/Ob7LvrmYmQ7U0+rDVaaapOIsNUCqxvWDN4KWUHOnOQ+6Dw=
-X-Received: by 2002:a17:907:72cd:b0:b83:f09f:4e56 with SMTP id
- a640c23a62f3a-b844516d7admr651521166b.63.1767883259450; Thu, 08 Jan 2026
- 06:40:59 -0800 (PST)
+	s=arc-20240116; t=1767887822; c=relaxed/simple;
+	bh=3WxyY58R5RF4H49rbz20YiptJDUIV6EodvIQ0DXLKdE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nrcVgqFk39zL3ArXfYzwPNgdEraaN1XasqL3cC8OkcJIXFgVdN+8v4u/enEJTc46z5ceAqngH94iYkjIORtgDE/7QcrMa3yJrXZDKssfR+FPWQMfbqscnxbFGFu1gYUZo8j9kOOibuZWtkiAIqIOOD/W9E0YDdo4n8itJdAIyRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=nB0oP2Gd; arc=none smtp.client-ip=209.85.167.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-oi1-f196.google.com with SMTP id 5614622812f47-4510974a6bbso1332209b6e.3
+        for <linux-spi@vger.kernel.org>; Thu, 08 Jan 2026 07:57:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1767887819; x=1768492619; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z0+ELb9bQZu0kUreFc+yy4vgvyvuKYmmuSxPTDF+G0o=;
+        b=nB0oP2GdgPdgFBXH6MQWO3DDLbBE+6EKA3Y5Zo0wrTyl2IUnQbY89xV4AE0uUyZD5z
+         4AQcJG5v0+5N6J1BJQnZiEZQ5v5RVkDB6WlFkW0EszMq5ZK48vrRYtg9OLzTzanMWQkx
+         FjQwoh6bI9Mxknzh4dEI2MdWQ+4LHY2zCCMN/vQpipiXlSfD51St7DCtJS29SgktG77w
+         qG12xfdU0ZKCX0rZVM3poKV7sRwb62jBiJ1utcnP0PTdvaDlt5PFYc+uZgdRhPGXkexL
+         QkqxMMjXNXy1ZAKVyReOhkWAXZiu97fI5Lns+XrZZYSVz45n9926kaA40VBIYGDyQ/CQ
+         DIWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767887819; x=1768492619;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z0+ELb9bQZu0kUreFc+yy4vgvyvuKYmmuSxPTDF+G0o=;
+        b=bHUfq9VXy3Ph7cR6LUbe8cblZmbKQtrs7wkTXISPCdB1jzk27XXoOWxQdQg0l3NIji
+         loGusAWTcQV93CKRd5JchqRafTx/MkRJ/oY/4z9x7ktfM8nU5sLfxGH/vK33yWerX0Md
+         RwRVlRbXrdMEdoGhKbQ5D2+N/p7sVwkOpsWuaH6FrH/csXTBXRAQA5/v2lFew7PcukWA
+         QMrh2qf1dDArR00870aEQ0otCsbID+ee+GPNa2RZk88o2clRQtg5qNVemHYTXxcDUrhQ
+         zaKPOglPoeVCNpRlGjjppfkBIbjhAvlMs+1RLzk419wrNTDjkLRgmKQuG6XrEHo/1Xa4
+         is+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCURE6LySeq1359veImmNxD9sBRptVzOxzYD9QQW5dFb4ToLzv2uB9oKDSJi7+X7kmt8fYOwqzfid70=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxy9yipTCxQeQm+y/SEX4PY1U4ywYCSxZlBS1qDROgMD9O/Q0Sq
+	KRVCMvRnLuweNUdEdNEqgpfofhN3ovPQNVZQhIZaR/0soWxICbDwoBqzJu5t5Y85HX8=
+X-Gm-Gg: AY/fxX54Sgi1QOk5Vl2/JCLFdKk2xSSRYH/ymrBymoMOuetgp2y9J1jg3biMw/mtann
+	dAcqbb2wS+XYxlr7VEljlxIcY5uQyjijkA9X06cODMJY1xPTGa/JtsACkvm0yGBtcTRcFGEDsIF
+	6Z0NwFkSxnXuFlpHM5gP3Y/Kz5+UCzATItPSqn4iiCwHYXHEVmbCjVViqCoZXZENb94JIY3JWTj
+	Z3DOTU8pahi1/l7Y83LuUW7ScA4w1XMDHrTTYHeL8ZzIBsviiU1cgUXyBp8EFRPsoPv43PP2amD
+	+/cIVTtp9K8FL6cm9zvDoHoCdvmJ15VPPUM1Rc84iqzAUG1jBv7vbT2lu7T7f4riS+q+tRFc4T8
+	4PtU1yoxjJ8YZlDgwGOp9ZzoFPHjwxXaCyr1R/ha1wP1GZOdPUEsipavAv1QDayot0Bkx4eL0gk
+	Goe7/nIuv+eMTTJiLi+YuMtLXOLNS/ixSdHJ10zx9IaZo4jTs/s4Xqu4nlCxiN
+X-Google-Smtp-Source: AGHT+IFwUW2T7bI5xvApxv4384NTKdeNIA2TmBS2bO3HBU4plxZjZ1bXoeq7L5luyn6AbAoj1AAj9g==
+X-Received: by 2002:a05:6808:250b:b0:43f:1d72:592 with SMTP id 5614622812f47-45a6bdbe64emr2767749b6e.23.1767887819203;
+        Thu, 08 Jan 2026 07:56:59 -0800 (PST)
+Received: from ?IPV6:2600:8803:e7e4:500:c69c:7b5c:ce9b:24be? ([2600:8803:e7e4:500:c69c:7b5c:ce9b:24be])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-45a5e1b1285sm3623783b6e.8.2026.01.08.07.56.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 07:56:58 -0800 (PST)
+Message-ID: <c93a528c-39d6-4e29-b64a-ecf75032b60d@baylibre.com>
+Date: Thu, 8 Jan 2026 09:56:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
- <20251219-spi-add-multi-bus-support-v4-2-145dc5204cd8@baylibre.com> <aV-jQImroXxFqj3Z@debian-BULLSEYE-live-builder-AMD64>
-In-Reply-To: <aV-jQImroXxFqj3Z@debian-BULLSEYE-live-builder-AMD64>
-From: Rob Herring <robh@kernel.org>
-Date: Thu, 8 Jan 2026 08:40:47 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+y86RJ3PwN1DSbw1zUgL-f-R98u7s+zfrKr99V+za1Zw@mail.gmail.com>
-X-Gm-Features: AQt7F2o2jGkKFch4Ba0iemfY8-pqG-ebcXF772c-dsVzMB7IP52XjuMQWCjxSCI
-Message-ID: <CAL_Jsq+y86RJ3PwN1DSbw1zUgL-f-R98u7s+zfrKr99V+za1Zw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/9] spi: dt-bindings: add spi-{tx,rx}-lane-map properties
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/9] spi: Documentation: add page on multi-lane support
 To: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-Cc: David Lechner <dlechner@baylibre.com>, Mark Brown <broonie@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marcelo Schmitt <marcelo.schmitt@analog.com>, 
-	Michael Hennerich <michael.hennerich@analog.com>, =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>, 
-	Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-iio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
+ Michael Hennerich <michael.hennerich@analog.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>,
+ Jonathan Cameron <jic23@kernel.org>, Andy Shevchenko <andy@kernel.org>,
+ Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-iio@vger.kernel.org
+References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
+ <20251219-spi-add-multi-bus-support-v4-5-145dc5204cd8@baylibre.com>
+ <aV-mpFCF_ET3AZ1B@debian-BULLSEYE-live-builder-AMD64>
+Content-Language: en-US
+From: David Lechner <dlechner@baylibre.com>
+In-Reply-To: <aV-mpFCF_ET3AZ1B@debian-BULLSEYE-live-builder-AMD64>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 8, 2026 at 6:28=E2=80=AFAM Marcelo Schmitt
-<marcelo.schmitt1@gmail.com> wrote:
->
+On 1/8/26 6:44 AM, Marcelo Schmitt wrote:
+> Actually, one more thing ...
+> 
 > On 12/19, David Lechner wrote:
-> > Add spi-tx-lane-map and spi-rx-lane-map properties to the SPI periphera=
-l
-> > device tree binding. These properties allow specifying the mapping of
-> > peripheral data lanes to controller data lanes. This is needed e.g. whe=
-n
-> > some lanes are skipped on the controller side so that the controller
-> > can correctly route data to/from the peripheral.
-> >
-> > Signed-off-by: David Lechner <dlechner@baylibre.com>
-> > ---
-> >
-> > v4 changes:
-> > - This replaces the data-lanes property from the previous revision. Now
-> >   there are separate properties for tx and rx lane maps. And instead of
-> >   being the primary property for determining the number of lanes, this
-> >   is only needed in special cases where the mapping is non-trivial.
-> > ---
-> >  .../devicetree/bindings/spi/spi-peripheral-props.yaml      | 14 ++++++=
-++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props=
-.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> > index 59ddead7da14..2f278f145f78 100644
-> > --- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> > +++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-> > @@ -75,6 +75,13 @@ properties:
-> >        enum: [0, 1, 2, 4, 8]
-> >      default: [1]
-> >
-> > +  spi-rx-lane-map:
-> > +    description: Mapping of peripheral RX lanes to controller RX lanes=
-.
-> > +      Each index in the array represents a peripheral RX lane, and the=
- value
-> > +      at that index represents the corresponding controller RX lane.
-> These are peripheral props so I guess RX is from peripheral perspective.
-> In that case, those would be routed to controller TX lanes, no?
+>> Add a new page to Documentation/spi/ describing how multi-lane SPI
+>> support works. This is uncommon functionality so it deserves its own
+>> documentation page.
+>>
+>> Signed-off-by: David Lechner <dlechner@baylibre.com>
+>> ---
+> ...
+>> +- :c:macro:`SPI_MULTI_BUS_MODE_STRIPE`: Send or receive two different data words
+>> +    at the same time, one on each lane. This means that the buffer needs to be
+>> +    sized to hold data for all lanes. Data is interleaved in the buffer, with
+>> +    the first word corresponding to lane 0, the second to lane 1, and so on.
+>> +    Once the last lane is used, the next word in the buffer corresponds to lane
+>> +    0 again. Accordingly, the buffer size must be a multiple of the number of
+>> +    lanes. This mode works for both reads and writes.
+>> +
+>> +    Example::
+>> +
+>> +        struct spi_transfer xfer = {
+>> +            .rx_buf = rx_buf,
+>> +            .len = 2,
+>> +            .multi_lane_mode = SPI_MULTI_BUS_MODE_STRIPE,
+>> +        };
+>> +
+>> +        spi_sync_transfer(spi, &xfer, 1);
+>> +
+>> +    Each tx wire has a different data word sent simultaneously::
+> In this example, the controller is reading data so the rx wires have different
+> data word received?
 
-I'm pretty sure it's the input to the controller like the other rx
-properties. Like rx-delay is for reads.
+Yes, I tried to make that clear below by having a different value
+for each.
+> 
+>> +
+>> +        controller    < data bits <     peripheral
+>> +        ----------   ----------------   ----------
+>> +            SDI 0    0-0-0-1-0-0-0-1    SDO 0
+>> +            SDI 1    1-0-0-0-1-0-0-0    SDO 1
+>> +
+>> +    After the transfer, ``rx_buf[0] == 0x11`` (word from SDO 0) and
+>> +    ``rx_buf[1] == 0x88`` (word from SDO 1).
 
-I guess "peripheral RX lanes to controller RX lanes" is a bit oddly worded.
-
-Rob
 
