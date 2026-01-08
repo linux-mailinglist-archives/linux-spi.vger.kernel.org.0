@@ -1,145 +1,87 @@
-Return-Path: <linux-spi+bounces-12210-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12209-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B80A2D02AF8
-	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 13:40:11 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9190D02D70
+	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 14:06:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C48D7302F69E
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 12:36:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5EE393001FE3
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 13:06:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB70D4CBAA4;
-	Thu,  8 Jan 2026 12:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4974A38E5D7;
+	Thu,  8 Jan 2026 11:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="koJLXys3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YOqzq6Pn"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E16754CBA98
-	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 12:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F286A3A35C7;
+	Thu,  8 Jan 2026 11:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767875109; cv=none; b=fg4eDWzJcDp1xcDYsPCzk1ajUE/SgF59KYr25eXFIo1wXphwRt9q5yS0NvEQOByhaT1N8uP8ygqVGR1kSRtAxDAXeYBP7SnkS/bKtt/XKEEGLt6jCT4uHi+brOPdzo/ynf/MM+8lG1bY9mKm/+Itwi4qlHeHXOEy2WUeLpEGZ2M=
+	t=1767870143; cv=none; b=IbG+JDNGk/DO2Kttd7WD741LovBRWcXy7RJ99yHCjbeLmpSe4yoigJ+V4BsKaSKaRs5ZgHE6k24u92SMSaoz2Yeca0NytCkuZiE0IIj8nOQHv2Zie2jynXAAP4tRlGeVsEO2tXey7f8S85bHc/g59qYAZ7R+w9+rSKJlvBnY2oI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767875109; c=relaxed/simple;
-	bh=aaHyXdS0nmiOSH+39v4TllnNhWztOoW+ppCJ7RxVa5E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCh3ajMvIjlKguvDYMSpLUcQTiMkdiwTz4nulxX8+LwcKJjju2sizbbL02sv5dmRCA9bNY0YnCKkcrukz9d9VZyz915HW/nHPrQF9fVdrQvzMm7LRjo8e7eTAm/YfdFstDEMpqNpJmc0hQScYAz8P00iOpjlrcpaWLBPAtixo8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=koJLXys3; arc=none smtp.client-ip=209.85.222.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-93f5905e60eso1863780241.0
-        for <linux-spi@vger.kernel.org>; Thu, 08 Jan 2026 04:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767875107; x=1768479907; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZuHLAkpi+QoqrsNtnMo40SsdhSUfyacTFMUwhFx6NDQ=;
-        b=koJLXys3IA+qyZ7CAZCe5pUZXZxq6kHVsMIHd4+B85mTLJqkMPydN+cmi3xx5f1Rt+
-         cz+04Kza8mCuxWrxfc2kI6dWJTtI+MurnIS9KzApEIoWrh0V3p0ir5pq2cuzCvuZHrHt
-         j6sXyTFEL5gAlMeiUV1up52QIUd+olw2bX7YV9MPpZoMdThDX/gW+EpOkNHsf5p842Al
-         3vRgihucJdm6shRB07V+LqyTmlW398F207x7S2O5vqty/4s84k1R4JUUOMcpB7tgcFFt
-         LKNPE4XR1bQb+lE4Og82o0Bt6rjPJ9xoF5cjF7GAUl9bXn/EKS32ocm/D9QZB2/lrUS9
-         5YYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767875107; x=1768479907;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZuHLAkpi+QoqrsNtnMo40SsdhSUfyacTFMUwhFx6NDQ=;
-        b=GGhoM0cdvFj66vISm9iGKGseHOdm1RsR9aF/4PzplSxDt3/Z9RK+y+Saw+IxI8LFG/
-         RgfSZCLEP//tiEG4hywPFwH7ukYhIEbgWjh+TCfdwNwJlZMJnpLtJDTlmnekHRrnsfRc
-         4g57cYAm/+L39DlNF9lmbQRgx3ImzAUYZ/+rDy+Ljik7JPQnX5NKjLv/StVOZGPmeMD6
-         XgGNUtUOyaYr4RaWsSSlTl1RbZNgjopmugKoxYQJ3MCkoNP8quwp4vti/EO6vQW8A2NF
-         s1nlZKH2grSFsOzK0zyVN/fXugEZvQR6n5UyBOsYQMTb8XopTkePfeQV2Wd+5y4fBTlY
-         EfzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUtLRu5xe65k4rGoq+0jZQP3MzzafMlRv3rdG5eO8W8huh2isVFC6xGdXlg9Ij5UQk9DI61CkdlNM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCIQWX45qRxKemwSm9wDSCYiUCBPR3I19Mq0bTHtIMwY0kVc6b
-	Q7I714NA658mBvrm6M1slw5r9i2CdxggPkoojG1puT0suYH0iNQb1Z7N
-X-Gm-Gg: AY/fxX7L3IosS2Sskfz+g5fWedX0m7Q8jtF648NGtrqtgk6FYdZ+ygr4ZoZcwAKlFVQ
-	6QLPhiDMZi4hTG5om83ISv6+AkdHMNEbi9jtXf0lPHlkGlPKk2TnG6lJqPJJFEG7whiGxhCImM/
-	N1jg1mcr98q3otVOmf2T7MEMDLcA4mzbGHqqGIGsgG2uwsInKvCxFMIRG8DoVWc5Xa1hAcZeyVu
-	rKpdCuqshhyabxWe5Cxs9J1GqKvdfBi27FgAN4Rq/R2AULEZc+UkP/ttv2JyCQmUls1Qvt7kCRn
-	gFlxm4a4Da0JpCYWMgHHIGWehYHYQCGHHDIYdpoG6orje4wBGYCgYZfbG72HSeho9tbNGBBUXdQ
-	lYUUUz0vF9IwcZYmg9z3voXPFim9rjzChMgH9iTpLanl/kKRB5T+mtgEqnTBioZiGUTputOMlCG
-	e6T0FtMvlJnlxZHowQoJ4=
-X-Google-Smtp-Source: AGHT+IEBwSk5QOmvxP7JWfiLaJmCUu07iMcs1hqKhN6MvYBXFCVIPi1VMHNI/PsFUx/a1aq7urblAw==
-X-Received: by 2002:a05:6102:5714:b0:5db:d60a:6b1f with SMTP id ada2fe7eead31-5ecb6938423mr2317214137.23.1767875106642;
-        Thu, 08 Jan 2026 04:25:06 -0800 (PST)
-Received: from localhost ([2804:30c:2766:a500:b70:8c42:f792:bef6])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-944122ae554sm5583799241.2.2026.01.08.04.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 04:25:05 -0800 (PST)
-Date: Thu, 8 Jan 2026 09:26:51 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v4 1/9] spi: dt-bindings: change spi-{rx,tx}-bus-width to
- arrays
-Message-ID: <aV-ii6pdDYA02euV@debian-BULLSEYE-live-builder-AMD64>
-References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
- <20251219-spi-add-multi-bus-support-v4-1-145dc5204cd8@baylibre.com>
+	s=arc-20240116; t=1767870143; c=relaxed/simple;
+	bh=j+m4pmahMPKTeJHv084pK40Ng7vT7Xd+DmVBZhi+jYo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LlEEm9mN0YuSlzFg8pFa6VnXt16IECg26ybJkwXkY7PvXi0qGK5J4FpgEPR6JNPp97dgT9ve/bymTwRIBtzYZvn049XsvxkwTgYENqpuwQeZb6hdhtnsPdpKhXva+OJr3C+NYCTwrpCgkYJlAq5OOJ7cP7DI8CAjvhOcHq4Vaew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YOqzq6Pn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BAE4C116C6;
+	Thu,  8 Jan 2026 11:02:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767870142;
+	bh=j+m4pmahMPKTeJHv084pK40Ng7vT7Xd+DmVBZhi+jYo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=YOqzq6PnaT+cDFCwGsvnUPhhsiojSFyGw7S2cWyEgMv8hiZvJN2YzGX614CbeH8SK
+	 4rvAMSCrFig2CvVI/OrqXwt0SyrsldGYnESbFifm6AOyHeiIabeVk0YfdjwTrVISos
+	 i8Rs0dOQi4IQlPvBiWvig1L+3x6/Umj/CLhQVDKCBk8n2xvgYisSJj2JbwsmjjQHGF
+	 o5fbJx6bXOGYxKCQ3tAUTlma9mk3aeNSKYHP7mr+Z7/mDYi6iggm0qUywwQCfLPdDj
+	 IeEXrKpO24+QrPdyrObWALgAI5cHneSUTWie5XZmD7RBRhVIydCrcE7CQ+OOyijFhR
+	 ydnfGIsjnTREA==
+From: Lee Jones <lee@kernel.org>
+To: Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Steffen Trumtrar <kernel@pengutronix.de>, Pavel Machek <pavel@kernel.org>, 
+ Mark Brown <broonie@kernel.org>, 
+ Steffen Trumtrar <s.trumtrar@pengutronix.de>
+Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Jacek Anaszewski <jacek.anaszewski@gmail.com>
+In-Reply-To: <20251201-v6-14-topic-ti-lp5860-v6-0-be9a21218157@pengutronix.de>
+References: <20251201-v6-14-topic-ti-lp5860-v6-0-be9a21218157@pengutronix.de>
+Subject: Re: [PATCH v6 0/2] LED: Add basic LP5860 LED matrix driver
+Message-Id: <176787013936.860906.10157564091923679409.b4-ty@kernel.org>
+Date: Thu, 08 Jan 2026 11:02:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219-spi-add-multi-bus-support-v4-1-145dc5204cd8@baylibre.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-52d38
 
-On 12/19, David Lechner wrote:
-> Change spi-rx-bus-width and spi-tx-bus-width properties from single
-> uint32 values to arrays of uint32 values. This allows describing SPI
-> peripherals connected to controllers that have multiple data lanes for
-> receiving or transmitting two or more words in parallel.
+On Mon, 01 Dec 2025 12:19:46 +0100, Steffen Trumtrar wrote:
+> The lp5860 is a LED matrix driver with 18 constant current sinks and 11
+> scan switches which allows controlling up to 196 LED dots.
 > 
-> Each index in the array corresponds to a physical data lane (one or more
-> wires depending on the bus width). Additional mapping properties will be
-> needed in cases where a lane on the controller or peripheral is skipped.
+> This series adds just the basic support for the device on the SPI bus.
+> It is also possible to use it on I2C. The interface can be
+> switched/selected via an interface select pin.
 > 
-> Bindings that make use of this property are updated in the same commit
-> to avoid validation errors.
-> 
-> The adi,ad4030 binding can now better describe the chips multi-lane
-> capabilities, so that binding is refined and gets a new example.
-> 
-> Converting from single uint32 to array of uint32 does not break .dts/
-> .dtb files since there is no difference between specifying a single
-> uint32 value and an array with a single uint32 value in devicetree.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
-> 
-> v4 changes:
-> - New patch to replace data-lanes property patch.
-> 
-> In v3, Rob suggested possibly splitting the spi-controller.yaml file
-> to have a way to make most SPI controllers have maxItems: 1 for these
-> properties. I would like to avoid that because it doesn't seem scalable,
-> e.g. if we need another similar split in the future, the number of
-> combinations would grow exponentially (factorially?). I have an idea to
-> instead do this using $dynamicAnchor and $dynamicRef, but dt-schema
-> doesn't currently support that. So I propose we do the best we can for
-> now with the current dt-schema and make further improvements later.
-> 
-> Also, in v3, I suggested that we could have leading 0s in the arrays
-> to indicate unused lanes. But after further consideration, I think it's
-> better to have separate lane-mapping properties for that purpose. It
-> will be easier to explain and parse and be a bit more flexible that way.
+> [...]
 
-LGTM
-Reviewed-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+Applied, thanks!
+
+[1/2] dt-bindings: leds: add lp5860 LED controller
+      commit: 393d56d437c65e4619cadab9f2347167cde99906
+[2/2] leds: add support for TI LP5860 LED driver chip
+      commit: 97ee55eb5d33f6b0d2d72954a8ce8a61c15893c8
+
+--
+Lee Jones [李琼斯]
+
 
