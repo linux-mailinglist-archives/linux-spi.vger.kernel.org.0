@@ -1,112 +1,112 @@
-Return-Path: <linux-spi+bounces-12206-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12208-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EE0ED01BFF
-	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 10:10:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55DABD0230B
+	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 11:47:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B4289305784D
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 08:55:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9E66130C4E15
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 10:15:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0717238B9A3;
-	Thu,  8 Jan 2026 07:53:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF33B43B817;
+	Thu,  8 Jan 2026 10:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="KAlfEiDc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJukXlDr"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9299438B98C
-	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 07:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0869D3ECBD8;
+	Thu,  8 Jan 2026 10:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767858819; cv=none; b=CuZ2Zk7K/yFY3NHawhf6xvtR46UG1Fj5SAb5LRI/EbaG2OK3wgaKDM8d8TC8SCVqmljgpY9xSa/UXZIdUNEfTBJ6O346H1J0fDxAPK8UyYMcH9OobgG4Gc15xphF6MKPwcYm6L8dXt5P8soK83+BLccsu13Ux3wTeYN8LWCm654=
+	t=1767867327; cv=none; b=YI17mWn8hqcVS69EUecVwLvtGnG3vBtIw9kI4Rl4Hz5/X7SNrXFYZOh2caC6WNQGXwOIFA/VSVjb1ORkfsFLcLSlCVPlSn0KGpYHLgoRfUGQjESFmp6Y6cp74oUP167itmbSGXkbLNvfcv5p/oMwAlhaUkyo2138i/m6ShtuF00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767858819; c=relaxed/simple;
-	bh=ZOCtnOIUDGhtXFxpL7a+j98ZZWNUH6g4Uu4CU4oFuNI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CCNx47Apfk4HBzYfJwut0w/Ueal/wyuhoaNUL5x6ToUKcphGdk2u3DhjjTN1rL0aUNXe43aeglui4GqxiBZWZVpL+tbbzqoGVgr2hgTcf8+MMbZVJ1FCyUWnucsP7ZVUSW3RNbIE+CqilKC8QWjDRvrN44VuctfJg/BMp4AkEUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=KAlfEiDc; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=iWj7nOUU03u7CJJZ4hIqUKWg1L01ZekPymK3iNDetg0=;
-	b=KAlfEiDcTPlBTE0TeRe1SgHGycdGHDWyAl6IiDBzSJZiVp7k48Vtikp3SMGPf3iLR3vMHA9vT
-	gguF4bm0TGDw8D7p+wLG+SVla3pldusU69KmQyvinI0lWMLETiqOrAflCig0IixSBjnmym+2icD
-	JQo4Ut5Fe2xEcKZ/G0rMz5U=
-Received: from mail.maildlp.com (unknown [172.19.163.127])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4dmxrz0p39z1K968;
-	Thu,  8 Jan 2026 15:50:11 +0800 (CST)
-Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id 099EF402AB;
-	Thu,  8 Jan 2026 15:53:25 +0800 (CST)
-Received: from kwepemn200006.china.huawei.com (7.202.194.129) by
- dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 8 Jan 2026 15:53:24 +0800
-Received: from localhost.huawei.com (10.90.31.46) by
- kwepemn200006.china.huawei.com (7.202.194.129) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 8 Jan 2026 15:53:24 +0800
-From: Devyn Liu <liudingyuan@h-partners.com>
-To: <shenyang39@huawei.com>, <broonie@kernel.org>
-CC: <linux-spi@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <yubowen8@huawei.com>,
-	<zhanjie9@hisilicon.com>, <liuyonglong@huawei.com>,
-	<kangfenglong@huawei.com>, <alireza.sanaee@huawei.com>,
-	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>,
-	<kong.kongxinwei@hisilicon.com>, <liudingyuan@h-partners.com>,
-	<lujunhua7@h-partners.com>
-Subject: [PATCH] spi: hisi-kunpeng: Fixed the wrong debugfs node name in hisi_spi debugfs initialization
-Date: Thu, 8 Jan 2026 15:53:23 +0800
-Message-ID: <20260108075323.3831574-1-liudingyuan@h-partners.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1767867327; c=relaxed/simple;
+	bh=/Jo4ameylI0QDhXxQi0CCzG2dUsmHBJUDcZwLC5zwbA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lSn33Ieq/8Sfpe+4EwndNhkW+sTPWS/NDsaagPnnsdCbhCz6oG5RzaiZKiHanu0Gwwk3DZOLIKWclvTYIVDDnSzoEnkMEFTk8++XOhC+LR+xBgmz+JnnCg+8AVWSwSBPlwh8YapP49yqaYw1C/fKvTaJLi+XNNOPuOgE3Fld9c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJukXlDr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2BDDC116C6;
+	Thu,  8 Jan 2026 10:15:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767867326;
+	bh=/Jo4ameylI0QDhXxQi0CCzG2dUsmHBJUDcZwLC5zwbA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VJukXlDrCbJOTEghDXLqYk1LyiTsHtYPsvhcEAYVvGBcAW4OMHxk8hZ77RIvCbAq4
+	 Gu49EpVeij/ehMx5DaJK1xGB16fgOe5CikVuGooTBvXGcmnHLC95wIGuwQT8FUVYim
+	 68EfHiAngHTaO1CLjU91vdCTD/5wOyWNwh3TqgSwc7AdZxLZf+YxJfA5sXbHDZx/MQ
+	 prM1AV2uhEVuH4MDU58jbwMXdMUSd2aOX04Mh+iLCHRzFvK5SOA4GtJPZoj1yPZPaa
+	 hTDj2e/FtJIBcmLvFriUiYGzS4WxRpISQRRNPfR9WVHwPlVCERGEqQ4XFR0T7Zzqxj
+	 XjK9vT41zh1ww==
+Date: Thu, 8 Jan 2026 10:15:20 +0000
+From: Lee Jones <lee@kernel.org>
+To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
+Cc: Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] mfd: sprd-sc27xx: Integrate power off and reboot
+ support
+Message-ID: <20260108101520.GA302752@google.com>
+References: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
+ <20251110-sc27xx-mfd-poweroff-v2-1-fd5842e732fe@abscue.de>
+ <20251120153024.GI661940@google.com>
+ <aSNFk7tZqcgBqYsI@abscue.de>
+ <20251126153619.GH3070764@google.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemn200006.china.huawei.com (7.202.194.129)
+In-Reply-To: <20251126153619.GH3070764@google.com>
 
-In hisi_spi_debugfs_init, spi controller pointer is calculated
-by container_of macro, and the member is hs->dev. But the host
-cannot be calculated offset directly by this. (hs->dev) points
-to (pdev->dev), and it is the (host->dev.parent) rather than
-(host->dev) points to the (pdev->dev), which is set in
-__spi_alloc_controller.
+On Wed, 26 Nov 2025, Lee Jones wrote:
 
-In this patch, this issues is fixed by getting the spi_controller
-data from pdev->dev by dev_get_drvdata() directly. (dev->driver_data)
-points to the spi controller data in the probe stage.
+> On Sun, 23 Nov 2025, Otto Pflüger wrote:
+> 
+> > On Thu, Nov 20, 2025 at 03:30:24PM +0000, Lee Jones wrote:
+> > > On Mon, 10 Nov 2025, Otto Pflüger wrote:
+> > > 
+> > > > The SC27xx PMICs allow restarting and powering off the device. Since
+> > > > this functionality is rather simple and not configurable in any way,
+> > > > make it part of the main PMIC driver.
+> > > 
+> > > This sounds like more of a drivers/power thing.
+> > 
+> > This was originally in drivers/power, but according to [1], it should
+> > not be a separate device tree node. Using a separate driver without a
+> > separate device tree node would still involve some code here that
+> > instantiates a platform device and selects the right platform data for
+> > it.
+> > 
+> > Registering the poweroff handler directly seemed less complex, and I
+> > assumed it was okay since some other MFD drivers (e.g. rk8xx) also
+> > implement the same functionality without a separate power driver.
+> > 
+> > Is it a good idea to use devm_mfd_add_devices here instead?
+> > 
+> > [1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
+> 
+> Well that is quite the predicament.
+> 
+> Let me catch-up with Rob out-of-band and see if we can come up with a
+> solution.
 
-Signed-off-by: Devyn Liu <liudingyuan@h-partners.com>
-Reviewed-by: Yang Shen <shenyang39@huawei.com>
----
- drivers/spi/spi-hisi-kunpeng.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+The discussion between Rob and I led to an "agree to disagree" moment.
 
-diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
-index dadf558dd9c0..80a1a15de0bc 100644
---- a/drivers/spi/spi-hisi-kunpeng.c
-+++ b/drivers/spi/spi-hisi-kunpeng.c
-@@ -161,10 +161,8 @@ static const struct debugfs_reg32 hisi_spi_regs[] = {
- static int hisi_spi_debugfs_init(struct hisi_spi *hs)
- {
- 	char name[32];
-+	struct spi_controller *host = dev_get_drvdata(hs->dev);
- 
--	struct spi_controller *host;
--
--	host = container_of(hs->dev, struct spi_controller, dev);
- 	snprintf(name, 32, "hisi_spi%d", host->bus_num);
- 	hs->debugfs = debugfs_create_dir(name, NULL);
- 	if (IS_ERR(hs->debugfs))
+I still think that a node to describe this device is the correct
+approach, however without Rob's blessing, you're a bit stuck.
+
+I think your best bet at this point is to remove the
+devm_of_platform_populate() and replace it with mfd_add_devices().
+
 -- 
-2.33.0
-
+Lee Jones [李琼斯]
 
