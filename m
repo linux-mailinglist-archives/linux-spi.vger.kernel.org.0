@@ -1,142 +1,137 @@
-Return-Path: <linux-spi+bounces-12213-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12216-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DD27D03F16
-	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 16:41:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ADF1D047C3
+	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 17:43:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6F3B93085FBE
-	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 15:29:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6D458323B7CB
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 15:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902C3465D14;
-	Thu,  8 Jan 2026 12:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC16946BBFF;
+	Thu,  8 Jan 2026 12:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEPN8acV"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="0QsV2+5m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-dy1-f196.google.com (mail-dy1-f196.google.com [74.125.82.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287F1465D07
-	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 12:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116FC46BBED;
+	Thu,  8 Jan 2026 12:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767876157; cv=none; b=bRvli6eH1aPmc72yZx9DKfh2PmUJbCPxyOHV9/P2VtU/BEi4+MjZ79rEYSFF3K+eMgT/RF1HnPw/c/ezUQvFUXYKknoQTD7XUMKfhPIEj7QQZJWSom3xSS3fcDcLF2IzmBrLMsOMKO88PsgCZqhFi4pDpTp9EQgpNkMnj+lHGUw=
+	t=1767876706; cv=none; b=JjuzRYESi0CTkkWjidltZAfTJAtwuSYLyw+iaeDB4RTepP2ylu2boEdc0V/5XTAmEIsdSS91gbhIA25HURvmi+v1PbmwwFXSTVu3ZplC56WhS0DPuaSwkqHFcXU/fr8eXO0UKmjIFTLIzgPVGsb7tgveYtV7k608jazCl9ghMYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767876157; c=relaxed/simple;
-	bh=6wtGbh2+RP2QUwWE9UIqXXcEp3EZiqiCgv0n4SQ2vUs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K7WvbrYM9xmH19vK20xqNjs6ldnjVUBBXF7vnnfVXRd+uVeLtm9nau26F8pvB/iUISDn+T48lTo9wOET41FpTi3hZEJ8xGUdXroiWp5YHZtlz/VZCNyAbXFJ5FlcQz/KZCC8o/hFCioxuIR6Yo8PvjnBzmbCMceTNiKdEbyIICo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEPN8acV; arc=none smtp.client-ip=74.125.82.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f196.google.com with SMTP id 5a478bee46e88-2ae2eb49b4bso424461eec.0
-        for <linux-spi@vger.kernel.org>; Thu, 08 Jan 2026 04:42:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767876155; x=1768480955; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iINcQgr3dcl7IwITqUtWTzuEmlrnp/IbXb1tjKBIgMo=;
-        b=KEPN8acV47ycJ2LaC9cZjX8YgKn9GIKrsokTF2tfNcleQqIFZhx0Z5OM3aokWl7Kjk
-         aRxOeWqpSUO9mvIcOpR/zhbrNF6Uc48Tw8AipNy1S9Q5T0CJ/khaYfNSneL7SSKAjoAh
-         FHIpeWjO3/OuPgaqS3vj7mxmjT4iycF9d7E4pyfZquhaPo/OSnpA7ZFPWbmHZHMzX0Ik
-         78zZwGdLZKIi/xndMyukXa5gMUtQcRZ+oSObG3uxgf2XaIfM4Xkl65yJYA8x3nm13PVF
-         PAaMbSg1Uyw4vc9kodaZsIe3Lykz+MvtMHHtohN9VQxWn75f+r6+scRqBtJR1o7OlN/U
-         AZUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767876155; x=1768480955;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iINcQgr3dcl7IwITqUtWTzuEmlrnp/IbXb1tjKBIgMo=;
-        b=QvnflXTPb6vsFSe/RSfDqOjDUhtT7EXJhLt1082wK892r4s6MIUX/H2+Inflna4Zp0
-         2xRI8q0KuxN0TKQQEE5fi8FsQ2XFZJsAfJBaX+lyQqNN6uTwAu60ztOnd5V6Ld6AV697
-         fSqfqVWE6VYi0p4ZiR8dIcxsmaX4Jebp+NcZrsgL3klIEs+Mu6F/oIwrhKDqYQOZghI4
-         VUWzFhsGJfnxmGkrLlms/AcahChw8w7h8qegm80rnw0VfEKNrhYyYvo2TJLs2lWHO/IL
-         4SySBZLRstjomBRNI2ri2YluHn62OL1vZpmvg1UiUDkC+x8dnSKooyIWnAEXG77luAHL
-         zhsw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9aygC8MDhdKX2ftaDy1a2ZtQQHGWAzHUpr5ECnuPznsSh+WxBvTpwfwXhgg7HsKQyxaASElo+H4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz54PIPdAIn8mXvHaO1zG3WRLN/k4xl53DGnnEsbDEv8H+ZnbCf
-	sHsiESEQTsc9vBtONhOHcfBd1JaEtQXeo8257ls35KLfQ5Gpf/dvdAcV
-X-Gm-Gg: AY/fxX7aiieL2k5dmlo5Iv3Qn/70dNTqYc4AUTThj/IMh3XVBB2A2cxhKzFY5ZOI2FC
-	B2N8IU770YTP+gzAiSPFdsK7aJaQ7q2ulKSsbmdYkE+h79OS138cykETzE9cxLQGSMZ25azmX1E
-	ILHzkD3EZaAr5oINfzQjap4yhHwKywhe5+wFxMe7a7m319YgHKyltT3SUvkP8yikmxBN1DcnbxO
-	n8ijUFiFNm5eWFPoevC05MCi8NOfqAdcaSvl2x1o+ZnAcrPvncCpw8704NgfyDY1nvehYA991dq
-	W0gaCKHzAnfbwHe4OcEDSpcS90eWNZW5f5f7Bui5CX9Pr9cJPwa+kGx6ZG+w5iEd4ldqNweaJFu
-	9BMv7MPHUVGmvNpPQAbYlPXaH2PZadVZ69WCTh9Lgw/IKzgAvDhM9mFjH57vf75xYG0AHSQ5vGA
-	jJlcGdaJo88Ic+jbXwXVY=
-X-Google-Smtp-Source: AGHT+IGKdzRBnHICTlRWGJzmFCnaBvcnI3d6GGx35do6Dsr1hh8Gc5HdQMPNrFaQ6n6EcK7eJyNvKw==
-X-Received: by 2002:a05:7300:5613:b0:2b0:1607:6d02 with SMTP id 5a478bee46e88-2b17d2ba86cmr4428926eec.31.1767876155196;
-        Thu, 08 Jan 2026 04:42:35 -0800 (PST)
-Received: from localhost ([2804:30c:2766:a500:b70:8c42:f792:bef6])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b21dasm9868181eec.27.2026.01.08.04.42.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 04:42:34 -0800 (PST)
-Date: Thu, 8 Jan 2026 09:44:20 -0300
-From: Marcelo Schmitt <marcelo.schmitt1@gmail.com>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Sean Anderson <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-iio@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] spi: Documentation: add page on multi-lane support
-Message-ID: <aV-mpFCF_ET3AZ1B@debian-BULLSEYE-live-builder-AMD64>
-References: <20251219-spi-add-multi-bus-support-v4-0-145dc5204cd8@baylibre.com>
- <20251219-spi-add-multi-bus-support-v4-5-145dc5204cd8@baylibre.com>
+	s=arc-20240116; t=1767876706; c=relaxed/simple;
+	bh=oMbg1t4gVHb0Gg+4k+LaYWcg2zi+dDlwTj6oLi0A9bE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DZe9AfJ0SGR1qCrfQlEEJCXjSgFWuueEvdliSFx5knRNgoMv+noKhULkmgQSgj9sauGpyr8m1/FWc04UeHUH8akd+QiL309+IWo8F7FpoM4ncuneCdhA5bmxJpmb1RI0Rk+bKvrnjzqxlYN9PcDkZH/SeAwgaSMkmdp43PE9Chk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=0QsV2+5m; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1767876705; x=1799412705;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=oMbg1t4gVHb0Gg+4k+LaYWcg2zi+dDlwTj6oLi0A9bE=;
+  b=0QsV2+5mdWUmtiptXmK2/DBE8wMGZXgafrQnFEhOQXs6eReG3h15qAB0
+   6hEjVW+reMHGnxV/8lfW2uf+ShU6YNdItACuGF1MN8qQT0ZxpPedC8Hy7
+   DD3hYAMr5U7uFj+ozfaQavq8NZFUwuB4/npaQFwO3nwScoUimqpZctIiF
+   +p4goaIqbg/tWSbLS23iDPVcx0pnmEBYVd3J6wyI1kZxIsK65/BJiVI1G
+   6ZX3c12N4wOh6ObenByKWrEE095cJBkWTFEBi0RdIY6c13CGT0zLPK++A
+   Xi5EoGk8+jBK2+Mr+3c+tSp1R6EdbKr/bJx1sSsjJtBUfOo2JeC+ThHR8
+   A==;
+X-CSE-ConnectionGUID: X6J/S07DR6yot7+6HsGmPQ==
+X-CSE-MsgGUID: aacrEZ+gQPGTejMT6AIfFQ==
+X-IronPort-AV: E=Sophos;i="6.21,210,1763449200"; 
+   d="scan'208";a="51559444"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Jan 2026 05:51:38 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Thu, 8 Jan 2026 05:51:08 -0700
+Received: from [10.205.167.104] (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Thu, 8 Jan 2026 05:51:06 -0700
+Message-ID: <12446fa2-570b-4882-80dc-c72a166aaf19@microchip.com>
+Date: Thu, 8 Jan 2026 13:00:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251219-spi-add-multi-bus-support-v4-5-145dc5204cd8@baylibre.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] spi: microchip-core: use XOR instead of ANDNOT to
+ simplify the logic
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Conor Dooley
+	<conor@kernel.org>
+CC: Jonas Gorski <jonas.gorski@gmail.com>, Mark Brown <broonie@kernel.org>,
+	<linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Prajna Rajendra
+ Kumar - M74368" <prajna.rajendrakumar@microchip.com>
+References: <20251128185518.3989250-1-andriy.shevchenko@linux.intel.com>
+ <20251128185518.3989250-3-andriy.shevchenko@linux.intel.com>
+ <CAOiHx==y-4Jjckr-KnwdmJhi=TR9_wzcHvNo8GAeUmJ43Y_bHw@mail.gmail.com>
+ <aSqsdKpJ7CDd6jJn@smile.fi.intel.com>
+ <20251201-calamity-favoring-b2d1ec4bcc81@spud>
+ <aS3XBW7D0vVmUTio@smile.fi.intel.com>
+Content-Language: en-US
+From: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+In-Reply-To: <aS3XBW7D0vVmUTio@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Actually, one more thing ...
+On 01/12/2025 17:57, Andy Shevchenko wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>
+> On Mon, Dec 01, 2025 at 04:08:57PM +0000, Conor Dooley wrote:
+>> On Sat, Nov 29, 2025 at 10:19:00AM +0200, Andy Shevchenko wrote:
+>>> On Fri, Nov 28, 2025 at 08:30:43PM +0100, Jonas Gorski wrote:
+>>>> On Fri, Nov 28, 2025 at 7:56 PM Andy Shevchenko
+>>>> <andriy.shevchenko@linux.intel.com> wrote:
+> ...
+>
+>>>>> -       if (spi->mode & SPI_MODE_X_MASK & ~spi->controller->mode_bits) {
+>>>>> +       if ((spi->mode ^ spi->controller->mode_bits) & SPI_MODE_X_MASK) {
+>>>> This changes the behavior: if a bit isn't set in spi->mode that is set
+>>>> in mode_bits, it would have been previously accepted, now it's
+>>>> refused. E.g. controller has (SPI_CPOL | SPI_CPHA), device only
+>>>> SPI_CPOL. 0x1 & 0x3 & ~0x3 => 0, vs (0x1 ^ 0x3) & 0x3 => 0x2
+>>>>
+>>>> If this is the actually intended behavior here, it is a fix and should
+>>>> carry a Fixes tag (the message below implies that).
+>>> Yeah, yesterday I was thinking about the same and I was confused by the logic
+>>> behind. As far as I understood the comments regarding mode provided by DT is
+>>> that the mode is configured in IP and may not be changed. And you are right
+>>> about the fix, but let's wait for Microchip to elaborate on the expected
+>>> behaviour.
+>> Prajna is on holiday and I don't have a setup to actually test this on,
+>> but I'm 99% sure that you're both right and the original behaviour was
+>> wrong. There's a verilog parameter to the IP block that determines which
+>> motorola mode it is and a device that's not an exact match won't work.
+> Okay, let's not hurry up with this and wait for testing results.
+>
+>> FWIW:
+>> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>>>>>                  dev_err(&spi->dev, "incompatible CPOL/CPHA, must match controller's Motorola mode\n");
+>>>>>                  return -EINVAL;
+>>>>>          }
+> Thanks for the review!
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
+Hi,
 
-On 12/19, David Lechner wrote:
-> Add a new page to Documentation/spi/ describing how multi-lane SPI
-> support works. This is uncommon functionality so it deserves its own
-> documentation page.
-> 
-> Signed-off-by: David Lechner <dlechner@baylibre.com>
-> ---
-...
-> +- :c:macro:`SPI_MULTI_BUS_MODE_STRIPE`: Send or receive two different data words
-> +    at the same time, one on each lane. This means that the buffer needs to be
-> +    sized to hold data for all lanes. Data is interleaved in the buffer, with
-> +    the first word corresponding to lane 0, the second to lane 1, and so on.
-> +    Once the last lane is used, the next word in the buffer corresponds to lane
-> +    0 again. Accordingly, the buffer size must be a multiple of the number of
-> +    lanes. This mode works for both reads and writes.
-> +
-> +    Example::
-> +
-> +        struct spi_transfer xfer = {
-> +            .rx_buf = rx_buf,
-> +            .len = 2,
-> +            .multi_lane_mode = SPI_MULTI_BUS_MODE_STRIPE,
-> +        };
-> +
-> +        spi_sync_transfer(spi, &xfer, 1);
-> +
-> +    Each tx wire has a different data word sent simultaneously::
-In this example, the controller is reading data so the rx wires have different
-data word received?
+I've tested this on my setup and XOR check matches how the controller
+behaves. The SPI mode is fixed in hardware, so the previous logic was
+wrong.
 
-> +
-> +        controller    < data bits <     peripheral
-> +        ----------   ----------------   ----------
-> +            SDI 0    0-0-0-1-0-0-0-1    SDO 0
-> +            SDI 1    1-0-0-0-1-0-0-0    SDO 1
-> +
-> +    After the transfer, ``rx_buf[0] == 0x11`` (word from SDO 0) and
-> +    ``rx_buf[1] == 0x88`` (word from SDO 1).
+Tested-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+
 
