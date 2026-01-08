@@ -1,112 +1,112 @@
-Return-Path: <linux-spi+bounces-12201-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12206-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B8B4CFF64C
-	for <lists+linux-spi@lfdr.de>; Wed, 07 Jan 2026 19:20:49 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EE0ED01BFF
+	for <lists+linux-spi@lfdr.de>; Thu, 08 Jan 2026 10:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5A62730239DD
-	for <lists+linux-spi@lfdr.de>; Wed,  7 Jan 2026 18:20:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B4289305784D
+	for <lists+linux-spi@lfdr.de>; Thu,  8 Jan 2026 08:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98D53446B7;
-	Wed,  7 Jan 2026 18:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0717238B9A3;
+	Thu,  8 Jan 2026 07:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cfK1G1cT"
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="KAlfEiDc"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF8B318B86;
-	Wed,  7 Jan 2026 18:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9299438B98C
+	for <linux-spi@vger.kernel.org>; Thu,  8 Jan 2026 07:53:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767809471; cv=none; b=Z+uvfrrfL8OeUZ/eCphl17TipAOrutMWaMkkqaSVnaj2W2xjCdsH4AhDPZPVIo1rbQ4Jm9G5tWQKMBGHRCRqkll3Mtx7olsdFdNMS0p1bj1u1FUZuVOaKwiYBsg1YNZ+LzSF5zG8JY0NRHP7fj4XXb6eIOyQonQGmLKGQft0efU=
+	t=1767858819; cv=none; b=CuZ2Zk7K/yFY3NHawhf6xvtR46UG1Fj5SAb5LRI/EbaG2OK3wgaKDM8d8TC8SCVqmljgpY9xSa/UXZIdUNEfTBJ6O346H1J0fDxAPK8UyYMcH9OobgG4Gc15xphF6MKPwcYm6L8dXt5P8soK83+BLccsu13Ux3wTeYN8LWCm654=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767809471; c=relaxed/simple;
-	bh=yTNbHm4Elx5+p4958R6MqgcPSCwr1JI4nhgkqFvSTQk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ullz0+xaSQQl8kfqBKBhxXehs3uf6htcOZz8vFBsxxa5WxjmyPmJS85AdNOUVbZ7kZqRFhDHxwPJZcghJAEncH9exxoMLQib4QPLARiIhCQumQ0YOQhkVueYobO+7rJLlol9xFmeYelBspkXTVElYp4U3IjtnVxsid4VOuwLOZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfK1G1cT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8804DC4CEF1;
-	Wed,  7 Jan 2026 18:11:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767809471;
-	bh=yTNbHm4Elx5+p4958R6MqgcPSCwr1JI4nhgkqFvSTQk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cfK1G1cTgD2fle+eiVWG8uWGL3DLjptNzOtIstqyjt6/KrCcdkcRIYkLMAFg5sqfU
-	 23DJAQ6Ihpdb0VBgZEj5n4w3P/+Tfctp8rOxcqAdwIfRgsibuGYiVVhEMNkpf5BavK
-	 hAE9zfUD/PvELOxL1BnKLd1mySP9UBmDoUgW70rAsQSmNsdrNvRd3AB9QCLwRqAK+j
-	 oxVc3cTy7pQnwCk8nZBquR6VX65USIoYM8/BhK/axE/pa5A6txZuUFQ/C+KsYl/Wdl
-	 MWyiwSl+/46epZ2ay12CbjJus5BTD4FfLSnKm9atA3rN+Tu5UGRZsB7JumYPu4T/PH
-	 iTN8bHn/qzmQA==
-Date: Wed, 7 Jan 2026 19:11:07 +0100
-From: Andi Shyti <andi.shyti@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, lee@kernel.org, 
-	andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	linusw@kernel.org, Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
-	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, luka.perkov@sartura.hr, 
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 05/15] dt-bindings: i2c: atmel,at91sam: add
- microchip,lan9691-i2c
-Message-ID: <aV6hp9_AbKm9IAP9@zenone.zhora.eu>
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-6-robert.marko@sartura.hr>
+	s=arc-20240116; t=1767858819; c=relaxed/simple;
+	bh=ZOCtnOIUDGhtXFxpL7a+j98ZZWNUH6g4Uu4CU4oFuNI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CCNx47Apfk4HBzYfJwut0w/Ueal/wyuhoaNUL5x6ToUKcphGdk2u3DhjjTN1rL0aUNXe43aeglui4GqxiBZWZVpL+tbbzqoGVgr2hgTcf8+MMbZVJ1FCyUWnucsP7ZVUSW3RNbIE+CqilKC8QWjDRvrN44VuctfJg/BMp4AkEUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=KAlfEiDc; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=iWj7nOUU03u7CJJZ4hIqUKWg1L01ZekPymK3iNDetg0=;
+	b=KAlfEiDcTPlBTE0TeRe1SgHGycdGHDWyAl6IiDBzSJZiVp7k48Vtikp3SMGPf3iLR3vMHA9vT
+	gguF4bm0TGDw8D7p+wLG+SVla3pldusU69KmQyvinI0lWMLETiqOrAflCig0IixSBjnmym+2icD
+	JQo4Ut5Fe2xEcKZ/G0rMz5U=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4dmxrz0p39z1K968;
+	Thu,  8 Jan 2026 15:50:11 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 099EF402AB;
+	Thu,  8 Jan 2026 15:53:25 +0800 (CST)
+Received: from kwepemn200006.china.huawei.com (7.202.194.129) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 8 Jan 2026 15:53:24 +0800
+Received: from localhost.huawei.com (10.90.31.46) by
+ kwepemn200006.china.huawei.com (7.202.194.129) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 8 Jan 2026 15:53:24 +0800
+From: Devyn Liu <liudingyuan@h-partners.com>
+To: <shenyang39@huawei.com>, <broonie@kernel.org>
+CC: <linux-spi@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <yubowen8@huawei.com>,
+	<zhanjie9@hisilicon.com>, <liuyonglong@huawei.com>,
+	<kangfenglong@huawei.com>, <alireza.sanaee@huawei.com>,
+	<salil.mehta@huawei.com>, <shiju.jose@huawei.com>,
+	<kong.kongxinwei@hisilicon.com>, <liudingyuan@h-partners.com>,
+	<lujunhua7@h-partners.com>
+Subject: [PATCH] spi: hisi-kunpeng: Fixed the wrong debugfs node name in hisi_spi debugfs initialization
+Date: Thu, 8 Jan 2026 15:53:23 +0800
+Message-ID: <20260108075323.3831574-1-liudingyuan@h-partners.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251229184004.571837-6-robert.marko@sartura.hr>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemn200006.china.huawei.com (7.202.194.129)
 
-Hi Robert,
+In hisi_spi_debugfs_init, spi controller pointer is calculated
+by container_of macro, and the member is hs->dev. But the host
+cannot be calculated offset directly by this. (hs->dev) points
+to (pdev->dev), and it is the (host->dev.parent) rather than
+(host->dev) points to the (pdev->dev), which is set in
+__spi_alloc_controller.
 
-On Mon, Dec 29, 2025 at 07:37:46PM +0100, Robert Marko wrote:
-> Document Microchip LAN969x I2C compatible.
-> 
-> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Acked-by: Andi Shyti <andi.shyti@kernel.org>
+In this patch, this issues is fixed by getting the spi_controller
+data from pdev->dev by dev_get_drvdata() directly. (dev->driver_data)
+points to the spi controller data in the probe stage.
 
-Just this patch merged to i2c/i2c-host.
+Signed-off-by: Devyn Liu <liudingyuan@h-partners.com>
+Reviewed-by: Yang Shen <shenyang39@huawei.com>
+---
+ drivers/spi/spi-hisi-kunpeng.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Thanks,
-Andi
+diff --git a/drivers/spi/spi-hisi-kunpeng.c b/drivers/spi/spi-hisi-kunpeng.c
+index dadf558dd9c0..80a1a15de0bc 100644
+--- a/drivers/spi/spi-hisi-kunpeng.c
++++ b/drivers/spi/spi-hisi-kunpeng.c
+@@ -161,10 +161,8 @@ static const struct debugfs_reg32 hisi_spi_regs[] = {
+ static int hisi_spi_debugfs_init(struct hisi_spi *hs)
+ {
+ 	char name[32];
++	struct spi_controller *host = dev_get_drvdata(hs->dev);
+ 
+-	struct spi_controller *host;
+-
+-	host = container_of(hs->dev, struct spi_controller, dev);
+ 	snprintf(name, 32, "hisi_spi%d", host->bus_num);
+ 	hs->debugfs = debugfs_create_dir(name, NULL);
+ 	if (IS_ERR(hs->debugfs))
+-- 
+2.33.0
 
-> ---
-> Changes in v4:
-> * Pick Acked-by from Andi
-> 
-> Changes in v3:
-> * Pick Acked-by from Conor
-> 
->  Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> index e61cdb5b16ef..c83674c3183b 100644
-> --- a/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/atmel,at91sam-i2c.yaml
-> @@ -26,6 +26,7 @@ properties:
->                - microchip,sam9x60-i2c
->        - items:
->            - enum:
-> +              - microchip,lan9691-i2c
->                - microchip,sama7d65-i2c
->                - microchip,sama7g5-i2c
->                - microchip,sam9x7-i2c
-> -- 
-> 2.52.0
-> 
 
