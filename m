@@ -1,55 +1,55 @@
-Return-Path: <linux-spi+bounces-12262-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12263-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7301FD0BA3E
-	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:28:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7695FD0BA2A
+	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 47A4A312ED19
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:20:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 01E473077473
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D03336C0B1;
-	Fri,  9 Jan 2026 17:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1F036B07B;
+	Fri,  9 Jan 2026 17:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VsVf09XI"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="2GWdC6RF"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A3636B064
-	for <linux-spi@vger.kernel.org>; Fri,  9 Jan 2026 17:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B85366DAC;
+	Fri,  9 Jan 2026 17:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767979127; cv=none; b=sYCQHchqeW4LfmNOzOn7tp9k/HFeAUmhjcvGbxZvQDU3Q0sPxCQRU2hgb4rBqwNLPSNhu335Xc0e0k04as1OwtGKt1yOylOCy7L5MnjCQGk1LFh3htv4VN4eZRN9mCBoAc7QXMHijXG6wRWZdmXgEDp25lRamLsK5JWS1Zes/3M=
+	t=1767979127; cv=none; b=ovpmqVgXqaeOj/k5P+waahdHXOrvz5BH+dGEEpamPLRtD/Es7nmdBQp/Z481w7vFg/WRZo6/S++hyI3V9zpLonsEOwBZQbEI19damXCGuLo5fmLD7avBH0GXNt/n6Twhn1gzv/PhYyE/+ofi/bwNZqxQBXzoZQ1KZqBdP1GBVAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767979127; c=relaxed/simple;
-	bh=s5DqMiIYKdUfxWUAhN4RGGYA4fqft2YfnmGn93p+UVQ=;
+	bh=ZBa9WI9sNZf/R3HFBY0G831aCKS+wM03PWRWgU0Aikk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iaqejOnWAIRZS5X93mKrx76EVBgAX91PsUnafkxw0y6yr0HSNAcDrdi34Ge7kRwhqn+t7RkVTwGfX0np7e/dPKvJpwoN2CVnqnTiDa9eYjD6XMxksCmE+Ci0tzmoNgMECgmMgff1d1Bql/ohnC62xYSATzNo7I6KhzFPDdtqJo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VsVf09XI; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=pfBYQVLJR1Ik0vhWevdvDitGjEtRW/xVbgIHq3BoMFEau1wI9EpUzZfjSS0FLSE8BQEBfoitJX6BopIqsy8fKUWOI2Q5fzFB3AwPx54d30BZ45T68TrcpVt2SdC+JwONmUTy+DzpLFFHimAbMQJ+gZymENZbqiWmrnuDVgJqHZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=2GWdC6RF; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 628BE4E42029;
-	Fri,  9 Jan 2026 17:18:43 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id B0FE84E4202B;
+	Fri,  9 Jan 2026 17:18:44 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 38D1E606C6;
-	Fri,  9 Jan 2026 17:18:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 99992103C89BE;
-	Fri,  9 Jan 2026 18:18:41 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 89E25606C6;
+	Fri,  9 Jan 2026 17:18:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D1BBA103C89BD;
+	Fri,  9 Jan 2026 18:18:42 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1767979122; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1767979123; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=MJtnWz64Xe2CigN2SsqL9dz4pY2jKcHax/iVWEjwuVE=;
-	b=VsVf09XIYY2kdVeC7p8aVeJhhXqg3JjokyNXGBN/qHn+C8TZq/tt9kVF8GKjfzrTja2L49
-	ObuMZwLg6icAY8fW1jwM8TCNfKPkvcWs4PqikhCyUD+7fqYCE/mjiTLzwBfYEQGICfoQb7
-	LHVUj0tVRQ0O9Y3pZypA10d2LigK45IrsM87PfSQj9Lr2H/chB6Ct017Vm/mDMM/tHHAzI
-	OmF7aL5DFTrSBB1621r+FS+UtY4TCk869vywmaiZB/zZc629UUxlIn1LxHE21ThmJa4SYC
-	M0XEXdCHeuIgfp7NjC8xu/6zHpYF2N9bWBYd0E8O8oe/MY+vEVJGz2kvP619Dw==
+	bh=71VfqlwpnO88b/BySfbu5HhBv3rjVPZdc4UiUGls3+g=;
+	b=2GWdC6RFF/oN61uiGb0U2Bfk6QtlTupk4CCJ0UftEV2hk0MCSwA5glgEp3PMl2sI6bZVai
+	cFI8myiIMfCBF7H4m8iJKjTEz4zmN7Se4ua7TEr4wsGgN/pUIFmQxrONiS4U7WVk8Wbfjw
+	nI3WgT2zIjTkpGfQ/id93LVlU8/4ywafoyphM20J7wYcARplx+fMsOOCM5vF/EwySwAwqK
+	x4Nj4vIdOCf/QVJ8POdb5FGYGXKC1GjR7qxlXFI5U94zmx1nfYRgywARbIXYEvXHX3E84w
+	QPBWJPGZrbNmvv+5vCXb6C+77YSToZOC2XCCwSGt3QUUc7HvSUo0wBG7kpkW4Q==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 09 Jan 2026 18:18:18 +0100
-Subject: [PATCH v2 20/27] mtd: spinand: winbond: Configure the IO mode
- after the dummy cycles
+Date: Fri, 09 Jan 2026 18:18:19 +0100
+Subject: [PATCH v2 21/27] mtd: spinand: Gather all the bus interface steps
+ in one single function
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-20-1fff6a2ddb80@bootlin.com>
+Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-21-1fff6a2ddb80@bootlin.com>
 References: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 In-Reply-To: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
@@ -72,68 +72,131 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-When we will change the bus interface, the action that actually performs
-the transition is the IO mode register write. This means after the IO
-mode register write, we should use the new bus interface. But the
-->configure_chip() hook itself is not responsible of making this change
-official, it is the caller that must act according to the return value.
+Writing the quad enable bit in one helper and doing the chip
+configuration in another does not make much sense from a bus interface
+setup point of view.
 
-Reorganize this helper to first configure the dummy cycles before
-possibly switching to another bus interface.
+Instead, let's create a broader helper which is going to be in charge of
+all the bus configuration steps at once. This will specifically allow to
+transition to octal DDR mode, and even fallback to quad (if suppoorted)
+or single mode otherwise.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/winbond.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/mtd/nand/spi/core.c | 62 +++++++++++++++++++++++++++------------------
+ 1 file changed, 37 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
-index b16963637683..1d79a8ae7920 100644
---- a/drivers/mtd/nand/spi/winbond.c
-+++ b/drivers/mtd/nand/spi/winbond.c
-@@ -381,21 +381,6 @@ static int w35n0xjw_vcr_cfg(struct spinand_device *spinand)
- 
- 	op = spinand->op_templates->read_cache;
- 
--	single = (op->cmd.buswidth == 1 && op->addr.buswidth == 1 && op->data.buswidth == 1);
--	dtr = (op->cmd.dtr || op->addr.dtr || op->data.dtr);
--	if (single && !dtr)
--		io_mode = W35N01JW_VCR_IO_MODE_SINGLE_SDR;
--	else if (!single && !dtr)
--		io_mode = W35N01JW_VCR_IO_MODE_OCTAL_SDR;
--	else if (!single && dtr)
--		io_mode = W35N01JW_VCR_IO_MODE_OCTAL_DDR;
--	else
--		return -EINVAL;
--
--	ret = w35n0xjw_write_vcr(spinand, W35N01JW_VCR_IO_MODE_REG, io_mode);
--	if (ret)
--		return ret;
--
- 	dummy_cycles = ((op->dummy.nbytes * 8) / op->dummy.buswidth) / (op->dummy.dtr ? 2 : 1);
- 	switch (dummy_cycles) {
- 	case 8:
-@@ -413,6 +398,21 @@ static int w35n0xjw_vcr_cfg(struct spinand_device *spinand)
- 	if (ret)
- 		return ret;
- 
-+	single = (op->cmd.buswidth == 1 && op->addr.buswidth == 1 && op->data.buswidth == 1);
-+	dtr = (op->cmd.dtr && op->addr.dtr && op->data.dtr);
-+	if (single && !dtr)
-+		io_mode = W35N01JW_VCR_IO_MODE_SINGLE_SDR;
-+	else if (!single && !dtr)
-+		io_mode = W35N01JW_VCR_IO_MODE_OCTAL_SDR;
-+	else if (!single && dtr)
-+		io_mode = W35N01JW_VCR_IO_MODE_OCTAL_DDR;
-+	else
-+		return -EINVAL;
-+
-+	ret = w35n0xjw_write_vcr(spinand, W35N01JW_VCR_IO_MODE_REG, io_mode);
-+	if (ret)
-+		return ret;
-+
+diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+index 88d87a96ddb0..54a32cea3755 100644
+--- a/drivers/mtd/nand/spi/core.c
++++ b/drivers/mtd/nand/spi/core.c
+@@ -261,18 +261,9 @@ static int spinand_init_cfg_cache(struct spinand_device *spinand)
  	return 0;
  }
  
+-static int spinand_init_quad_enable(struct spinand_device *spinand)
++static int spinand_init_quad_enable(struct spinand_device *spinand,
++				    bool enable)
+ {
+-	bool enable = false;
+-
+-	if (!(spinand->flags & SPINAND_HAS_QE_BIT))
+-		return 0;
+-
+-	if (spinand->op_templates->read_cache->data.buswidth == 4 ||
+-	    spinand->op_templates->write_cache->data.buswidth == 4 ||
+-	    spinand->op_templates->update_cache->data.buswidth == 4)
+-		enable = true;
+-
+ 	return spinand_upd_cfg(spinand, CFG_QUAD_ENABLE,
+ 			       enable ? CFG_QUAD_ENABLE : 0);
+ }
+@@ -1391,12 +1382,6 @@ static int spinand_manufacturer_init(struct spinand_device *spinand)
+ 			return ret;
+ 	}
+ 
+-	if (spinand->configure_chip) {
+-		ret = spinand->configure_chip(spinand);
+-		if (ret)
+-			return ret;
+-	}
+-
+ 	return 0;
+ }
+ 
+@@ -1602,6 +1587,31 @@ static int spinand_detect(struct spinand_device *spinand)
+ 	return 0;
+ }
+ 
++static int spinand_configure_chip(struct spinand_device *spinand)
++{
++	bool quad_enable = false;
++	int ret;
++
++	if (spinand->flags & SPINAND_HAS_QE_BIT) {
++		if (spinand->ssdr_op_templates.read_cache->data.buswidth == 4 ||
++		    spinand->ssdr_op_templates.write_cache->data.buswidth == 4 ||
++		    spinand->ssdr_op_templates.update_cache->data.buswidth == 4)
++			quad_enable = true;
++	}
++
++	ret = spinand_init_quad_enable(spinand, quad_enable);
++	if (ret)
++		return ret;
++
++	if (spinand->configure_chip) {
++		ret = spinand->configure_chip(spinand);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
+ static int spinand_init_flash(struct spinand_device *spinand)
+ {
+ 	struct device *dev = &spinand->spimem->spi->dev;
+@@ -1612,10 +1622,6 @@ static int spinand_init_flash(struct spinand_device *spinand)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = spinand_init_quad_enable(spinand);
+-	if (ret)
+-		return ret;
+-
+ 	ret = spinand_upd_cfg(spinand, CFG_OTP_ENABLE, 0);
+ 	if (ret)
+ 		return ret;
+@@ -1628,19 +1634,25 @@ static int spinand_init_flash(struct spinand_device *spinand)
+ 		return ret;
+ 	}
+ 
++	ret = spinand_configure_chip(spinand);
++	if (ret)
++		goto manuf_cleanup;
++
+ 	/* After power up, all blocks are locked, so unlock them here. */
+ 	for (i = 0; i < nand->memorg.ntargets; i++) {
+ 		ret = spinand_select_target(spinand, i);
+ 		if (ret)
+-			break;
++			goto manuf_cleanup;
+ 
+ 		ret = spinand_lock_block(spinand, BL_ALL_UNLOCKED);
+ 		if (ret)
+-			break;
++			goto manuf_cleanup;
+ 	}
+ 
+-	if (ret)
+-		spinand_manufacturer_cleanup(spinand);
++	return 0;
++
++manuf_cleanup:
++	spinand_manufacturer_cleanup(spinand);
+ 
+ 	return ret;
+ }
 
 -- 
 2.51.1
