@@ -1,54 +1,54 @@
-Return-Path: <linux-spi+bounces-12247-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12248-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EAEAD0B9B7
-	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:23:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF9A6D0BA98
+	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:31:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 02EEB30208DC
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:19:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3CEFC30E5E9F
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:19:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AF4836656E;
-	Fri,  9 Jan 2026 17:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64A2736656B;
+	Fri,  9 Jan 2026 17:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wVJ+MX0p"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l4DhprWE"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380EA368261
-	for <linux-spi@vger.kernel.org>; Fri,  9 Jan 2026 17:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49D330149F;
+	Fri,  9 Jan 2026 17:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767979111; cv=none; b=dGkPTv4a01ubw7PAt44aiax2bmSqzxy83IMt55wB60s0S5y7m9EuDqOQmm4ELBfVG4S7q+20xeA7DGoWO+FAKHXvhz8woHn8SCviVnDJjljeaqLj8k+Ea7+tNZQESiZX4uc0rVNtXz5UaYTRe1g/ij9SrnkuhcsxpLln/8QVLBY=
+	t=1767979114; cv=none; b=FoAkV+SS5iH+TgtnZqSol72sVMoEfNQFeCE5uD1TcundnacNukkgTqHgi4G39wklzCOmryuPLYuA1PKRzmD+vEtjQwH4QIZEhfcuLssI8NFx/pnlx+Q/YQLGfqE4yg71kDoqUJh1/6hNLvQuRja1x94tlplkS7ps0yfAWnDcXjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767979111; c=relaxed/simple;
-	bh=IJQIQ1qPwnyGsodqhdDYlPN0s9/YWzU7C+O/2+1S0xM=;
+	s=arc-20240116; t=1767979114; c=relaxed/simple;
+	bh=t2/eAaKJ9Xy8Li8YXfUEutFre1NJlcHvaAFMV0Kgiuo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LcGjdM3oEoMHeCczpU7U8onqLH4UvmYl8hQOo8Urtw+ct+idFuCz7sGsEPc6U3GA/Y3ETWttnDdnWr/6dNK2WO5KqhszXiNyP5Jcvd8baPRv6P2CBxZx9Q+tXqBDZFSpt460vmmK3bKv4CqBfKoupYLzkwyR9kp5mslEl61Zfek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wVJ+MX0p; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=fB0Dh0ROF46fxTlrSY7hVuhLjMC7Q6I8y1pnxeF0Fg0bM5lfQdPGWMlTKyN4D2NQ8XxT6PlV8Nh4vUebA1JlLrTH76y8GLaK1DDxPPFCnQMeHq1l0j8azdcyfQOaSppWF15/csX4XahQqVEY9QDcgbkNftJs6ITK+djaKG88HEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l4DhprWE; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 8D3934E42029;
-	Fri,  9 Jan 2026 17:18:25 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 21635C1F6E4;
+	Fri,  9 Jan 2026 17:18:00 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 64C0A606C6;
-	Fri,  9 Jan 2026 17:18:25 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B60D9103C89AD;
-	Fri,  9 Jan 2026 18:18:23 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6A94F606C6;
+	Fri,  9 Jan 2026 17:18:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E2028103C8956;
+	Fri,  9 Jan 2026 18:18:24 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1767979104; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1767979105; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=v22HJHx8//qB5/a5Mqzhu2mFFylXUtBtPnkP97yMpsw=;
-	b=wVJ+MX0pEoXe/7NLlNWUtxxBoI/lzU9mojd2jzQG93nDEXa3RsmSGhB2bptt7G/SnTRLBZ
-	4fVO/5/czzugN6vkX+kUET3HUqmF7ItOAUTQCFXdFN23Fvu+caG/fpIpu9+D7N1tKjLayU
-	aygZjlNhJmmDNDdS0lfgK/tGMdWbBrUBmZJr2ecHtKLAOGYkY6BcZZFvbiRrLsfFBFHn46
-	Nk1ZS8cYeFI8tW4tkX6/4m7X0O4FV3mdBenwQeSlCBOKAjNkbzAZA1KuWVAOhaCuh2E3TC
-	v+4o/eg0J7/n3tVsTOWbLFUwp4Ec+6vRljUCyKTi43fewgVX+rLrkF8QsmWjKQ==
+	bh=Ba70zlYcbz8QlJI8mSBGaiXcm4X/itTgn1V4VCKgo+E=;
+	b=l4DhprWEs5zbKkrQZO+XkLm+NE+5V/RcLPIos0dLXX01VbFKN3IP/Ou8JbsNWVZ6tb/Tzo
+	VwUeIRl6DaaNK6kH+bR6imsyI2XRXfADra4GhO29uRY4Lc7hfA1CnmvuB/uRz8AEN+JjUw
+	ErTL8HMqvUTi2fAs0c6G2jjIPFfU+yLDoqh8nSRbdIcHGnffpScPTVduslqBfVMdV3bJoo
+	s+PkqQyLIowQ5fgqwL//6Ng6yfoWktMK0gmrI/HRYSZV9aFIddGtzXq2frc6yk1SrY1IXP
+	pFfYpJE+/M9A6jAFeICx2qynl2KrXmZS01+Q81XpmMnrD9WJv0KxBheGxOkeTA==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 09 Jan 2026 18:18:03 +0100
-Subject: [PATCH v2 05/27] mtd: spinand: Add missing check
+Date: Fri, 09 Jan 2026 18:18:04 +0100
+Subject: [PATCH v2 06/27] mtd: spinand: Remove stale definitions
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-5-1fff6a2ddb80@bootlin.com>
+Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-6-1fff6a2ddb80@bootlin.com>
 References: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 In-Reply-To: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
@@ -71,34 +71,32 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-The update cache variant is mandatory, both read and write versions are
-being checked, but not this one. All chip drivers seem to implement this
-variant, so there should be no breakage.
+SPI NAND command values are directly included in the macros defining the
+ops. These are stale definitions, they are unused so drop them.
 
 Reviewed-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
-The core has been like that since the begining, I do not think this
-patch should be backported, hence no Fixes tag. This barely
-qualifies as a fix anyway.
----
- drivers/mtd/nand/spi/core.c | 3 +++
- 1 file changed, 3 insertions(+)
+ include/linux/mtd/spinand.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
-index 62447801abb1..8acea0372f21 100644
---- a/drivers/mtd/nand/spi/core.c
-+++ b/drivers/mtd/nand/spi/core.c
-@@ -1432,6 +1432,9 @@ int spinand_match_and_init(struct spinand_device *spinand,
+diff --git a/include/linux/mtd/spinand.h b/include/linux/mtd/spinand.h
+index 049d55c38d52..ad2773f1f963 100644
+--- a/include/linux/mtd/spinand.h
++++ b/include/linux/mtd/spinand.h
+@@ -232,12 +232,6 @@
+ 		   SPI_MEM_OP_NO_DUMMY,					\
+ 		   SPI_MEM_OP_DATA_OUT(len, buf, 8))
  
- 		op = spinand_select_op_variant(spinand,
- 					       info->op_variants.update_cache);
-+		if (!op)
-+			return -ENOTSUPP;
-+
- 		spinand->op_templates.update_cache = op;
- 
- 		return 0;
+-/**
+- * Standard SPI NAND flash commands
+- */
+-#define SPINAND_CMD_PROG_LOAD_X4		0x32
+-#define SPINAND_CMD_PROG_LOAD_RDM_DATA_X4	0x34
+-
+ /* feature register */
+ #define REG_BLOCK_LOCK		0xa0
+ #define BL_ALL_UNLOCKED		0x00
 
 -- 
 2.51.1
