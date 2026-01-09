@@ -1,52 +1,55 @@
-Return-Path: <linux-spi+bounces-12239-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12240-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D14DED0AFAC
-	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 16:41:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9B4D0AF1C
+	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 16:35:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4058A3078EBD
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 15:30:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E3F7530BEECD
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 15:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C95C330D27;
-	Fri,  9 Jan 2026 15:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9E3A313E19;
+	Fri,  9 Jan 2026 15:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+hZ9rK8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4w1nxcc"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CA5313261;
-	Fri,  9 Jan 2026 15:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA158288505;
+	Fri,  9 Jan 2026 15:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767972611; cv=none; b=r3mC1qMW5EoWYh7aKHXfX2b3DpXBvMw9SpxSzaKVxb3VxIcVkwU+iXf/gVTNeBU6LkBNpwWScwc6YpeclpHndue9WA95WPFsForCr4KH6kD8ZCovFKpMB7ysZLdvV0WYPS+KbHG2m89GrR1oAB7wxOdQeIg/B5+8XZ8jq3o831k=
+	t=1767972612; cv=none; b=OXm/gxV7ZaR6u2gt4z2tNSVXnFm4sQXdEYNh6F9m9Cs3wHu6QmJtJt3tA35015mDqZHtAK6qsNfmIapjB0KT6GklaSPUoF0ukYswt4FFcZLE6ux2u+/LfF5mX7I2lrfeSIPjKHYWHERR3ngyruysQC9uXf7n4m15jJwDbGLVVyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767972611; c=relaxed/simple;
-	bh=Hu+suSqeAC73qWNDwf/X2dCSSGpxuISVJPtVdq1X+x0=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=sfDAsKK2m0aRd+rN9bgwY6gAgUo99O2pZZG+YFP6G2xmFoMjeQZuA8NYH5IuF6I+XSWoT1n+XUWlyKdqpFjXDeGQIF/o0fOSubcNs+AIKILBZoR3Uk4nirApTDsv+QYgrjbUUZrnLFlbjqK7Tphh8qVDWQUXcZqPKwqfXi+m7QE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+hZ9rK8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2C1C19422;
-	Fri,  9 Jan 2026 15:30:10 +0000 (UTC)
+	s=arc-20240116; t=1767972612; c=relaxed/simple;
+	bh=CVMPOaxDs8+TNFQb6yWujrE4hu02VsB/ZEa3zMEvSfg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ZhBhS8QZA7+YFx+jbdYrs3/V7J1/3LYyxVN6e+UzLO1Ldg4B9gkdS/65BJ7IiIyM++lQnY8+shHUlLEPT1j4kdEqQOn7jEZsPMUP6BkzAmSn7e94UjG/KJG11PSctoR2JEgwBMZdnfcnWafsQzRY140mShTfK5K1fo7CNy3HAnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4w1nxcc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6165AC4CEF1;
+	Fri,  9 Jan 2026 15:30:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767972610;
-	bh=Hu+suSqeAC73qWNDwf/X2dCSSGpxuISVJPtVdq1X+x0=;
-	h=From:To:In-Reply-To:References:Subject:Date:From;
-	b=t+hZ9rK8oXWouW48hIJnIVdfBVeTA82wGCzMynnoeCoeHvon0/QV9a0cA1UCT/Ot+
-	 QWwZpI4Py40WoHN5WrBBlMqIEBrywY3R+giBGEH++1o830CwaYJPk3cMiaopBQjeTm
-	 wr7BpkQPoPfqP4ESvxVhzWiaXlfIcnxRb0j4rIbbWSdZhjgtN4eYcNE0DRBzBy/5qI
-	 P5eP8EKJ2I9VTPzyb6r4qfbDxJhg9zXtDqWzlICoY7BvW7+2QDmPeoYstE9VLL39nB
-	 GKvTFwgv9yvfZwMGXAGAMhRnF3L6xOaFmncqWut46F+XGbm3CzA8FIK5mc13j+UXb9
-	 Z0tVo2U99NyxA==
+	s=k20201202; t=1767972612;
+	bh=CVMPOaxDs8+TNFQb6yWujrE4hu02VsB/ZEa3zMEvSfg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Z4w1nxccMwDXZMUmWI9nQbpt7pozew5OuQm6gygdaRkuhBILy40StzF90aHnZ6Wn1
+	 6um+2EEDPRXP4j18pcyokjZ03ysOzsS6zjTxmC+U5NSeNsxNh43U3LbtC1hmWzmT1T
+	 mVkAni051WI+p95RNhNp4MnTbVy5IHOgNDS7HUxGRVjp+CgkJDBYx+3jIemfo8LB6Z
+	 KHqfmP5wJrsUwjfh/TVtirswK/XGq1SvLfsyAYVlrnqnz/9E8vaeMhshRY3dsDnpJ+
+	 5b2UTaRg7FZnz+1K4ljx8ZeF8F+N5676dIhE/eIBVeLosdyunmITxsisoql/QM7kNc
+	 jVdm0xAWXs6bw==
 From: Mark Brown <broonie@kernel.org>
-To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20260108175145.3535441-1-andriy.shevchenko@linux.intel.com>
-References: <20260108175145.3535441-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: Simplify devm_spi_*_controller()
-Message-Id: <176797260995.67850.318976521283878747.b4-ty@kernel.org>
-Date: Fri, 09 Jan 2026 15:30:09 +0000
+Cc: Conor Dooley <conor.dooley@microchip.com>
+In-Reply-To: <20260108175100.3535306-1-andriy.shevchenko@linux.intel.com>
+References: <20260108175100.3535306-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: microchip-core: use XOR instead of ANDNOT
+ to fix the logic
+Message-Id: <176797261111.67850.5868118938886891604.b4-ty@kernel.org>
+Date: Fri, 09 Jan 2026 15:30:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,12 +60,15 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Thu, 08 Jan 2026 18:51:45 +0100, Andy Shevchenko wrote:
-> Use devm_add_action_or_reset() instead of devres_alloc() and
-> devres_add(), which works the same. This will simplify the
-> code. There is no functional changes.
+On Thu, 08 Jan 2026 18:49:40 +0100, Andy Shevchenko wrote:
+> Use XOR instead of ANDNOT to fix the logic. The current approach with
+> (foo & BAR & ~baz) is harder to process, and it proved to be wrong,
+> than more usual pattern for the comparing misconfiguration using
+> ((foo ^ baz) & BAR) which can be read as "find all different bits
+> between foo and baz that are related to BAR (mask)". Besides that
+> it makes the binary code shorter.
 > 
-> 
+> [...]
 
 Applied to
 
@@ -70,8 +76,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: Simplify devm_spi_*_controller()
-      commit: b6376dbed8e173f9571583b5d358b08ff394e864
+[1/1] spi: microchip-core: use XOR instead of ANDNOT to fix the logic
+      commit: 19a4505a7a5d4eea70f1a42d601c25d730922fdf
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
