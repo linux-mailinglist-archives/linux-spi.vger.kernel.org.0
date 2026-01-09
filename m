@@ -1,55 +1,53 @@
-Return-Path: <linux-spi+bounces-12240-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12242-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9B4D0AF1C
-	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 16:35:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5570D0B97B
+	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:20:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E3F7530BEECD
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 15:30:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 54D8F306C42C
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9E3A313E19;
-	Fri,  9 Jan 2026 15:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE62236657C;
+	Fri,  9 Jan 2026 17:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z4w1nxcc"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pj3Dd7rP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA158288505;
-	Fri,  9 Jan 2026 15:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 516A5364E98;
+	Fri,  9 Jan 2026 17:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767972612; cv=none; b=OXm/gxV7ZaR6u2gt4z2tNSVXnFm4sQXdEYNh6F9m9Cs3wHu6QmJtJt3tA35015mDqZHtAK6qsNfmIapjB0KT6GklaSPUoF0ukYswt4FFcZLE6ux2u+/LfF5mX7I2lrfeSIPjKHYWHERR3ngyruysQC9uXf7n4m15jJwDbGLVVyA=
+	t=1767979105; cv=none; b=hLPBhbU5doJs34LGB6LLfljjzDXbwy3TJGTqZaogjLId+oUoFmxvl4yXwqcY+hRnX34TP+nAoGzYrAcaeGWVxV/do4MSl2SZoD3BBTQbfsH9wkv2LY9p/XMn7+bzFW4/qDeFnyXilw+GH8Rd3DUTf4U5vhlccpZdBYBAIwFZ8+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767972612; c=relaxed/simple;
-	bh=CVMPOaxDs8+TNFQb6yWujrE4hu02VsB/ZEa3zMEvSfg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=ZhBhS8QZA7+YFx+jbdYrs3/V7J1/3LYyxVN6e+UzLO1Ldg4B9gkdS/65BJ7IiIyM++lQnY8+shHUlLEPT1j4kdEqQOn7jEZsPMUP6BkzAmSn7e94UjG/KJG11PSctoR2JEgwBMZdnfcnWafsQzRY140mShTfK5K1fo7CNy3HAnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z4w1nxcc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6165AC4CEF1;
-	Fri,  9 Jan 2026 15:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767972612;
-	bh=CVMPOaxDs8+TNFQb6yWujrE4hu02VsB/ZEa3zMEvSfg=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Z4w1nxccMwDXZMUmWI9nQbpt7pozew5OuQm6gygdaRkuhBILy40StzF90aHnZ6Wn1
-	 6um+2EEDPRXP4j18pcyokjZ03ysOzsS6zjTxmC+U5NSeNsxNh43U3LbtC1hmWzmT1T
-	 mVkAni051WI+p95RNhNp4MnTbVy5IHOgNDS7HUxGRVjp+CgkJDBYx+3jIemfo8LB6Z
-	 KHqfmP5wJrsUwjfh/TVtirswK/XGq1SvLfsyAYVlrnqnz/9E8vaeMhshRY3dsDnpJ+
-	 5b2UTaRg7FZnz+1K4ljx8ZeF8F+N5676dIhE/eIBVeLosdyunmITxsisoql/QM7kNc
-	 jVdm0xAWXs6bw==
-From: Mark Brown <broonie@kernel.org>
-To: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>, 
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Conor Dooley <conor.dooley@microchip.com>
-In-Reply-To: <20260108175100.3535306-1-andriy.shevchenko@linux.intel.com>
-References: <20260108175100.3535306-1-andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v1 1/1] spi: microchip-core: use XOR instead of ANDNOT
- to fix the logic
-Message-Id: <176797261111.67850.5868118938886891604.b4-ty@kernel.org>
-Date: Fri, 09 Jan 2026 15:30:11 +0000
+	s=arc-20240116; t=1767979105; c=relaxed/simple;
+	bh=R6GlVPGDpq1uR2NO4kCfloP6M5eya3woLdSSYYgdg0o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bSOFtyQLEmipS2UPbAdHJvcubFoJy42XTV8mqE4zYcuMfa8orN/Ix0akLlHyBkIitjdwY/MAecCmTFxJbmA9JIdZ+VWATa+u33xOKRULWesQN/54KO5beFtQnYKpyEOeEl8Sw2vFxmNBdY+kfNWkfA3h0/kUbpFidNaTUSyPfKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pj3Dd7rP; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id AC727C1F6E4;
+	Fri,  9 Jan 2026 17:17:52 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E4146606C6;
+	Fri,  9 Jan 2026 17:18:18 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 19591103C8956;
+	Fri,  9 Jan 2026 18:18:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1767979098; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=Nk6VYcCVM0dbZkuSsvXeXsco6Qkys/I/rgDW/FQldcQ=;
+	b=pj3Dd7rPaTHREoqeQrezQtCbnfQ26+bke+WyrcVrSBwnSu5mVscaAIGOxW1meuTJ3+XQWH
+	B/R4xhAZHC6ddKFKz2wADfx6TOW/SATVGpqze5o/U6l1OJRU0yB2Zxu9WuDd+o3W5fxo7a
+	NxyDgHtYONLOmBh/LiumZ0pWeM6FmaiDSiZoIzjKcvWjEskf5pNXEEnBZbirb//MLRlncI
+	cJrXKRZ58YmrpFxKZ+BlYEuPEw38444+1WSroyI9Dp3Oj+lFDRpskHe8B23ggjYu3yOll7
+	oB5Nq+x6WVWSUkncXLy9Y/2nvJKlJ33plDv/gOtJzvKSeTERob5WDEJ//8ZO0g==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v2 00/27] mtd: spinand: Octal DTR support
+Date: Fri, 09 Jan 2026 18:17:58 +0100
+Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,45 +55,118 @@ List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-47773
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WNTQ6CMBBGr0K6dkyn/IiuvIdhQekgk2iHtKRqC
+ He3cgGX7yXf+1YVKTBFdSlWFShxZPEZzKFQw9T7OwG7zMpoU6MuEV7srXgHqQE8QRgQxLkAZVu
+ PumraqndnlcdzoJHfe/jWZZ44LhI++0/Cn/2bTAgaLFXGkSnJjni1IsuD/XGQp+q2bfsCkfVAx
+ r4AAAA=
+X-Change-ID: 20251031-winbond-v6-17-rc1-oddr-385f04684ad9
+To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
+ Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Pratyush Yadav <pratyush@kernel.org>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Steam Lin <STLin2@winbond.com>, Santhosh Kumar K <s-k6@ti.com>, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, Miquel Raynal <miquel.raynal@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, 08 Jan 2026 18:49:40 +0100, Andy Shevchenko wrote:
-> Use XOR instead of ANDNOT to fix the logic. The current approach with
-> (foo & BAR & ~baz) is harder to process, and it proved to be wrong,
-> than more usual pattern for the comparing misconfiguration using
-> ((foo ^ baz) & BAR) which can be read as "find all different bits
-> between foo and baz that are related to BAR (mask)". Besides that
-> it makes the binary code shorter.
-> 
-> [...]
+Hello,
 
-Applied to
+This series adds support for 8D-8D-8D in SPI NAND, which can already be
+leveraged without any SPI changes as controllers already have this
+support for some SPI NOR devices.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+The series is a bit long because many preparation patches were needed
+in order to have a clean 8D-8D-8D introduction (one of the last
+patches), but I believe the split is worth it.
+
+Among the few spi-mem patches, they are needed for building the SPI NAND
+changes (especially the ODTR introduction at the end) and therefore an
+immutable tag will be needed for merging in the MTD tree (unless all the
+series goes through MTD directly ofc).
+
+There is a benchmark in the last Winbond patch, we get +55% read speed
+and +26% write speed with this series, at 25MHz!
+
+    1S-8S-8S:
+    
+       # flash_speed /dev/mtd0 -c1 -d
+       eraseblock write speed is 7529 KiB/s
+       eraseblock read speed is 15058 KiB/s
+    
+    8D-8D-8D:
+    
+       # flash_speed /dev/mtd0 -c1 -d
+       eraseblock write speed is 9481 KiB/s
+       eraseblock read speed is 23272 KiB/s
+
+I am excited to see this finally upstream! Next step will be to see TI's
+PHY tuning series from Santhosh in conjunction with this one to operate at
+maximum speed.
 
 Thanks!
+Miquèl
 
-[1/1] spi: microchip-core: use XOR instead of ANDNOT to fix the logic
-      commit: 19a4505a7a5d4eea70f1a42d601c25d730922fdf
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+---
+Changes in v2:
+- Rebased on v6.19-rc1.
+- Collected tags.
+- Fixed commit logs as reported.
+- Removed inline functions and turned them into proper functions in a C
+  file as suggested by Tudor.
+- Squashed patches 10 and 11 as suggested by Tudor.
+- Link to v1: https://lore.kernel.org/r/20251031-winbond-v6-17-rc1-oddr-v1-0-be42de23ebf1@bootlin.com
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+---
+Miquel Raynal (27):
+      spi: spi-mem: Make the DTR command operation macro more suitable
+      spi: spi-mem: Create a repeated address operation
+      spi: spi-mem: Limit octal DTR constraints to octal DTR situations
+      mtd: spinand: Fix kernel doc
+      mtd: spinand: Add missing check
+      mtd: spinand: Remove stale definitions
+      mtd: spinand: Use standard return values
+      mtd: spinand: Decouple write enable and write disable operations
+      mtd: spinand: Create an array of operation templates
+      mtd: spinand: Make use of the operation templates through SPINAND_OP()
+      mtd: spinand: macronix: Convert vendor specific operation to SPINAND_OP()
+      mtd: spinand: winbond: Convert W25N specific operation to SPINAND_OP()
+      mtd: spinand: winbond: Convert W35N specific operation to SPINAND_OP()
+      mtd: spinand: List vendor specific operations and make sure they are supported
+      mtd: spinand: macronix: Register vendor specific operation
+      mtd: spinand: winbond: Register W25N vendor specific operation
+      mtd: spinand: winbond: Register W35N vendor specific operation
+      mtd: spinand: winbond: Fix style
+      mtd: spinand: winbond: Rename IO_MODE register macro
+      mtd: spinand: winbond: Configure the IO mode after the dummy cycles
+      mtd: spinand: Gather all the bus interface steps in one single function
+      mtd: spinand: Add support for setting a bus interface
+      mtd: spinand: Propagate the bus interface across core helpers
+      mtd: spinand: Give the bus interface to the configuration helper
+      mtd: spinand: Warn if using SSDR-only vendor commands in a non SSDR mode
+      mtd: spinand: Add octal DTR support
+      mtd: spinand: winbond: W35N octal DTR support
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+ drivers/mtd/nand/spi/core.c       | 387 +++++++++++++++++++++++++++++++++-----
+ drivers/mtd/nand/spi/esmt.c       |   4 +-
+ drivers/mtd/nand/spi/gigadevice.c |   8 +-
+ drivers/mtd/nand/spi/macronix.c   |  49 ++++-
+ drivers/mtd/nand/spi/micron.c     |   8 +-
+ drivers/mtd/nand/spi/toshiba.c    |   3 +-
+ drivers/mtd/nand/spi/winbond.c    | 129 +++++++++----
+ drivers/spi/spi-mem.c             |  15 +-
+ include/linux/mtd/spinand.h       | 161 ++++++++++++++--
+ include/linux/spi/spi-mem.h       |  14 +-
+ 10 files changed, 651 insertions(+), 127 deletions(-)
+---
+base-commit: f7fae19731779c45416e3961fa7127ca225554a0
+change-id: 20251031-winbond-v6-17-rc1-oddr-385f04684ad9
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Best regards,
+-- 
+Miquel Raynal <miquel.raynal@bootlin.com>
 
 
