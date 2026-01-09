@@ -1,54 +1,55 @@
-Return-Path: <linux-spi+bounces-12260-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12261-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B1E9D0BA05
-	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:26:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C440BD0BA08
+	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 18:26:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8E29C306CCC4
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:20:14 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EB8D730D3320
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 17:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98C6036BCC3;
-	Fri,  9 Jan 2026 17:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9200036BCE8;
+	Fri,  9 Jan 2026 17:18:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zMOUPjUA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="V8rJzHi9"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE32366DC0
-	for <linux-spi@vger.kernel.org>; Fri,  9 Jan 2026 17:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C47636AB76
+	for <linux-spi@vger.kernel.org>; Fri,  9 Jan 2026 17:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767979125; cv=none; b=O1oQcTiXoZgqvwwEacmOxtex+J2/iYSzhHGatB5exxszYy1uNq2vsciAkSlcEtYCNCGPyNgRmPRfyjKWZI9LRx8MsdcXofnUwKjzZvgN9YG8QN5wa5qV3R+tCgSf1O61/dfZzITBtPMdrB9A5Nfi0EhymZ2WTvv0UJpBqXtD/D8=
+	t=1767979126; cv=none; b=NwEjAvmuTBS2H5XgMWcAFrsUXlz0WOiLn8A9rdmgcVS52KABn7scPJZz2OSQgE6NpAEICfYCxGIfdk2Trt+dKo8AUrF5JtIVdKt/jOz9SW5RjsFWeajiN3Vs8U4GTeT4VeFHdeyvUvaR0mUqmFAXxEYVlauIFKH2vup7q5jk2HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767979125; c=relaxed/simple;
-	bh=5BVkDdhPjQnDwGQu6wDXQeEYwIQ8QpywOZbs/XLaB/w=;
+	s=arc-20240116; t=1767979126; c=relaxed/simple;
+	bh=BV8D7nBZkFVhYpQyKB0DGYiE68OVjWx/XnDOI3/F8wY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ceExRfRSPnfFlYKU1eNewtRgajWYyaUINqCV1R2sKoOrfHd/peF9RsQu6iCeFcoSUDyOVB2zf5hUZ9qCctZMq8KYyIiOAoL190GaYIE+7XChdGRHtUQFBsROz+N1Ore18C2o3lCmUf2n4Ru89Oxh3o+abe8HQ3hCeti4G1LfBkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zMOUPjUA; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=Qr/guAqh/wktc/sNnRiFEXHazULHpzTOSvBzHIaRR71Uu5+jjSZCeLGVDDe1SLtBf7m+dvkrgJ8GF5uWBFL08YMWVkmX75rwSoWum1AwA/vUdfyVszKPH1pUPmJU7J9zW6MGM6V2OLP8HGVpli/FPxtVoigK/8xmtmWPxkKxYWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=V8rJzHi9; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id E5CA24E42027;
-	Fri,  9 Jan 2026 17:18:40 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id AFEB5C1F6E6;
+	Fri,  9 Jan 2026 17:18:15 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B7DBB606C6;
-	Fri,  9 Jan 2026 17:18:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 30F84103C89BA;
-	Fri,  9 Jan 2026 18:18:39 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0426D606C6;
+	Fri,  9 Jan 2026 17:18:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 542E4103C89BB;
+	Fri,  9 Jan 2026 18:18:40 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1767979120; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1767979121; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=W6+rvBQGeoJcUuTU/Yf2GkJyCdo7KGLjvhpSVmkvjVc=;
-	b=zMOUPjUAOqspSfsNt505s/8CA2O3cgcgg8yJCBsN+gMIijYLK6nlXFTeUmqT3tq1D9Wh6A
-	BhfsXxv6b8HY5BBvdrUTKIIZ+auAQ0KLBLns82N4viG+TPr3cfVgIlS66v6U6b/SQoETgv
-	E91jKZnLJZSxx06pWa+IspmvDc6U8GzKa6PJIdG21vI6K4LtR0hf1X3DcLqnQxxV6ogv6Y
-	NfNj91UfwCAayJnH+iASo0wasO8/XiI+DG6BRHmLuRm35hvdea5CpuKxdF+a6wGA0YTE9I
-	A2MaLXI2gbxl17zh+xOMJdJMQqYWypR+alewZYZhV6sbdv4V/5+svwg9Tm4GSA==
+	bh=6HYIcnqwyFWxHq3DkqAqIbtZT7IZvCykXnPBw3eNAvA=;
+	b=V8rJzHi926cmEs6Gy53noktAnngb4K3uRi6ofuWB8Sort6rU+WndQ4GbUql4ZuEhdOvnIZ
+	y8u5z9GJePmW3A+ZiCM8ABQcD+dJsZkUP8BLZM2agaakpgN+xl7sMisaV9fJTd2cXImy9b
+	Mdt0G8FFASpZuEKnBn9+InEVZvpAv4l2mQaeZhacHXfnKmR7nrqnvEMjzznV10QNWWJ89+
+	nkEvX7DZuK3NgWDSkPNfVv6+vaxdjCOPP0sMlxA1nWo0h2xjWrKq6QuDJfbUqT1josmX8u
+	lYP2M8i3FCFE55oqTSj/ADsqA/UqZjTJYJfBkcb23UAdhDVj/QGgWsq1EfMZIg==
 From: Miquel Raynal <miquel.raynal@bootlin.com>
-Date: Fri, 09 Jan 2026 18:18:16 +0100
-Subject: [PATCH v2 18/27] mtd: spinand: winbond: Fix style
+Date: Fri, 09 Jan 2026 18:18:17 +0100
+Subject: [PATCH v2 19/27] mtd: spinand: winbond: Rename IO_MODE register
+ macro
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,7 +58,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-18-1fff6a2ddb80@bootlin.com>
+Message-Id: <20260109-winbond-v6-17-rc1-oddr-v2-19-1fff6a2ddb80@bootlin.com>
 References: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 In-Reply-To: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Richard Weinberger <richard@nod.at>, 
@@ -71,25 +72,35 @@ Cc: Tudor Ambarus <tudor.ambarus@linaro.org>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add a missing new line in the middle of the driver.
+Suffix the macro name with *_REG to align with the rest of the driver.
 
 Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 ---
- drivers/mtd/nand/spi/winbond.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mtd/nand/spi/winbond.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbond.c
-index 1c13dba08369..7eade2251f7b 100644
+index 7eade2251f7b..b16963637683 100644
 --- a/drivers/mtd/nand/spi/winbond.c
 +++ b/drivers/mtd/nand/spi/winbond.c
-@@ -408,6 +408,7 @@ static int w35n0xjw_vcr_cfg(struct spinand_device *spinand)
- 	default:
+@@ -22,7 +22,7 @@
+ #define W25N0XJW_SR4			0xD0
+ #define W25N0XJW_SR4_HS			BIT(2)
+ 
+-#define W35N01JW_VCR_IO_MODE			0x00
++#define W35N01JW_VCR_IO_MODE_REG	0x00
+ #define W35N01JW_VCR_IO_MODE_SINGLE_SDR		0xFF
+ #define W35N01JW_VCR_IO_MODE_OCTAL_SDR		0xDF
+ #define W35N01JW_VCR_IO_MODE_OCTAL_DDR_DS	0xE7
+@@ -392,7 +392,7 @@ static int w35n0xjw_vcr_cfg(struct spinand_device *spinand)
+ 	else
  		return -EINVAL;
- 	}
-+
- 	ret = w35n0xjw_write_vcr(spinand, W35N01JW_VCR_DUMMY_CLOCK_REG, dummy_cycles);
+ 
+-	ret = w35n0xjw_write_vcr(spinand, W35N01JW_VCR_IO_MODE, io_mode);
++	ret = w35n0xjw_write_vcr(spinand, W35N01JW_VCR_IO_MODE_REG, io_mode);
  	if (ret)
  		return ret;
+ 
 
 -- 
 2.51.1
