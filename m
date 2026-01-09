@@ -1,91 +1,95 @@
-Return-Path: <linux-spi+bounces-12241-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12239-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B40B6D0AF91
-	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 16:40:00 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D14DED0AFAC
+	for <lists+linux-spi@lfdr.de>; Fri, 09 Jan 2026 16:41:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7B4B130D5C95
-	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 15:33:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4058A3078EBD
+	for <lists+linux-spi@lfdr.de>; Fri,  9 Jan 2026 15:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 113632EAB6E;
-	Fri,  9 Jan 2026 15:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C95C330D27;
+	Fri,  9 Jan 2026 15:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geGlpLOR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t+hZ9rK8"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F732DA768
-	for <linux-spi@vger.kernel.org>; Fri,  9 Jan 2026 15:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CA5313261;
+	Fri,  9 Jan 2026 15:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767972811; cv=none; b=HrJJKK+HfamdQ4wJKUmKOWOdDOXoBB+DVhPh/gPjeHrOW7k27Edjdf48NKNyTd/+ras1vVS7i27cOvt1GxJQ4PHiw4LZGerQAfLcuJo6fl1k13gslUAkvYh8lvn+0cfKHAelyynCbG+E4QqEjFYeNorzzcuH4p1gyZg5nd3oCCE=
+	t=1767972611; cv=none; b=r3mC1qMW5EoWYh7aKHXfX2b3DpXBvMw9SpxSzaKVxb3VxIcVkwU+iXf/gVTNeBU6LkBNpwWScwc6YpeclpHndue9WA95WPFsForCr4KH6kD8ZCovFKpMB7ysZLdvV0WYPS+KbHG2m89GrR1oAB7wxOdQeIg/B5+8XZ8jq3o831k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767972811; c=relaxed/simple;
-	bh=huw7v89IVFlSWbfjlNeD4g542D+0NrOshRzhH1vgahc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=ea7dAi5igaqRDO+8rLFDiQoSNiZRDcEzCpdgEWbMB2MVHJpkuxYlc9SkYXhVvyrD0QSbWCLAaQ0EfTV92ZHGEcnRXERuNwBOFbdCdN5BNAFPbjmWps6Tu9/4gm1PlBWbKEADNduiHkLhMpn4cfq8F7eAngn2VMO7su90Kb7SYs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geGlpLOR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E33C4CEF1;
-	Fri,  9 Jan 2026 15:33:30 +0000 (UTC)
+	s=arc-20240116; t=1767972611; c=relaxed/simple;
+	bh=Hu+suSqeAC73qWNDwf/X2dCSSGpxuISVJPtVdq1X+x0=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=sfDAsKK2m0aRd+rN9bgwY6gAgUo99O2pZZG+YFP6G2xmFoMjeQZuA8NYH5IuF6I+XSWoT1n+XUWlyKdqpFjXDeGQIF/o0fOSubcNs+AIKILBZoR3Uk4nirApTDsv+QYgrjbUUZrnLFlbjqK7Tphh8qVDWQUXcZqPKwqfXi+m7QE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t+hZ9rK8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A2C1C19422;
+	Fri,  9 Jan 2026 15:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767972810;
-	bh=huw7v89IVFlSWbfjlNeD4g542D+0NrOshRzhH1vgahc=;
-	h=Subject:From:Date:To:From;
-	b=geGlpLORyEG7dPIF6LCysOeNXj3g+NwkPgPhUrHlOZuD2B7+tgeXEMFNXD/3Q/YVL
-	 2VmcTJOSHpeLQb9e+YF9EtvgGfnLkbPjbg1TI+T480SzKUHGcGsyx+0q9zRjSzmKMs
-	 Z+QJSC5NHFqIxGQOgMAKGF4BaBMcm8T5k3kF3IZQOYwSQ0lpa9djDi0KXhd6E3UAUa
-	 6cyfIO1lJ1Ykker6u+AXcVpIlj22GPLT2CvOBwgRWrC8OGup4wn0TCj4782EoMwhmh
-	 q0iZqHvzOWTRL8CW7oG2+9Z1WmBJ/a74qlNqC/KpMbdpOiMhuOHnAMbp85FDzq0jQy
-	 tkkrJWS2RYkjQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D5813930CB3;
-	Fri,  9 Jan 2026 15:30:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1767972610;
+	bh=Hu+suSqeAC73qWNDwf/X2dCSSGpxuISVJPtVdq1X+x0=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=t+hZ9rK8oXWouW48hIJnIVdfBVeTA82wGCzMynnoeCoeHvon0/QV9a0cA1UCT/Ot+
+	 QWwZpI4Py40WoHN5WrBBlMqIEBrywY3R+giBGEH++1o830CwaYJPk3cMiaopBQjeTm
+	 wr7BpkQPoPfqP4ESvxVhzWiaXlfIcnxRb0j4rIbbWSdZhjgtN4eYcNE0DRBzBy/5qI
+	 P5eP8EKJ2I9VTPzyb6r4qfbDxJhg9zXtDqWzlICoY7BvW7+2QDmPeoYstE9VLL39nB
+	 GKvTFwgv9yvfZwMGXAGAMhRnF3L6xOaFmncqWut46F+XGbm3CzA8FIK5mc13j+UXb9
+	 Z0tVo2U99NyxA==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20260108175145.3535441-1-andriy.shevchenko@linux.intel.com>
+References: <20260108175145.3535441-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v1 1/1] spi: Simplify devm_spi_*_controller()
+Message-Id: <176797260995.67850.318976521283878747.b4-ty@kernel.org>
+Date: Fri, 09 Jan 2026 15:30:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork summary for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176797260592.293560.16620378279279360829.git-patchwork-summary@kernel.org>
-Date: Fri, 09 Jan 2026 15:30:05 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
-Hello:
+On Thu, 08 Jan 2026 18:51:45 +0100, Andy Shevchenko wrote:
+> Use devm_add_action_or_reset() instead of devres_alloc() and
+> devres_add(), which works the same. This will simplify the
+> code. There is no functional changes.
+> 
+> 
 
-The following patches were marked "accepted", because they were applied to
-broonie/spi.git (for-next):
+Applied to
 
-Patch: [v1,1/1] spi: Simplify devm_spi_*_controller()
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1040071
-  Lore link: https://lore.kernel.org/r/20260108175145.3535441-1-andriy.shevchenko@linux.intel.com
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-Series: spi: microchip-core: Code improvements (part 2)
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1028777
-  Lore link: https://lore.kernel.org/r/20251128185518.3989250-1-andriy.shevchenko@linux.intel.com
-    Patches: [v4,1/2] spi: microchip-core: Refactor FIFO read and write handlers
-             [v4,2/2] spi: microchip-core: use XOR instead of ANDNOT to simplify the logic
+Thanks!
 
-Patch: [v1,1/1] spi: microchip-core: use XOR instead of ANDNOT to fix the logic
-  Submitter: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-  Committer: Mark Brown <broonie@kernel.org>
-  Patchwork: https://patchwork.kernel.org/project/spi-devel-general/list/?series=1040070
-  Lore link: https://lore.kernel.org/r/20260108175100.3535306-1-andriy.shevchenko@linux.intel.com
+[1/1] spi: Simplify devm_spi_*_controller()
+      commit: b6376dbed8e173f9571583b5d358b08ff394e864
 
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Total patches: 4
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
