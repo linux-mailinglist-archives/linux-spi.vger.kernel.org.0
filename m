@@ -1,79 +1,79 @@
-Return-Path: <linux-spi+bounces-12281-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12282-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0204BD0F242
-	for <lists+linux-spi@lfdr.de>; Sun, 11 Jan 2026 15:42:33 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B947D0F264
+	for <lists+linux-spi@lfdr.de>; Sun, 11 Jan 2026 15:42:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA0CC30198B3
-	for <lists+linux-spi@lfdr.de>; Sun, 11 Jan 2026 14:42:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 30579301B65D
+	for <lists+linux-spi@lfdr.de>; Sun, 11 Jan 2026 14:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA0D3491E8;
-	Sun, 11 Jan 2026 14:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99376349AF1;
+	Sun, 11 Jan 2026 14:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="c77L/krc"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="l107AcbN"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5368054654
-	for <linux-spi@vger.kernel.org>; Sun, 11 Jan 2026 14:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF4633033F
+	for <linux-spi@vger.kernel.org>; Sun, 11 Jan 2026 14:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768142549; cv=none; b=AkDnF9DQx7O+vhRaupXJAtkqnx0ozm9WPybbBrEb5tJrWim0Z8p0lV0X19VR8hOvkPZw+Gy1ylHfF270hthcgUmWl4oI40zWVrKFcTBlPaxK+JA13WRTYfrSq/xHkcnPLeE0NItLBsX0LkYt5H58QX9urZdQchCcfNmmQwYae4Y=
+	t=1768142565; cv=none; b=L29xS6A8VJrBMXWQRzV0xTGD0lTSHjFkLtplLFWPdLz0dM0rzR6xqEyyOOs2OlI+6eIUsVCf6mpu240LYw10zibwZpHpwBz7C0sk+SSv5i5BgUhjKSd5zSBXJiZZlNMlD5zkbjBIbGzNY4MYGF5LJzZPSul7cl9pINl8p1r8TQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768142549; c=relaxed/simple;
-	bh=nwibogWEaRHQR0G0uXO7BApOaM+RxcF4pitpiLWDTZg=;
+	s=arc-20240116; t=1768142565; c=relaxed/simple;
+	bh=r3/sjCZcn12IuIXnTNYHXq/ljVnoUjX3EA+fjUfOI3Q=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=rhED17Pt3guCJ5Zx3o+/9n98KDksUtNPoKHmkWMEj2+3dVahQsMta2ton5MUc9oPcPQctl+K60fyY0bhfo+S9/tci90mE52Pye+RdQJy5BstbrXR9HEmmJ5Z/kpLIHqgE6W8Ki5x2rIBCUOrZ3OkEx6tQ2xJExFM/T+1arQaGoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=c77L/krc; arc=none smtp.client-ip=209.85.208.44
+	 In-Reply-To:Content-Type; b=LEE/IDZFuX69D7yTrmcY7mRpbnvQ4CNpwctwshEGaptjTecjKJS3mOaBXmwZAiPLVEfehjhFwpQ+hMGhz12kqx48Xut1rC7AZmUKhoBunEMNWMVnnwF8I9GNm6NRjikX0mZimlx71uN/445p/9VFwjc/vbTs2UBX3sp/dJGLiYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=l107AcbN; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64b4b35c812so9118732a12.0
-        for <linux-spi@vger.kernel.org>; Sun, 11 Jan 2026 06:42:27 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-64ba9a00b5aso8146972a12.2
+        for <linux-spi@vger.kernel.org>; Sun, 11 Jan 2026 06:42:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1768142546; x=1768747346; darn=vger.kernel.org;
+        d=tuxon.dev; s=google; t=1768142562; x=1768747362; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=MkabSAxRfLn0dHpHfPolIqVil9ZYQkOUo+uqCMKmtA0=;
-        b=c77L/krcX+Mfr24+FUl4++gD6P5i5AGxy0m+b1eI91GhsDm0sayjulKachXmaIlYnj
-         wCOILRVKwoNMqwNVxiWqRG/2EpusMOG+6mI5UGjqQhrvQX/0x8TiI6/sD/LxA6Hib49A
-         w1bH1nFUZyZHE7gn2ZaU+W23FBJAHpOkkENkXq3dyjTbNfVtcnT0ibchItmEiZ1Np1qd
-         rc0qk+dTF5Uvu980fQlLsCVoritMg6f6VP48BGlFIXsO11MCq0nYJAdrEc8pu+EFAWms
-         a9jgZUFbr9W0Mz4E+TgG2PBR7kf7gSyNi/WRoJKvSsndQ8k0T0kWq1Tnsly+JbkLGMdO
-         RD9A==
+        bh=G/KcOMY2Aiby4Ym2c9/9bLw/G2mVDeqsJ5KVEAaYuIM=;
+        b=l107AcbNznzRzuNtn2TbxkYQlhR6Da9D0PeoZ7sVNzp9wAV5yVHDFfgDXtNcse8JtP
+         1DmmAfeZqqOcYFTSenS6cILajX5b6RgXX6HIhmIY3UZg5aJbo1JdFeC80Cv5hvn3bc/j
+         KKvki4OvEDKaJ9Fj86eywK4bKJI3rT+mJc+W0fyaHWSjZlsmYrrYq/9nELRLzTNYMz8o
+         6P1n1ZpvhhJDtfSLkMqCU6tFwKyfICSvVpovW3EKjYdzLfS1yWeDeZCGMKox7umDzxa/
+         PmGX3iy4E8hkGBE0MJQGizSmXp2IAvi9VaWoFC5Y6NGSSlZKyu7zWYQjhjJS6J8/dfWu
+         Ev4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768142546; x=1768747346;
+        d=1e100.net; s=20230601; t=1768142562; x=1768747362;
         h=content-transfer-encoding:in-reply-to:content-language:references
          :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MkabSAxRfLn0dHpHfPolIqVil9ZYQkOUo+uqCMKmtA0=;
-        b=nnEihhFFUa1E6h+DcwrR4D2TcE3IYu6UD6qK+ZzKmI8Aw98im49j0D4eZfoZwaHlT6
-         wewZjDGe6s5BSGAI4GZfC805J64qSt3C8oQtj0ZKMP7kSBp25e9A2ir/cPL81109lvky
-         cRVBB2EiLYfAeAqlEZejhuYX3jeiN4GigMxPLHyMDQfTbhViQCVmSnhHzTXndCLPzNa9
-         ZWvcHE4qcdpHz6MaMaTUZu075zvhkoHS9G0WS2Ps0WtsEYXhvb+T97K1XCl+KbqRCzii
-         ztmVGLvG3iFZvGfm4CUQj0EuqeFPzovqTMK392Fzp1lOGJhllx95oUPpR3h9pgp4TmlX
-         2zhg==
-X-Forwarded-Encrypted: i=1; AJvYcCXk+fexnUiAcTuP0tWXqGhdycvGI81x0NB3ZiCHckzcRQB1g8wV0rOyEzRmeus4qkgC3/GdnZ5zGa4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywt5yJPp3IBKXlGccRNreRe3PPaXQC/S/+oRBd0DvSTeKBpmhve
-	97YW9YEXbNQsa4vN0T4UoasbraIAy+p89qmlXZp+7sIZyAHRX03JQ3yx8t096qS7So0=
-X-Gm-Gg: AY/fxX7JjvUaJWRLRNQ1e1OavpkbE2NbhJZplkLu6R1bhWmBI2HxxDQ+bI0cxODsZ20
-	EpPnxTPRi9QyMbN+jO0sII10swo0kUvlQ6KcBegknckj395ZvjT+DvwX/N594d95mXQxXGRvx0S
-	MZbXU4AGFzKtWzS+3HJwghFJlFvi3NzjnF5Y3f/DBg/5IicPe7jWzxihKtKMC2LF2y6G1qD3JIa
-	kW/n2hc71yyx972m4jmBLVCWAXL3bvzgzvhP7MeG81IS1SBvk9earDDjVmZFFkG7ND4iSXYNCb4
-	5Kv8z0WNK7oBinrPQglZb9j+2lys69AaxSGALzmF0dsdQGxkpBg5xgPBJaEHfSlE44uNXxB39Yr
-	nSepdbvevo7w0ttJ2DlB6OZ8901d4zxbQ25m3J7LJKcBFsIjq0cNba3MHF4xHeqcORcDnqhOFjy
-	Nr5XInmQcEzN9n/bykQhsLV8VRTU8KuNq5sA==
-X-Google-Smtp-Source: AGHT+IFonU/ClDvId9huEtx8OVZbpqDSrZa3cVBTJbulbnKxAZxCbWxaUM02TgbsxBJ1Mah6guhUAA==
-X-Received: by 2002:a05:6402:1469:b0:641:8a92:9334 with SMTP id 4fb4d7f45d1cf-65097dceb25mr14589135a12.6.1768142545311;
-        Sun, 11 Jan 2026 06:42:25 -0800 (PST)
+        bh=G/KcOMY2Aiby4Ym2c9/9bLw/G2mVDeqsJ5KVEAaYuIM=;
+        b=YaPtNi5LiH58LmvIw65EAG3i1qgJ45vysnGMu8gsSXySBIVAD1W3DjlPr4rsjozfT0
+         561C6ouy7JDSH+kcclktaEGZXR7KcwfWlS2q7EhczlUJJfFDlF9z9uv/iX3YtkwNn03M
+         6hokODYLZIeX1luovJDkyakvjI0oaJRctD8UDWMz789fl/58zLdPOGN0Gl0DqZeGG1t/
+         astwp3ddnSIO9EcNB/hAZRkHWimF0Uv5V5dpgr/pZugzh4UWsHk7wITZbRzZiH5+82yQ
+         dMu+pitc9agVVEeUJ3Inx18cRaZW8dZpXaOSRsscTngkyPiT0B09MJoBr9LS+olEGhCQ
+         ktgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU33xCn1jLm8dEu5a3223pgClV6hHIeUhpRsL29JqtyMc0hVjY2V26IB/JAGGm0GEUjMfy817/sg2g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yybp5daegoN67C0ZzPPdtU7fAth+hoRiqOnDD4lmVLBBFm4In31
+	PYJFqLaOY2WyjMBiJKafRT2DIuqtSlY4jWDlYTJeypGbBWvJCXgUkJNMK3tXSXNWdBc=
+X-Gm-Gg: AY/fxX5kuo3IBsR9AvKTfMV3BE4UGDTBeGwvg9kqUE/mNQG1lWsXrSpJ8XjDta508+O
+	d1GFXcHPJV6lAejGOGT7kpd9J1w049QDqp8z6PqzMn0JO9nE/gTWv9cyzSfSRRnBVFLWkniuqjR
+	NAXdIJbb98/St+SjuwEqjah2hdXgtKpxNphV+w591zPF73qWUbkjGIWW8JAw8cW3lIROE6QqrcL
+	Fm9aEiAmVtRuHZbxDUxlinVwRk6SRym/9JVD/Kss71FWM5kHXEdwm+nrgtyjae7fGW/r69PrvBi
+	0K5ceMPFyhWRa+FbZcyuMwy+EHc73nUbLJUcpDCzQFCn/iJWgspnqj3F2CmpnrAjmSw+tPOEjsz
+	uk3cDRfv9vwGEsap7N9wpM8mYmrWqpnhMcz6wUjFUqK5/gIPvnAvktpsZA9k9XZ2rHyASq5FZhC
+	nWrNsrZZFp/bXFV7kZr2S1hwI=
+X-Google-Smtp-Source: AGHT+IE39UCsqaKXvD3F+fxNGt3UWpgz3o9+Q+iDczrztF9S6FJS6cHaS0zXDwLhDt1npYxNq43EAw==
+X-Received: by 2002:a05:6402:26d1:b0:64b:5f4e:9e6d with SMTP id 4fb4d7f45d1cf-65097e50c56mr13973823a12.18.1768142561550;
+        Sun, 11 Jan 2026 06:42:41 -0800 (PST)
 Received: from [10.216.106.246] ([213.233.110.57])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507be658b3sm14914417a12.18.2026.01.11.06.42.19
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507be642f5sm14853659a12.20.2026.01.11.06.42.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jan 2026 06:42:24 -0800 (PST)
-Message-ID: <2cdac084-4924-4ca2-85d6-2e6d9bf284aa@tuxon.dev>
-Date: Sun, 11 Jan 2026 16:42:18 +0200
+        Sun, 11 Jan 2026 06:42:41 -0800 (PST)
+Message-ID: <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
+Date: Sun, 11 Jan 2026 16:42:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -82,8 +82,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: claudiu beznea <claudiu.beznea@tuxon.dev>
-Subject: Re: [PATCH v4 12/15] arm64: dts: microchip: add LAN969x clock header
- file
+Subject: Re: [PATCH v4 15/15] arm64: dts: microchip: add EV23X71A board
 To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
  alexandre.belloni@bootlin.com, herbert@gondor.apana.org.au,
@@ -101,62 +100,148 @@ To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
  linux-serial@vger.kernel.org, linux-usb@vger.kernel.org
 Cc: luka.perkov@sartura.hr
 References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-13-robert.marko@sartura.hr>
+ <20251229184004.571837-16-robert.marko@sartura.hr>
 Content-Language: en-US
-In-Reply-To: <20251229184004.571837-13-robert.marko@sartura.hr>
+In-Reply-To: <20251229184004.571837-16-robert.marko@sartura.hr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
+Hi, Robert,
 
 On 12/29/25 20:37, Robert Marko wrote:
-> LAN969x uses hardware clock indexes, so document theses in a header to make
-> them humanly readable.
+> Microchip EV23X71A is an LAN9696 based evaluation board.
 > 
 > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
 > ---
-> Changes in v4:
-> * Move clock indexes from dt-bindings to a DTS header
-> 
 > Changes in v2:
-> * Rename file to microchip,lan9691.h
+> * Split from SoC DTSI commit
+> * Apply DTS coding style
+> * Enclose array in i2c-mux
+> * Alphanumericaly sort nodes
+> * Change management port mode to RGMII-ID
 > 
->   arch/arm64/boot/dts/microchip/clk-lan9691.h | 24 +++++++++++++++++++++
->   1 file changed, 24 insertions(+)
->   create mode 100644 arch/arm64/boot/dts/microchip/clk-lan9691.h
+>   arch/arm64/boot/dts/microchip/Makefile        |   1 +
+>   .../boot/dts/microchip/lan9696-ev23x71a.dts   | 757 ++++++++++++++++++
+>   2 files changed, 758 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
 > 
-> diff --git a/arch/arm64/boot/dts/microchip/clk-lan9691.h b/arch/arm64/boot/dts/microchip/clk-lan9691.h
+> diff --git a/arch/arm64/boot/dts/microchip/Makefile b/arch/arm64/boot/dts/microchip/Makefile
+> index c6e0313eea0f..09d16fc1ce9a 100644
+> --- a/arch/arm64/boot/dts/microchip/Makefile
+> +++ b/arch/arm64/boot/dts/microchip/Makefile
+> @@ -1,4 +1,5 @@
+>   # SPDX-License-Identifier: GPL-2.0
+> +dtb-$(CONFIG_ARCH_LAN969X) += lan9696-ev23x71a.dtb
+>   dtb-$(CONFIG_ARCH_SPARX5) += sparx5_pcb125.dtb
+>   dtb-$(CONFIG_ARCH_SPARX5) += sparx5_pcb134.dtb sparx5_pcb134_emmc.dtb
+>   dtb-$(CONFIG_ARCH_SPARX5) += sparx5_pcb135.dtb sparx5_pcb135_emmc.dtb
+> diff --git a/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
 > new file mode 100644
-> index 000000000000..f0006a603747
+> index 000000000000..435df455b078
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/microchip/clk-lan9691.h
-> @@ -0,0 +1,24 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +++ b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
 
-Shouldn't this use the same license as the dtsi including it?
+[ ...]
+
+> +&gpio {
+> +	emmc_sd_pins: emmc-sd-pins {
+> +		/* eMMC_SD - CMD, CLK, D0, D1, D2, D3, D4, D5, D6, D7, RSTN */
+> +		pins = "GPIO_14", "GPIO_15", "GPIO_16", "GPIO_17",
+> +		       "GPIO_18", "GPIO_19", "GPIO_20", "GPIO_21",
+> +		       "GPIO_22", "GPIO_23", "GPIO_24";
+> +		function = "emmc_sd";
+> +	};
+> +
+> +	fan_pins: fan-pins {
+> +		pins = "GPIO_25", "GPIO_26";
+> +		function = "fan";
+> +	};
+> +
+> +	fc0_pins: fc0-pins {
+> +		pins = "GPIO_3", "GPIO_4";
+> +		function = "fc";
+> +	};
+> +
+> +	fc2_pins: fc2-pins {
+> +		pins = "GPIO_64", "GPIO_65", "GPIO_66";
+> +		function = "fc";
+> +	};
+> +
+> +	fc3_pins: fc3-pins {
+> +		pins = "GPIO_55", "GPIO_56";
+> +		function = "fc";
+> +	};
+> +
+> +	mdio_pins: mdio-pins {
+> +		pins = "GPIO_9", "GPIO_10";
+> +		function = "miim";
+> +	};
+> +
+> +	mdio_irq_pins: mdio-irq-pins {
+> +		pins = "GPIO_11";
+> +		function = "miim_irq";
+> +	};
+> +
+> +	sgpio_pins: sgpio-pins {
+> +		/* SCK, D0, D1, LD */
+> +		pins = "GPIO_5", "GPIO_6", "GPIO_7", "GPIO_8";
+> +		function = "sgpio_a";
+> +	};
+> +
+> +	usb_ulpi_pins: usb-ulpi-pins {
+> +		pins = "GPIO_30", "GPIO_31", "GPIO_32", "GPIO_33",
+> +		       "GPIO_34", "GPIO_35", "GPIO_36", "GPIO_37",
+> +		       "GPIO_38", "GPIO_39", "GPIO_40", "GPIO_41";
+> +		function = "usb_ulpi";
+> +	};
+> +
+> +	usb_rst_pins: usb-rst-pins {
+> +		pins = "GPIO_12";
+> +		function = "usb2phy_rst";
+> +	};
+> +
+> +	usb_over_pins: usb-over-pins {
+> +		pins = "GPIO_13";
+> +		function = "usb_over_detect";
+> +	};
+> +
+> +	usb_power_pins: usb-power-pins {
+> +		pins = "GPIO_1";
+> +		function = "usb_power";
+> +	};
+> +
+> +	ptp_out_pins: ptp-out-pins {
+> +		pins = "GPIO_58";
+> +		function = "ptpsync_4";
+> +	};
+
+Could you please move this one upper to have all the entries in the gpio 
+container alphanumerically sorted?
 
 > +
-> +#ifndef _DTS_CLK_LAN9691_H
-> +#define _DTS_CLK_LAN9691_H
-> +
-> +#define GCK_ID_QSPI0		0
-> +#define GCK_ID_QSPI2		1
-> +#define GCK_ID_SDMMC0		2
-> +#define GCK_ID_SDMMC1		3
-> +#define GCK_ID_MCAN0		4
-> +#define GCK_ID_MCAN1		5
-> +#define GCK_ID_FLEXCOM0		6
-> +#define GCK_ID_FLEXCOM1		7
-> +#define GCK_ID_FLEXCOM2		8
-> +#define GCK_ID_FLEXCOM3		9
-> +#define GCK_ID_TIMER		10
-> +#define GCK_ID_USB_REFCLK	11
-> +
-> +/* Gate clocks */
-> +#define GCK_GATE_USB_DRD	12
-> +#define GCK_GATE_MCRAMC		13
-> +#define GCK_GATE_HMATRIX	14
-> +
-> +#endif
+> +	ptp_ext_pins: ptp-ext-pins {
+> +		pins = "GPIO_59";
+> +		function = "ptpsync_5";
+> +	};
+
+Same here.
+
+[ ...]
+
+> +		port29: port@29 {
+> +			reg = <29>;
+> +			phys = <&serdes 11>;
+> +			phy-handle = <&phy3>;
+> +			phy-mode = "rgmii-id";
+> +			microchip,bandwidth = <1000>;
+
+There are some questions around this node from Andrew in v1 of this series, 
+which I don't see an answer for in any of the following versions. Could you 
+please clarify?
+
+The rest looks good to me.
+
+Thank you,
+Claudiu
 
 
