@@ -1,62 +1,63 @@
-Return-Path: <linux-spi+bounces-12320-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12321-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A11ED15459
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 21:38:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E62D1546E
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 21:38:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E2B8D30084C5
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 20:35:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D0BC83027A78
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 20:35:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C3D347FDF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E11C35503F;
 	Mon, 12 Jan 2026 20:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QCguevzN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jzuHypuq"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3760C33C511;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C522D33EAE6;
 	Mon, 12 Jan 2026 20:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768250152; cv=none; b=fnuDB3mxhEKuvAvNevfoNVverwp+/HpWh8nO+X9b7Wv8aNbXofc6C+esd+HZhp8haa58nLSh4xiQHGJmGntgk8nl3ak+dmJkcyrEtoPMSK/bD5ogsCg9HA716Ej1SiLYkxhlZpPwPgkJfs9cYk60pugvF9JLIZ0VespfLWRBVkA=
+	t=1768250152; cv=none; b=ao+Qed1GgqeB2tXExxU58sfaA/THhUGGJr16eSfJMUUTbjhuEKvb5rGanVf1eHVHjc523p5nBpsCMtukFuu0DZoK0+VYkM4UhA162DZJrPawVeTTmdEV8ZmblTVwQPkHPEAu08efYngw6zZ6fhA8CKSxJyUv8/f2FTW8SB/GwB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768250152; c=relaxed/simple;
-	bh=REqCyoJrIpewtMdGURz7oYk9zmr7BJajQXuF1TakMwI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KGc4j6Ht0H3iJH3Jj1/gVdllG4YvbjanFjk3yjLAT4xmapgCqZ95wMu+UudZBEGiyV0BUAdmgiA20hklKj4a4vVh7y58Wo9KAJc6pHSI2x+TDS5eR/q8MXYg8jax200Znmb2VaRFQ5YOO/+Xmtq3jqlqIvXm+hr0nOpjDnv9U2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QCguevzN; arc=none smtp.client-ip=192.198.163.11
+	bh=dzIlNxBLNcrWr8IC/y57DQTFAbop0n5nPnrevzaacBI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eI88JJAgQmtM4GaHB+ENhltn41En4blBjY0kApkYjQ/UaitS9/3PXGRGdBYNJv5r5o10NuL++SeTLJgvRG1FaTBeiMLanyEcbC+/mFOk/8iSrDqWjLszIM3xBafD5BmClQILFPCsrLRzpm8CHDqBMAVffFR3s8OpgMAQus5Wj7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jzuHypuq; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768250150; x=1799786150;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=REqCyoJrIpewtMdGURz7oYk9zmr7BJajQXuF1TakMwI=;
-  b=QCguevzNgwfX1JAE49nWByuGOxIM8sxLJ4WqKj2vGkzgURnNGX7qjSlH
-   vBOddmWfj7QO/sQh3HV/IKa0nKA078K+jaGji+FxSpQ4J3yFOotQIbxRK
-   SUwdX7xByKHfkMsYQ3OPgf0pEUWJdQ03oS/7qlMOl0i+cmLI7sgJUcY00
-   A2o4W/Psa5jqwDaMc1f9B0lITHt7/PPCMQ8cWt/3u81+/vCgs5orlFIKz
-   5xhguICZ+yjZBUBSzYmj66TT+ZnFIZ5NghP/qcAb8GW0KRrYBRbygslRQ
-   EXg4r2/nB7n0UGycseTGRWYpgywNY7IFTcWsgHOeTu97nG2v+JGTWCin7
+  t=1768250151; x=1799786151;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dzIlNxBLNcrWr8IC/y57DQTFAbop0n5nPnrevzaacBI=;
+  b=jzuHypuqUGo6qOQ8r7cE3yRV3G+hWUMp9KuTvJZ2acGIVnhePUJt/Iw2
+   NXLrgeOKPMcImfwzGXjRteUcRfTHwAU8csHlpaeK+vO6TzEvLLEzgYSyU
+   2uMPLYP8tJL8XnYbC0RNClM8KX8UGit8DdrYILJjK6myjSg58fu9FH6mo
+   jyJM1Vlnnk3TKWq5ymicd3oHqkJE4TsHz+Bb7HnWFY3NQwMPYyHKm6Alw
+   PWdijHKCG7J5PT8o27Bi7DJAqxH4LYIgpeHmSoZRjZspFcd997V2Q77u/
+   hTqBgqdkv3XvxhoAFq1WHcm0Oj195UoqNqC/zN+VUmGwHWpUg9bHyiYjS
    g==;
-X-CSE-ConnectionGUID: d4Z7sdjYT9SE3fbNYjaQXA==
-X-CSE-MsgGUID: L+lqyCOKSxmCMABSasr3cw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="80173655"
+X-CSE-ConnectionGUID: Uy1vY54vQw+Fe3Jw5jqXag==
+X-CSE-MsgGUID: l6MzxHBzRhyUGTcsn2/GSg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11669"; a="69515881"
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="80173655"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 12:35:49 -0800
-X-CSE-ConnectionGUID: qrF+XUj5Smmcrdyy5Dee6Q==
-X-CSE-MsgGUID: pPBsBLFtQSOQR4pxhpa//Q==
+   d="scan'208";a="69515881"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2026 12:35:50 -0800
+X-CSE-ConnectionGUID: Wd9Pd5v0RsaC3tx7hFm2fQ==
+X-CSE-MsgGUID: aPk0SsUFTRe0eIv2P2Fwzg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,221,1763452800"; 
-   d="scan'208";a="208707588"
+   d="scan'208";a="209262083"
 Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa004.jf.intel.com with ESMTP; 12 Jan 2026 12:35:38 -0800
+  by orviesa005.jf.intel.com with ESMTP; 12 Jan 2026 12:35:40 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 6841594; Mon, 12 Jan 2026 21:35:37 +0100 (CET)
+	id 6FF4698; Mon, 12 Jan 2026 21:35:37 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Mark Brown <broonie@kernel.org>,
 	Varshini Rajendran <varshini.rajendran@microchip.com>,
@@ -209,153 +210,68 @@ Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
 	=?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
 	Michal Simek <michal.simek@amd.com>,
 	Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH v2 0/4] spi: Make SPI core to take care of fwnode assignment
-Date: Mon, 12 Jan 2026 21:21:22 +0100
-Message-ID: <20260112203534.4186261-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/4] spi: Propagate default fwnode to the SPI controller device
+Date: Mon, 12 Jan 2026 21:21:23 +0100
+Message-ID: <20260112203534.4186261-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260112203534.4186261-1-andriy.shevchenko@linux.intel.com>
+References: <20260112203534.4186261-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-It seems all of the SPI drivers want to propagate fwnode (or of_node)
-of the physical device to the SPI device. Make sure we don't duplicate
-it over and over in each new driver (+2 in this cycle) by making core
-to take care of that. Note, similar is done already by IIO and
-I²C subsystems.
+Most of the SPI controller drivers share the parent's fwnode
+by explicit assignment. Propagate the default by SPI core,
+so they may drop that in the code. Only corner cases may require
+a special treatment and we simply (re)assign the controller's
+fwnode explicitly (as it's done right now, no changes required
+for that).
 
-There is one noticeable and quite specific case that is taken care in
-the first patch and now we have a confirmation from Cirrus that everything
-is okay.  The rest is just a mechanical conversion after checking that
-the parent device is assigned to the same that provides the respective
-fwnode.
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Tested-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-cs42l43.c | 8 ++++++++
+ drivers/spi/spi.c         | 3 +++
+ 2 files changed, 11 insertions(+)
 
-Changelog v2:
-- collected tags
-- fixed W=1 warning (unused variable) in spi-dln2.c (LKP)
-
-v1: 20260108203004.3538449-1-andriy.shevchenko@linux.intel.com
-
-Andy Shevchenko (4):
-  spi: Propagate default fwnode to the SPI controller device
-  spi: Drop duplicate of_node assignment
-  spi: Drop duplicate fwnode assignment
-  spi: Drop duplicate device_set_node() call
-
- drivers/spi/atmel-quadspi.c          | 1 -
- drivers/spi/spi-airoha-snfi.c        | 1 -
- drivers/spi/spi-altera-platform.c    | 2 --
- drivers/spi/spi-amlogic-spifc-a1.c   | 1 -
- drivers/spi/spi-amlogic-spisg.c      | 1 -
- drivers/spi/spi-apple.c              | 1 -
- drivers/spi/spi-ar934x.c             | 1 -
- drivers/spi/spi-armada-3700.c        | 4 +---
- drivers/spi/spi-aspeed-smc.c         | 1 -
- drivers/spi/spi-atcspi200.c          | 1 -
- drivers/spi/spi-ath79.c              | 1 -
- drivers/spi/spi-atmel.c              | 1 -
- drivers/spi/spi-axi-spi-engine.c     | 1 -
- drivers/spi/spi-bcm-qspi.c           | 1 -
- drivers/spi/spi-bcm2835.c            | 1 -
- drivers/spi/spi-bcm2835aux.c         | 1 -
- drivers/spi/spi-bcm63xx-hsspi.c      | 1 -
- drivers/spi/spi-bcm63xx.c            | 1 -
- drivers/spi/spi-bcmbca-hsspi.c       | 1 -
- drivers/spi/spi-cadence-quadspi.c    | 1 -
- drivers/spi/spi-cadence-xspi.c       | 1 -
- drivers/spi/spi-cadence.c            | 1 -
- drivers/spi/spi-cavium-octeon.c      | 1 -
- drivers/spi/spi-cavium-thunderx.c    | 1 -
- drivers/spi/spi-clps711x.c           | 1 -
- drivers/spi/spi-cs42l43.c            | 8 ++++++++
- drivers/spi/spi-davinci.c            | 1 -
- drivers/spi/spi-dln2.c               | 3 ---
- drivers/spi/spi-dw-core.c            | 2 --
- drivers/spi/spi-ep93xx.c             | 1 -
- drivers/spi/spi-falcon.c             | 1 -
- drivers/spi/spi-fsl-dspi.c           | 1 -
- drivers/spi/spi-fsl-espi.c           | 1 -
- drivers/spi/spi-fsl-lib.c            | 1 -
- drivers/spi/spi-fsl-lpspi.c          | 1 -
- drivers/spi/spi-geni-qcom.c          | 1 -
- drivers/spi/spi-gpio.c               | 1 -
- drivers/spi/spi-gxp.c                | 1 -
- drivers/spi/spi-hisi-kunpeng.c       | 1 -
- drivers/spi/spi-img-spfi.c           | 1 -
- drivers/spi/spi-imx.c                | 1 -
- drivers/spi/spi-ingenic.c            | 1 -
- drivers/spi/spi-lantiq-ssc.c         | 1 -
- drivers/spi/spi-ljca.c               | 1 -
- drivers/spi/spi-loongson-core.c      | 1 -
- drivers/spi/spi-lp8841-rtc.c         | 1 -
- drivers/spi/spi-meson-spicc.c        | 1 -
- drivers/spi/spi-meson-spifc.c        | 1 -
- drivers/spi/spi-microchip-core-spi.c | 1 -
- drivers/spi/spi-mpc512x-psc.c        | 2 --
- drivers/spi/spi-mpc52xx-psc.c        | 2 --
- drivers/spi/spi-mpc52xx.c            | 1 -
- drivers/spi/spi-mpfs.c               | 1 -
- drivers/spi/spi-mt65xx.c             | 1 -
- drivers/spi/spi-mt7621.c             | 1 -
- drivers/spi/spi-mtk-nor.c            | 1 -
- drivers/spi/spi-mtk-snfi.c           | 1 -
- drivers/spi/spi-mux.c                | 1 -
- drivers/spi/spi-mxic.c               | 1 -
- drivers/spi/spi-npcm-fiu.c           | 1 -
- drivers/spi/spi-npcm-pspi.c          | 1 -
- drivers/spi/spi-nxp-fspi.c           | 2 --
- drivers/spi/spi-nxp-xspi.c           | 1 -
- drivers/spi/spi-oc-tiny.c            | 1 -
- drivers/spi/spi-orion.c              | 1 -
- drivers/spi/spi-pl022.c              | 1 -
- drivers/spi/spi-pxa2xx.c             | 2 --
- drivers/spi/spi-qcom-qspi.c          | 1 -
- drivers/spi/spi-qpic-snand.c         | 1 -
- drivers/spi/spi-qup.c                | 1 -
- drivers/spi/spi-rb4xx.c              | 1 -
- drivers/spi/spi-realtek-rtl-snand.c  | 1 -
- drivers/spi/spi-realtek-rtl.c        | 1 -
- drivers/spi/spi-rockchip-sfc.c       | 1 -
- drivers/spi/spi-rockchip.c           | 1 -
- drivers/spi/spi-rspi.c               | 1 -
- drivers/spi/spi-rzv2h-rspi.c         | 2 --
- drivers/spi/spi-rzv2m-csi.c          | 2 --
- drivers/spi/spi-s3c64xx.c            | 1 -
- drivers/spi/spi-sc18is602.c          | 2 --
- drivers/spi/spi-sg2044-nor.c         | 1 -
- drivers/spi/spi-sh-hspi.c            | 1 -
- drivers/spi/spi-sh-msiof.c           | 1 -
- drivers/spi/spi-sifive.c             | 1 -
- drivers/spi/spi-slave-mt27xx.c       | 1 -
- drivers/spi/spi-sn-f-ospi.c          | 1 -
- drivers/spi/spi-sprd-adi.c           | 1 -
- drivers/spi/spi-sprd.c               | 1 -
- drivers/spi/spi-stm32-ospi.c         | 1 -
- drivers/spi/spi-stm32-qspi.c         | 1 -
- drivers/spi/spi-stm32.c              | 1 -
- drivers/spi/spi-sun4i.c              | 1 -
- drivers/spi/spi-sun6i.c              | 1 -
- drivers/spi/spi-sunplus-sp7021.c     | 1 -
- drivers/spi/spi-synquacer.c          | 3 ---
- drivers/spi/spi-tegra114.c           | 1 -
- drivers/spi/spi-tegra20-sflash.c     | 1 -
- drivers/spi/spi-tegra20-slink.c      | 1 -
- drivers/spi/spi-tegra210-quad.c      | 1 -
- drivers/spi/spi-ti-qspi.c            | 1 -
- drivers/spi/spi-uniphier.c           | 1 -
- drivers/spi/spi-virtio.c             | 2 --
- drivers/spi/spi-wpcm-fiu.c           | 1 -
- drivers/spi/spi-xcomm.c              | 1 -
- drivers/spi/spi-xilinx.c             | 1 -
- drivers/spi/spi-xlp.c                | 1 -
- drivers/spi/spi-xtensa-xtfpga.c      | 1 -
- drivers/spi/spi.c                    | 3 +++
- 108 files changed, 12 insertions(+), 122 deletions(-)
-
+diff --git a/drivers/spi/spi-cs42l43.c b/drivers/spi/spi-cs42l43.c
+index 4b6b65f450a8..a4a650c8d740 100644
+--- a/drivers/spi/spi-cs42l43.c
++++ b/drivers/spi/spi-cs42l43.c
+@@ -371,6 +371,14 @@ static int cs42l43_spi_probe(struct platform_device *pdev)
+ 
+ 	fwnode_property_read_u32(xu_fwnode, "01fa-sidecar-instances", &nsidecars);
+ 
++	/*
++	 * Depending on the value of nsidecars we either create a software node
++	 * or assign an fwnode. We don't want software node to be attached to
++	 * the default one. That's why we need to clear the SPI controller fwnode
++	 * first.
++	 */
++	device_set_node(&priv->ctlr->dev, NULL);
++
+ 	if (nsidecars) {
+ 		struct software_node_ref_args args[] = {
+ 			SOFTWARE_NODE_REFERENCE(fwnode, 0, GPIO_ACTIVE_LOW),
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index f077ea74e299..b773c297f8b1 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -3072,6 +3072,9 @@ struct spi_controller *__spi_alloc_controller(struct device *dev,
+ 	else
+ 		ctlr->dev.class = &spi_controller_class;
+ 	ctlr->dev.parent = dev;
++
++	device_set_node(&ctlr->dev, dev_fwnode(dev));
++
+ 	pm_suspend_ignore_children(&ctlr->dev, true);
+ 	spi_controller_set_devdata(ctlr, (void *)ctlr + ctlr_size);
+ 
 -- 
 2.50.1
 
