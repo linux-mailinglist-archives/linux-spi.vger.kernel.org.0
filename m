@@ -1,192 +1,162 @@
-Return-Path: <linux-spi+bounces-12297-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12298-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4324D13060
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 15:11:57 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE269D1349A
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 15:50:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7EFFC3009131
-	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 14:11:49 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 68CCA3003197
+	for <lists+linux-spi@lfdr.de>; Mon, 12 Jan 2026 14:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507DF1D555;
-	Mon, 12 Jan 2026 14:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11A6F2D0C8B;
+	Mon, 12 Jan 2026 14:47:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CakAumhF"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iUXN7uSf"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87747154425
-	for <linux-spi@vger.kernel.org>; Mon, 12 Jan 2026 14:11:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C169B2BF3DB;
+	Mon, 12 Jan 2026 14:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768227108; cv=none; b=MDRAKz+v+A5Vn1mi2PH2vmBVxIvdQfZlURm7kkJ5bjifqJ5t22aGylQ/39lwQWr2KF0tA4ZJFe8wXqDlS15JqbSuhEuArQ83kT1t13OB7FDwvfuRP4ireODsVlQzBUUAAlRtb/QUIQTYl/X7K36Za1Q6T/FLon0x/t3y4CKArJs=
+	t=1768229277; cv=none; b=qxVMK1sLrDhYVSRD242FYT2tC8PdwPqvuUMauOZWdTYKQLwGJUwmsWy6yRCvcpOaP3uOAFSq5cilhpQ1wvr1H4rym8WGd3JMz8S2y0CS+QKpBKL9SX5gJonPNDpiXkqNairuEUlifJqt4PnW4/V9FMo44hksUHXtaJS9Lufetk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768227108; c=relaxed/simple;
-	bh=bgJaNUM5VIgE3jmg2aRlC1+4Tim4pBQlk9u6DJ16NrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W5bNO/OhY09KuYxkdxzYOBYZPdo0W6GCL45axgTDPUtKibGRfcW8ljxATrLZ8feTW1VUO6+kxyI0lXob+Mhii5YDz+LZ19pAIk1GDA83zbIBv/4kO0r+5l3mmFk0gvs3XHMxHWt0UoGKFL7Bwn4n9JdIiWQjwt0QdztXmcAm48A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CakAumhF; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1768229277; c=relaxed/simple;
+	bh=nUGXhmxfk4xVstkedOcb8jdC/4d8W+cXsb3tcmVsSFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d9IeY++M+uDmqzNzx1WXgss3JF4UDM+B2nvpSseVIh/wtsgwk/iDqpuwlzbLpPyn1DbwEYzLm8IxvDOoKYF8WY81oF9Yi8AjALldmj37apJfnqMiO6LQLv/vSgpIvP/y3joaFTG7Gj2kP3xbA1eOwHTwTj3CjQivc8Hno1iKj+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iUXN7uSf; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 5059C1A27F1;
-	Mon, 12 Jan 2026 14:11:37 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6E8661A27ED;
+	Mon, 12 Jan 2026 14:47:54 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 0D1FB6074A;
-	Mon, 12 Jan 2026 14:11:37 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 736BF103C8C61;
-	Mon, 12 Jan 2026 15:10:37 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 42F05606FA;
+	Mon, 12 Jan 2026 14:47:54 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A0B3F103C8A5B;
+	Mon, 12 Jan 2026 15:47:32 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768227090; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1768229271; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=S8c2ARP9HcnV+reUeOF4Vcg2quHBkPmCAqYrhfyr6c0=;
-	b=CakAumhFpasu+3ZI3BaB812kdRiuu+v1Tg/Sp3TTEi8pdVKDZEtVO84AoLEgEc1xrnFluT
-	i+SAwVNTU/VK298rD4GgfOlbL1x1IRBq+LMtmjrslvr8iNw/wqHBq7SowNZ+1bxrqAdaPR
-	ziVMPo032s+fSJqG9mpYJmDIazpKyi53yb/qGj1zj4VwwbAj77lJfzPnCy7GfnRvSCaoiG
-	VLNhV0T9IC//MbbHQG1tnGAF03XNmqvN+K3xG6/Renyw+hJ5Ia+fO3n6d7mTvuZI7e4oUm
-	CIup66ln9btW8iWglHRpKXcMS5I6EydGAat63GN0yLYYuyDF497mBLdXxOQ06g==
-From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
-To: Mark Brown <broonie@kernel.org>,
- Varshini Rajendran <varshini.rajendran@microchip.com>,
- Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Sunny Luo <sunny.luo@amlogic.com>, Janne Grunau <j@jannau.net>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, CL Wang <cl634@andestech.com>,
- Manikandan Muralidharan <manikandan.m@microchip.com>,
- David Lechner <dlechner@baylibre.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Jonas Gorski <jonas.gorski@gmail.com>, Hang Zhou <929513338@qq.com>,
- Jun Guo <jun.guo@cixtech.com>, Philipp Stanner <phasta@kernel.org>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Bartosz Golaszewski <brgl@kernel.org>, Shiji Yang <yangshiji66@outlook.com>,
- James Clark <james.clark@linaro.org>, Jonathan Marek <jonathan@marek.ca>,
- Carlos Song <carlos.song@nxp.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Huacai Chen <chenhuacai@kernel.org>, Xianwei Zhao <xianwei.zhao@amlogic.com>,
- Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>,
- Sergio Perez Gonzalez <sperezglz@gmail.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Qianfeng Rong <rongqianfeng@vivo.com>, Haibo Chen <haibo.chen@nxp.com>,
- Gabor Juhos <j4g8y7@gmail.com>, Md Sadre Alam <quic_mdalam@quicinc.com>,
- Rosen Penev <rosenp@gmail.com>, Luis de Arquer <luis.dearquer@inertim.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, Longbin Li <looong.bin@gmail.com>,
- Patrice Chotard <patrice.chotard@foss.st.com>,
- =?UTF-8?B?Q2zDqW1lbnQ=?= Le Goffic <clement.legoffic@foss.st.com>,
- Alessandro Grassi <alessandro.grassi@mailbox.org>,
- Chen-Yu Tsai <wens@kernel.org>, Darshan R <rathod.darshan.0896@gmail.com>,
- Aaron Kling <webgeek1234@gmail.com>, Vishwaroop A <va@nvidia.com>,
- Haixu Cui <quic_haixcui@quicinc.com>,
- Darshan Rathod <darshanrathod475@gmail.com>, linux-spi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-amlogic@lists.infradead.org, asahi@lists.linux.dev,
- linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
- linux-rpi-kernel@lists.infradead.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, imx@lists.linux.dev,
- linux-arm-msm@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-rockchip@lists.infradead.org,
- linux-renesas-soc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
- linux-tegra@vger.kernel.org, virtualization@lists.linux.dev,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Ray Liu <ray.liu@airoha.com>,
- Sven Peter <sven@kernel.org>, Neal Gompa <neal@gompa.dev>,
- =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@kaod.org>,
- Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>,
- Ryan Wanner <ryan.wanner@microchip.com>,
- Michael Hennerich <michael.hennerich@analog.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Kamal Dasu <kamal.dasu@broadcom.com>,
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- William Zhang <william.zhang@broadcom.com>,
- Kursad Oney <kursad.oney@broadcom.com>, Anand Gore <anand.gore@broadcom.com>,
- =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
- David Rhodes <david.rhodes@cirrus.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- Vladimir Oltean <olteanv@gmail.com>, Frank Li <Frank.Li@nxp.com>,
- Jean-Marie Verdun <verdun@hpe.com>, Nick Hawkins <nick.hawkins@hpe.com>,
- Yang Shen <shenyang39@huawei.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Lixu Zhang <lixu.zhang@intel.com>,
- Yinbo Zhu <zhuyinbo@loongson.cn>, Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Conor Dooley <conor.dooley@microchip.com>,
- Daire McNamara <daire.mcnamara@microchip.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Avi Fishman <avifishman70@gmail.com>, Tomer Maimon <tmaimon77@gmail.com>,
- Tali Perry <tali.perry1@gmail.com>, Patrick Venture <venture@google.com>,
- Nancy Yuen <yuenn@google.com>, Benjamin Fair <benjaminfair@google.com>,
- Han Xu <han.xu@nxp.com>, Yogesh Gaur <yogeshgaur.83@gmail.com>,
- Linus Walleij <linusw@kernel.org>, Daniel Mack <daniel@zonque.org>,
- Haojian Zhuang <haojian.zhuang@gmail.com>,
- Robert Jarzmik <robert.jarzmik@free.fr>,
- Chris Packham <chris.packham@alliedtelesis.co.nz>,
- Heiko Stuebner <heiko@sntech.de>,
- Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
- Andi Shyti <andi.shyti@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Paul Walmsley <pjw@kernel.org>, Samuel Holland <samuel.holland@sifive.com>,
- Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Alain Volmat <alain.volmat@foss.st.com>,
- Jernej Skrabec <jernej.skrabec@gmail.com>, Li-hao Kuo <lhjeff911@gmail.com>,
- Masahisa Kojima <masahisa.kojima@linaro.org>,
- Jassi Brar <jaswinder.singh@linaro.org>,
- Laxman Dewangan <ldewangan@nvidia.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Sowjanya Komatineni <skomatineni@nvidia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Jonathan =?UTF-8?B?TmV1c2Now6RmZXI=?= <j.neuschaefer@gmx.net>,
- Michal Simek <michal.simek@amd.com>, Max Filippov <jcmvbkbc@gmail.com>
-Subject: Re: [PATCH v1 4/4] spi: Drop duplicate device_set_node() call
-Date: Mon, 12 Jan 2026 15:10:36 +0100
-Message-ID: <2776743.vuYhMxLoTh@benoit.monin>
-In-Reply-To: <20260108203004.3538449-5-andriy.shevchenko@linux.intel.com>
-References:
- <20260108203004.3538449-1-andriy.shevchenko@linux.intel.com>
- <20260108203004.3538449-5-andriy.shevchenko@linux.intel.com>
+	bh=q/WLPrz5mCQaWOceOk8Ks2oQ15KuKRHou0wGW5c209g=;
+	b=iUXN7uSfeXgQl4nNnPIxxArDY5Gzbwtk5FBobBJO+ueYTKc1/BEPsvLsksdtAAQpqIsWQO
+	/cnIaP1yp40XU+4otLwInaG3Ccgw4ZjdYuBZpKDSxPUmWLKE7SIJzjlyOttIjV5+FmXYBq
+	R26TBX76EEVjpW2JNaMKjbn9Bg5Hc0m/7+OqUYza1Mg8WIkIk5gJ9KPNwyEZMv8Yjfzikr
+	sTt+xW+RYnH9eZug2OQgC+nbK+tcnBHgnDLk+ZgL/pp++VYX0gvJquvTFjdbT3L5ZBtzCj
+	N8BCh1TaOXz9DcWQNxj+3/dOOdCe3qyYIz/NXGcGMfeq+14pb1zJbp2/pCkjtg==
+Date: Mon, 12 Jan 2026 15:47:31 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Saravana Kannan <saravanak@kernel.org>
+Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, Rob Herring <robh@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Kalle Niemi
+ <kaleposti@gmail.com>, linux-arm-kernel@lists.infradead.org, Andrew Lunn
+ <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
+ Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
+ Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
+ Shyti <andi.shyti@kernel.org>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
+ Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Charles
+ Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
+ <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, Andy
+ Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally
+ <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
+ <jonathan.cameron@huawei.com>, Dave Jiang <dave.jiang@intel.com>, Alison
+ Schofield <alison.schofield@intel.com>, Vishal Verma
+ <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
+ <dan.j.williams@intel.com>, Wolfram Sang <wsa@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
+ <allan.nielsen@microchip.com>, Horatiu Vultur
+ <horatiu.vultur@microchip.com>, Steen Hegelund
+ <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
+ overlays"
+Message-ID: <20260112154731.6540453b@bootlin.com>
+In-Reply-To: <20251211161902.11ef4248@bootlin.com>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
+	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
+	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
+	<20251202102619.5cd971cc@bootlin.com>
+	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
+	<20251202175836.747593c0@bootlin.com>
+	<dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
+	<20251204083839.4fb8a4b1@bootlin.com>
+	<CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
+	<20251210132140.32dbc3d7@bootlin.com>
+	<c50c40cc-69f6-436c-a94e-94a3a10f6727@gmail.com>
+	<20251211132044.10f5b1ea@bootlin.com>
+	<1b9fa77b-d74a-4fa7-b2e7-8b389d59a5a0@gmail.com>
+	<20251211161902.11ef4248@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-On Thursday, 8 January 2026 at 21:23:41 CET, Andy Shevchenko wrote:
-> The SPI core provides the default fwnode for the controller,
-> assigned by device_set_node(). No need to repeat it in the driver.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Hi Saravana,
 
->  drivers/spi/spi-dw-core.c           | 2 --
->=20
-Works fine on Mobileye EyeQ6Lplus SoC in both host and target mode.
+(+To Saravana using his new email address)
 
-Tested-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com> # dw mobileye
+We still have issues related to devlink and overlays.
 
-Thanks,
-=2D-=20
-Beno=C3=AEt Monin, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+In order to move forward on the topic, I think I need your help.
 
+Can you have a look and share any ideas to fix them?
 
+On Thu, 11 Dec 2025 16:19:02 +0100
+Herve Codina <herve.codina@bootlin.com> wrote:
+...
+> 
+> IMHO, I think the issue is related to overlays and fw_devlink.
+> The distinction between "a new node is going to lead to a device" vs "a new
+> node is just data and will never been attached to a new device" when an
+> overlay is applied is broken.
+> 
+> This is broken with the upstream "treewide: Fix probing of devices in DT
+> overlays" commit I've tried to revert. Indeed, on the LAN966x PCI device
+> use case devlinks created are not correct with this commit applied.
+> 
+> I am not sure also that devlinks created with a more complex overlay will be
+> correct. For instance, Matti, with your overlay not sure that a phandle from
+> the oscillator node referencing the pmic node will lead to a correct
+> provider/consumer devlink between the pmic device and the oscillator device.
+> 
+> On the other hand, this is broken with "of: dynamic: Fix overlayed devices
+> not probing because of fw_devlink" works for the LAN966x PCI device use case
+> an lead to correct devlinks but breaks your use cases.
+> 
+> Does anyone have an idea about how to fix those issues?
+> 
 
+The commit "of: dynamic: Fix overlayed devices not probing because of fw_devlink"
+can be found in this series (patch 3)
+  https://lore.kernel.org/all/20251015071420.1173068-4-herve.codina@bootlin.com/
+
+Best regards,
+Hervé
 
