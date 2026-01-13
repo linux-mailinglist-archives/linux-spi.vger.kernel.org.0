@@ -1,57 +1,55 @@
-Return-Path: <linux-spi+bounces-12327-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12328-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0533CD18867
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 12:42:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C51C5D18870
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 12:43:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7C3653002D08
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 11:42:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 02E5C301A72F
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 11:42:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72B0538B7A9;
-	Tue, 13 Jan 2026 11:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7FB38BDD3;
+	Tue, 13 Jan 2026 11:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jLF0qILW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBkROKMT"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD7038A2B5;
-	Tue, 13 Jan 2026 11:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82F42BE620;
+	Tue, 13 Jan 2026 11:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768304572; cv=none; b=OloEPfY4co57lw3pa1dlhnNYiK7/12D3rHDNMHlP5It2acziuWVvBt4Srane2O6p+v9plBQVMS3+itbn40cgBWd07CAJNgzMmbp8TAj/S3s25mPGYlRbqFExrZCy/ftHhE9QCtkPeJfs0WBC4rh2ESNkM5UDgXEL/Cc9qE8qiCE=
+	t=1768304573; cv=none; b=nS4qcfn/qFYW+dKHuPC85XIF0JKJuviK7cFafPrCzcyARwRXnzP4nurNAfNz+cnfoGd4C0BL+mbd4tMJGZQ8D/Ls1tg23cjQ9HRTw0uj/aYrJfSI8OcSP3SYDIkECvIZdoc+B1sqPpih9zwHYDmMqxamqcQbhUyumvplya6scWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768304572; c=relaxed/simple;
-	bh=8ZCIZAy2nNpThhX5goPfWn6peYuTFVOzBqggm9jLdYk=;
+	s=arc-20240116; t=1768304573; c=relaxed/simple;
+	bh=agevuoXnSFpyj8tR6f0Quta7RPrJDOnsP1WFdyq0NyI=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=anhbbVtHPTmlBKcE6eAqcZ2EXYAtkkEx3mcVDpQd5pazyqT4w3ZMskxXEZQTDNYHg2opCBNUc9lgc0sbHjfgAzmWp5Qk58TRzZfLjIw/KgK2pr1aosjYUmBMiZs136QSFUc+Dhzw83uRluLHEeT32nfigEqFhht55zpvUfCoqw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jLF0qILW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A74C116C6;
-	Tue, 13 Jan 2026 11:42:50 +0000 (UTC)
+	 MIME-Version:Content-Type; b=NY1/ZjRYrHM/kYRs0swEJ7tb27WHrXcb9N5SDp3dq4g+raO8ENPj8jkDZC8P+KHzsGn+CKVJt6tFLdjf28MJp4moj+aZRENpFxXr/4YWMyzAJ0juFD3A5PjRU3qp64SZJuVBWQuapITXC7zYenlYTTISR71vxI6OeGMcWF5Hjm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBkROKMT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E217C19422;
+	Tue, 13 Jan 2026 11:42:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768304571;
-	bh=8ZCIZAy2nNpThhX5goPfWn6peYuTFVOzBqggm9jLdYk=;
+	s=k20201202; t=1768304573;
+	bh=agevuoXnSFpyj8tR6f0Quta7RPrJDOnsP1WFdyq0NyI=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=jLF0qILWfJSSPsB0tCWU8I2oEnZg4tIJRINrpWsKdIGY6coGzEWna9cXjc6TpfVVa
-	 bWhCzXYeGQA6aTrF1hAR3/CP9CCziRmU5XX/f8lkkzIgEP4l7FdVL7x5Ie00RGYBKB
-	 C4QEaySQTfYIXOLsgJTetxHnWMUwc5PbwyTCFUrBBie6va6++eEyyW4X4BKVAS9CRP
-	 icJYXtRKa9fJ3j08A4cELtESyUT/0PF/8Os4l0WtzIP5QNXw7TYOw3tyXpyP3umCwp
-	 YGlTm4fyH9QsX/dFhWxNKLseXLDPsSoOwt94bRKqL62YemonmMX/gp3Vz4GZjS3gmg
-	 1QU1rqpEkCJ4A==
+	b=DBkROKMTG/Rpn7PwaCm5r4c0ZA7FLtB7bTmAPgVBmM0wSTnsD3hRFQR6EiY47X/jD
+	 RmUybtOu/WdMtMZkb3WzyTf+q/KLIXKY+nGbSnYb4u/ZOmzJBc/LCa9nnoadbVnIlp
+	 8jZ67vhgmuAWm4FnsFPfXyE3RzhO0ljSEInwg6ai5o9CLSh9gBW2roiuGl/kbxIr//
+	 5Q+KlBc79yrDjjDbNnUr/DxiXNxu85MArGbn+4NnYw2AtV/wRey7+ixQwzOhYD4q3x
+	 LV/tRcpPt4Sgak35f5sJII3Vv7y1zalhynMUkncGU39LqAZqvqKfWTTaVnrG77c4/C
+	 nUciffX90/4Ww==
 From: Mark Brown <broonie@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Vladimir Zapolskiy <vz@mleia.com>
-Cc: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
- linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org
-In-Reply-To: <20260109075032.3287109-1-vz@mleia.com>
-References: <20260109075032.3287109-1-vz@mleia.com>
-Subject: Re: [PATCH] spi: dt-bindings: nxp,lpc3220-spi: Add DMA specific
- properties
-Message-Id: <176830457004.25724.10171206431125136162.b4-ty@kernel.org>
-Date: Tue, 13 Jan 2026 11:42:50 +0000
+To: Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, Felix Gu <gu_0233@qq.com>
+Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <tencent_AC7D389CE7E24318445E226F7CDCCC2F0D07@qq.com>
+References: <tencent_AC7D389CE7E24318445E226F7CDCCC2F0D07@qq.com>
+Subject: Re: [PATCH v2] spi: spi-sprd-adi: Fix double free in probe error
+ path
+Message-Id: <176830457213.25724.9815535994112539882.b4-ty@kernel.org>
+Date: Tue, 13 Jan 2026 11:42:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -62,13 +60,17 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Fri, 09 Jan 2026 09:50:32 +0200, Vladimir Zapolskiy wrote:
-> NXP LPC32xx SPI controllers supports DMA operations over rx-tx channel,
-> which is muxed with SSP SPI controller DMA.
+On Fri, 09 Jan 2026 20:49:53 +0800, Felix Gu wrote:
+> The driver currently uses spi_alloc_host() to allocate the controller
+> but registers it using devm_spi_register_controller().
 > 
-> For additional reference see Table 69 in NXP LPC32xx User Manual.
+> If devm_register_restart_handler() fails, the code jumps to the
+> put_ctlr label and calls spi_controller_put(). However, since the
+> controller was registered via a devm function, the device core will
+> automatically call spi_controller_put() again when the probe fails.
+> This results in a double-free of the spi_controller structure.
 > 
-> 
+> [...]
 
 Applied to
 
@@ -76,8 +78,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: dt-bindings: nxp,lpc3220-spi: Add DMA specific properties
-      commit: 8672e4b51adfc57150f3862b1665faff0acf1bad
+[1/1] spi: spi-sprd-adi: Fix double free in probe error path
+      commit: 383d4f5cffcc8df930d95b06518a9d25a6d74aac
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
