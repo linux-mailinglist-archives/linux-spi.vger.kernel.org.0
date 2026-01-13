@@ -1,100 +1,281 @@
-Return-Path: <linux-spi+bounces-12353-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12354-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28428D1B085
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 20:26:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 690B1D1B278
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 21:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E88293013302
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 19:26:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A175B302516F
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 20:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A1E36AB51;
-	Tue, 13 Jan 2026 19:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C013816E0;
+	Tue, 13 Jan 2026 20:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4pHT8CB"
+	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="zIz8nYJt"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B8535F8B3;
-	Tue, 13 Jan 2026 19:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD94E35EDD1
+	for <linux-spi@vger.kernel.org>; Tue, 13 Jan 2026 20:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768332362; cv=none; b=lP7x+nuXn1NmCca6bj81sPsHExtdmW2hxdKAQdCWEuV1etgQgZ2q56yAOQ3b3cxXKbST0DjlKVgjHvKMFXNdYg2qtsdb5MDyQvwtDVM5vtKsIIJZQYOF2ropcKyLd4IpIDuQ+DkHRlyepu+NBOIuWuYr+ghz2RSYDO9DEoPNlY4=
+	t=1768334995; cv=none; b=DZQ8ds6NwYfl5Ja7ltxHedpWUJ2tigPoL3DvaKZ8XyM96SF0KiwenLmlBn8Y0kS5imi9xBQ9atKcCDy/HD84l5cfOcqEf321vWoZb5al2DB8JoFeOuKZeQi6d/GuSML1dum2YTHHZL6QeWD2TtaDtaHpeG7Uof2D10f6V4pTjm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768332362; c=relaxed/simple;
-	bh=QfE9tdDld62jcRONc3G5Wfpg9QgF5mvAscqXx3Y8ssg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XDsNDwScwY9KSjVV+zOvI3e4vQFQ7WZnjYcNHWdneYnjEzFIratJGraGoYUWDoL2mA6+PwlTOmv+U+tFBaus9orceROL5glCXMMlThWNx+bP9Fea4p9P2B7fdZa1j1nnrq+0txm94o3tyNTe/8BNpYMkknK8ySqXQiUcducHThw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4pHT8CB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C98ECC19422;
-	Tue, 13 Jan 2026 19:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768332362;
-	bh=QfE9tdDld62jcRONc3G5Wfpg9QgF5mvAscqXx3Y8ssg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X4pHT8CBEdXSkeDUsLsNHhwAyrm51GavxZ/Q6TOUWzqFxBR3jZoLGJVzeajUY9Npp
-	 JPBnnGeyWBwgoPm0auCkj4pQ6P2fCYQeZLl1XwAwr3KAmmcrUdc0mHWIPhI8Irpmj6
-	 uayeg13bPvmTQMrWHR0rZD735sWFI7zN4cJ/nycB1pOSJRidYMAcpEFKl5UoLa4O3t
-	 CF9XuYyD8NUcA67hCFHtAo1UVESnKc26KvUsKzUDgw97r4RzmJIjQZ8wFPT8C9n0dJ
-	 VAWBMpGU1OQxZUYD8yNgZ91jspyPwpxkmGQq0mht5GHh6/cSUCFfcQx55MyGIN+s5Z
-	 4TOzW0bu9X+OA==
-Date: Tue, 13 Jan 2026 19:25:58 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: Felix Gu <gu_0233@qq.com>, linux-spi@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Orson Zhai <orsonzhai@gmail.com>
-Subject: Re: [PATCH v2] spi: spi-sprd-adi: Fix double free in probe error path
-Message-ID: <24f98b92-af03-4a5a-9f22-e83045289c7e@sirena.org.uk>
-References: <176830457213.25724.9815535994112539882.b4-ty@kernel.org>
- <1c068a91-e0a9-4edd-b5d0-c7fde56999f7@web.de>
+	s=arc-20240116; t=1768334995; c=relaxed/simple;
+	bh=pyMp5oFQEzQGlgpWodh5m5sUhmJKSJMmcF9EpqTle4o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ixXeueN/SEFzSezfOCIJqo/jqAmNd0SsohAtbUvo8qMisjsAnZYZuj8AFiHkzxMioz0p/KVnmfEn/U6RHyuEwGRPVyX+dzhDFmZnE3DRyt1IdqGq30wWUHV9+XTQ+E7xrNPq1C42UhEKexSZP44+gaODLJREiahvU1tfQzRgxYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=zIz8nYJt; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b874c00a39fso33589166b.0
+        for <linux-spi@vger.kernel.org>; Tue, 13 Jan 2026 12:09:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura; t=1768334991; x=1768939791; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
+        b=zIz8nYJtuj84rCwrR4h2rYUNtQy0kQi3Vs6Pa4eyUFvYBSmR3JdcK91Z5LcbNLJJbd
+         KBv1zpWpctONSZSIZfox4XBRJ3RoOniV3X3ufcycnUMgiQws9qL2iJTLfcYz/6ywcGtF
+         IEbL5rTF894Idp+8ULCgygVGYo7r2T+AndIh1IP7v3vgatT1IQO43J17idGJA2xunR2Y
+         7fJ9k/8LfGQoxc/GCDnq0d/fOOs+esgxOp4GdBC/tXJBsPbMEB8jlL/iIMNJVyMCIozF
+         aMqv/iMccUIy3JOOqaYhzVETvgeYFGAbN22kE3vQ40Dtdd6YFQhBIm6KtULuMQfYbl9n
+         eBaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768334991; x=1768939791;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
+        b=OcmAVHW3ldQE7foCcTUCWpco8o0tPnYqoM2Whs55x4390b1mRumhmkTCZ3D8C4RfJR
+         CprdKyb0jX+debu5rZ+wvIi1OfL9rr0YKkDZkFcuaSwzcPu2G+Z4v0GM4fDA0qpEqUtp
+         FOV1mRiSYUExWD1vuFqS0JBLhKuLTz8veA2w87Aj3S7BMcx5nIjTmqcnwy8WzObcbVv4
+         4l56wVNyMK5q6UEvIpg8YBqhvXAq46ZzhvXGCt54rWwpFgj2m99tHj3WYG5AEB4wCMDU
+         W7d+8UfB61pfNSp4hrfsMw3+1khY8sYjuMrF/wvBkRIsoxfQgSoKNuZS+QT0rtp4/OrY
+         E5qg==
+X-Forwarded-Encrypted: i=1; AJvYcCUniHEJFjJ451g4nacYpxRnbLJKovazdjGVDImPE0T7NhKqMuqm+Q32j2AA3pumGqdRCTSjx+K4wGc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFt/hSBP++898pj1YSGKHmHiEPGZXzJi3xWW+cSMVewtX2Zdws
+	7zg8AaAhA7NFQWiboNQpWBFpYrgwa9NJDTu55R9GkrqsvAVGAyTF+7uPSFLAavBcPluOPhVg6id
+	zOCqiy460W0lIbStKboS3XldUYLpk4BqYJyyynoX6Og==
+X-Gm-Gg: AY/fxX7x09ZB6uk9kO85+Ydibf+4h6ocWrO5xTGD88KbEO3T/R+xR9SDjvEloQqTbsd
+	8Mhl29mQaQknmq789AC0J+ItNXyY5AyKtT+E2FFGxW0iBF9/pQhxr6RCgWE3aTAD/Fg2a9FU/DX
+	FTy2rCH4OPCfWANIPb3wpYBpu//hiXzejaogmiQXzdpwSiJGoWq3EwvQLpBJai8QwvCi4ATZueJ
+	QxQ2bhytogzbUWo7cCpxxUMcUvQ2Giy1YiONzRWmMtUNFGXhKAzrkgCG3jvHLq7PWQwIXZtHmjf
+	Rklt8oSqq75h9zG3qdXA0sM9JRjmlLswKg5O/Wut7IRK4cvvYnf8xHmCl+IR
+X-Received: by 2002:a17:907:9483:b0:b87:191f:4fab with SMTP id
+ a640c23a62f3a-b8761d928b1mr18947166b.26.1768334991113; Tue, 13 Jan 2026
+ 12:09:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="O/SrnPaEPrZwexDk"
-Content-Disposition: inline
-In-Reply-To: <1c068a91-e0a9-4edd-b5d0-c7fde56999f7@web.de>
-X-Cookie: All models over 18 years of age.
-
-
---O/SrnPaEPrZwexDk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+References: <20251229184004.571837-1-robert.marko@sartura.hr>
+ <20251229184004.571837-16-robert.marko@sartura.hr> <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
+In-Reply-To: <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
+From: Robert Marko <robert.marko@sartura.hr>
+Date: Tue, 13 Jan 2026 21:09:40 +0100
+X-Gm-Features: AZwV_QhCSNrQ25JXSm6moAYHvYjCfUUDQoR1FC1MV_mP0oSiXaM4vWsMWx6MKV0
+Message-ID: <CA+HBbNFYBhtvUxd45O7eP_1JYENxeGZOkA+yUsEdztOSSi9Gdg@mail.gmail.com>
+Subject: Re: [PATCH v4 15/15] arm64: dts: microchip: add EV23X71A board
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
+	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
+	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
+	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
+	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luka.perkov@sartura.hr
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 13, 2026 at 08:20:29PM +0100, Markus Elfring wrote:
+On Sun, Jan 11, 2026 at 3:42=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
+n.dev> wrote:
+>
+> Hi, Robert,
+>
+> On 12/29/25 20:37, Robert Marko wrote:
+> > Microchip EV23X71A is an LAN9696 based evaluation board.
+> >
+> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> > ---
+> > Changes in v2:
+> > * Split from SoC DTSI commit
+> > * Apply DTS coding style
+> > * Enclose array in i2c-mux
+> > * Alphanumericaly sort nodes
+> > * Change management port mode to RGMII-ID
+> >
+> >   arch/arm64/boot/dts/microchip/Makefile        |   1 +
+> >   .../boot/dts/microchip/lan9696-ev23x71a.dts   | 757 +++++++++++++++++=
++
+> >   2 files changed, 758 insertions(+)
+> >   create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/microchip/Makefile b/arch/arm64/boot/d=
+ts/microchip/Makefile
+> > index c6e0313eea0f..09d16fc1ce9a 100644
+> > --- a/arch/arm64/boot/dts/microchip/Makefile
+> > +++ b/arch/arm64/boot/dts/microchip/Makefile
+> > @@ -1,4 +1,5 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> > +dtb-$(CONFIG_ARCH_LAN969X) +=3D lan9696-ev23x71a.dtb
+> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb125.dtb
+> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb134.dtb sparx5_pcb134_emmc.d=
+tb
+> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb135.dtb sparx5_pcb135_emmc.d=
+tb
+> > diff --git a/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts b/arch/=
+arm64/boot/dts/microchip/lan9696-ev23x71a.dts
+> > new file mode 100644
+> > index 000000000000..435df455b078
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
+>
+> [ ...]
+>
+> > +&gpio {
+> > +     emmc_sd_pins: emmc-sd-pins {
+> > +             /* eMMC_SD - CMD, CLK, D0, D1, D2, D3, D4, D5, D6, D7, RS=
+TN */
+> > +             pins =3D "GPIO_14", "GPIO_15", "GPIO_16", "GPIO_17",
+> > +                    "GPIO_18", "GPIO_19", "GPIO_20", "GPIO_21",
+> > +                    "GPIO_22", "GPIO_23", "GPIO_24";
+> > +             function =3D "emmc_sd";
+> > +     };
+> > +
+> > +     fan_pins: fan-pins {
+> > +             pins =3D "GPIO_25", "GPIO_26";
+> > +             function =3D "fan";
+> > +     };
+> > +
+> > +     fc0_pins: fc0-pins {
+> > +             pins =3D "GPIO_3", "GPIO_4";
+> > +             function =3D "fc";
+> > +     };
+> > +
+> > +     fc2_pins: fc2-pins {
+> > +             pins =3D "GPIO_64", "GPIO_65", "GPIO_66";
+> > +             function =3D "fc";
+> > +     };
+> > +
+> > +     fc3_pins: fc3-pins {
+> > +             pins =3D "GPIO_55", "GPIO_56";
+> > +             function =3D "fc";
+> > +     };
+> > +
+> > +     mdio_pins: mdio-pins {
+> > +             pins =3D "GPIO_9", "GPIO_10";
+> > +             function =3D "miim";
+> > +     };
+> > +
+> > +     mdio_irq_pins: mdio-irq-pins {
+> > +             pins =3D "GPIO_11";
+> > +             function =3D "miim_irq";
+> > +     };
+> > +
+> > +     sgpio_pins: sgpio-pins {
+> > +             /* SCK, D0, D1, LD */
+> > +             pins =3D "GPIO_5", "GPIO_6", "GPIO_7", "GPIO_8";
+> > +             function =3D "sgpio_a";
+> > +     };
+> > +
+> > +     usb_ulpi_pins: usb-ulpi-pins {
+> > +             pins =3D "GPIO_30", "GPIO_31", "GPIO_32", "GPIO_33",
+> > +                    "GPIO_34", "GPIO_35", "GPIO_36", "GPIO_37",
+> > +                    "GPIO_38", "GPIO_39", "GPIO_40", "GPIO_41";
+> > +             function =3D "usb_ulpi";
+> > +     };
+> > +
+> > +     usb_rst_pins: usb-rst-pins {
+> > +             pins =3D "GPIO_12";
+> > +             function =3D "usb2phy_rst";
+> > +     };
+> > +
+> > +     usb_over_pins: usb-over-pins {
+> > +             pins =3D "GPIO_13";
+> > +             function =3D "usb_over_detect";
+> > +     };
+> > +
+> > +     usb_power_pins: usb-power-pins {
+> > +             pins =3D "GPIO_1";
+> > +             function =3D "usb_power";
+> > +     };
+> > +
+> > +     ptp_out_pins: ptp-out-pins {
+> > +             pins =3D "GPIO_58";
+> > +             function =3D "ptpsync_4";
+> > +     };
+>
+> Could you please move this one upper to have all the entries in the gpio
+> container alphanumerically sorted?
+>
+> > +
+> > +     ptp_ext_pins: ptp-ext-pins {
+> > +             pins =3D "GPIO_59";
+> > +             function =3D "ptpsync_5";
+> > +     };
+>
+> Same here.
 
-> See also once more:
-> Check =E2=80=9CBAD_FIXES_TAG=E2=80=9D
-> https://elixir.bootlin.com/linux/v6.19-rc4/source/scripts/checkpatch.pl#L=
-3231-L3269
+Sure, I will make sure that pin nodes are alphabetical (I found some
+more that are not) in v5.
 
-Feel free to ignore Markus, he has a long history of sending
-unhelpful review comments and continues to ignore repeated requests
-to stop.
+>
+> [ ...]
+>
+> > +             port29: port@29 {
+> > +                     reg =3D <29>;
+> > +                     phys =3D <&serdes 11>;
+> > +                     phy-handle =3D <&phy3>;
+> > +                     phy-mode =3D "rgmii-id";
+> > +                     microchip,bandwidth =3D <1000>;
+>
+> There are some questions around this node from Andrew in v1 of this serie=
+s,
+> which I don't see an answer for in any of the following versions. Could y=
+ou
+> please clarify?
 
---O/SrnPaEPrZwexDk
-Content-Type: application/pgp-signature; name="signature.asc"
+Sure, as for the RGMII I switched to rgmii-id so the PHY is adding the dela=
+ys.
+Though, I am not sure if its better to add them via MAC as it can add
+the delays instead of the PHY,
+so I am open to suggestions here.
 
------BEGIN PGP SIGNATURE-----
+As for the phys property, yes that is not required here as RGMII ports
+are dedicated, there are no
+SERDES lanes being used for them.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlmnEUACgkQJNaLcl1U
-h9CafAf/XCYWfQBwsp+Cg343Z9xX5S2BrTbieAtFS/Nj8KUIkK57jjR6duOXDOjb
-PU6gfdbTZ0lx78hDMAvZmR9c16HipZOpXm2x6WWhyO7tSCyMlalXkwOkIUeFdutu
-r7eLHJiHQW2QDy2aM5Blnxt3aBN2Eh5Z2Fctim37nMyGhK88fZRktS3PZl+sc+A7
-oDSpwXMWJCqN7kyuBmqeJcYFCVqk3XJTOajxem9OysYN17v+Qv+eEMaE6kBWVtB0
-DBwAXmk3VD5cPds+EfYnslgs00KAZctzUhXE1zR/zgDkVmPyWhRIu1J9gCAcjLQA
-MBKaIpPt8E3y2mPahqPmhpVqBNI69g==
-=eMuY
------END PGP SIGNATURE-----
+I have updated the bindings to account for this and it will be part of v5.
 
---O/SrnPaEPrZwexDk--
+Regards,
+Robert
+
+>
+> The rest looks good to me.
+>
+> Thank you,
+> Claudiu
+>
+
+
+--=20
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura d.d.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr
 
