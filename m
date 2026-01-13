@@ -1,55 +1,57 @@
-Return-Path: <linux-spi+bounces-12328-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12329-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C51C5D18870
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 12:43:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58D59D1886A
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 12:43:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 02E5C301A72F
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 11:42:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DBF623014138
+	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 11:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7FB38BDD3;
-	Tue, 13 Jan 2026 11:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5C902BE620;
+	Tue, 13 Jan 2026 11:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBkROKMT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QoMA6EXm"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82F42BE620;
-	Tue, 13 Jan 2026 11:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838F738BDD3
+	for <linux-spi@vger.kernel.org>; Tue, 13 Jan 2026 11:42:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768304573; cv=none; b=nS4qcfn/qFYW+dKHuPC85XIF0JKJuviK7cFafPrCzcyARwRXnzP4nurNAfNz+cnfoGd4C0BL+mbd4tMJGZQ8D/Ls1tg23cjQ9HRTw0uj/aYrJfSI8OcSP3SYDIkECvIZdoc+B1sqPpih9zwHYDmMqxamqcQbhUyumvplya6scWM=
+	t=1768304576; cv=none; b=GWw7pcDPafur1bfo0Z6BK2buvtv2FbhJPlzCrNw6BoSB7yI6Ksw4Xlimsz8yxKzX6xvb7QaGR6r2Lv1r0Q/FIXq8Ag+g0IAY8lm+Xt9/Db24imhsw+WS4HGQDn1EAffM8P3GzkH1fwUM6mP5OZbS9WBLWlKRfWIeSPxFySCi6i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768304573; c=relaxed/simple;
-	bh=agevuoXnSFpyj8tR6f0Quta7RPrJDOnsP1WFdyq0NyI=;
+	s=arc-20240116; t=1768304576; c=relaxed/simple;
+	bh=KiWzf5kGCSQTL3S3lojnfr9SeyYwyG2WS7wgeq2OlQA=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=NY1/ZjRYrHM/kYRs0swEJ7tb27WHrXcb9N5SDp3dq4g+raO8ENPj8jkDZC8P+KHzsGn+CKVJt6tFLdjf28MJp4moj+aZRENpFxXr/4YWMyzAJ0juFD3A5PjRU3qp64SZJuVBWQuapITXC7zYenlYTTISR71vxI6OeGMcWF5Hjm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBkROKMT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E217C19422;
-	Tue, 13 Jan 2026 11:42:52 +0000 (UTC)
+	 MIME-Version:Content-Type; b=piZ/I8QeUpZzh03EmQJ2MA6QTeoEY5/u3v10ij6e/63C+ASLxNJXE0ZWE8vs7watoJJgu3bh25EztzJXezIlHa1pv0cDqkObrYIr68z2Wkjy5I51L6LZh9NPHI5FqWvXFt8C4/dvOqvm3Yb/Q4LeKeZnO9Hdv9rsDXb5/pmIa6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QoMA6EXm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02ADAC116C6;
+	Tue, 13 Jan 2026 11:42:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768304573;
-	bh=agevuoXnSFpyj8tR6f0Quta7RPrJDOnsP1WFdyq0NyI=;
+	s=k20201202; t=1768304576;
+	bh=KiWzf5kGCSQTL3S3lojnfr9SeyYwyG2WS7wgeq2OlQA=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=DBkROKMTG/Rpn7PwaCm5r4c0ZA7FLtB7bTmAPgVBmM0wSTnsD3hRFQR6EiY47X/jD
-	 RmUybtOu/WdMtMZkb3WzyTf+q/KLIXKY+nGbSnYb4u/ZOmzJBc/LCa9nnoadbVnIlp
-	 8jZ67vhgmuAWm4FnsFPfXyE3RzhO0ljSEInwg6ai5o9CLSh9gBW2roiuGl/kbxIr//
-	 5Q+KlBc79yrDjjDbNnUr/DxiXNxu85MArGbn+4NnYw2AtV/wRey7+ixQwzOhYD4q3x
-	 LV/tRcpPt4Sgak35f5sJII3Vv7y1zalhynMUkncGU39LqAZqvqKfWTTaVnrG77c4/C
-	 nUciffX90/4Ww==
+	b=QoMA6EXm9/2V4CmtvPzckGtXxTaoAsWjjppaYHOe/l+Oz4ySiJCZBC2wBWrT+/4kV
+	 gZpXXzF2HHZTAA1K+A4v40cXq8eB4NpQb2Luyzix9ALNS+Rb7SAMQtEnquf7i8HXg6
+	 3jy+zgGxclqficmJt+ukQVrKZEvU8EN4eFlMVfMwuB0MmBfIralU+7MfxpWSJecTx/
+	 R7vD5iW37hCztm577qSyGaSb5HRhYqDLVeqdmoRnk7HjJxZLdCyAbICY84q7aQHT0J
+	 xicDPZEq78+QUIYn/jNmBrIdD4DwE5pN89WvAnmkst/PqN+eAHby8SDhfLHimwy/3E
+	 7a1BU66QR6B2w==
 From: Mark Brown <broonie@kernel.org>
-To: Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, Felix Gu <gu_0233@qq.com>
-Cc: linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <tencent_AC7D389CE7E24318445E226F7CDCCC2F0D07@qq.com>
-References: <tencent_AC7D389CE7E24318445E226F7CDCCC2F0D07@qq.com>
-Subject: Re: [PATCH v2] spi: spi-sprd-adi: Fix double free in probe error
- path
-Message-Id: <176830457213.25724.9815535994112539882.b4-ty@kernel.org>
-Date: Tue, 13 Jan 2026 11:42:52 +0000
+To: shenyang39@huawei.com, Devyn Liu <liudingyuan@h-partners.com>
+Cc: linux-spi@vger.kernel.org, linuxarm@huawei.com, 
+ jonathan.cameron@huawei.com, yubowen8@huawei.com, zhanjie9@hisilicon.com, 
+ liuyonglong@huawei.com, kangfenglong@huawei.com, alireza.sanaee@huawei.com, 
+ salil.mehta@huawei.com, shiju.jose@huawei.com, 
+ kong.kongxinwei@hisilicon.com, lujunhua7@h-partners.com
+In-Reply-To: <20260108075323.3831574-1-liudingyuan@h-partners.com>
+References: <20260108075323.3831574-1-liudingyuan@h-partners.com>
+Subject: Re: [PATCH] spi: hisi-kunpeng: Fixed the wrong debugfs node name
+ in hisi_spi debugfs initialization
+Message-Id: <176830457375.25724.8454029111549041009.b4-ty@kernel.org>
+Date: Tue, 13 Jan 2026 11:42:53 +0000
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,15 +62,13 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.15-dev-47773
 
-On Fri, 09 Jan 2026 20:49:53 +0800, Felix Gu wrote:
-> The driver currently uses spi_alloc_host() to allocate the controller
-> but registers it using devm_spi_register_controller().
-> 
-> If devm_register_restart_handler() fails, the code jumps to the
-> put_ctlr label and calls spi_controller_put(). However, since the
-> controller was registered via a devm function, the device core will
-> automatically call spi_controller_put() again when the probe fails.
-> This results in a double-free of the spi_controller structure.
+On Thu, 08 Jan 2026 15:53:23 +0800, Devyn Liu wrote:
+> In hisi_spi_debugfs_init, spi controller pointer is calculated
+> by container_of macro, and the member is hs->dev. But the host
+> cannot be calculated offset directly by this. (hs->dev) points
+> to (pdev->dev), and it is the (host->dev.parent) rather than
+> (host->dev) points to the (pdev->dev), which is set in
+> __spi_alloc_controller.
 > 
 > [...]
 
@@ -78,8 +78,8 @@ Applied to
 
 Thanks!
 
-[1/1] spi: spi-sprd-adi: Fix double free in probe error path
-      commit: 383d4f5cffcc8df930d95b06518a9d25a6d74aac
+[1/1] spi: hisi-kunpeng: Fixed the wrong debugfs node name in hisi_spi debugfs initialization
+      commit: b062a899c997df7b9ce29c62164888baa7a85833
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
