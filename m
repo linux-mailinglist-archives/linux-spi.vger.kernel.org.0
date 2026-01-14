@@ -1,281 +1,211 @@
-Return-Path: <linux-spi+bounces-12354-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12355-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690B1D1B278
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 21:10:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD00D1CBB8
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 07:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A175B302516F
-	for <lists+linux-spi@lfdr.de>; Tue, 13 Jan 2026 20:09:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8E599304E171
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 06:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C013816E0;
-	Tue, 13 Jan 2026 20:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5955536E47D;
+	Wed, 14 Jan 2026 06:50:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="zIz8nYJt"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="CWcDJbXl"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013061.outbound.protection.outlook.com [40.107.159.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD94E35EDD1
-	for <linux-spi@vger.kernel.org>; Tue, 13 Jan 2026 20:09:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768334995; cv=none; b=DZQ8ds6NwYfl5Ja7ltxHedpWUJ2tigPoL3DvaKZ8XyM96SF0KiwenLmlBn8Y0kS5imi9xBQ9atKcCDy/HD84l5cfOcqEf321vWoZb5al2DB8JoFeOuKZeQi6d/GuSML1dum2YTHHZL6QeWD2TtaDtaHpeG7Uof2D10f6V4pTjm8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768334995; c=relaxed/simple;
-	bh=pyMp5oFQEzQGlgpWodh5m5sUhmJKSJMmcF9EpqTle4o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ixXeueN/SEFzSezfOCIJqo/jqAmNd0SsohAtbUvo8qMisjsAnZYZuj8AFiHkzxMioz0p/KVnmfEn/U6RHyuEwGRPVyX+dzhDFmZnE3DRyt1IdqGq30wWUHV9+XTQ+E7xrNPq1C42UhEKexSZP44+gaODLJREiahvU1tfQzRgxYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=zIz8nYJt; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b874c00a39fso33589166b.0
-        for <linux-spi@vger.kernel.org>; Tue, 13 Jan 2026 12:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1768334991; x=1768939791; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
-        b=zIz8nYJtuj84rCwrR4h2rYUNtQy0kQi3Vs6Pa4eyUFvYBSmR3JdcK91Z5LcbNLJJbd
-         KBv1zpWpctONSZSIZfox4XBRJ3RoOniV3X3ufcycnUMgiQws9qL2iJTLfcYz/6ywcGtF
-         IEbL5rTF894Idp+8ULCgygVGYo7r2T+AndIh1IP7v3vgatT1IQO43J17idGJA2xunR2Y
-         7fJ9k/8LfGQoxc/GCDnq0d/fOOs+esgxOp4GdBC/tXJBsPbMEB8jlL/iIMNJVyMCIozF
-         aMqv/iMccUIy3JOOqaYhzVETvgeYFGAbN22kE3vQ40Dtdd6YFQhBIm6KtULuMQfYbl9n
-         eBaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768334991; x=1768939791;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=X3PB19UpbesWMeT0R3+l59gQeDUb0GCMAUDX3FFcChs=;
-        b=OcmAVHW3ldQE7foCcTUCWpco8o0tPnYqoM2Whs55x4390b1mRumhmkTCZ3D8C4RfJR
-         CprdKyb0jX+debu5rZ+wvIi1OfL9rr0YKkDZkFcuaSwzcPu2G+Z4v0GM4fDA0qpEqUtp
-         FOV1mRiSYUExWD1vuFqS0JBLhKuLTz8veA2w87Aj3S7BMcx5nIjTmqcnwy8WzObcbVv4
-         4l56wVNyMK5q6UEvIpg8YBqhvXAq46ZzhvXGCt54rWwpFgj2m99tHj3WYG5AEB4wCMDU
-         W7d+8UfB61pfNSp4hrfsMw3+1khY8sYjuMrF/wvBkRIsoxfQgSoKNuZS+QT0rtp4/OrY
-         E5qg==
-X-Forwarded-Encrypted: i=1; AJvYcCUniHEJFjJ451g4nacYpxRnbLJKovazdjGVDImPE0T7NhKqMuqm+Q32j2AA3pumGqdRCTSjx+K4wGc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFt/hSBP++898pj1YSGKHmHiEPGZXzJi3xWW+cSMVewtX2Zdws
-	7zg8AaAhA7NFQWiboNQpWBFpYrgwa9NJDTu55R9GkrqsvAVGAyTF+7uPSFLAavBcPluOPhVg6id
-	zOCqiy460W0lIbStKboS3XldUYLpk4BqYJyyynoX6Og==
-X-Gm-Gg: AY/fxX7x09ZB6uk9kO85+Ydibf+4h6ocWrO5xTGD88KbEO3T/R+xR9SDjvEloQqTbsd
-	8Mhl29mQaQknmq789AC0J+ItNXyY5AyKtT+E2FFGxW0iBF9/pQhxr6RCgWE3aTAD/Fg2a9FU/DX
-	FTy2rCH4OPCfWANIPb3wpYBpu//hiXzejaogmiQXzdpwSiJGoWq3EwvQLpBJai8QwvCi4ATZueJ
-	QxQ2bhytogzbUWo7cCpxxUMcUvQ2Giy1YiONzRWmMtUNFGXhKAzrkgCG3jvHLq7PWQwIXZtHmjf
-	Rklt8oSqq75h9zG3qdXA0sM9JRjmlLswKg5O/Wut7IRK4cvvYnf8xHmCl+IR
-X-Received: by 2002:a17:907:9483:b0:b87:191f:4fab with SMTP id
- a640c23a62f3a-b8761d928b1mr18947166b.26.1768334991113; Tue, 13 Jan 2026
- 12:09:51 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B38299A81;
+	Wed, 14 Jan 2026 06:50:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768373432; cv=fail; b=XYtPWYxS5Exg1L/4Iw18emGOIah74nmZtyd+IdFvFu2PDY7m+5RoiafOWS+z4jD4y8L97VU4kekmmJ9KLQh/XULm0ZaZTbCPZp+ap3TP2hEv0gt9qJJyGrUBQirKehyqfq4l8RPRWgoHFN6Np0KT3QSqLSI6fgtc11uM06GY+qU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768373432; c=relaxed/simple;
+	bh=MK9HEyM7t9e1aXf+nQ0L1GS6QNRr0Yq8FJTndbQ2c3I=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=X5dzbS42twJMlJXDzn4E5nDPXpfdY84n04Nx8WAuHql3vgZeTDr5f0chTko+ys+ELvlNeZ2FOAOfGavpnQ4plu5rsMARYW8kzXFovCZ6i4mijPBb+Zfa1sf8mZWG0xIBSq+jK1hvTdWyv+c/QRNFMA/lBWgpbLs+mufNeWshOSY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=CWcDJbXl; arc=fail smtp.client-ip=40.107.159.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=tITzU1rC61iaofQTOtwTNoflwYY/qoeKyfsCthOEdXF97AMQ2touiMLUaOABaM/OZWCMxub1Ja9GfZIxYs5yGJ8URLfvnCEBLZ8ziJgwGmJxdobt7PXziJLBnqtbxGLXWc2D//PFfzlM9LbKPq4uv+47pzI3FKj8q5VPzWeIytaNPddz/GCfDnCHrQdY1PVc5pth65qone3MzWsv2afb7TvXtG6pFCYiR2OiW3QhoSzg1B/mh5hwgxzSupVlgp4klUikmyUA7xi6MkD9cO4o0Iysqg9nbqvDuyM3iB0mk0ebtnl6ZTh5bNQOjhwlvOGWFu9bfGgK0H4rW3CRgKcJlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LYJYRVLo+Dg2rBtgykOZNFz7bbPOElbLyzV6Ea58Vf0=;
+ b=jxv7poCyn8hYq3aLt3Qf3mK8TCmSN09pk5B30vNsXF9+7rdxE5BLbjzIZTqJdFKnCVKgjIfVgAyWYlEWlTRIoEvtAAM1JNwQL+Vf2kNUjLPS6D7GHalUvbGXOZW52Z1uuV0Rz+lao3RJLbXr24u5V86znMkbfFFFcdXuvcidrT/kiYGOrlNSgx2uHKwodUFD4K4wVWvbIualN2yTpBwnEdaAEFKQ4gq+3f4vV+eVqgcEQv6Qv1qj6rSmgVwgBWswKbweTHnDUCb5G9YSKUIPePXeYqbe1XqX/gZ8MaXO5/u16RLaNwMo8X32YdBusT436XVXDhKdQaWkkYY0HTFWiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LYJYRVLo+Dg2rBtgykOZNFz7bbPOElbLyzV6Ea58Vf0=;
+ b=CWcDJbXlf/ft2/pNfMqIhzM0IQBlzMEfQY7Jkhpxo4FpqSCiHoV4zxm6N1L+eEsHKKl0Cj223byDMn10nATtfo5OuIVP3EiV8D9Cfnomgnb2jFMdwSvAgTkgT/SviicrewA1jiSnl+EIocLtimkDSIqM29F9pcmBhGeuc2qvMJu+dXiFUFkHD1k1S/U244vR0VBwd1T0TlutKGM4lp8sKw4mmvJi21/umjVIrWqkL3cm3rEchl+xQM+shO5Xzr8t61tHma611WRMTv27ZEbG07hgsZBUHgQ9TcqZCLHmB5w/CgFFjOqgCY+2QYE7xdBnOKk4XFXmhCu4Dw1CpT6OkA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU0PR04MB9496.eurprd04.prod.outlook.com (2603:10a6:10:32d::19)
+ by AS8PR04MB8673.eurprd04.prod.outlook.com (2603:10a6:20b:428::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.5; Wed, 14 Jan
+ 2026 06:50:14 +0000
+Received: from DU0PR04MB9496.eurprd04.prod.outlook.com
+ ([fe80::868b:3935:5e0f:6a33]) by DU0PR04MB9496.eurprd04.prod.outlook.com
+ ([fe80::868b:3935:5e0f:6a33%6]) with mapi id 15.20.9520.005; Wed, 14 Jan 2026
+ 06:50:14 +0000
+From: Haibo Chen <haibo.chen@nxp.com>
+Subject: [PATCH 0/3] Add MT35XU01G SPI NOR flash on i.MX952-EVK board
+Date: Wed, 14 Jan 2026 14:49:44 +0800
+Message-Id: <20260114-xspi-imx952-v1-0-acc60a5a2a9d@nxp.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIg8Z2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDQ0MT3YrigkzdzNwKS1MjXQNzExPLxNQUs6RECyWgjoKi1LTMCrBp0bG
+ 1tQAjUGC/XQAAAA==
+X-Change-ID: 20260114-xspi-imx952-07449aed6ba8
+To: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768373406; l=754;
+ i=haibo.chen@nxp.com; s=20250421; h=from:subject:message-id;
+ bh=MK9HEyM7t9e1aXf+nQ0L1GS6QNRr0Yq8FJTndbQ2c3I=;
+ b=3IVyBLP29eWUpmCH0JStgNrumMAtPrA7YRyCv7rzfck0WX/j4wuGdvO9iiYhcBBV/DGNfDknT
+ Xiwa2jD/dSrAzC3I3U6Zygewjc7/yPrnaJIJc+bVa3moJuX3i50iF5r
+X-Developer-Key: i=haibo.chen@nxp.com; a=ed25519;
+ pk=HR9LLTuVOg3BUNeAf4/FNOIkMaZvuwVJdNrGpvKDKaI=
+X-ClientProxiedBy: SGBP274CA0020.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::32)
+ To DU0PR04MB9496.eurprd04.prod.outlook.com (2603:10a6:10:32d::19)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-16-robert.marko@sartura.hr> <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
-In-Reply-To: <858ca139-61c5-45e3-a2c9-d0af414e3592@tuxon.dev>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Tue, 13 Jan 2026 21:09:40 +0100
-X-Gm-Features: AZwV_QhCSNrQ25JXSm6moAYHvYjCfUUDQoR1FC1MV_mP0oSiXaM4vWsMWx6MKV0
-Message-ID: <CA+HBbNFYBhtvUxd45O7eP_1JYENxeGZOkA+yUsEdztOSSi9Gdg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/15] arm64: dts: microchip: add EV23X71A board
-To: claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
-	andi.shyti@kernel.org, lee@kernel.org, andrew+netdev@lunn.ch, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org, 
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, olivia@selenic.com, radu_nicolae.pirea@upb.ro, 
-	richard.genoud@bootlin.com, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
-	broonie@kernel.org, lars.povlsen@microchip.com, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-spi@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, luka.perkov@sartura.hr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9496:EE_|AS8PR04MB8673:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0091d2ef-a482-46bf-e95f-08de53392b78
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|52116014|7416014|366016|19092799006|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?enZUMU9nN2tvc0p4cGI3YXlMYndiNjFqcEZvVktkRStnSEF2ZjBsdlhzYnJz?=
+ =?utf-8?B?eGJRVnJXK2JuLzkxRUo5SWVtNUZlWnZ6M1RXN0wreSsrYi8vdjBpa01GN2ZH?=
+ =?utf-8?B?ODJuWnVuV3VNa2h5cFJxOUo1VUZKVGhSdUNLRi95ZDhQQTJ3eVRDbkF2aTZO?=
+ =?utf-8?B?S3loYyt6bUV1bURYY01oRXpobGtETEhKRHNaMDNGUWJzM1pQSUg4OW1IZ1VF?=
+ =?utf-8?B?YXFLbFRNdlo5MVlXKzdoazdUS05QUkdzMk10eUl6ZVRUUVlZWFZpK3VkdnV4?=
+ =?utf-8?B?L1RZVU1ldGxraU9QMVFVUHhob2l3NTZ5NjVwWk5BcW55SDRqMnZHSVdEYytq?=
+ =?utf-8?B?QXNlZmhVRU1MLzFTN1BXckJNQWt1eEk3VnNleEpya09YcFUxSFFGak5kakRN?=
+ =?utf-8?B?TFpCZmJBL25ENXhWd2N0WVBQR2x2UFFOYUxVcDNqSmhmSzJrZG1mb2ZGby9k?=
+ =?utf-8?B?S01yc3lQWDFIeXVlVzFjTDFvdTNnS1l4MVgybUJXNjlpNlJ0Sko4TlFKMkNS?=
+ =?utf-8?B?bUZJL1M3MGdjd3VpY3NwalRpeGFvaXM5TGtnaDJudEIzS1NlRlJnQ1ZWLzdT?=
+ =?utf-8?B?dHN6OWF2dHZub2pubkRCZEV3dy9HOEEzaG8vamt5TkZJU1dCeUdUbEdxby9j?=
+ =?utf-8?B?UnhZdi9wTEFrZHFWOHV1RDhCVEEraXpjWHk1QnBPWXhQcmVQQm1FYklGT25L?=
+ =?utf-8?B?UnpFa01hYTVIbDBydnYzaVFmTnJZdDcrMHRhaWJKS2l5b1N5bzNtTjBZcDhQ?=
+ =?utf-8?B?cXd5V0EvTWVmcG00VGZ6T0ZhZGgwOFdnVEtlVjZZWUZ4SjB5MXB1cURvL3Ar?=
+ =?utf-8?B?bjhsU0U2QWpYaU02amJWZGdOanJ5bVl4dlVnKzFtd2wrYy93OGZSc2JTc2Rt?=
+ =?utf-8?B?Q1FrbUkrTzdmY2VUb1VaMDhMVURRNTlVNXdMdkdaWmxtS21vekpMQlFUdTJ4?=
+ =?utf-8?B?by84Q1RZV1g4eXdqdHpUOFBEVjRucEhTWEFrMDdtNlV4TXlYWHJwdUhRbHJQ?=
+ =?utf-8?B?T2RaZk9lU2hBVzlkK2dXdVlXN0U4akppNml2UlVGSWFYSnJGaUljcEUzd29Q?=
+ =?utf-8?B?VHpsRXMvQVZ1cWVOSm9kZ3M0bXBvREJDL0huc1IzQnV2Z1YxV0FDRkFDRUl1?=
+ =?utf-8?B?ODlGVjVoUERmbmgyYVJBRGYvRmZsZUlIUVdYUEVYM2VhMnBrNEFUT3JUTFNO?=
+ =?utf-8?B?ZnZRakErVlpaSlUweVFqK3h3NlhlZ2YzK1hmZHA4Y283b2dVckpGeW51cGZG?=
+ =?utf-8?B?SG5tcExQdDZLditJZmdFcFFOaGhRSXNJL1NPaW1DTHJtUld1aW9jMlovVDln?=
+ =?utf-8?B?RjkxSStyTEFkSUJ1bUI2YkxuYUVyT0U4UUY1Vk4xTmJxZUc1ZUtKS3NxREF2?=
+ =?utf-8?B?aktSejdsMW03cHpMMTJvUHN0Q1hUMGx5T0x0NGFCRzJKY05rck93djBBZzhR?=
+ =?utf-8?B?Q1QxaG5xVEwrelFJS3VIMlRrcll6elNIZVlTSmpIL1BMN2xoZXdjb1FWcXBH?=
+ =?utf-8?B?R1haSTIvVUh6c1VrbURWb3lHTktySDRaUDBlZDZZcU9MeEdxRWswdlAxQ05k?=
+ =?utf-8?B?RmNEejREMHc5UnpBcVFiS2NVMXA3VnZlSzdTcUwxOXBjc0pxOGZ6U1B0WHpD?=
+ =?utf-8?B?Y2l4RUEwUktwT2hoMGZiNHBLc1VqUGRKbFNFZWZ2OE5YbU9JM1Y5MHJJNjho?=
+ =?utf-8?B?cytnWjZBYzA0Y0RVWEFSM2Fqek85R1ZRa0V0MkV6bE1na0RTSlZiVXZpTjFj?=
+ =?utf-8?B?M0lRUnUzUU85WHF5ekNJZjBiZ3V0OG9XeEtPeUUvREh6ZGdCMVR1VE9PUU1J?=
+ =?utf-8?B?WWR5Sk1mZGE5RkY2bEt0bmlId1Zrcld0a2gzbDJLanlmZUN0dllBTE9tV3lB?=
+ =?utf-8?B?M2VhL1dtd1gzSDU0cFA1Wit4Ykc4RmxZc3liT2piVUFIRE1DUkVjaW50Y1kw?=
+ =?utf-8?B?T0lucXh0ZFNrb1BXcFo1RmJkdDFrc0NJNVRhVnJWODdtdjZEWGtyME5PTmYv?=
+ =?utf-8?B?OVI1d2E4UHY0UnFuY2dGY05oZi9NeVc4anJydC9LL0ZMUSttUEUwTzVnbURD?=
+ =?utf-8?Q?QPOGeQ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9496.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(366016)(19092799006)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Tk9udlNQUk5nK25paUVrRW1ZZjAxZTc4WnJBbk9pMFdBNVA1WCtkVFdYNGt1?=
+ =?utf-8?B?ano2Y1JRUU4zaWk2dERpdXlTTXNhYXQ2aUtDampOemVsaFYxRjN0YTlWVTQ5?=
+ =?utf-8?B?VzVSWXhpbHBnUVZqQTFlQktINmpZWDQrY3dNN2xVcGFzdHV0VDdvcnlBczhn?=
+ =?utf-8?B?SjErcStxbEZmOS9YRlpkNGIvYUVta3ZGRzdRTG00Tmc5ZUlFZm8rc1A5Ny81?=
+ =?utf-8?B?ZFlyYks0cExQdVRSS1hYZmF5bXFyUWZzb1dQQUpJNDRrcSsxUEcydi9lUldB?=
+ =?utf-8?B?aWFqUy9saThlbVlrSzlzWENsT1craWY2VmF4dnY3djU0SjkrNHk1ejg1VHFP?=
+ =?utf-8?B?RVA0MmJjRytmZ1RwdTJOaHVEOWtOVFJBYUQvQXlrR3VjamFvYVJlWWFrbkdI?=
+ =?utf-8?B?d1JXLzBtK1o3UkZzeHFUeGlLb0ZiVE9JdmpuYnhna2Z3ZGV1OEQ0MVRDdDhT?=
+ =?utf-8?B?bldPSTB0SHdtSUl2andCRjdGRUJwMzh2aE1wdGsxUFd5RnUrR252MmxIZnhH?=
+ =?utf-8?B?bklXdTJUb0RWSXFtZU9xSVFha3RJQkQxZUpvSUJIVXd0dTEzWEl1djhQaWpl?=
+ =?utf-8?B?aERZM2ttY3IxYzg3K1J0aEptS2FSWW5ON3hIR1ZFczlSYTNZRjFyYktrMmZj?=
+ =?utf-8?B?ZVNsd3cwWXdxOUlpOWg3Zisxakd4eFNSR3Q2bnRNVWlVRjZaRi9NdTMrMkhl?=
+ =?utf-8?B?UDRXUXQ2RnhsditjaUNBd1dOQU4rcEJvV25ROHB0TEtQbjNQZVFpVHpSaE0x?=
+ =?utf-8?B?QTZOR3ozQnMzSmppd3pQMTVIR1prTXJpNWJJcjh3M1hoeGdYWXpaa25tUG5L?=
+ =?utf-8?B?RHE1cGJRY045VURtQWE3YlZvWFFSWEVTcXlvWTRBOUNLNnB3MVF3RXZOSkp5?=
+ =?utf-8?B?dlVOL1AwZXl1cXBhdUFWTno0NkNBYlRaUVdRandFRHJRbEZxblNGbzdqNUJU?=
+ =?utf-8?B?d1N6VHBwVEJZNEdDeThZS1VhcHQ4Yms4S1pjbHc3NHNzaDZtOVhlOXN4U1o4?=
+ =?utf-8?B?UFg2T0tuN2lzQ1FOSHpnSjgzbW5pSGlrZUJ1TTQ3cU1rZnVGTktCeFhxSVg3?=
+ =?utf-8?B?YXVpakdLTkdPS292TjkvSldoOVgzdzM0ek04WVZUY2lXVVZDMzRMK21uTWZj?=
+ =?utf-8?B?My96T2c0VzdCUnJBdERMOFd4WE9rbE9neCtVaDBwa29iN1diRk5vMzRsVitM?=
+ =?utf-8?B?VitCOU5JRjFmWVdsY215NUZWQXV5Q1FXczVNV1VGT3FXeXBib2JhN1BERjlU?=
+ =?utf-8?B?ejlsM3JZdHJTMTltR3lWdFJKOWgzWnF5MG5DOUUrN21WVUZIUGJHdmtqL0hw?=
+ =?utf-8?B?OFV4b1I1Q1R1R1JXVjY5SVIxN1UrWWM3WXZaNy8zaWtKaFVtL1pWNXN5WHNG?=
+ =?utf-8?B?c0VTSGNLS2ZyZFhNclJHSXNRV0dyajFGSUYrTHhmNUExZmxFZzV1cWRsZWlJ?=
+ =?utf-8?B?TllGdjByYVNpT3NmTEFYUlkxZGJnSlhtK0J4a200UGs1Q0V4Zzd1dWROSDVK?=
+ =?utf-8?B?RW1nMjJScEhuYlNUWWl5cFlzaHlyOTRuS2EvM2UvdlRmd3llNmZEYkV0WDZN?=
+ =?utf-8?B?ZmM5OVg2R011VnRTMzg0OW1CV2c0RjdYdW9RK3h6eHpYZ1hkTTRXNHhMdWx0?=
+ =?utf-8?B?WDBscHpkQnFNdE8wWk9qZ1NNRlA3N3ZHRWxlV0s2NVRKMFhHOTlycGxXT2lK?=
+ =?utf-8?B?cnQzaE9yTkR0Z2VQYzR1MjE3ZXhiSi9iR0NBWVFIYy9GZFZsNkU5eXpodlZV?=
+ =?utf-8?B?ZDFSNkt0VTdhNVc5NDRkZEJOcVB6d2NjSzRWT29qUG5zU2RhWWpGK1g5MDRo?=
+ =?utf-8?B?LzZMS0tMc3RoYTlibzE4S25CbEswdm9aUklxdUY1M1BTK2h3V0xrQUdoMGlO?=
+ =?utf-8?B?UUVyVVZYNE5PY0Uvd0RQTnA1RERna1VRdFp0dWpSR0FpT21IQXhNZjlpMWFG?=
+ =?utf-8?B?VG9PODM1cEFCSm1RbGNldWx3YzVpM3RyK0paV2tXaG03MC9YRnA5eVdiUTcx?=
+ =?utf-8?B?OVQrNGhMZEhyeHdLemszU2hhZy9wRFNsbWZ4dnlrMk1aTlJHeVVLQ2Jlamk5?=
+ =?utf-8?B?cXdXcnFQaDFEem9GbGhOU08yRFRPVUFkenZmOGpjTkJPQzVTYU1EZDlqOW5G?=
+ =?utf-8?B?TnRPYVZ4MDlBWkpXUzlsTURxa3RNMUFHTGxpQmZQWTdwT1ROSmFmazFNRkFF?=
+ =?utf-8?B?U0I2dlhZcCt2SjRTNmY5NnpjTFZaMG1VOVdRdURtckY5QW5URkZvOG1MK1Z1?=
+ =?utf-8?B?M0JlRmdtOHdaSHVqT2tCNWVnOStkUzEzVlVBQVZrbmZIQ2EycDd3dllFNjR6?=
+ =?utf-8?B?ajNUTkFCWk82M1Q2OTF3eWtQb0NnT1BGRzhFVFlSNzdEZXY0K29tUT09?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0091d2ef-a482-46bf-e95f-08de53392b78
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9496.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2026 06:50:14.3528
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0HKXA/LfNxrOsLKtb+/3CMPS7QW2UopEyv9+YRQehGTBAcv0/kqOwQB+EbM3VUTymi9/10Sp3zqeewuNZ4FUFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8673
 
-On Sun, Jan 11, 2026 at 3:42=E2=80=AFPM claudiu beznea <claudiu.beznea@tuxo=
-n.dev> wrote:
->
-> Hi, Robert,
->
-> On 12/29/25 20:37, Robert Marko wrote:
-> > Microchip EV23X71A is an LAN9696 based evaluation board.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > ---
-> > Changes in v2:
-> > * Split from SoC DTSI commit
-> > * Apply DTS coding style
-> > * Enclose array in i2c-mux
-> > * Alphanumericaly sort nodes
-> > * Change management port mode to RGMII-ID
-> >
-> >   arch/arm64/boot/dts/microchip/Makefile        |   1 +
-> >   .../boot/dts/microchip/lan9696-ev23x71a.dts   | 757 +++++++++++++++++=
-+
-> >   2 files changed, 758 insertions(+)
-> >   create mode 100644 arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
-> >
-> > diff --git a/arch/arm64/boot/dts/microchip/Makefile b/arch/arm64/boot/d=
-ts/microchip/Makefile
-> > index c6e0313eea0f..09d16fc1ce9a 100644
-> > --- a/arch/arm64/boot/dts/microchip/Makefile
-> > +++ b/arch/arm64/boot/dts/microchip/Makefile
-> > @@ -1,4 +1,5 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> > +dtb-$(CONFIG_ARCH_LAN969X) +=3D lan9696-ev23x71a.dtb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb125.dtb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb134.dtb sparx5_pcb134_emmc.d=
-tb
-> >   dtb-$(CONFIG_ARCH_SPARX5) +=3D sparx5_pcb135.dtb sparx5_pcb135_emmc.d=
-tb
-> > diff --git a/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts b/arch/=
-arm64/boot/dts/microchip/lan9696-ev23x71a.dts
-> > new file mode 100644
-> > index 000000000000..435df455b078
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/microchip/lan9696-ev23x71a.dts
->
-> [ ...]
->
-> > +&gpio {
-> > +     emmc_sd_pins: emmc-sd-pins {
-> > +             /* eMMC_SD - CMD, CLK, D0, D1, D2, D3, D4, D5, D6, D7, RS=
-TN */
-> > +             pins =3D "GPIO_14", "GPIO_15", "GPIO_16", "GPIO_17",
-> > +                    "GPIO_18", "GPIO_19", "GPIO_20", "GPIO_21",
-> > +                    "GPIO_22", "GPIO_23", "GPIO_24";
-> > +             function =3D "emmc_sd";
-> > +     };
-> > +
-> > +     fan_pins: fan-pins {
-> > +             pins =3D "GPIO_25", "GPIO_26";
-> > +             function =3D "fan";
-> > +     };
-> > +
-> > +     fc0_pins: fc0-pins {
-> > +             pins =3D "GPIO_3", "GPIO_4";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     fc2_pins: fc2-pins {
-> > +             pins =3D "GPIO_64", "GPIO_65", "GPIO_66";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     fc3_pins: fc3-pins {
-> > +             pins =3D "GPIO_55", "GPIO_56";
-> > +             function =3D "fc";
-> > +     };
-> > +
-> > +     mdio_pins: mdio-pins {
-> > +             pins =3D "GPIO_9", "GPIO_10";
-> > +             function =3D "miim";
-> > +     };
-> > +
-> > +     mdio_irq_pins: mdio-irq-pins {
-> > +             pins =3D "GPIO_11";
-> > +             function =3D "miim_irq";
-> > +     };
-> > +
-> > +     sgpio_pins: sgpio-pins {
-> > +             /* SCK, D0, D1, LD */
-> > +             pins =3D "GPIO_5", "GPIO_6", "GPIO_7", "GPIO_8";
-> > +             function =3D "sgpio_a";
-> > +     };
-> > +
-> > +     usb_ulpi_pins: usb-ulpi-pins {
-> > +             pins =3D "GPIO_30", "GPIO_31", "GPIO_32", "GPIO_33",
-> > +                    "GPIO_34", "GPIO_35", "GPIO_36", "GPIO_37",
-> > +                    "GPIO_38", "GPIO_39", "GPIO_40", "GPIO_41";
-> > +             function =3D "usb_ulpi";
-> > +     };
-> > +
-> > +     usb_rst_pins: usb-rst-pins {
-> > +             pins =3D "GPIO_12";
-> > +             function =3D "usb2phy_rst";
-> > +     };
-> > +
-> > +     usb_over_pins: usb-over-pins {
-> > +             pins =3D "GPIO_13";
-> > +             function =3D "usb_over_detect";
-> > +     };
-> > +
-> > +     usb_power_pins: usb-power-pins {
-> > +             pins =3D "GPIO_1";
-> > +             function =3D "usb_power";
-> > +     };
-> > +
-> > +     ptp_out_pins: ptp-out-pins {
-> > +             pins =3D "GPIO_58";
-> > +             function =3D "ptpsync_4";
-> > +     };
->
-> Could you please move this one upper to have all the entries in the gpio
-> container alphanumerically sorted?
->
-> > +
-> > +     ptp_ext_pins: ptp-ext-pins {
-> > +             pins =3D "GPIO_59";
-> > +             function =3D "ptpsync_5";
-> > +     };
->
-> Same here.
+on i.MX952 EVK board, there is MT35XU01G SPI NOR, i.MX952 control
+this nor device through XSPI controller. 
 
-Sure, I will make sure that pin nodes are alphabetical (I found some
-more that are not) in v5.
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+---
+Haibo Chen (3):
+      spi: dt-bindings: nxp,imx94-xspi: add nxp,imx952-xspi
+      arm64: dts: imx952: Add xspi node
+      arm64: dts: imx952-evk: add MT35XU01G spi nor flash
 
->
-> [ ...]
->
-> > +             port29: port@29 {
-> > +                     reg =3D <29>;
-> > +                     phys =3D <&serdes 11>;
-> > +                     phy-handle =3D <&phy3>;
-> > +                     phy-mode =3D "rgmii-id";
-> > +                     microchip,bandwidth =3D <1000>;
->
-> There are some questions around this node from Andrew in v1 of this serie=
-s,
-> which I don't see an answer for in any of the following versions. Could y=
-ou
-> please clarify?
+ .../devicetree/bindings/spi/nxp,imx94-xspi.yaml    |  4 +++
+ arch/arm64/boot/dts/freescale/imx952-evk.dts       | 41 ++++++++++++++++++++++
+ arch/arm64/boot/dts/freescale/imx952.dtsi          | 19 ++++++++++
+ 3 files changed, 64 insertions(+)
+---
+base-commit: 0f853ca2a798ead9d24d39cad99b0966815c582a
+change-id: 20260114-xspi-imx952-07449aed6ba8
 
-Sure, as for the RGMII I switched to rgmii-id so the PHY is adding the dela=
-ys.
-Though, I am not sure if its better to add them via MAC as it can add
-the delays instead of the PHY,
-so I am open to suggestions here.
+Best regards,
+-- 
+Haibo Chen <haibo.chen@nxp.com>
 
-As for the phys property, yes that is not required here as RGMII ports
-are dedicated, there are no
-SERDES lanes being used for them.
-
-I have updated the bindings to account for this and it will be part of v5.
-
-Regards,
-Robert
-
->
-> The rest looks good to me.
->
-> Thank you,
-> Claudiu
->
-
-
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
 
