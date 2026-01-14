@@ -1,45 +1,45 @@
-Return-Path: <linux-spi+bounces-12360-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12361-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D25CD1D555
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 10:03:06 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 098FDD1D53D
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 10:02:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 51D923014D54
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 09:00:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5ABBF30024FF
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 09:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA3D381715;
-	Wed, 14 Jan 2026 09:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62B943806C2;
+	Wed, 14 Jan 2026 09:01:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SuNa2oNa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DWrvtQuh"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C30C3803D2;
-	Wed, 14 Jan 2026 09:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331BA318BB2;
+	Wed, 14 Jan 2026 09:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768381209; cv=none; b=T/vWiS+QWpueSVFX4KOhXq7k6zhp027YfDhPVHLr42dqeasnYF1mmysqTD6fdogmzDWUwwJU0nKxS1REde7/u1VKDbCpZNkWFiQ+UxB7vfV6N74Q8YaEmn6jVEVfzXbFH8VEEoeQZd13XvTOgEQikLUWYGuUTLEJxpAc3YVL/f0=
+	t=1768381319; cv=none; b=Ak08bacv38L9PcYJ/OEVbpyXEwDSlvkB4tkZvz06F87XHSQ4xp9Wb48hexaBnqsRFV06Sw33+b3mfYU6AbGmlv4DEqVFebak7/GV53UlsfappLyvjI2Tiksd3ImO9TQEk3YRnUVybckGUoO+HfsgakTduf0N868K6KdANzQAKqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768381209; c=relaxed/simple;
-	bh=cMA2KZasj9r0FQVnNn9r02j58aCYrjJl3jl/KgqA7M0=;
+	s=arc-20240116; t=1768381319; c=relaxed/simple;
+	bh=nxA2mHonqKWViVIbRKfDmQdwUTDEjyfSyt+tTaVRFyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OTTNDuNM97RLVnATsnYgjEB9eW+KFu6ybNQ6XvWgBQ2+PV51MMWr1UkNN5jydqzjMohja/VXWFOTdE4CKfuU7PF+lfJOPg/atmXqibfu1D5X/8m2QmbWxfo44dDbjh6OQy3SoB5HPJEb2fhRL5waji0gFNWb6NAb6aYFKh8XtI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SuNa2oNa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 945EBC4CEF7;
-	Wed, 14 Jan 2026 09:00:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HJ/u6jSwASCvNFqnNnM0JqMckDG+gNLPIyR3T73dF/WKr0iXJCbAl/3pNQxOfYiHUP2eLuTdUQ7DRIfe2L6AL7BjLb70Xqt2Y6MDXIdhA2aaJpPe5PhdOjQXllOZeFDt7cE/CBUw1odEcYClYHU0mwRAH0FJ9mv2TAT4g3fVSQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DWrvtQuh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26A83C4CEF7;
+	Wed, 14 Jan 2026 09:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768381209;
-	bh=cMA2KZasj9r0FQVnNn9r02j58aCYrjJl3jl/KgqA7M0=;
+	s=k20201202; t=1768381318;
+	bh=nxA2mHonqKWViVIbRKfDmQdwUTDEjyfSyt+tTaVRFyw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SuNa2oNauyr+ScYJaHb2S1v4DJxGFZTR0WEmaD6W7Sz7wSs6lXrRCytqj3CZJjm0M
-	 1Gyo8KJ9JRwfIWNptp1FxJ4L9KYoOvl7QuDHmXKbU+xjiJd7IcXZyoalteTcy+fEvJ
-	 g/5nUYP3zcVO69OKsGsADDrAjgUJvcdMMKvcInPk9J++2TOAnX/12oDHjRlo6EDYkm
-	 /5+6REsrX5NBlpt7uCUefSV8Qmh4oqBJVbhJfh3U5yhifjzlqrLc+ffcay1bDdkm/o
-	 Rg60ayJvZvG+dogQUPk6p7sVsN7sDLnlDIVepvxGj6yKz/bsRocXrM2oJWi9Izbvtu
-	 0dPFLjdTOTHbw==
-Date: Wed, 14 Jan 2026 10:00:06 +0100
+	b=DWrvtQuha5kSY4m2qn8bt6qBPuPGzFC+vQm/GDyMhNzJXv55sIA9fZftUsGujQ5cc
+	 XoLR36CW4UgIhf/ERZhC8WjtGVdrfN83Tj2dGHcXKNhoALS5UaOfeHxYqJCguGD31B
+	 PTOk9b0BC46LSeUVb9tFxa0H0l/Zoi5MJGnF3jwh4Ynf1kQCzcTr8LZGuXy/G3yp+V
+	 a6fNGXQJofUP/XJoBrX+eDUjoTZ4fMoaQy284HRq7yM0ziAH88hHnk835K6Ik0YXa4
+	 ObAgpIfDsRpTVnM+7TrxZWs3IKIm+pVkwY2c3AWOHUDCfmMyhPDnjQmVbquWcXE7Wg
+	 4Ab2gN1UWdKYw==
+Date: Wed, 14 Jan 2026 10:01:56 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Praveen Talari <praveen.talari@oss.qualcomm.com>
 Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -48,10 +48,12 @@ Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
 	linux-kernel@vger.kernel.org, bryan.odonoghue@linaro.org, dmitry.baryshkov@oss.qualcomm.com, 
 	andersson@kernel.org, bjorn.andersson@oss.qualcomm.com, 
 	prasad.sodagudi@oss.qualcomm.com, mukesh.savaliya@oss.qualcomm.com, quic_vtanuku@quicinc.com, 
-	aniket.randive@oss.qualcomm.com, chandana.chiluveru@oss.qualcomm.com
-Subject: Re: [PATCH v1 0/4] Enable SPI on SA8255p Qualcomm platforms
-Message-ID: <20260114-truthful-just-boobook-16494b@quoll>
+	aniket.randive@oss.qualcomm.com, chandana.chiluveru@oss.qualcomm.com, 
+	Nikunj Kela <quic_nkela@quicinc.com>
+Subject: Re: [PATCH v1 1/4] spi: dt-bindings: describe SA8255p
+Message-ID: <20260114-tested-convivial-swallow-df674b@quoll>
 References: <20260112190134.1526646-1-praveen.talari@oss.qualcomm.com>
+ <20260112190134.1526646-2-praveen.talari@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -60,34 +62,28 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260112190134.1526646-1-praveen.talari@oss.qualcomm.com>
+In-Reply-To: <20260112190134.1526646-2-praveen.talari@oss.qualcomm.com>
 
-On Tue, Jan 13, 2026 at 12:31:30AM +0530, Praveen Talari wrote:
-> The Qualcomm automotive SA8255p SoC relies on firmware to configure
-> platform resources, including clocks, interconnects and TLMM.
-> The driver requests resources operations over SCMI using power
-> and performance protocols.
+On Tue, Jan 13, 2026 at 12:31:31AM +0530, Praveen Talari wrote:
+> Add DT bindings for the QUP GENI SPI controller on sa8255p platform.
 > 
-> The SCMI power protocol enables or disables resources like clocks,
-> interconnect paths, and TLMM (GPIOs) using runtime PM framework APIs,
-> such as resume/suspend, to control power states(on/off).
+> SA8255p platform abstracts resources such as clocks, interconnect and
+> GPIO pins configuration in Firmware. SCMI power and perf protocols are
+> utilized to request resource configurations.
 > 
-> The SCMI performance protocol manages SPI frequency, with each
-> frequency rate represented by a performance level. The driver uses
-> geni_se_set_perf_opp() API to request the desired frequency rate.
+> SA8255p platform does not require the Serial Engine (SE) common properties
+> as the SE firmware is loaded and managed by the TrustZone (TZ) secure
+> environment.
 > 
-> As part of geni_se_set_perf_opp(), the OPP for the requested frequency
-> is obtained using dev_pm_opp_find_freq_floor() and the performance
-> level is set using dev_pm_opp_set_opp().
-> 
-> Dependencies:
-> This series depends on Enable I2C on SA8255p Qualcomm platforms
-> https://lore.kernel.org/all/20260112104722.591521-1-praveen.talari@oss.qualcomm.com/
+> Co-developed-by: Nikunj Kela <quic_nkela@quicinc.com>
+> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
+> Signed-off-by: Praveen Talari <praveen.talari@oss.qualcomm.com>
+> ---
+>  .../bindings/spi/qcom,sa8255p-geni-spi.yaml   | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/qcom,sa8255p-geni-spi.yaml
 
-It should not because it means it cannot be easily applied by
-maintainers.
-
-Why can't you decouple the dependencies?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Best regards,
 Krzysztof
