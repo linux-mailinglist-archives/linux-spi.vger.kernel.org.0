@@ -1,45 +1,45 @@
-Return-Path: <linux-spi+bounces-12362-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12363-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 492DAD1D700
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 10:16:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7A7ED1D631
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 10:10:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4C091300FFBF
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 09:05:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C685B302E7F4
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 09:06:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A36137BE98;
-	Wed, 14 Jan 2026 09:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7983815E9;
+	Wed, 14 Jan 2026 09:06:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tfm2PHPo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ex3xWVz4"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669E118B0F;
-	Wed, 14 Jan 2026 09:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BD537F11D;
+	Wed, 14 Jan 2026 09:06:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768381518; cv=none; b=iZBl46+uBXbIcSZSxv17e9PUNuTqknNCh8aecwsarbdx/MM/UrsyEevW6cYCipZTuDKSESlWyZACuATTZNg3FUic9pSo/D8VholBAbvkD4Ye08eFPyI0418SyFOVSHo5pRXi3VAorOdVQt+kVvWRvCGW7t7IEVTpFoNuO7DJwOk=
+	t=1768381575; cv=none; b=ajzvzu9/r/ciH9cmi1f5n7X8CBPwd3RxHFLpET8zWc2gPdhrav/GNZnBYW6/kcdcjQL9y8vtwe2m1BW6lXnirQVSXeLksTQ7QfjcvQAvb8E8asFIHlf3LvRkamuYnh7xdOoJT02zCOCLBNsNoyFDdWntoygWfV8qIdmCa3ZWhEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768381518; c=relaxed/simple;
-	bh=ESHQksRovUrweSbNK4qiBPoivNpYzBG+Qh83awItVSo=;
+	s=arc-20240116; t=1768381575; c=relaxed/simple;
+	bh=KYdqP8j7qXNdTgDTk0iu/82mcAvoZxCH5aKihyu+xOc=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IEb+uEcD/X4LB+M4ywWYq+5pEx1y82nY/K7FwNu6xa1lVcFs8FladfGnEOwa8YWFavZq3QNCpMbcKC+UJ38SEkLQpeOs9B4s9eNDNLtl3Terh62o5tld/dyM/KsyOFnyxhAgBcQMyZOWaJ+axhcUpLpAK1uEmvshcmwHwtAMVK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tfm2PHPo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDFB9C4CEF7;
-	Wed, 14 Jan 2026 09:05:12 +0000 (UTC)
+	 MIME-Version:Content-Type; b=p9UghNpoemO7S/h400Zp77sdvWCBpe+f9RTg3GpJ8kQYUimSsjAo3AWXOBkaqYL0jZJjdzg4cV9/c0tx0EM8S8MlnuqtmzqiqR6/KG0AjSQTahIrfa5rrxyXClhE8Ar/ZQXNlAlaNDdZxwljb29CqR6obf4tkXY0/29UPxnLIFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ex3xWVz4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA73C19423;
+	Wed, 14 Jan 2026 09:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768381518;
-	bh=ESHQksRovUrweSbNK4qiBPoivNpYzBG+Qh83awItVSo=;
+	s=k20201202; t=1768381575;
+	bh=KYdqP8j7qXNdTgDTk0iu/82mcAvoZxCH5aKihyu+xOc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tfm2PHPo7/5fB24TyLjScylCvvI8OrYye7sAslynKdixe05PDCYkdhMSk0aOGJV9h
-	 dcPaOI0P97iEr3Ebj3U2/LObpI1acBMOWH3c3VWBU54LHZpVzeC5RlZDdIr4G03HJN
-	 LpwjbY5cavSmHNMOGzDLkJjhzKo7UFmBCT/3YCUhvp0kuXUtqIgIbE5nOx/J1mH5IK
-	 QIx4XUxKDqqybx1sAhpi7va9X5/GRjgN4AtFSQfZ9dDbwvrB8z2vyxeG92tvo5N2GJ
-	 7av6xD5/CWs9+b+qhJvDmxfZy1cfxmKcl86tc7yLffYLfcr1A3soTsMTLOR9BWiZAs
-	 CdAOZ2Q0hos1g==
-Date: Wed, 14 Jan 2026 09:05:08 +0000
+	b=ex3xWVz4mwdvwZv76QvlignXUolEw/jXpH03zTS5y2eFEr0iN6scYiHfpWVynD+yU
+	 SXJCPRixoJ60n5OB6ZdMyYkk95XIf+pzUS5ZJXD1ZluQFBKMFuuqrjuks7WERTU2ci
+	 ZK0n3AU0E+DPp1bmyDPkiqRAcOebGbVfr+PZ8dvLotmIgJUj+K2qxgfTF/+NlOItnT
+	 uW59IDB68jvtGn6IFRmpsHVrH/oDA3fvoXIjOXMhnmiTP4jd7lckaaM/4zCAkpctEX
+	 9PjB3YBCUbXyY9EMUtbnXbfIBDXOPx3H2LacyM4ougyvjjH2yXMOmJ5twKzQ2/hZyi
+	 mthw+5NyKvEig==
+Date: Wed, 14 Jan 2026 09:06:04 +0000
 From: Jonathan Cameron <jic23@kernel.org>
 To: David Lechner <dlechner@baylibre.com>
 Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -50,12 +50,12 @@ Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
  <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 3/9] spi: support controllers with multiple data
- lanes
-Message-ID: <20260114090508.3ebef716@jic23-huawei>
-In-Reply-To: <20260112-spi-add-multi-bus-support-v5-3-295f4f09f6ba@baylibre.com>
+Subject: Re: [PATCH v5 4/9] spi: add multi_lane_mode field to struct
+ spi_transfer
+Message-ID: <20260114090604.031ed4f0@jic23-huawei>
+In-Reply-To: <20260112-spi-add-multi-bus-support-v5-4-295f4f09f6ba@baylibre.com>
 References: <20260112-spi-add-multi-bus-support-v5-0-295f4f09f6ba@baylibre.com>
-	<20260112-spi-add-multi-bus-support-v5-3-295f4f09f6ba@baylibre.com>
+	<20260112-spi-add-multi-bus-support-v5-4-295f4f09f6ba@baylibre.com>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -63,125 +63,66 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 12 Jan 2026 11:45:21 -0600
+On Mon, 12 Jan 2026 11:45:22 -0600
 David Lechner <dlechner@baylibre.com> wrote:
 
-> Add support for SPI controllers with multiple physical SPI data lanes.
-> (A data lane in this context means lines connected to a serializer, so a
-> controller with two data lanes would have two serializers in a single
-> controller).
-> 
-> This is common in the type of controller that can be used with parallel
-> flash memories, but can be used for general purpose SPI as well.
-> 
-> To indicate support, a controller just needs to set ctlr->num_data_lanes
-> to something greater than 1. Peripherals indicate which lane they are
-> connected to via device tree (ACPI support can be added if needed).
-> 
-> The spi-{tx,rx}-bus-width DT properties can now be arrays. The length of
-> the array indicates the number of data lanes, and each element indicates
-> the bus width of that lane. For now, we restrict all lanes to have the
-> same bus width to keep things simple. Support for an optional controller
-> lane mapping property is also implemented.
-> 
+> Add a new multi_lane_mode field to struct spi_transfer to allow
+> peripherals that support multiple SPI lanes to be used with a single
+> SPI controller.
+>=20
+> This requires both the peripheral and the controller to have multiple
+> serializers connected to separate data lanes. It could also be used with
+> a single controller and multiple peripherals that are functioning as a
+> single logical device (similar to parallel memories).
+>=20
+> Acked-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+> Acked-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
 > Signed-off-by: David Lechner <dlechner@baylibre.com>
+Fwiw looks fine to me (and so a tag mostly so I don't read it again in v6=20
+if that happens!)
+Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+
 > ---
-> 
-> v5 changes:
-> - Use of_property_read_variable_u32_array() for lane maps.
-For this, I think you need to check for short maps.
-> 
+>=20
 > v4 changes:
-> - Update for changes in devicetree bindings.
-> - Don't put new fields in the middle of CS fields.
-> - Dropped acks since this was a significant rework.
-> 
+> * Shortened commit message (useful info will be in docs instead).
+> * Added whitespace to create clear grouping of macros and the field.
+>=20
 > v3 changes:
 > * Renamed "buses" to "lanes" to reflect devicetree property name change.
-> 
-> This patch has been seen in a different series [1] by Sean before:
-> 
-> [1]: https://lore.kernel.org/linux-spi/20250616220054.3968946-4-sean.anderson@linux.dev/
-> 
-> Changes:
-> * Use u8 array instead of bitfield so that the order of the mapping is
->   preserved. (Now looks very much like chip select mapping.)
-> * Added doc strings for added fields.
-> * Tweaked the comments.
 > ---
->  drivers/spi/spi.c       | 116 +++++++++++++++++++++++++++++++++++++++++++++++-
->  include/linux/spi/spi.h |  22 +++++++++
->  2 files changed, 136 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index e25df9990f82..5c3f9ba3f606 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -2370,7 +2370,53 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
->  		spi->mode |= SPI_CS_HIGH;
->  
->  	/* Device DUAL/QUAD mode */
-> -	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
+>  include/linux/spi/spi.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
+> index 7aff60ab257e..eba7ae8466ac 100644
+> --- a/include/linux/spi/spi.h
+> +++ b/include/linux/spi/spi.h
+> @@ -981,6 +981,8 @@ struct spi_res {
+>   *      (SPI_NBITS_SINGLE) is used.
+>   * @rx_nbits: number of bits used for reading. If 0 the default
+>   *      (SPI_NBITS_SINGLE) is used.
+> + * @multi_lane_mode: How to serialize data on multiple lanes. One of the
+> + *      SPI_MULTI_LANE_MODE_* values.
+>   * @len: size of rx and tx buffers (in bytes)
+>   * @speed_hz: Select a speed other than the device default for this
+>   *      transfer. If 0 the default (from @spi_device) is used.
+> @@ -1117,6 +1119,12 @@ struct spi_transfer {
+>  	unsigned	cs_change:1;
+>  	unsigned	tx_nbits:4;
+>  	unsigned	rx_nbits:4;
 > +
-> +	rc = of_property_read_variable_u32_array(nc, "spi-tx-lane-map",
-> +						 spi->tx_lane_map, 1,
-> +						 ARRAY_SIZE(spi->tx_lane_map));
-
-This reads 'up to' the ARRAY_SIZE(spi->tx_lane_map)
-If it is short, what is the right thing to do?  I'd either expect a check
-for that or for rc to be stashed somewhere if positive for later use.
-If the intent is for short the default of 0 is fine, then if it's a lot
-short we'll end up with repeated mappings to 0 which makes little sense.
-
-
-> +	if (rc == -EINVAL) {
-> +		/* Default lane map */
-> +		for (idx = 0; idx < ARRAY_SIZE(spi->tx_lane_map); idx++)
-> +			spi->tx_lane_map[idx] = idx;
-> +	} else if (rc < 0) {
-> +		dev_err(&ctlr->dev,
-> +			"failed to read spi-tx-lane-map property: %d\n", rc);
-> +		return rc;
-> +	}
+> +#define SPI_MULTI_LANE_MODE_SINGLE	0 /* only use single lane */
+> +#define SPI_MULTI_LANE_MODE_STRIPE	1 /* one data word per lane */
+> +#define SPI_MULTI_LANE_MODE_MIRROR	2 /* same word sent on all lanes */
+> +	unsigned	multi_lane_mode: 2;
 > +
-> +	rc = of_property_count_u32_elems(nc, "spi-tx-bus-width");
-> +	if (rc < 0 && rc != -EINVAL) {
-> +		dev_err(&ctlr->dev,
-> +			"failed to read spi-tx-bus-width property: %d\n", rc);
-> +		return rc;
-> +	}
-> +
-> +	if (rc == -EINVAL) {
-> +		/* Default when property is not present. */
-> +		spi->num_tx_lanes = 1;
-> +	} else {
-> +		u32 first_value;
-> +
-> +		spi->num_tx_lanes = rc;
-> +
-> +		for (idx = 0; idx < spi->num_tx_lanes; idx++) {
-> +			of_property_read_u32_index(nc, "spi-tx-bus-width", idx,
-> +						   &value);
-
-Probably want a sanity check on return value of that even though we are fairly sure
-it won't fail.
-
-> +
-> +			/*
-> +			 * For now, we only support all lanes having the same
-> +			 * width so we can keep using the existing mode flags.
-> +			 */
-> +			if (!idx)
-> +				first_value = value;
-> +			else if (first_value != value) {
-> +				dev_err(&ctlr->dev,
-> +					"spi-tx-bus-width has inconsistent values: first %d vs later %d\n",
-> +					first_value, value);
-> +				return -EINVAL;
-> +			}
-> +		}
+>  	unsigned	timestamped:1;
+>  	bool		dtr_mode;
+>  #define	SPI_NBITS_SINGLE	0x01 /* 1-bit transfer */
+>=20
 
 
