@@ -1,45 +1,45 @@
-Return-Path: <linux-spi+bounces-12363-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12364-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7A7ED1D631
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 10:10:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B3D4D1D68C
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 10:12:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C685B302E7F4
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 09:06:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 003533010062
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 09:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD7983815E9;
-	Wed, 14 Jan 2026 09:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5534C3803F6;
+	Wed, 14 Jan 2026 09:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ex3xWVz4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xvd9BtOQ"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89BD537F11D;
-	Wed, 14 Jan 2026 09:06:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FFE354AEC;
+	Wed, 14 Jan 2026 09:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768381575; cv=none; b=ajzvzu9/r/ciH9cmi1f5n7X8CBPwd3RxHFLpET8zWc2gPdhrav/GNZnBYW6/kcdcjQL9y8vtwe2m1BW6lXnirQVSXeLksTQ7QfjcvQAvb8E8asFIHlf3LvRkamuYnh7xdOoJT02zCOCLBNsNoyFDdWntoygWfV8qIdmCa3ZWhEw=
+	t=1768381834; cv=none; b=JG8oyxACr5V1/foSKWB8JBtoTZHWNtd1ushn4C+ngMEUf44m4AiZweEtohKYFIclwoGlidrJ4aixnp9IEJrvhrv+uwssnJpDnelA71b1rh5ZBxCAq5J+Bp52DefDc0OcPs2c+7yPtOm+L8+ZEhjXL7OyAF0Dokvvx/92xpvOmyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768381575; c=relaxed/simple;
-	bh=KYdqP8j7qXNdTgDTk0iu/82mcAvoZxCH5aKihyu+xOc=;
+	s=arc-20240116; t=1768381834; c=relaxed/simple;
+	bh=FqQYIhi1gEHPr0Al0KQJ5kpiMUVkj4Z6T+IkvCgJlHQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p9UghNpoemO7S/h400Zp77sdvWCBpe+f9RTg3GpJ8kQYUimSsjAo3AWXOBkaqYL0jZJjdzg4cV9/c0tx0EM8S8MlnuqtmzqiqR6/KG0AjSQTahIrfa5rrxyXClhE8Ar/ZQXNlAlaNDdZxwljb29CqR6obf4tkXY0/29UPxnLIFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ex3xWVz4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA73C19423;
-	Wed, 14 Jan 2026 09:06:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=J0ML+KdPehcE//g+e0RIci+0S/30LaBC2TguMzIFQGgZYxZgLjrjfwc7i7A2XBzkMS/hAirTYQ50QCs/l8hzLU2tKUkFlCAjp7qC/Q+FzTIMW8FyIdFeAXCi7vD1gxYAzuG/JJRBuc6zMg3JvEorIEXTY73NUfOrNwEKzXUGj6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xvd9BtOQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E25C19423;
+	Wed, 14 Jan 2026 09:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768381575;
-	bh=KYdqP8j7qXNdTgDTk0iu/82mcAvoZxCH5aKihyu+xOc=;
+	s=k20201202; t=1768381833;
+	bh=FqQYIhi1gEHPr0Al0KQJ5kpiMUVkj4Z6T+IkvCgJlHQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ex3xWVz4mwdvwZv76QvlignXUolEw/jXpH03zTS5y2eFEr0iN6scYiHfpWVynD+yU
-	 SXJCPRixoJ60n5OB6ZdMyYkk95XIf+pzUS5ZJXD1ZluQFBKMFuuqrjuks7WERTU2ci
-	 ZK0n3AU0E+DPp1bmyDPkiqRAcOebGbVfr+PZ8dvLotmIgJUj+K2qxgfTF/+NlOItnT
-	 uW59IDB68jvtGn6IFRmpsHVrH/oDA3fvoXIjOXMhnmiTP4jd7lckaaM/4zCAkpctEX
-	 9PjB3YBCUbXyY9EMUtbnXbfIBDXOPx3H2LacyM4ougyvjjH2yXMOmJ5twKzQ2/hZyi
-	 mthw+5NyKvEig==
-Date: Wed, 14 Jan 2026 09:06:04 +0000
+	b=Xvd9BtOQib5sDzf5hysV51eR5b9p045kAeSvXaz0VhtzXejh63hWNwqib9O4wo2xh
+	 kIJmGiqkH5/eg0n7CgK/7c0dgq3ijCeF7KtrLE5SSZCyUsgtfV1oWaQIOeS/jAchGM
+	 mBBRNz2afbtlUED3p1aOIix5jUsrR+i7gY9zCrqyw6x5DXJ53BWbJ4oSq/t0W2bK7/
+	 ykiZw2ihAeje/aNTaKj1mAsgrc/auMuoeEXNY34Tnxf+pq8Ma/KxLHx2KAs9Bn1kE0
+	 gZj6TNxqGbmRHRQsyEGCSuN4kNPm7CzdUNgcr3uEaXgfYKoiQJTg6Zrdadp8cvnVnL
+	 jDE4F6C5YnZ/Q==
+Date: Wed, 14 Jan 2026 09:10:24 +0000
 From: Jonathan Cameron <jic23@kernel.org>
 To: David Lechner <dlechner@baylibre.com>
 Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -50,12 +50,12 @@ Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
  <sean.anderson@linux.dev>, linux-spi@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-iio@vger.kernel.org
-Subject: Re: [PATCH v5 4/9] spi: add multi_lane_mode field to struct
- spi_transfer
-Message-ID: <20260114090604.031ed4f0@jic23-huawei>
-In-Reply-To: <20260112-spi-add-multi-bus-support-v5-4-295f4f09f6ba@baylibre.com>
+Subject: Re: [PATCH v5 5/9] spi: Documentation: add page on multi-lane
+ support
+Message-ID: <20260114091024.390432c0@jic23-huawei>
+In-Reply-To: <20260112-spi-add-multi-bus-support-v5-5-295f4f09f6ba@baylibre.com>
 References: <20260112-spi-add-multi-bus-support-v5-0-295f4f09f6ba@baylibre.com>
-	<20260112-spi-add-multi-bus-support-v5-4-295f4f09f6ba@baylibre.com>
+	<20260112-spi-add-multi-bus-support-v5-5-295f4f09f6ba@baylibre.com>
 X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
@@ -63,66 +63,144 @@ List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 12 Jan 2026 11:45:22 -0600
+On Mon, 12 Jan 2026 11:45:23 -0600
 David Lechner <dlechner@baylibre.com> wrote:
 
-> Add a new multi_lane_mode field to struct spi_transfer to allow
-> peripherals that support multiple SPI lanes to be used with a single
-> SPI controller.
->=20
-> This requires both the peripheral and the controller to have multiple
-> serializers connected to separate data lanes. It could also be used with
-> a single controller and multiple peripherals that are functioning as a
-> single logical device (similar to parallel memories).
->=20
-> Acked-by: Nuno S=C3=A1 <nuno.sa@analog.com>
-> Acked-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
+> Add a new page to Documentation/spi/ describing how multi-lane SPI
+> support works. This is uncommon functionality so it deserves its own
+> documentation page.
+> 
+> Reviewed-by: Marcelo Schmitt <marcelo.schmitt@analog.com>
 > Signed-off-by: David Lechner <dlechner@baylibre.com>
-Fwiw looks fine to me (and so a tag mostly so I don't read it again in v6=20
-if that happens!)
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+Hi David,
 
-> ---
->=20
-> v4 changes:
-> * Shortened commit message (useful info will be in docs instead).
-> * Added whitespace to create clear grouping of macros and the field.
->=20
-> v3 changes:
-> * Renamed "buses" to "lanes" to reflect devicetree property name change.
-> ---
->  include/linux/spi/spi.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/include/linux/spi/spi.h b/include/linux/spi/spi.h
-> index 7aff60ab257e..eba7ae8466ac 100644
-> --- a/include/linux/spi/spi.h
-> +++ b/include/linux/spi/spi.h
-> @@ -981,6 +981,8 @@ struct spi_res {
->   *      (SPI_NBITS_SINGLE) is used.
->   * @rx_nbits: number of bits used for reading. If 0 the default
->   *      (SPI_NBITS_SINGLE) is used.
-> + * @multi_lane_mode: How to serialize data on multiple lanes. One of the
-> + *      SPI_MULTI_LANE_MODE_* values.
->   * @len: size of rx and tx buffers (in bytes)
->   * @speed_hz: Select a speed other than the device default for this
->   *      transfer. If 0 the default (from @spi_device) is used.
-> @@ -1117,6 +1119,12 @@ struct spi_transfer {
->  	unsigned	cs_change:1;
->  	unsigned	tx_nbits:4;
->  	unsigned	rx_nbits:4;
+A few things inline.
+
+> diff --git a/Documentation/spi/multiple-data-lanes.rst b/Documentation/spi/multiple-data-lanes.rst
+> new file mode 100644
+> index 000000000000..96d6997ecf77
+> --- /dev/null
+> +++ b/Documentation/spi/multiple-data-lanes.rst
+
+...
+
+> +---------------------
+> +Describing the wiring
+> +---------------------
 > +
-> +#define SPI_MULTI_LANE_MODE_SINGLE	0 /* only use single lane */
-> +#define SPI_MULTI_LANE_MODE_STRIPE	1 /* one data word per lane */
-> +#define SPI_MULTI_LANE_MODE_MIRROR	2 /* same word sent on all lanes */
-> +	unsigned	multi_lane_mode: 2;
+> +The ``spi-tx-bus-width`` and ``spi-rx-bus-width`` properties in the devicetree
+> +are used to describe how many data lanes are connected between the controller
+> +and how wide each lane is. The number of items in the array indicates how many
+> +lanes there are, and the value of each item indicates how many bits wide that
+> +lane is.
 > +
->  	unsigned	timestamped:1;
->  	bool		dtr_mode;
->  #define	SPI_NBITS_SINGLE	0x01 /* 1-bit transfer */
->=20
+> +For example, a dual-simultaneous-sampling ADC with two 4-bit lanes might be
+> +wired up like this::
+> +
+> +    +--------------+    +----------+
+> +    | SPI          |    | AD4630   |
+> +    | Controller   |    | ADC      |
+> +    |              |    |          |
+> +    |          CS0 |--->| CS       |
+> +    |          SCK |--->| SCK      |
+> +    |          SDO |--->| SDI      |
+> +    |              |    |          |
+> +    |        SDIA0 |<---| SDOA0    |
+> +    |        SDIA1 |<---| SDOA1    |
+> +    |        SDIA2 |<---| SDOA2    |
+> +    |        SDIA3 |<---| SDOA3    |
+> +    |              |    |          |
+> +    |        SDIB0 |<---| SDOB0    |
+> +    |        SDIB1 |<---| SDOB1    |
+> +    |        SDIB2 |<---| SDOB2    |
+> +    |        SDIB3 |<---| SDOB3    |
+> +    |              |    |          |
+> +    +--------------+    +----------+
+> +
+> +It is described in a devicetree like this::
+> +
+> +    spi {
+> +        compatible = "my,spi-controller";
+> +
+> +        ...
+> +
+> +        adc@0 {
+> +            compatible = "adi,ad4630";
+> +            reg = <0>;
+> +            ...
+> +            spi-rx-bus-width = <4>, <4>; /* 2 lanes of 4 bits each */
+> +            ...
+> +        };
+> +    };
+> +
+> +In most cases, lanes will be wired up symmetrically (A to A, B to B, etc). If
+> +this isn't the case, extra ``spi-rx-bus-width`` and ``spi-tx-bus-width``
+
+Wrong properties.  They are those sizes but spi-tx-lane-map and spi-rx-lane-map
+
+> +properties are needed to provide a mapping between controller lanes and the
+> +physical lane wires.
+> +
+> +Here is an example where a multi-lane SPI controller has each lane wired to
+> +separate single-lane peripherals::
+> +
+> +    +--------------+    +----------+
+> +    | SPI          |    | Thing 1  |
+> +    | Controller   |    |          |
+> +    |              |    |          |
+> +    |          CS0 |--->| CS       |
+> +    |         SDO0 |--->| SDI      |
+> +    |         SDI0 |<---| SDO      |
+> +    |        SCLK0 |--->| SCLK     |
+> +    |              |    |          |
+> +    |              |    +----------+
+> +    |              |
+> +    |              |    +----------+
+> +    |              |    | Thing 2  |
+> +    |              |    |          |
+> +    |          CS1 |--->| CS       |
+> +    |         SDO1 |--->| SDI      |
+> +    |         SDI1 |<---| SDO      |
+> +    |        SCLK1 |--->| SCLK     |
+> +    |              |    |          |
+> +    +--------------+    +----------+
+> +
+> +This is described in a devicetree like this::
+> +
+> +    spi {
+> +        compatible = "my,spi-controller";
+> +
+> +        ...
+> +
+> +        thing1@0 {
+> +            compatible = "my,thing1";
+> +            reg = <0>;
+> +            ...
+> +        };
+> +
+> +        thing2@1 {
+> +            compatible = "my,thing2";
+> +            reg = <1>;
+> +            ...
+> +            spi-tx-lane-map = <1>; /* lane 0 is not used, lane 1 is used for tx wire */
+> +            spi-rx-lane-map = <1>; /* lane 0 is not used, lane 1 is used for rx wire */
+
+Whilst simple I'd kind of expect a multi lane case as the example, or this and
+the multilane one? For me the comment that follows is sufficient for the 1 lane
+offset case you have here.
+
+> +            ...
+> +        };
+> +    };
+> +
+> +
+> +The default values of ``spi-rx-bus-width`` and ``spi-tx-bus-width`` are ``<1>``,
+> +so these properties can still be omitted even when ``spi-rx-lane-map`` and
+> +``spi-tx-lane-map`` are used.
+
+
 
 
