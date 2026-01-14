@@ -1,129 +1,144 @@
-Return-Path: <linux-spi+bounces-12367-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12368-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F82BD1E5F8
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 12:25:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EEE5D1F59E
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 15:17:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F126830057C3
-	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 11:25:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C3D5C3040659
+	for <lists+linux-spi@lfdr.de>; Wed, 14 Jan 2026 14:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D78387573;
-	Wed, 14 Jan 2026 11:25:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21E72D6E73;
+	Wed, 14 Jan 2026 14:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kRxBz2YN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HIag13BS"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953A538171F;
-	Wed, 14 Jan 2026 11:25:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371D12D3A7B
+	for <linux-spi@vger.kernel.org>; Wed, 14 Jan 2026 14:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768389937; cv=none; b=FmGJu4DZJLqgipAXdueMeXhhulchNws+oscOZnBAPAZ5U5OqunuPhWSalCQVpseSSej0ZKaBVO7BXqgKoDTF1x66kVsmv7HrNJR8ELwg35bgCZcyZCXkRigzodoc/aV04hH6CULdPyLq8eQEI0eGL6+46RGj3/tlCklcDsiL/Vc=
+	t=1768400083; cv=none; b=kV1lrr2meAXsEy5Vleqhm5PZkM+C7HFoyCEWm63YSsSggSLs+iViCt0PycltTb8ZbwFi6h7vM04zKo48n7jdVu2Q0+NY0g6p1RxNkYwlT64cbQHHCO1abU8ANNpadyzNt1fRdiSOFyPl7gRwKKAozp8cJcOB+6YhPXsvIFqLlwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768389937; c=relaxed/simple;
-	bh=U6RMlAgcFRqPdzpR/EIwWZLTgG6XUg9BI1Pj/Gbu3QM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TS8fW2tAFCWSARMHLQHcKiPqWU8gKuYGSgnmakraTU/FyJLMsYY58xglWrV8Oua5QzS6a5VkPP2C6sWshmhnAYYeN34ogAgGbXTDoKhC9+fHVfbplAjq3zOxgizWqaXY5IBYrhbFe5ifi1xlxfzAe71+Ti7gHzD9r8cGkc9Rncs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kRxBz2YN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4886BC19422;
-	Wed, 14 Jan 2026 11:25:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768389937;
-	bh=U6RMlAgcFRqPdzpR/EIwWZLTgG6XUg9BI1Pj/Gbu3QM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kRxBz2YNtMNGHq1aCPPsMx0QHp4s8EDEZCsxOLNTTC6oqWlYR2SoG0G+ymX53S/Y8
-	 e5z3B8UL6c/YhoCzk3QgGy37GFJckD5WJxeEvTp+ht1mTfFXEaqn1imiP0bGCSf20O
-	 Fai/jt+k1gGXLqJYS+LHiMI4J/3/Oq1EALiZtXQSQOUanB5qeLCc1UUnr5liFRpW3g
-	 TLkrS+0PlR6t1pAlz2FSq3DWYmPqWX6cIrrrpRGgXJtjhPSXQ5TvpoC0Bm4cA+1hyE
-	 1VAtYAmKa5gXL29T7qXTNgqrxG8v9evr6WIZiKAGT1jJx7Jl4x8pnhDxZv2mGDc+ZB
-	 TRO5y46ie0YEA==
-Date: Wed, 14 Jan 2026 11:25:32 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Steam Lin <STLin2@winbond.com>, Santhosh Kumar K <s-k6@ti.com>,
-	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH v2 00/27] mtd: spinand: Octal DTR support
-Message-ID: <61a547d0-592c-4cf5-ae4f-54456b08e83d@sirena.org.uk>
-References: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
+	s=arc-20240116; t=1768400083; c=relaxed/simple;
+	bh=qrtUkzUvAu/GybEKdOHSy5+pyZma5Pf7dEV9LqKAr2s=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aF68aS3qlYIqhVmiHTzroAelEDYoBn/xVoreL/dIUkDmaC67B6OHnWFzJ7/ncCwcCTX8fNRUQUkKnIsy9fpadTCJjT7AeBfzG3tXwAV/10HX0B7RWDoo4Te2sC679bs+w7kXpy+Jhas3bkG2QV1b9yl3zvKYA20WDRAQ0vTRu7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HIag13BS; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8c537a42b53so28515185a.0
+        for <linux-spi@vger.kernel.org>; Wed, 14 Jan 2026 06:14:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768400081; x=1769004881; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ngcbeZxEgHt+JNZ+WGmatkfACIVP9YV9ttrHXNi6YxE=;
+        b=HIag13BS41+0HEm+oowtl8xM9GWnAxFrlxF80AQu5wJBeo0mcOxvVGr3avLxbqvejz
+         2e1YAdhGJQX8GrDUKccN01CJtEfXcmji3yhgTtgVnO6C3If/EXJy7k8IBhUkBVNsj4Fn
+         GY4J6UMYjdUEVymGvh+Jxc/DdsfUqd04y9hRoZyokzMqtUfqhmYcX/sh6q3NBpEo1pBv
+         eBrgu/3owA2wXs0mTHu4FNckUgagWmk+NYTOK/v4WPjHSfbgJKFpFnpnWHmSfLpQU0V/
+         FCIxfTynz86ay9jXrZ/NkUJTfzM2tfFSbbFshqoRQvMu49n6ttUYBc0nAFi00rc/79xv
+         oWJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768400081; x=1769004881;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ngcbeZxEgHt+JNZ+WGmatkfACIVP9YV9ttrHXNi6YxE=;
+        b=m7896DS8d7K1NSaraXfs+YgWCYke3xfrjHV1XjN9CiemkkNi/rUoXTMmPGTogFtBpU
+         J+6KCYt8DSzuiVq2ZMapiSrX+JEMdr/7KL/BnEFagbLZIouf9UqpvghN4MYIjh1fbANm
+         UmMyGAcjR2Ha0g675JXOgzJMQh76vIJVOyU5pt6hKzMBwJPKp5SS9pHF7B9QaAGa+oj5
+         8dbk+k0ENEzAwCjgUJZwopr1JtgtkMjBg6uoX1o2f9xNcCabiMPcJuHBoT4yzH2nbl/b
+         o2LPP8SJpMYMg1IzP1t4p5Nwc44rMFohP8UNa3tSi5DW99krTeJDR6w9OuNuRCBYCkIQ
+         7htA==
+X-Gm-Message-State: AOJu0YzWsqyf6+dpB5DDY8cbAmf/8EauucEj6oju5Gdnr3auJyHHcoJh
+	VwU2rWa5TLnRyGyqKvdunuIyKkoN2LIqhCXcKQFftsrzZcwycNPpXZFu
+X-Gm-Gg: AY/fxX5d/7FVzzVci5Ff4/7PAGatFWy3u/++klMRbFj9DJhWM0xegTTxrg/VUKlbcy6
+	NDuqTpuSqR9o7FWM8+XPDwuMDQv4dSYSkR+KZCjVHtAFPV4Y5JuFRrf0hzBIw3pjpZM4p+sjRUc
+	nFwEUQ1OejEvG0CAr8RIB4Vzzg0IPvJ5qTbB/flA2UQAO8wHokAmRr2Ia5BgJX+wh3rbGdiVGFR
+	UAdfg1trnBYBYKOy/nCr72JMhrGYQvGbMUWjlF0soQwfMfbmMPlsp13xQGcW9SXgDDK874frh7Y
+	qY0tL9sHmOK16UBhJpjRDHTS2T05QiU1YGzJ29PwRhjAgOwpiNNl96+DfC1acyrYbz2T5XJK9wk
+	c5MOR3/5sgB8jVg+4awebWd1PBlHZO2SPBLVf+riRNj/tnSZurwQQldLLtUku8jXRVyyA6wlHG4
+	hYhZ0n/hmktOy3FOqbtyuFBdjeP+b8MO37ExtLY/O98+JhUCh7seWDI80UA8Lp+CI4m6jBgxSzu
+	g+e
+X-Received: by 2002:a05:620a:372a:b0:8c5:2eb9:7be8 with SMTP id af79cd13be357-8c52fb9a133mr375377585a.47.1768400081038;
+        Wed, 14 Jan 2026 06:14:41 -0800 (PST)
+Received: from RDEALENC-L01.ad.analog.com ([24.206.116.131])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770cdfb0sm179880536d6.6.2026.01.14.06.14.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 06:14:40 -0800 (PST)
+From: Rodrigo Alencar <455.rodrigo.alencar@gmail.com>
+X-Google-Original-From: Rodrigo Alencar <rdealenc@rdealenc-l01.ad.analog.com>
+Date: Wed, 14 Jan 2026 14:14:35 +0000
+To: Jun Guo <jun.guo@cixtech.com>, peter.chen@cixtech.com, 
+	fugang.duan@cixtech.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	broonie@kernel.org
+Cc: linux-spi@vger.kernel.org, michal.simek@amd.com, 
+	cix-kernel-upstream@cixtech.com, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] spi: spi-cadence: supports transmission with
+ bits_per_word of 16 and 32
+Message-ID: <fu4ujdxwlhyhuwjtsiebje5pyc32rfs52vo2gyy7nay2krkxeh@wpls44xdfgy4>
+References: <20251031073003.3289573-1-jun.guo@cixtech.com>
+ <20251031073003.3289573-3-jun.guo@cixtech.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="itinsQmmtHTcSc+n"
-Content-Disposition: inline
-In-Reply-To: <20260109-winbond-v6-17-rc1-oddr-v2-0-1fff6a2ddb80@bootlin.com>
-X-Cookie: Absence makes the heart grow frantic.
-
-
---itinsQmmtHTcSc+n
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20251031073003.3289573-3-jun.guo@cixtech.com>
 
-On Fri, Jan 09, 2026 at 06:17:58PM +0100, Miquel Raynal wrote:
+On 25/10/31 03:30PM, Jun Guo wrote:
+> The default FIFO data width of the Cadence SPI IP is 8 bits, but
+> the hardware supports configurations of 16 bits and 32 bits.
+> This patch enhances the driver to support communication with both
+> 16-bits and 32-bits FIFO data widths.
+> 
+> Signed-off-by: Jun Guo <jun.guo@cixtech.com>
 
-> This series adds support for 8D-8D-8D in SPI NAND, which can already be
-> leveraged without any SPI changes as controllers already have this
-> support for some SPI NOR devices.
+...
 
-The following changes since commit 0f61b1860cc3f52aef9036d7235ed1f017632193:
+> +static inline void cdns_spi_writer(struct cdns_spi *xspi)
+> +{
+> +	u32 txw = 0;
+> +
+> +	if (xspi->txbuf && !IS_ALIGNED((uintptr_t)xspi->txbuf, xspi->n_bytes)) {
+> +		pr_err("%s: txbuf address is not aligned for %d bytes\n",
+> +		       __func__, xspi->n_bytes);
+> +		return;
+> +	}
+> +
+> +	if (xspi->txbuf) {
+> +		switch (xspi->n_bytes) {
+> +		case CDNS_SPI_N_BYTES_U8:
+> +			txw = *(u8 *)xspi->txbuf;
+> +			break;
+> +		case CDNS_SPI_N_BYTES_U16:
+> +			txw = *(u16 *)xspi->txbuf;
+> +			break;
+> +		case CDNS_SPI_N_BYTES_U32:
+> +			txw = *(u32 *)xspi->txbuf;
+> +			break;
+> +		default:
+> +			pr_err("%s invalid n_bytes %d\n", __func__,
+> +			       xspi->n_bytes);
+> +			return;
+> +		}
+> +		cdns_spi_write(xspi, CDNS_SPI_TXD, txw);
+> +		xspi->txbuf = (u8 *)xspi->txbuf + xspi->n_bytes;
+> +	}
 
-  Linux 6.19-rc5 (2026-01-11 17:03:14 -1000)
+cdns_spi_write(xspi, CDNS_SPI_TXD, txw) needs to be called regardless of xspi->txbuf.
+Otherwise, there will be no clock for the read operation to work.
+This is a bug I am seeing on a Zedboard running on 6.19
 
-are available in the Git repository at:
+kind regards,
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-octal-dtr
-
-for you to fetch changes up to 8618271887ca10ac5108fe7e1d82ba8f1b152cf9:
-
-  spi: spi-mem: Limit octal DTR constraints to octal DTR situations (2026-01-12 12:40:30 +0000)
-
-----------------------------------------------------------------
-spi: Octal DTR support
-
-This series adds support for 8D-8D-8D in SPI NAND, which can already be
-leveraged without any SPI changes as controllers already have this
-support for some SPI NOR devices.
-
-Among the few spi-mem patches, they are needed for building the SPI NAND
-changes (especially the ODTR introduction at the end) and therefore an
-immutable tag will be needed for merging in the MTD tree (unless all the
-series goes through MTD directly ofc).
-
-----------------------------------------------------------------
-Miquel Raynal (3):
-      spi: spi-mem: Make the DTR command operation macro more suitable
-      spi: spi-mem: Create a repeated address operation
-      spi: spi-mem: Limit octal DTR constraints to octal DTR situations
-
- drivers/spi/spi-mem.c       | 15 +++++++++++++--
- include/linux/spi/spi-mem.h | 14 +++++++++++---
- 2 files changed, 24 insertions(+), 5 deletions(-)
-
---itinsQmmtHTcSc+n
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlnfSsACgkQJNaLcl1U
-h9B91wf/ZanJsMJVyxIu9u84HYAFqkU4Kl+90t40mG9eWlxraksjBKZpzqupnA3D
-Nrzw1RwMPqiWTlkcKlyJPzYnTb++uuYEDTOexISgEBN3WKBhkV6fFQQrkuWYqsZ1
-qnaRwV3NwC5wGjXrbufqkIXrIvgdex9lZWMu3YRL1N2bHTscK5xZYo0q7IOZ0YvY
-vP7TeSF7ldXzpWo+z2hFdHxKAcXtHopbvDxWFWFR6kDZ4eoItyvRpJ5P3eqAuUC8
-X6IVy4ajVfL4eKlmnkwwktKsKq1bQBUVZmup6LKzoEwymLfvmSgi1Pqifgm5f15V
-1QTg5nj5vZrDOKUMfi3wF4P/cvIuaA==
-=xyvE
------END PGP SIGNATURE-----
-
---itinsQmmtHTcSc+n--
+Rodrigo Alencar
 
