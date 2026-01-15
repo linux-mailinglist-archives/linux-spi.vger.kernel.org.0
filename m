@@ -1,163 +1,143 @@
-Return-Path: <linux-spi+bounces-12380-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12381-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C81CD2368A
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 10:19:59 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79C82D237E9
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 10:27:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 69F59306595F
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 09:19:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CE872302EC71
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 09:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B012D35A93E;
-	Thu, 15 Jan 2026 09:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 372DC35B150;
+	Thu, 15 Jan 2026 09:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="akI8CD3R"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022122.outbound.protection.outlook.com [40.107.75.122])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B036342509;
-	Thu, 15 Jan 2026 09:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.122
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768468772; cv=fail; b=Bk6NR+2Sjji8Q2DSlv76uTCnLJGnfJU5bt1/t2Mn8tMuv2//QcCpbHfTmaplQMPbkBONmmykPURTblG/Twp/TeWCB7F8W/aJcfhvTxEVjAfOMCiiStePgcMStYWyNkOzaTaXAneL6S3cuDHLsXCLq5bVukq2zLwx2T2X2Im+Ikw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768468772; c=relaxed/simple;
-	bh=3oNUr2AIle4VtupD/cGDdBQj0l4jilQHb5VGo+0Uc08=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=eUiJ15S36sc5sALU79Vd/SjW7b4alp3Ypx6pRvuM6lqBomgiDj2ll5fzV5HIxMcCG2yPDKHHfDDvv+bxsZM3TWgeloQgDAK1VodvGw6FHUSEO+uRwWC5rcQUZKKEcPcnUWk+VucMldBvHKML6TcaMm3sRcILi3c4WM+BDBZmpio=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com; spf=pass smtp.mailfrom=cixtech.com; arc=fail smtp.client-ip=40.107.75.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cixtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cixtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hmBIriSrbpR0MPE0QZLUgfTWWZzeBThNEdXOR4u4ZQFbqCFHRIkaRgjQPN1HsWCDtakgocfDLk6VfxBAU5AfTH3kGxoaAT/YBWUcyzF0MmUnxw2wX2gV90X1rMOb1RxBLfeXh9Upc+k2K1qWeGTEEaMxjKIJXx3YCcIdmguyDWiwkd5NbovKdxhU0ZOt7DbjR4p8TRB8Er1azm6XR/UvZF9eE1HhOeMvsy2N5egxUcFPwmJlX+W2Pz56EC4O+gaGXaCawy452MC58+zIOmTC6ghc/SYypdx8Ql6P04XeLAvFWBahceEK8X0Wsrwi61pJsTTVr7FOp0ByzA8zN01udw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6dWfl3sjEvBKj8G2GM5fFahd/GZ1zztXtPwDy4/aluQ=;
- b=e8vEQjZEwsFc+p/ZiA5U0lwBqEtIGcoyrHTnyrgfdee2W53ziGWTaoaG0Vv/P3KmReCtd/pusvpNTCrWKtaj2HX6Fn2JmFzvtAt7l9j2lNzFs74a2I9Nc02+Q0awmGctIKFAMB4am1Qd8uwtvNQdEDc3xOnlVMtqk7qbeINKXScc/PYwmsaNd+lF2X1yShy8+Xro2C39SeBiduZ/eMHgr2bm73nzY7TAZRBpEl0SgmlJYYWU2hAssTbr3AWOtXCfaVnm4aS+frL0xc5Hu6ORtZI7d92vMrkxFn8rzBvuU9Usw+mwR/1/psghyR9QzGolGSY6oV2g7NAlxOQXtKR47A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 222.71.101.198) smtp.rcpttodomain=cixtech.com smtp.mailfrom=cixtech.com;
- dmarc=bestguesspass action=none header.from=cixtech.com; dkim=none (message
- not signed); arc=none (0)
-Received: from TY4P286CA0068.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:371::9)
- by OSQPR06MB7203.apcprd06.prod.outlook.com (2603:1096:604:292::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.5; Thu, 15 Jan
- 2026 09:19:26 +0000
-Received: from TY2PEPF0000AB85.apcprd03.prod.outlook.com
- (2603:1096:405:371:cafe::3c) by TY4P286CA0068.outlook.office365.com
- (2603:1096:405:371::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.6 via Frontend Transport; Thu,
- 15 Jan 2026 09:19:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 222.71.101.198)
- smtp.mailfrom=cixtech.com; dkim=none (message not signed)
- header.d=none;dmarc=bestguesspass action=none header.from=cixtech.com;
-Received-SPF: Pass (protection.outlook.com: domain of cixtech.com designates
- 222.71.101.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=222.71.101.198; helo=smtprelay.cixcomputing.com; pr=C
-Received: from smtprelay.cixcomputing.com (222.71.101.198) by
- TY2PEPF0000AB85.mail.protection.outlook.com (10.167.253.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9520.1 via Frontend Transport; Thu, 15 Jan 2026 09:19:26 +0000
-Received: from guoo-System-Product-Name.. (unknown [172.20.64.188])
-	by smtprelay.cixcomputing.com (Postfix) with ESMTPSA id 1E9424079A20;
-	Thu, 15 Jan 2026 17:19:25 +0800 (CST)
-From: Jun Guo <jun.guo@cixtech.com>
-To: peter.chen@cixtech.com,
-	fugang.duan@cixtech.com,
-	broonie@kernel.org
-Cc: 455.rodrigo.alencar@gmail.com,
-	linux-spi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jun Guo <jun.guo@cixtech.com>
-Subject: [PATCH] spi: spi-cadence: enable SPI_CONTROLLER_MUST_TX
-Date: Thu, 15 Jan 2026 17:19:24 +0800
-Message-Id: <20260115091924.844179-1-jun.guo@cixtech.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78419356A10;
+	Thu, 15 Jan 2026 09:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768469141; cv=none; b=FjBTudzONP5yAEbUh5/bJG6szT6lS4hECeoa+S0XMJ1HFQL1dSPtADi6yQGfRCKiawVP8V49bDHgYuAWkL06S6UR3Iz7yZ2mazkOrCRGDdxesC2MhjNZjVnuiiMIK+yMBKQ/JvcoMHGvsjEC7k3xwg7ngCXb0j852s+RMw6fvWY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768469141; c=relaxed/simple;
+	bh=/gd41pN+2oJIM9vptIsbXw8vPsTvmjAJ4LLt3mcWAEI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QJ6ECZA/Djd5Likrojd6EE8YY2/kSzBH1CA3fMfWP9JEUmYx0ZQvGN50yliMSaBMwk50AhoCEdsA89iPoXgbqX0L1/1CYKAW86oGhdXuwCbs4a1PLubgQWPv3V6taqM3BeL5cceD1afoKKBueEaKrK5OWjH3Y7ElubcalfaeUSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=akI8CD3R; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 9612AC1F1E5;
+	Thu, 15 Jan 2026 09:25:05 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 45027606B6;
+	Thu, 15 Jan 2026 09:25:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AB45910B68454;
+	Thu, 15 Jan 2026 10:25:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1768469131; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=K1qbl7S2rlm9JCoeIkodciVRDJ3Iedcf5ILamFg+cZg=;
+	b=akI8CD3RJmrxk8tvBidwHPjmgLY26oOmJnPJCIDjAGoaBTuLLD9nIELbBll4eGRD15fCJa
+	ZJXm3JzUvYQOpAfZdnAz/eL+sbiWCLxIiJAk6GSOfwsjqSH1Bn9OdZVUYioOTmTyHDvUoI
+	KP/jn11nU95HrIz+P/fOHdFpUbO4ufM7NFSmMzblD5Q0hqrgQWyl5bnpgwDs6J7nYjzcIh
+	lvABoG7up2UVpPJna220IY/EJOBnm4XHQfIYpm8nFUTbXzuyCtWUOBgHhLYN3vXjbMxDpS
+	XVPuivGafNm48T3tnkLj+eAjTRtXrbTTQz+A9T2fjbxfg3Q2CiDV2mv/dD+yzw==
+From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+Subject: [PATCH v2 00/13] spi: cadence-qspi: Add Renesas RZ/N1 support
+Date: Thu, 15 Jan 2026 10:24:51 +0100
+Message-Id: <20260115-schneider-6-19-rc1-qspi-v2-0-7e6a06e1e17b@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PEPF0000AB85:EE_|OSQPR06MB7203:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: f40b2c4e-c04e-4603-cfe1-08de54172dec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?nSmNxf+Hcp9cJHu1e2PQN+9/1680vMbYdCIcv6ZN5rG6qrfE3yXNyCo8uqhW?=
- =?us-ascii?Q?UYu/vV/c89VdC5ylEa32eHFqTcS/jtHNKM9D0z5hhGEZZRjg6uKyym9VdkS0?=
- =?us-ascii?Q?m35TH/4AlwgKEoWEc4iH6VS6rhYzA9DfyoxdDMgTVF4RmHkiDaiZUhdMpDHY?=
- =?us-ascii?Q?mkHUNFTjIXSiKh6pPTic9C5gJ21s+d+Ft3sQNAOn1EC4GaE9VuNldiuj3OfR?=
- =?us-ascii?Q?ErMKGE+sTOUlkhoVJU72C6TFITl0sMJtHrXx63qq1xR2/ruPlW/NDINuKITJ?=
- =?us-ascii?Q?TD7/tOLFiXS0agFeCEGPy6sKPgWGS2YngakAm3N4t4AUM3Srup/falT4Nivz?=
- =?us-ascii?Q?Vxv3NjCfkUNPkcOkKDok6CYp2c27Qzp2rEz4Yst7AF5adLkpm2byuOwnfdxw?=
- =?us-ascii?Q?sckpq4A/j0t2BKTPbRGbx0Iymj5BemIjRZ0RmUghRQWSHUQUV+Pply1ex5NE?=
- =?us-ascii?Q?avRvwL7SadchqksG6A+De47kcMwU77LOH4Se7xQ+eS2SOQGWCuiAvBxB8RHi?=
- =?us-ascii?Q?ArgZHvEDsLLOL0mJiKc9dYogRPP9R/HVYhU8hhdMfVli00oB1QtisYRTcCtl?=
- =?us-ascii?Q?iFGODWH7eyQh+ID0qfDdCrocLtTHLx8TG5OLH4J5XZIp9YRA420U7IYTfw7N?=
- =?us-ascii?Q?mjfYGCxc5Kz9Tt2mnxVMO/Qe1uzJrV7lwOi5mQPWYftz8H/TXDWAWFzrlzUn?=
- =?us-ascii?Q?k4Oz/jLAP6owqkoVTUDzXRcpFRCsltt9OGKEqvbGyRsfdZj/5VZkL1bf6Avt?=
- =?us-ascii?Q?WU8cb7d60IU/OWTw+LtXpXIexrJ5H5w+LwdWKw4Rt6eN9tVN1L17/+OUTeqb?=
- =?us-ascii?Q?wD6Ibg8tWnxDeHb6+9p4SFU9DjhuE4RVBrc+alYw3eTLJBidv90OYMkOHtBY?=
- =?us-ascii?Q?f9x6m/xQQTwv0pRz64Xz7algqUAw3qNu4t3xQmCqx3HnCGkLp0rXg62g4Uk1?=
- =?us-ascii?Q?Z39e8EaIzF67boOuTWv08ivJL2U9vQjg3SRsq8RUrhDsA2LzhQLcFkypWnPU?=
- =?us-ascii?Q?4rGXlShQzoRmxTlicWIn5oEHPg2WujmvNL9j1cRBi03X2NsMN5pWLnRB7Tqr?=
- =?us-ascii?Q?VzqKBT5fzP/6w6+bhJO7u+vkVSVDM0J7nw6bB3RGuGrf6z32zNmcutEeDU6x?=
- =?us-ascii?Q?oNYsrA83dnS2q6qgZ8cyQ/PQOK+PzTb9Hf9dWwXiHLxYQmyvce/F7TFREwno?=
- =?us-ascii?Q?x/l1gwROqG/UNTbRu51QUOlO4CjLWR7ZYS0NlapA7my6jTbs5dV153XZ66tb?=
- =?us-ascii?Q?g679LZKgakJmNYlByjtHhPmUVoy1tZIyc5FeNABSvwplSbwmQ453XT+I8t2k?=
- =?us-ascii?Q?RU17jfKTH9L/yL9kp7TJmOV+PGzX1LCumwr1T0RSynPD8IBkzqp5XYhohNFz?=
- =?us-ascii?Q?GGVtAKtXChju3c0J40wFfUy0NdKieAV8smWEbKYEbn400tT8ihElfj3sOrqF?=
- =?us-ascii?Q?SUy0k6ztMrIlcQaPs9YhtFRg1mIzMfZ8BtGeP2MyAdERHmQjZjEktUFmhKkP?=
- =?us-ascii?Q?J+irQcLixne5uNkrmQL/AAaP5/14qdme9HFNdMxC8UEqtnkzFTcfx11wn6fi?=
- =?us-ascii?Q?VgxlgiXgNYEBXvgFpAquxUkyJbwMnrLdOMiOO99TEzmSA8eBDqLf2V/uvFAh?=
- =?us-ascii?Q?SYuiYx7MyiHFHVFeIt0r+LODdfLv9GGgYyE2O+Sxe/6zkOt8PKNpZmhsqj1c?=
- =?us-ascii?Q?9hL6Eg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:222.71.101.198;CTRY:CN;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:smtprelay.cixcomputing.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013)(7053199007);DIR:OUT;SFP:1102;
-X-OriginatorOrg: cixtech.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jan 2026 09:19:26.2192
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f40b2c4e-c04e-4603-cfe1-08de54172dec
-X-MS-Exchange-CrossTenant-Id: 0409f77a-e53d-4d23-943e-ccade7cb4811
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=0409f77a-e53d-4d23-943e-ccade7cb4811;Ip=[222.71.101.198];Helo=[smtprelay.cixcomputing.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	TY2PEPF0000AB85.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR06MB7203
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XNQQ6CMBAF0KuQWTuGKRSUlfcwLGo7yCTaYkuIh
+ nB3Kxdw+X7y/18hcRRO0BUrRF4kSfAZ6lCAHY2/M4rLBlUqTYrOmOzoWRxHbDAzWsJXmgRbWzH
+ pujVD4yC3p8iDvPfla589SppD/OxHC/3S/5sLYYkn43Spqa24ri+3EOaH+KMNT+i3bfsCYG8BO
+ cAAAAA=
+X-Change-ID: 20251219-schneider-6-19-rc1-qspi-7c3e1547af6d
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, Vaishnav Achath <vaishnav.a@ti.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Vignesh Raghavendra <vigneshr@ti.com>, Santhosh Kumar K <s-k6@ti.com>, 
+ Pratyush Yadav <pratyush@kernel.org>, 
+ Pascal Eberhard <pascal.eberhard@se.com>, linux-spi@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-renesas-soc@vger.kernel.org, 
+ "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-During an SPI read operation, even if the xspi->txbuf passed to the
-cdns_spi_writerinterface is empty, it is still necessary to call
-cdns_spi_write(xspi, CDNS_SPI_TXD, txw); otherwise, the read operation
-will fail to obtain data correctly due to a lack of clocks.
+Hello,
 
-Fixes: 4e00135b2dd1 ("spi: spi-cadence: supports transmission with bits_per_word of 16 and 32")
-Reported-by: Rodrigo Alencar <455.rodrigo.alencar@gmail.com>
-Closes: https://lore.kernel.org/all/lbijvnnwsnddonmm5pveqzap6iibxhl4maneq43x4j6w64dev6@u75qhm5cwiob/
-Signed-off-by: Jun Guo <jun.guo@cixtech.com>
+This series adds support for the QSPI controller available on Renesas
+RZ/N1S and RZ/N1D SoC. It has been tested with a custom board (see last
+SPI patch for details).
+
+Adding support for this SoC required a few adaptations in the Cadence
+QSPI driver. The bulk of the work is in the few last patches. Everything
+else is just misc style fixes and improvements which bothered me while I
+was wandering.
+
+In order to support all constraints, I sometimes used a new quirk (for
+the write protection feature and the "no indirect mode"), and sometimes
+used the compatible directly. The ones I thought might not be RZ/N1
+specific have been implemented under the form of a quirk, in order to
+ease their reuse. The other adaptations, which I believe are more
+Renesas specific, have been handled using the compatible. This is all
+very arbitrary, and can be discussed.
+
+Thanks,
+Miquèl
+
+Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-cadence.c | 1 +
- 1 file changed, 1 insertion(+)
+Changes in v2:
+- Fix commit log of DT binding patch, following Krzysztof's comment.
+- Fix properties order in DTSI.
+- Rebase on top of spi/for-next and fix all conflicts.
+- Simplify even further the code in the cleanup patches following
+  Pratyush's advices.
+- Link to v1: https://lore.kernel.org/r/20251219-schneider-6-19-rc1-qspi-v1-0-8ad505173e44@bootlin.com
 
-diff --git a/drivers/spi/spi-cadence.c b/drivers/spi/spi-cadence.c
-index 47054da630d0..41b5b58cbfac 100644
---- a/drivers/spi/spi-cadence.c
-+++ b/drivers/spi/spi-cadence.c
-@@ -729,6 +729,7 @@ static int cdns_spi_probe(struct platform_device *pdev)
- 	ctlr->unprepare_transfer_hardware = cdns_unprepare_transfer_hardware;
- 	ctlr->mode_bits = SPI_CPOL | SPI_CPHA;
- 	ctlr->bits_per_word_mask = SPI_BPW_MASK(8);
-+	ctlr->flags = SPI_CONTROLLER_MUST_TX;
- 
- 	if (of_device_is_compatible(pdev->dev.of_node, "cix,sky1-spi-r1p6"))
- 		ctlr->bits_per_word_mask |= SPI_BPW_MASK(16) | SPI_BPW_MASK(32);
+---
+Miquel Raynal (1):
+      spi: cadence-qspi: Make sure we filter out unsupported ops
+
+Miquel Raynal (Schneider Electric) (12):
+      spi: dt-bindings: cdns,qspi-nor: Add Renesas RZ/N1D400 to the list
+      spi: cadence-qspi: Align definitions
+      spi: cadence-qspi: Fix style and improve readability
+      spi: cadence-qspi: Fix ORing style and alignments
+      spi: cadence-qspi: Remove an useless operation
+      spi: cadence-qspi: Fix probe error path and remove
+      spi: cadence-qspi: Try hard to disable the clocks
+      spi: cadence-qspi: Kill cqspi_jh7110_clk_init
+      spi: cadence-qspi: Add a flag for controllers without indirect access support
+      spi: cadence-qspi: Make sure write protection is disabled
+      spi: cadence-qspi: Add support for the Renesas RZ/N1 controller
+      ARM: dts: r9a06g032: Describe the QSPI controller
+
+ .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |   4 +
+ arch/arm/boot/dts/renesas/r9a06g032.dtsi           |  14 ++
+ drivers/spi/spi-cadence-quadspi.c                  | 260 ++++++++++-----------
+ 3 files changed, 144 insertions(+), 134 deletions(-)
+---
+base-commit: 0afb3ab76ffb521700af678ea931d31192f93260
+change-id: 20251219-schneider-6-19-rc1-qspi-7c3e1547af6d
+
+Best regards,
 -- 
-2.34.1
+Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 
 
