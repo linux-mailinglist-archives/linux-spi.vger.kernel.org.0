@@ -1,160 +1,156 @@
-Return-Path: <linux-spi+bounces-12423-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12424-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43F41D28343
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 20:47:06 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5213D288DE
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 21:55:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 37149300F5BF
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 19:42:31 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6E2D9301055E
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 20:55:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD46F2D47F4;
-	Thu, 15 Jan 2026 19:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548A52DE6E3;
+	Thu, 15 Jan 2026 20:55:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oasis-open-org.20230601.gappssmtp.com header.i=@oasis-open-org.20230601.gappssmtp.com header.b="fWvxWKUi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHhTHhlw"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482FE312807
-	for <linux-spi@vger.kernel.org>; Thu, 15 Jan 2026 19:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768506150; cv=pass; b=ci0BlCmsnjFF1Op7OC9aYvrnrDJwJ6BX7NY8BNPtgevKGMuw1sLZOvllHpZGNgr3cZR0SzOWXv0Met0i5mDBIu1h2Qu8LjJ18bQW9RfnSzhnI/n9iLdLTqpkharQEXrd9A0+SfnL3TlTZYxULulcGO0eI3SBe+PRUdXPeIsTlzs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768506150; c=relaxed/simple;
-	bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=UqdwiL1LbQG6WL97XosTZNNDTsDLPvyG8q+jf/FQBf1gWpl9nS97feBwPb9OkbcUV+4bjWsIGYAwKq1DSTnc7veZUHEhIKTv/KY/qlWHPIkvPq5vG4sUsWZpxB4PL/emKzh0vRn8uU7lEuqFf/NiNjcFmIz78JxiWMyVUZ/8KC4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oasis-open.org; spf=pass smtp.mailfrom=oasis-open.org; dkim=pass (2048-bit key) header.d=oasis-open-org.20230601.gappssmtp.com header.i=@oasis-open-org.20230601.gappssmtp.com header.b=fWvxWKUi; arc=pass smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oasis-open.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oasis-open.org
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-88fcc71dbf4so8963866d6.2
-        for <linux-spi@vger.kernel.org>; Thu, 15 Jan 2026 11:42:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768506148; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UXWQB2kfPG/WE023i3UbzC2hfDO83s8m7xP6mx2cF14TSwNw2YC9dhZoxQMvZPljfj
-         L0hh8wpm3GS+mm6oqzpdyTZMRppNF8fsvmxwv41XSoZCqAioAntkhIr17mq3ysL6YFnR
-         hoUnzgbljohKMQ92Qz8tdavPIIX8pzhuL50NmnIZSYNjbgcQBHI/9pnxUIKJbhugBMfm
-         5QStMOeKkDXIZMkNR2UNTuNRza9NpVrTpwoD7yYjvm7Qx1IXT0Sj7H+lytx5e16azW2V
-         pfPTVpDZhJYiYjGVLJaAAo1L92d8pizGdy+f211kxakCertt1J8YiX3XEsqXIk+7QhYO
-         xsjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:dkim-signature;
-        bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
-        fh=/I5cyZnMiAN9eGeOh/ODxLiC6HTDV4NXVCL2a0ZKgRw=;
-        b=hE0Xuci6tSoJRxjWvM3asTW6jWN4PdqRSoR5acbb0r93XvZ1j5FcTvZf+RMqW4EvUf
-         Ud1Gv4fkkwJijHNBVJOW6rVcqdXkTT84BYh8SgCYbvb49wgBlwtaBd4PA3xb81doJZM/
-         Cf403mIq1tGO+jph14HttgttH9RDxeEni2ggBX8HVt5sxJ2UC1GS+O4GQVY6z2++x7nQ
-         KgPnGnSVdeR9m9EfFGYmldCtIb/C4V5vf3aRoy2LXnkThZPUQb9PD4pJWKIMfOFmOkqn
-         61KR+rAEtNSWyoZrEhhaL3ouenQ64jXvTEulaBFgmQN5Uw8sbQLJtS33Uh70X2WrZuxB
-         iBUg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oasis-open-org.20230601.gappssmtp.com; s=20230601; t=1768506148; x=1769110948; darn=vger.kernel.org;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
-        b=fWvxWKUiSEoOCihR/RgG3uKt50NjIzjpwyP6vT48WfhC3/qtVy+kdFzw9gq1AFEOow
-         Vwuhl5eBd2PQKF5gex1j5U1iotcFZJSgwSZkkUNDaCvDwbuIh+BM5JhUPqqh3Tvcqxkj
-         jwpS0VZe0YWHdFxKMTPKi8Ue2Mg9LCO75LbcQ/AiEjN4XY8/Aqjy5Xot18BAniyNEooQ
-         56o4mAIUa+bpyfGEdIhpwQZSJ2Z9BPCGU3CU6Mx5yIHRJwSuh6oGjCxr9s+SbSuSMN2w
-         uUJW3tDQTyANH+E0YVJZiV0nLyiWeglLY34eSdZmKKx0P6lPLNz9mCpxQoOwMzZ+Ljeb
-         up9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768506148; x=1769110948;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BVuRcIp9C9aDs7YujmRCIsJWyiCOSqmqC7FZNs5wMUU=;
-        b=sfvNYBk72ghV6yMyRfNwyZqjvaHC3JAh2nFVh/+rt7mqjjud7rP/NS2RZParfshfTo
-         EA1W6TdEsxYpjV/PDTS926oCQDgZQxe4jVSagGIY5fvXwWLQJNlunVrv9R6PO6xcN5Zc
-         i1vNMFrGT+3sd/YHsTzlZ+1on3PlY4UFEj91LrPdd6JuuQuHIwrCkvuQ3kTae4Sen+xM
-         S/nRgOLlM2/cf1wClpVcU5w+/qYWYi/jEpWz4t2DH3WwOqWpr6xQrNpZ7cI4JW5ttJh1
-         Ma9qR7GcwJNsPE8RF/w+hj46PRagjA/oRnEUHVpGD5Zyw3t98gcpxxB1I4OnckrnucTB
-         eYpw==
-X-Gm-Message-State: AOJu0YzSOG5frzHg3OIU53x2+DywUAKj4M2AazdJEbHpl2qzAybh7bqt
-	3ZEQUWbyDcHeOCRoq6Qnu3ztLi+q2z8v8+mSnhl8kJtcJGBoUZ71VratQNbGUemKQtDRi3ayHPI
-	FkVXmSqofe1XeUNI4FAxN3XKZYWcF0kRtucv3R7cnGEa7pLbQdnGz5pY=
-X-Gm-Gg: AY/fxX5RXotvfPkSEOEcBXgrh69+/yB8hL5XY+gUoSSiAO0lHufrGyejatbLlul2NdW
-	ZG6vYzWVP0HkHquVQByuWv6M55TxNT/ZwY7CV7dQFx9KtT6FqyUI48La4+VplPhncXhxP+36RsN
-	Htr7mGmIC3Q/NypJayVjh3qVScMB3yFvWViSiOua0kTL06n6GWLdsKvbzW4uc7JL3IBJpDCh27G
-	ZN6Ckege1qfZSFXX7kPDXtZFH0UqHZch2ROgZYvlXLIHjnTi69ShKduT3DP3/wSyNxc7dHYe+od
-	+Bq44U6StTrYA+nlwfouZ1osCRvUfns1U1oyix32UyjYvvlQwerRVI+j+5gg
-X-Received: by 2002:a05:6214:5283:b0:88a:2b3c:463c with SMTP id
- 6a1803df08f44-8942dd70194mr8833856d6.37.1768506147847; Thu, 15 Jan 2026
- 11:42:27 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E86629B8C7;
+	Thu, 15 Jan 2026 20:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768510546; cv=none; b=t8QEzB4/lnq7BR55uHlerBT1jScraQQR2YACNGlyhB5Vglt9oRK8JOIOfBSPxHxf70F0L0og/102EBlKF31LAQ14VsmwrVZxF/vDSzcDHuDFEvJQ11eXxHiJJ2k38Dau873H4L8zv0cTUQkfgGDkbIVRRxETYAU//ejyXmrVGhI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768510546; c=relaxed/simple;
+	bh=xi5LcqCgDaiuqSvT2omAUMxDmTQ8rZgS0cXcFkGJRIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=URE5cs/Nl70Kc1oZX+2+mw/CPMspjQtWwVr8ytrhrXaPPRpd4KhV+RXUv/cLwxN1wpC14ZeGGlUUDfT4oGAmNdEPc+Pe76bEgqzyj6QYIRF439y/aHkNqEG9KAbWblbs3hhBgEFovOQkkcGaBcdi7XhKcJ0Kgz2kD8gOX1wHMYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHhTHhlw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B1EDC19422;
+	Thu, 15 Jan 2026 20:55:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768510545;
+	bh=xi5LcqCgDaiuqSvT2omAUMxDmTQ8rZgS0cXcFkGJRIg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qHhTHhlwtgSGPzcDt6CAUNAF7nJukxtzf5nBiO7r9guVDAK4t4vgBIfL/pz9L//qq
+	 sQqwbEUUEiMn+HEk74oalcgFKfgj2AmKZZOAtsibFiZwESrnZRWyTSBNfE0RR41V5e
+	 pZ7UVLxBcjXUTbnLTeNDpjhpmvdU6MEypRTKFr1p7Dvft5utA7IH3+q3dAXX/PXrJr
+	 8IHKSEMoiw7EQRzjPCtIx22Z5H/Y+Q6OJqv/83QNTpqwNt+3rqfb2psUY+cHX8rRql
+	 HK4K3Wy40Gp1tmTGlN03YxIy/GyPkm3OMv6WX2/1djmyUt3yS4sBbEiH1Z/BQ/yu+G
+	 zWu8Hb5Aj7U4w==
+Message-ID: <4e8ffb51-28d3-42bf-a069-afb7fbf57bad@kernel.org>
+Date: Thu, 15 Jan 2026 21:55:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Kelly Cullinane <kelly.cullinane@oasis-open.org>
-Date: Thu, 15 Jan 2026 14:41:52 -0500
-X-Gm-Features: AZwV_QjcZuyMKSSDUn7zRJIv7vrdi-ai1fqKtEfZP9BwphHLy_zH5Ty4eemy2zE
-Message-ID: <CAAiF6036Z25evk=m7aKd2n5mDkcFz5rqtdA9Kz2uOSXzN66Ltg@mail.gmail.com>
-Subject: Invitation to comment on VIRTIO v1.4 CSD01
-To: linux-spi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] spi: dt-bindings: nxp,imx94-xspi: add nxp,imx952-xspi
+To: Frank Li <Frank.li@nxp.com>
+Cc: Haibo Chen <haibo.chen@nxp.com>, Han Xu <han.xu@nxp.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
+ imx@lists.linux.dev, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20260114-xspi-imx952-v1-0-acc60a5a2a9d@nxp.com>
+ <20260114-xspi-imx952-v1-1-acc60a5a2a9d@nxp.com>
+ <20260115-imaginary-banana-beaver-7b45ea@quoll>
+ <aWkEnEJRj01JSZj5@lizhi-Precision-Tower-5810>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <aWkEnEJRj01JSZj5@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-OASIS members and other interested parties,
+On 15/01/2026 16:15, Frank Li wrote:
+> On Thu, Jan 15, 2026 at 10:39:20AM +0100, Krzysztof Kozlowski wrote:
+>> On Wed, Jan 14, 2026 at 02:49:45PM +0800, Haibo Chen wrote:
+>>> Document i.MX952 XSPI compatible, which is derived from
+>>> i.MX94 XSPI.
+>>>
+>>> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml | 4 ++++
+>>>  1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
+>>> index a0f4b162c85855c55d06c6ea1a2417af5121fab2..16a0598c6d033554ce5a42a13a3265315a16992e 100644
+>>> --- a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
+>>> +++ b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
+>>> @@ -15,6 +15,10 @@ properties:
+>>>      oneOf:
+>>>        - enum:
+>>>            - nxp,imx94-xspi
+>>> +      - items:
+>>> +          - enum:
+>>> +              - nxp,imx952-xspi
+>>> +          - const: nxp,imx94-xspi
+>>
+>> You never checked your DTS and broke all existing users. And existing
+>> tools would clearly tell you that if you tried.
+> 
+> Krzysztof:
+> 
+> 	what's wrong?
+> 
+> 	I have not find any warnings under arch/arm64/boot/dts/freescale by
+> 
+> 	make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8 CHECK_DTBS=y dtbs
 
-OASIS and the VIRTIO TC are pleased to announce that VIRTIO v1.4 CSD01
-is now available for public review and comment.
+I misread the diff context and patch is obviously fine. Thanks for
+correcting me.
 
-VIRTIO TC aims to enhance the performance of virtual devices by
-standardizing key features of the VIRTIO (Virtual I/O) Device
-Specification.
 
-Virtual I/O Device (VIRTIO) Version 1.4
-Committee Specification Draft 01 / Public Review Draft 01
-09 December 2025
-
-TEX: https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-csp=
-rd01.html
-(Authoritative)
-HTML: https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-cs=
-prd01.html
-PDF: https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-csp=
-rd01.pdf
-
-The ZIP containing the complete files of this release is found in the direc=
-tory:
-https://docs.oasis-open.org/virtio/virtio/v1.4/csprd01/virtio-v1.4-csprd01.=
-zip
-
-How to Provide Feedback
-OASIS and the VIRTIO TC value your feedback. We solicit input from
-developers, users and others, whether OASIS members or not, for the
-sake of improving the interoperability and quality of its technical
-work.
-
-The public review is now open and ends Friday, February 13 2026 at 23:59 UT=
-C.
-
-Comments may be submitted to the project=E2=80=99s comment mailing list at
-virtio-comment@lists.linux.dev. You can subscribe to the list by
-sending an email to
-virtio-comment+subscribe@lists.linux.dev.
-
-All comments submitted to OASIS are subject to the OASIS Feedback
-License, which ensures that the feedback you provide carries the same
-obligations at least as the obligations of the TC members. In
-connection with this public review, we call your attention to the
-OASIS IPR Policy applicable especially to the work of this technical
-committee. All members of the TC should be familiar with this
-document, which may create obligations regarding the disclosure and
-availability of a member's patent, copyright, trademark and license
-rights that read on an approved OASIS specification.
-
-OASIS invites any persons who know of any such claims to disclose
-these if they may be essential to the implementation of the above
-specification, so that notice of them may be posted to the notice page
-for this TC's work.
-
-Additional information about the specification and the VIRTIO TC can
-be found at the TC=E2=80=99s public homepage.
+Best regards,
+Krzysztof
 
