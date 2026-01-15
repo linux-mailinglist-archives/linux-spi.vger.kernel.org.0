@@ -1,46 +1,46 @@
-Return-Path: <linux-spi+bounces-12424-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12425-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5213D288DE
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 21:55:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B009D288E9
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 21:56:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6E2D9301055E
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 20:55:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 87F4C301B83E
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 20:56:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548A52DE6E3;
-	Thu, 15 Jan 2026 20:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EE5C31AF1E;
+	Thu, 15 Jan 2026 20:56:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qHhTHhlw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nKt0IQR1"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E86629B8C7;
-	Thu, 15 Jan 2026 20:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD17309DD2;
+	Thu, 15 Jan 2026 20:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768510546; cv=none; b=t8QEzB4/lnq7BR55uHlerBT1jScraQQR2YACNGlyhB5Vglt9oRK8JOIOfBSPxHxf70F0L0og/102EBlKF31LAQ14VsmwrVZxF/vDSzcDHuDFEvJQ11eXxHiJJ2k38Dau873H4L8zv0cTUQkfgGDkbIVRRxETYAU//ejyXmrVGhI=
+	t=1768510563; cv=none; b=IADxt46jXCLWSHSQlkHZCl3BP8QpUrO045Qvv6NVWXFeKjnABvoCHLAKV2f6pbjF1kLCEIOLVg8TYSg5V9JS3O7/zOF52eOv7+EYhNqLcqkpYRGJWR9RTnGbQB/5EByeemWMuZu3r3bJlDfNJghE1hzAsJ0/bYMk1yTbWmJ7VAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768510546; c=relaxed/simple;
-	bh=xi5LcqCgDaiuqSvT2omAUMxDmTQ8rZgS0cXcFkGJRIg=;
+	s=arc-20240116; t=1768510563; c=relaxed/simple;
+	bh=Pmt89TRP2m7R72AuSe+MpzKuGu7MV9suJc+7MiSGbfo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=URE5cs/Nl70Kc1oZX+2+mw/CPMspjQtWwVr8ytrhrXaPPRpd4KhV+RXUv/cLwxN1wpC14ZeGGlUUDfT4oGAmNdEPc+Pe76bEgqzyj6QYIRF439y/aHkNqEG9KAbWblbs3hhBgEFovOQkkcGaBcdi7XhKcJ0Kgz2kD8gOX1wHMYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qHhTHhlw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B1EDC19422;
-	Thu, 15 Jan 2026 20:55:41 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=opP+6cnnUpuxmM2rMxSMmA5aVTOilPdrFQagWonl0+2S7ReSyfT/Tqp80Hy9NGhn0b8R37V1ZcMcSdA6f+ORrQ5TUydYuWpRbiAshTpLYTz9b74/HzFGfVR1INiO4BendaZ3EhVgYdClEOdzm7+BeoVzfuqWgHPCpD/grT6l9w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nKt0IQR1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 867ABC116D0;
+	Thu, 15 Jan 2026 20:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768510545;
-	bh=xi5LcqCgDaiuqSvT2omAUMxDmTQ8rZgS0cXcFkGJRIg=;
+	s=k20201202; t=1768510562;
+	bh=Pmt89TRP2m7R72AuSe+MpzKuGu7MV9suJc+7MiSGbfo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qHhTHhlwtgSGPzcDt6CAUNAF7nJukxtzf5nBiO7r9guVDAK4t4vgBIfL/pz9L//qq
-	 sQqwbEUUEiMn+HEk74oalcgFKfgj2AmKZZOAtsibFiZwESrnZRWyTSBNfE0RR41V5e
-	 pZ7UVLxBcjXUTbnLTeNDpjhpmvdU6MEypRTKFr1p7Dvft5utA7IH3+q3dAXX/PXrJr
-	 8IHKSEMoiw7EQRzjPCtIx22Z5H/Y+Q6OJqv/83QNTpqwNt+3rqfb2psUY+cHX8rRql
-	 HK4K3Wy40Gp1tmTGlN03YxIy/GyPkm3OMv6WX2/1djmyUt3yS4sBbEiH1Z/BQ/yu+G
-	 zWu8Hb5Aj7U4w==
-Message-ID: <4e8ffb51-28d3-42bf-a069-afb7fbf57bad@kernel.org>
-Date: Thu, 15 Jan 2026 21:55:36 +0100
+	b=nKt0IQR1ntXuq0DXgaqPzHSWElKQCQpiCCEQwEnTdrU8UeGsynLr20P5R0478IrcD
+	 NueNx4/sXeHo5ipRuxF+me15UTtfzCfulvgqWDy2rk2Uv3Y5WZM9dGyGMgpgpfFrkZ
+	 AWNbEHdksqDIeuOFUuioa5zj0EmPPIfF9JMxbUZMrxxwe/I/rCMseCMk5eoBI2AW3l
+	 r1uT9jEGyD9a5nw1+rcz5nh+MVk2i+BinO8+3eE35ImVexqrg8rnqKmVpqBtHOqgEr
+	 TfIyJryouq+iSauZHUMQ4GykuxIMsfnP1Z0i9wzvfaniqSBMdWT2U0FAp9cS4W1b0h
+	 UxF1/p2cs1Bkw==
+Message-ID: <c605c5f7-45b7-4e15-9d80-8bd224624b27@kernel.org>
+Date: Thu, 15 Jan 2026 21:55:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -49,20 +49,18 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/3] spi: dt-bindings: nxp,imx94-xspi: add nxp,imx952-xspi
-To: Frank Li <Frank.li@nxp.com>
-Cc: Haibo Chen <haibo.chen@nxp.com>, Han Xu <han.xu@nxp.com>,
+To: Haibo Chen <haibo.chen@nxp.com>, Han Xu <han.xu@nxp.com>,
  Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
  Sascha Hauer <s.hauer@pengutronix.de>,
  Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org,
- imx@lists.linux.dev, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+ Fabio Estevam <festevam@gmail.com>
+Cc: linux-spi@vger.kernel.org, imx@lists.linux.dev,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
 References: <20260114-xspi-imx952-v1-0-acc60a5a2a9d@nxp.com>
  <20260114-xspi-imx952-v1-1-acc60a5a2a9d@nxp.com>
- <20260115-imaginary-banana-beaver-7b45ea@quoll>
- <aWkEnEJRj01JSZj5@lizhi-Precision-Tower-5810>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,47 +106,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <aWkEnEJRj01JSZj5@lizhi-Precision-Tower-5810>
+In-Reply-To: <20260114-xspi-imx952-v1-1-acc60a5a2a9d@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 15/01/2026 16:15, Frank Li wrote:
-> On Thu, Jan 15, 2026 at 10:39:20AM +0100, Krzysztof Kozlowski wrote:
->> On Wed, Jan 14, 2026 at 02:49:45PM +0800, Haibo Chen wrote:
->>> Document i.MX952 XSPI compatible, which is derived from
->>> i.MX94 XSPI.
->>>
->>> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
->>> ---
->>>  Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
->>> index a0f4b162c85855c55d06c6ea1a2417af5121fab2..16a0598c6d033554ce5a42a13a3265315a16992e 100644
->>> --- a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
->>> @@ -15,6 +15,10 @@ properties:
->>>      oneOf:
->>>        - enum:
->>>            - nxp,imx94-xspi
->>> +      - items:
->>> +          - enum:
->>> +              - nxp,imx952-xspi
->>> +          - const: nxp,imx94-xspi
->>
->> You never checked your DTS and broke all existing users. And existing
->> tools would clearly tell you that if you tried.
+On 14/01/2026 07:49, Haibo Chen wrote:
+> Document i.MX952 XSPI compatible, which is derived from
+> i.MX94 XSPI.
 > 
-> Krzysztof:
-> 
-> 	what's wrong?
-> 
-> 	I have not find any warnings under arch/arm64/boot/dts/freescale by
-> 
-> 	make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j8 CHECK_DTBS=y dtbs
+> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-I misread the diff context and patch is obviously fine. Thanks for
-correcting me.
 
 
 Best regards,
