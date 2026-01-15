@@ -1,87 +1,75 @@
-Return-Path: <linux-spi+bounces-12414-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12415-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFD24D24E6F
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 15:18:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF774D252A4
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 16:08:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C241D301A1B2
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 14:16:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8DC0C304A991
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 15:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50DB63A1E81;
-	Thu, 15 Jan 2026 14:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S4bbQjQl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCF7534A3A2;
+	Thu, 15 Jan 2026 15:05:13 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A7136C598
-	for <linux-spi@vger.kernel.org>; Thu, 15 Jan 2026 14:16:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0680E3A7E10;
+	Thu, 15 Jan 2026 15:05:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768486577; cv=none; b=dScdlLoVVh2njSUNC7CmH0WzKDx2S3XdxAMEXYqNonbU7MtpY6Lk4MMJ3f11IimmAkgnKZJCl89SutwUqT0gDyyIesJZRYG45w0LQsT7S3ws2MFm6d5HcTzBPxB+9Qb5pgMDR15Azh6yrpnDrhZ5RBm5uCsAqkrtwfNvWF2aeb8=
+	t=1768489512; cv=none; b=EHQxgYzxgrGVr1MHjrrhZ9psJS8H/G9AU4VtfVpe31HErWIDRRpHXkeLeS2Gkfzi7c/pW1E0BHLLy+AD/hu2/NVGC55NImXNn7Uuy466Y7+qUOTTbUIECDX7SRoTRE5oHmBo6e76QZ9Blzdcz3H5kqrzxVX2ZpUv2R5VjGiRIoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768486577; c=relaxed/simple;
-	bh=l/gxthEIRz3eU4IfqPyFZSaiAO97LgJ+vu7RHRX5Qy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gxyPRfrGh3bwUFSOM/le49uTOnJR9ehGModrbvwzBvOpvGpPc4axjwPbgNN0HizwJN9w4z1G9DSwJJVvm+sEshFQJcto3anumxgREKuS1HXtT47NK1re8vSLgwwk6qyGcwd6+DpQPjkqB7omrMezVeRW07r/VysJ8aAEh5kqJ3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S4bbQjQl; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768486576; x=1800022576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l/gxthEIRz3eU4IfqPyFZSaiAO97LgJ+vu7RHRX5Qy0=;
-  b=S4bbQjQlZH31PfX5Y9W4tJZnR0onSQOM0HG94MXzqI6YOlAbiEPUtbAN
-   /iJsTO1OLeqi0XllGr4i1j2eOW0P3Mzm4zta476Uehq40RFjkSpRPPnLq
-   aMw9cVi4xXZrRd9zfA7cBkjyihQ5zx8pGIJOqYwN18NHGsXbKApaSnqJ0
-   PzyudaxrucV/TD852+hrZfsUhzybQDyGDSNrsbq0KyNmi6SSyk3dkoeKL
-   FP68BdcrrHUj5WrIHr62X6Ky0Qg1DO1lR46txKKAG9raZN1P4wSpT3xL3
-   LF2cwzO8l6VoAx6HqyZOraCfTafFQb+CNuNoeBDTaeE24n5ylXVyn+2y7
-   Q==;
-X-CSE-ConnectionGUID: Aen+okYZSm2LVJ9rNLuDjQ==
-X-CSE-MsgGUID: O5HDa/7/S12naMpmKXS6WQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11672"; a="81156694"
-X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="81156694"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2026 06:16:16 -0800
-X-CSE-ConnectionGUID: IDo0CUaATLa6w+wp5FcMBQ==
-X-CSE-MsgGUID: ftIyQlOLTNKXp0hpJ17ORA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,228,1763452800"; 
-   d="scan'208";a="209441246"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Jan 2026 06:16:14 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1001)
-	id A1A9E98; Thu, 15 Jan 2026 15:16:13 +0100 (CET)
-Date: Thu, 15 Jan 2026 15:16:13 +0100
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
-Cc: broonie@kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH] spi: intel-pci: Add support for Nova Lake SPI serial
- flash
-Message-ID: <20260115141613.GF2275908@black.igk.intel.com>
-References: <20260115120305.10080-1-alan.borzeszkowski@linux.intel.com>
+	s=arc-20240116; t=1768489512; c=relaxed/simple;
+	bh=FwS0C8ILdbqVuWDgxQqXcrBObuzyjHIIqp/jCcAL8Lk=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mWV4R2ZeZZHZn6QDBiU1HQLwwtDkhwlKKCE+pj2mdy6oP+AWWvh5thw1Yk0XRMuPKzHPvXve1CxonBpfJaAe8vO8vFJj0r9RRd347eR/6k84tj/TMghZXQf0T53i1oVow4pq0yMDHqMNw7XL4K1GRtgNTrHEQsjxKF4qgsfimrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Thu, 15 Jan
+ 2026 23:04:54 +0800
+Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Thu, 15 Jan 2026 23:04:54 +0800
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: <clg@kaod.org>, <broonie@kernel.org>, <boris.brezillon@bootlin.com>,
+	<joel@jms.id.au>, <andrew@codeconstruct.com.au>,
+	<linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <BMC-SW@aspeedtech.com>
+Subject: [PATCH 0/2] spi: aspeed: Improve handling of shared SPI controllers
+Date: Thu, 15 Jan 2026 23:04:52 +0800
+Message-ID: <20260115150454.1575970-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260115120305.10080-1-alan.borzeszkowski@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Thu, Jan 15, 2026 at 01:03:05PM +0100, Alan Borzeszkowski wrote:
-> Add Intel Nova Lake PCH-S SPI serial flash PCI ID to the list of
-> supported devices. This is the same controller found in previous
-> generations.
-> 
-> Signed-off-by: Alan Borzeszkowski <alan.borzeszkowski@linux.intel.com>
+This patch series improves handling of SPI controllers that are
+shared by spi-mem devices and other SPI peripherals.
 
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+The primary goal of this series is to support non-spi-mem devices in
+the ASPEED FMC/SPI controller driver. It also addresses an issue in
+the spi-mem framework observed when different types of SPI devices
+operate concurrently on the same controller, ensuring that spi-mem
+operations are properly serialized.
+
+Chin-Ting Kuo (2):
+  spi: spi-mem: Protect dirmap_create() with spi_mem_access_start/end
+  spi: aspeed: Add support for non-spi-mem devices
+
+ drivers/spi/spi-aspeed-smc.c | 121 +++++++++++++++++++++++++++++++++--
+ drivers/spi/spi-mem.c        |  11 +++-
+ 2 files changed, 125 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
+
 
