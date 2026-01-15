@@ -1,54 +1,54 @@
-Return-Path: <linux-spi+bounces-12384-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12386-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1986CD238BE
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 10:31:41 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F219D239CD
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 10:38:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5122F30C3553
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 09:25:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5940F3036051
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 09:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A33A35CBC3;
-	Thu, 15 Jan 2026 09:25:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FE335EDD6;
+	Thu, 15 Jan 2026 09:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LbF55K/K"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZCNCGrtQ"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FE035C1AF;
-	Thu, 15 Jan 2026 09:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A733435E52E;
+	Thu, 15 Jan 2026 09:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768469144; cv=none; b=rc44Bhdi0Ki5SKOVzN0kQy0izB4AWk2MBmvjXLXkRDXRtd3Q4UH14v8DMweuNBZXInWPYXIMJHP7lavEVqqSrvh3w/BtZwfQTE9TqZ8H+e3i+2fe2qKn/sdoftCso9RfFyh+kIW6enunvMFFgxqBo7HaXxeZPhMch0+FzCt250c=
+	t=1768469146; cv=none; b=RbfC1MNreHBoCxiKaMsbUY9tSBEpfH3B4K9ChVok8udNjFVJ8XHScRYRH/FunU9bDhZRHYt5tnO6B2CWVMNPPItt0crj2i7Rt9DW0OVnPaqOzkpVq3cc2trmIj0npF5ni/tweLQ7VEyCWRFusmghx9/9hfeb56gGlE9Z8RYY0lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768469144; c=relaxed/simple;
-	bh=gT3QETcdcCGbiRCmC0wzi2c4JfCVpnZFE7d7jQ8SPKk=;
+	s=arc-20240116; t=1768469146; c=relaxed/simple;
+	bh=i1g6FV6bWTRpy4Qm1cz9GUKgQo4Mdhxu1ddz5PGqn78=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ValPqckPHXHYHmVxEeeVGyL6IoiYAafiJgImdFJgYy90T0Gc7CF487ow3MnHSFaURljm0dBeqkpCcT9+8IyvNGqkTeA6YmxCf/nNGsmFajK9bXmjarOczdC4HTtAQGgjNGbcx3buw41sK7X3Vql/Pe7O6Ov3IMZ6olQswNayPkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LbF55K/K; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=JFXflXiNjpJYyhg5QdfN8lQAT0TFn45J75hSp+fkkpNM7oK2K14tdQ31p8mD2qebvNcc2NwyHHiVf0ihn5UnawKF05602FVUHWRLPZGVjMFl8txqfp+6H/Ih9bKYCh/sofP58VZpSdBQM5Mwar3dC+RkOaCGmXVMa8w2ZY07BXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ZCNCGrtQ; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 099231A287A;
-	Thu, 15 Jan 2026 09:25:41 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 9B162C1F1E5;
+	Thu, 15 Jan 2026 09:25:16 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D3471606B6;
-	Thu, 15 Jan 2026 09:25:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C703A10B6851D;
-	Thu, 15 Jan 2026 10:25:37 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 542C3606B6;
+	Thu, 15 Jan 2026 09:25:43 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DF8BB10B6852D;
+	Thu, 15 Jan 2026 10:25:39 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768469139; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1768469141; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=fVq92moEtVi/BN63BXxUDdkiQFjKN+FXnZ7Ltkyl1bY=;
-	b=LbF55K/K5uHSRSmLh1Xf7sG/MuyUWRMEEdAhxmSRF4z6BVVO7ifHJPgM7S20cqA851fPOM
-	B2ezzNtOIX5N8eAZCLiuIO1vSYlFipB3LYYB5cax3BUmhQ5HdmhErmivVpw+P9SY6epFEH
-	PVtUWA5VfUw395DakTn7aK6Gf49EpHkna3+8BrsyG52TTnUwLR98BzAGT15xd7M6PtbzK3
-	SkN5aHDS2TzzQx1P9xbE5+zqLmT737NzKLszUqVSPmcRVUph+8V7QN4Uzc33Ol48ezuWGz
-	P6sKwuqfxO/yCmVaVibTwzX9EGQPXcAbAddx/yeITCFoudOsobF1RaEJOm12Vg==
+	bh=TfqfY/NbV/xcFiwyzhB5ld1l7j/zKWnZt4iHWq7aaQk=;
+	b=ZCNCGrtQRoTJcAkbPkTeKXN0/Tdw8Dlg13VN+SIRLsJZEfxJ2U6UwuqwNwmBjMIrBdVT98
+	rH7KrgPMrGxCPgtO5QlYeAvQBTqxvWqjeq5rWj4KclZlr2oLxZwoM+Z8v2W/t4/vO9MtCx
+	ycrPNmtL1qSt2Dmu86SlkQ6cbVP2aFmp92jazLaC7FyHi3wytjE8X6/dLVBbdEC67o/OoX
+	Mp7sIPpNQXFa1ZAsSwANqdmHwKl0ZBm25HxuSRxkGY5PCM9DigbNp0k852axttgph2mh+z
+	9TBhT81PokT9QIq3Y+cwre6hD/s+cbp60tadlAYCSypEv9A3gOek+XHZLkAl1w==
 From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Thu, 15 Jan 2026 10:24:55 +0100
-Subject: [PATCH v2 04/13] spi: cadence-qspi: Fix ORing style and alignments
+Date: Thu, 15 Jan 2026 10:24:56 +0100
+Subject: [PATCH v2 05/13] spi: cadence-qspi: Remove an useless operation
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260115-schneider-6-19-rc1-qspi-v2-4-7e6a06e1e17b@bootlin.com>
+Message-Id: <20260115-schneider-6-19-rc1-qspi-v2-5-7e6a06e1e17b@bootlin.com>
 References: <20260115-schneider-6-19-rc1-qspi-v2-0-7e6a06e1e17b@bootlin.com>
 In-Reply-To: <20260115-schneider-6-19-rc1-qspi-v2-0-7e6a06e1e17b@bootlin.com>
 To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -77,65 +77,35 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-These definitions do not follow the standard patterns. Alignments are
-incoherent and the logical OR symbols '|' are misplaced. Reorganize
-these definitions.
+Right above writing the register value back based on 'div' value, there
+is the following check:
 
-There is no functional change.
+    if (div > CQSPI_REG_CONFIG_BAUD_MASK)
+            div = CQSPI_REG_CONFIG_BAUD_MASK;
 
-Acked-by: Pratyush Yadav <pratyush@kernel.org>
+which means div does not need to be AND'ed against the bitfield mask.
+
+Remove this redundant operation.
+
+Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
 ---
- drivers/spi/spi-cadence-quadspi.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
-index c0a507953c58..8eb80b4b76eb 100644
+index 8eb80b4b76eb..06f6c5979229 100644
 --- a/drivers/spi/spi-cadence-quadspi.c
 +++ b/drivers/spi/spi-cadence-quadspi.c
-@@ -2130,26 +2130,23 @@ static const struct cqspi_driver_platdata intel_lgm_qspi = {
- };
+@@ -1258,7 +1258,7 @@ static void cqspi_config_baudrate_div(struct cqspi_st *cqspi)
  
- static const struct cqspi_driver_platdata socfpga_qspi = {
--	.quirks = CQSPI_DISABLE_DAC_MODE
--			| CQSPI_NO_SUPPORT_WR_COMPLETION
--			| CQSPI_SLOW_SRAM
--			| CQSPI_DISABLE_STIG_MODE
--			| CQSPI_DISABLE_RUNTIME_PM,
-+	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION |
-+		  CQSPI_SLOW_SRAM | CQSPI_DISABLE_STIG_MODE |
-+		  CQSPI_DISABLE_RUNTIME_PM,
- };
+ 	reg = readl(reg_base + CQSPI_REG_CONFIG);
+ 	reg &= ~(CQSPI_REG_CONFIG_BAUD_MASK << CQSPI_REG_CONFIG_BAUD_LSB);
+-	reg |= (div & CQSPI_REG_CONFIG_BAUD_MASK) << CQSPI_REG_CONFIG_BAUD_LSB;
++	reg |= div << CQSPI_REG_CONFIG_BAUD_LSB;
+ 	writel(reg, reg_base + CQSPI_REG_CONFIG);
+ }
  
- static const struct cqspi_driver_platdata versal_ospi = {
- 	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL,
--	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA
--			| CQSPI_DMA_SET_MASK,
-+	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA |
-+		  CQSPI_DMA_SET_MASK,
- 	.indirect_read_dma = cqspi_versal_indirect_read_dma,
- 	.get_dma_status = cqspi_get_versal_dma_status,
- };
- 
- static const struct cqspi_driver_platdata versal2_ospi = {
- 	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL,
--	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA
--			| CQSPI_DMA_SET_MASK
--			| CQSPI_SUPPORT_DEVICE_RESET,
-+	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_SUPPORT_EXTERNAL_DMA |
-+		  CQSPI_DMA_SET_MASK | CQSPI_SUPPORT_DEVICE_RESET,
- 	.indirect_read_dma = cqspi_versal_indirect_read_dma,
- 	.get_dma_status = cqspi_get_versal_dma_status,
- };
-@@ -2166,7 +2163,7 @@ static const struct cqspi_driver_platdata pensando_cdns_qspi = {
- static const struct cqspi_driver_platdata mobileye_eyeq5_ospi = {
- 	.hwcaps_mask = CQSPI_SUPPORTS_OCTAL,
- 	.quirks = CQSPI_DISABLE_DAC_MODE | CQSPI_NO_SUPPORT_WR_COMPLETION |
--			CQSPI_RD_NO_IRQ,
-+		  CQSPI_RD_NO_IRQ,
- };
- 
- static const struct of_device_id cqspi_dt_ids[] = {
 
 -- 
 2.51.1
