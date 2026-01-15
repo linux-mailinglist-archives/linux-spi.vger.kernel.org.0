@@ -1,97 +1,80 @@
-Return-Path: <linux-spi+bounces-12395-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12396-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93522D23BDD
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 10:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D343ED23CB0
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 11:04:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8A4BE303C551
-	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 09:39:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DC04830006C4
+	for <lists+linux-spi@lfdr.de>; Thu, 15 Jan 2026 10:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AAE53563FB;
-	Thu, 15 Jan 2026 09:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4635D35773B;
+	Thu, 15 Jan 2026 10:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qXgAS7WS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="etyY3ota"
 X-Original-To: linux-spi@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAE6633439A;
-	Thu, 15 Jan 2026 09:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F7A35E52A
+	for <linux-spi@vger.kernel.org>; Thu, 15 Jan 2026 10:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768469963; cv=none; b=Kh5jq5WrJAiw21WipGuAn0b1mJBaHUMBDG1tus49cszOv0TOUOshB21EsNPsv/k80/d1NkJLCMyRVUpMGwKb8PSyV0Ami/8yjXuDXs7rhxlSRyGOFb2q2BE/6lN4AqL6uHwR8x8Awg+KOWcUjgnIYRJokn11jkldwd460xx30sA=
+	t=1768471207; cv=none; b=T1L2GyIj5y0gDLbOQ/YGrlGOCYUHgUIzYnBGZf/WkOkR7p4ICWB/3D62U8aEOdSTyR/FJXndc64ixHXIm9IvYeJgBMCIG4vcQTk4opkjb75TA7wIWrDJPjCG4WPFOaHxnjpAhyTfSjEmDHRX7y0aP7c4Fwwkd1MxM+lOz9jgJsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768469963; c=relaxed/simple;
-	bh=mBx+fIz49RnYEGumbLcy300xsMIP1MaxNQOI4ctMKv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sOC9scmYvtcCmUykZoGetktQ2KUzCAdKaI2SDzXtqAhYTiJcs6huPqOuiqGZBo5QsoqIZIfbgf9H9yt/zlE/VOUgo4OFKnzG/8sbl2IonddvhRPlFQGEGuKw4xA35cmy1fu7ZMmkMU8WgpALMigAsU5qBvPTOPtMIdwxrLoWia8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qXgAS7WS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E5CC116D0;
-	Thu, 15 Jan 2026 09:39:21 +0000 (UTC)
+	s=arc-20240116; t=1768471207; c=relaxed/simple;
+	bh=Zv6Sn17Kk12Fxbp+tTZ9RBpea7xRHv4mTszSrMQAUo0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=NoFU5hTtE+1EOybwsJg2EkGwwvXYJWsAWR4ee5cX5YkBWOk5P5Y0y1S9TulA0mqLAsDXWZoDHaSr15UNSSPresEF685408pL77clhg8Cwhich6LfrBeZCpl5F1pNXYCJFTOAMk22el3F7EstuM/jV6rKFYZof6iQsJS5jpT0Zzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=etyY3ota; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C21C116D0;
+	Thu, 15 Jan 2026 10:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768469962;
-	bh=mBx+fIz49RnYEGumbLcy300xsMIP1MaxNQOI4ctMKv0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qXgAS7WSEZWb8uBcsXbcLyta62IWCfXW3oyaPnXnNkmhIvEXMuw+FHiacgJLyidLD
-	 i8aFCvrAa2k9K5NEOFk+bo9pDbqf/fImM0gXkULtVq8F5MQhr932V9RL0AbVQqfQLX
-	 FG6D7avy/PwL8K5/uE+rdG3pS8/L7F35LO7Slr9gIm1eRRdMaqhp/th6DtGTNPsvNI
-	 vxCrBQhE/VgxzNmwEXG69XurVA8aw/69I7IIy3Ag9oZdiInkUwdbHzhqCFdBPVS8Zp
-	 CMfw04vpjMTmvaBjv0JeOCwEGhVIhTpGtOPpXZuKdADo9R73iIQKXOdj2psSK3dixQ
-	 tZLXjNUBs70rg==
-Date: Thu, 15 Jan 2026 10:39:20 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Haibo Chen <haibo.chen@nxp.com>
-Cc: Han Xu <han.xu@nxp.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, linux-spi@vger.kernel.org, imx@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] spi: dt-bindings: nxp,imx94-xspi: add nxp,imx952-xspi
-Message-ID: <20260115-imaginary-banana-beaver-7b45ea@quoll>
-References: <20260114-xspi-imx952-v1-0-acc60a5a2a9d@nxp.com>
- <20260114-xspi-imx952-v1-1-acc60a5a2a9d@nxp.com>
+	s=k20201202; t=1768471206;
+	bh=Zv6Sn17Kk12Fxbp+tTZ9RBpea7xRHv4mTszSrMQAUo0=;
+	h=Subject:From:Date:To:From;
+	b=etyY3otas22ai8opQ+Qxgw4anP/jw8mM8Ply1HODP/aeo1NFBvrUm4MicO31xrj3N
+	 MdJt3ueSO7pdvsvmvM54UBtmN8Ll32lYisnub3h/hH4ahjkAUwY4lRK8KauOqXK2G3
+	 12hoamEDVEAtcfh0DOnKqb3ZONeNYbbQos6dVCFTgwtRWAhS6HXJeTRgcYkryiW/ud
+	 /AyY8JO2JYNJpgcpYkEGEYoUz4Kiwi5EK0rjJ1Cw6a1ZAco86+lwZ8tBjKydnxtKnM
+	 thRKl1r7mZso6NlqPRnNldDvkAO2p5UA4U6kwn1Gs4uLCGgIPF91vS+FZm4GDyjmxe
+	 5Ac5Q8UemfP0A==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3C007380A95F;
+	Thu, 15 Jan 2026 09:56:40 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260114-xspi-imx952-v1-1-acc60a5a2a9d@nxp.com>
+Content-Transfer-Encoding: 8bit
+Subject: Patchwork housekeeping for: spi-devel-general
+From: patchwork-bot+spi-devel-general@kernel.org
+Message-Id: 
+ <176847099895.3920084.2387210167591702426.git-patchwork-housekeeping@kernel.org>
+Date: Thu, 15 Jan 2026 09:56:38 +0000
+To: linux-spi@vger.kernel.org, broonie@kernel.org
 
-On Wed, Jan 14, 2026 at 02:49:45PM +0800, Haibo Chen wrote:
-> Document i.MX952 XSPI compatible, which is derived from
-> i.MX94 XSPI.
-> 
-> Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-> ---
->  Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-> index a0f4b162c85855c55d06c6ea1a2417af5121fab2..16a0598c6d033554ce5a42a13a3265315a16992e 100644
-> --- a/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/nxp,imx94-xspi.yaml
-> @@ -15,6 +15,10 @@ properties:
->      oneOf:
->        - enum:
->            - nxp,imx94-xspi
-> +      - items:
-> +          - enum:
-> +              - nxp,imx952-xspi
-> +          - const: nxp,imx94-xspi
+Latest series: [v2] spi: cadence-qspi: Add Renesas RZ/N1 support (2026-01-15T09:24:51)
+  Superseding: [v1] spi: cadence-qspi: Add Renesas RZ/N1 support (2025-12-19T19:22:02):
+    [01/13] spi: dt-bindings: cdns,qspi-nor: Add Renesas RZ/N1D400 to the list
+    [02/13] spi: cadence-qspi: Align definitions
+    [03/13] spi: cadence-qspi: Fix style and improve readability
+    [04/13] spi: cadence-qspi: Fix ORing style and alignments
+    [05/13] spi: cadence-qspi: Remove an useless operation
+    [06/13] spi: cadence-qspi: Make sure we filter out unsupported ops
+    [07/13] spi: cadence-qspi: Fix probe error path and remove
+    [08/13] spi: cadence-qspi: Try hard to disable the clocks
+    [09/13] spi: cadence-qspi: Kill cqspi_jh7110_clk_init
+    [10/13] spi: cadence-qspi: Add a flag for controllers without indirect access support
+    [11/13] spi: cadence-qspi: Make sure write protection is disabled
+    [12/13] spi: cadence-qspi: Add support for the Renesas RZ/N1 controller
+    [13/13] ARM: dts: r9a06g032: Describe the QSPI controller
 
-You never checked your DTS and broke all existing users. And existing
-tools would clearly tell you that if you tried.
 
-Use tools instead of reviewers. Reviewers time is more important, so if
-you just disregard it I find it quite disrespectful.
-
-Best regards,
-Krzysztof
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
