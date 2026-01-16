@@ -1,167 +1,162 @@
-Return-Path: <linux-spi+bounces-12431-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12432-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04E6BD2F41B
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 11:07:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7B8D2FC44
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 11:46:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 628B1300518D
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 10:07:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E2DF630517ED
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 10:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F6A35EDDD;
-	Fri, 16 Jan 2026 10:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA9E435C181;
+	Fri, 16 Jan 2026 10:42:07 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB9635BDDB
-	for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 10:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E133612E7
+	for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 10:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768558040; cv=none; b=MUpf/W6l4lIzOaJszOuv+okeA20/d5tzIhPlkZBKgpR6QJvV6uyWFwNwWJljfSbZ/uhrslCQCUhz/rSSg35iruvlkdM3NP202ciAO1SKc6UQYGPCwtTELTxgAdF5ORWR9A9VsRS9vyDU9Sk03wfKNPK3eGrdWg3mhrhDqp60x8c=
+	t=1768560127; cv=none; b=P4nJXWXfrvp64135awq7jgy7Yb87i6i4rpo3b0FTanHD5ea2NW7SGpiKOTokNJlPM+HJ/TRuu/B6Q2/0nPFclYk6tzUsBfT/YtyWIHM96vzOHC4DTpA2ZO95ac0cTqq/bd+aNBMvQskXLHaMZON99OPtyTFfvAJSJBY0CYvoRZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768558040; c=relaxed/simple;
-	bh=vFDSKDXTht/uJMvnTP9p1krfHXltHzGUh32WOHuB08M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Uyu/QdquzpxrN4knBZob/MWGdkO3yPT00yVKPD9SrJq7yUkK9hwA9+G1ZdpFtdbxy6Zl9LubuMucU+68qT4yhmaZLv4EEQADNwZuyPl8ztwXTQNIPshuWDjxS7hApRcBQENHyE7KjLsng4cZ5mLDzBYLSaTzl4d1e742nm/bueM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1768560127; c=relaxed/simple;
+	bh=khagCyvCtlkZkLZ6tMgMbBbh4jk4K8LYJ0uHpPx08zA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=XSkQixqPfu8FIKigHLIi98/yXGVVCaCIt5seAswkocP9LDpWM12QITZfXVA7Mxo+vd4vIpvHVHOz8rFUfgfSpfg6TIx+u31+gVY2ELsITILg1/LrHHhBdpzSCsjq3XyHc06XxwZvs3Yieoq0NWUK4aRwwJUTwi36GP+em15av2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5635f6cb32fso621453e0c.1
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 02:07:18 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-4041500d9c3so1182153fac.2
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 02:41:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768558037; x=1769162837;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qn67cUMU39CUXsSSgwxUh1den8X1/rN7e8d6+1v2Oh4=;
-        b=qk0Fy1MZ8bBb1kUwJV6EtaePQme7by+1yetn8Gqf6FDN3KTpsCituXfv982lTsppvs
-         C0A3nh+VWRI3kIPDckDYBdbw1VI9rLD+mcvkichYL9CG4Y05zXw0ogZlrJf9icll7xUS
-         VWbZbuPwUqC88sLaOjHt/5JwsV2uRSXYYjs2E8HgKdawSzQo/LsuTanYMZvXGziJBr3D
-         psvy6Uz03X+1KuM2TTxb2P2q+C3DcTkl9leaSk89SBtby/gMfMNGhGTaqRgFWMj/Yy6I
-         QRYBhVGTpXk9OAc8Ruo34HekmLARnijViYV+lwcFt0TQMl9bSKymrDs3t/NoetIT/sRr
-         XNMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWJe/ivYoMEs3bW4BFhH+Uu8TWIs3E4OIBYGA3hrI6SaKtpkVB/HOUfeNmgMgL8uzqOjUdOIXXxD+A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNy2ftNukb6OBrw0rIW9fiqZLgt9NTPpFTyNdpPpCsBZLRu4rn
-	eeNpR6+QMFrANFcCC9n+q5TyabMvXe4BK1B/w4fL+JJGElMhF1vQQkIEFUz/7z8YnCA=
-X-Gm-Gg: AY/fxX5XL+pSMFbvn6rFUWwWCCFNHI2Bv6LSSVhRyLj9rhEXteNEuEX1lPF2vx1U+Ul
-	ZRAQHCgvtdQabL5qpPKsP1hU2Z85KOnVJpojZ8R5If+xMo/QSYh56WlqcmWVaGnZgXkUpyL8rA+
-	fJxY2EhzGSckOmvdVuh0kTys54I1tYV0+k+eQ+XiCz6OkGqKsDuIEXZpd3R9nHbpdZsh61uH9pQ
-	AYeZJWBE5dlOUE2jfRtRvlB+7ISw3VIvIKFgH+bLMXkk8R+KANSYK5KlldWuuQNDZYZttYW07/3
-	Z2cr1PXC+TUttjXUoK+JE2XoeSj3XV94fZzG0dcI+DKfvp8Hwrs2GUY3OJv/rG7gmjQtQfS2/fw
-	xm2BkpUa55zOSXtRafYYTS3htz6CcTwS9tFfe4cP1XMeaF/+RTfLSFsxdRs4t6tYZFy3CSORT7x
-	9c7mMtKkJAyHcKOFUYrD9E2kr607y5ziF09QmLCEj0pp8FXOzh
-X-Received: by 2002:a05:6122:1312:b0:55b:180f:fed2 with SMTP id 71dfb90a1353d-563b5b69ceemr794050e0c.2.1768558037527;
-        Fri, 16 Jan 2026 02:07:17 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-563b6ffeebdsm514804e0c.8.2026.01.16.02.07.15
-        for <linux-spi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jan 2026 02:07:16 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-941275fece4so472133241.1
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 02:07:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVV1VqEQ+gG19xFLErpw7pdjyQtdXbILkOEQaX8TmygsZrIPOl9lhrq31ocltmQr9Ttt5Itk8sKJ8g=@vger.kernel.org
-X-Received: by 2002:a05:6102:6d0:b0:5ee:a8c4:18f2 with SMTP id
- ada2fe7eead31-5f1a552a486mr757624137.26.1768558035521; Fri, 16 Jan 2026
- 02:07:15 -0800 (PST)
+        d=1e100.net; s=20230601; t=1768560117; x=1769164917;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=kWP/17hgPXs1aPCeyH6zzzFq2BcuhKEIrKVBaeDul+c=;
+        b=K72ot7EcLNzq6yB4bHkk65ilDUSvtFZVXkNXrIbNSNB4+XYigQqNI2UptJAxA/+1AM
+         zxnl/90CNCqE1grONRv50Tm672kWfHFxnVOrldMaqzOr2AgwMctEJaKI/vITPX21NlyT
+         TNYIxgWjCNXmgaBAqqUu2UB87yzrcfy2c6OUHhiMOyr43bnk6JeV/LKpcM8MWKXOEwV0
+         EnNwa3Tj5SUx8xqdvRCfDbhKACzxmqyfjGD4WgjMzIgY+QgkIg1tD5hz2lKp/jH1BES6
+         MHo9+VbEP2M7O388igCuXMWm8B2sB2jAnVkdAZK4yfA82LJty04EY33wKqM6rR5eKnBV
+         cOrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWXLk8MFUgY0IC6ypXpIWR5FgzSzRXNdPgw/B2p63jEDLPFTxczfKhRJC8D8yt9Btqzx1DdgD7YNOA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwUDmMYJ5i0RCekHzkHOtGCemX5pMl7hee1IOwI4dIsoJq4Qv6
+	CBd/r6aioEn3VsuhOdSPCy/a/mphVSDXRj7gz14RQKVg6ix5HOIVb4Rx0NXLwQ==
+X-Gm-Gg: AY/fxX6v9aZD8BWWnkyGzmtJF67Kj0hnuEmsI1townFlnmAw1gwCCCEV5VsMN5Duq6V
+	q4Hm7x80rXLj2RKWJp8MQaRmTHtq6/kQsMDbO2DTuDs99IQShSjg0XZBOtbFKZX4eH0LfWKELe7
+	fqXHppVjcvidna7S99rDh4MC2OvC76sws3YT3LtBgJV41Xn+9TpJTYJcgFNLPjfgDFKQrUGV5Rp
+	pnGbYwCCSzLz+kMx9u9k12+fP04FJh8klylCRlFQPTIHQnvzk8LZYW1oPrbwslP69ynphs8E9FL
+	zbN+wNxeh5mLW6RsGY+Si6DjW6WnGJ3LbQUo1zZ6irG8v8YBxOpdZN4lRwDQrxnvJmdl+I05ut8
+	hht2OZeZum6X30gwxw3vK6Zy5YrtGSTWkYRQVwlSQMvxdY9iB3bSMs3b2OPo9Rb8Ho/G41sAWO1
+	77Yg==
+X-Received: by 2002:a05:6871:7813:b0:3ec:495a:74f2 with SMTP id 586e51a60fabf-4044c1646d7mr1294805fac.3.1768560117088;
+        Fri, 16 Jan 2026 02:41:57 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:74::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4044baf5402sm1498837fac.4.2026.01.16.02.41.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jan 2026 02:41:56 -0800 (PST)
+From: Breno Leitao <leitao@debian.org>
+Date: Fri, 16 Jan 2026 02:41:41 -0800
+Subject: [PATCH 1/6] spi: tegra210-quad: Return IRQ_HANDLED when timeout
+ already processed transfer
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115-schneider-6-19-rc1-qspi-v2-0-7e6a06e1e17b@bootlin.com>
- <20260115-schneider-6-19-rc1-qspi-v2-13-7e6a06e1e17b@bootlin.com>
- <CAMuHMdUHwqBrNMQTO-g7yUA_owWXxT6bPi34Oxjt-J7N0Q2CXQ@mail.gmail.com> <87ldhxubt5.fsf@bootlin.com>
-In-Reply-To: <87ldhxubt5.fsf@bootlin.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 16 Jan 2026 11:07:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUqWUriQHR8UY631HZfVNsejgXE64jrChi=k2=5E6Hi-Q@mail.gmail.com>
-X-Gm-Features: AZwV_QiKDKKs-kGw2MFPAKLM-ZDRg69LJFyTkD_IY3NAlTAe2l416xADsDXNbp0
-Message-ID: <CAMuHMdUqWUriQHR8UY631HZfVNsejgXE64jrChi=k2=5E6Hi-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 13/13] ARM: dts: r9a06g032: Describe the QSPI controller
-To: Miquel Raynal <miquel.raynal@bootlin.com>
-Cc: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Vaishnav Achath <vaishnav.a@ti.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	=?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, 
-	Wolfram Sang <wsa+renesas@sang-engineering.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
-	Santhosh Kumar K <s-k6@ti.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Pascal Eberhard <pascal.eberhard@se.com>, linux-spi@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260116-tegra_xfer-v1-1-02d96c790619@debian.org>
+References: <20260116-tegra_xfer-v1-0-02d96c790619@debian.org>
+In-Reply-To: <20260116-tegra_xfer-v1-0-02d96c790619@debian.org>
+To: Thierry Reding <thierry.reding@gmail.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, 
+ Sowjanya Komatineni <skomatineni@nvidia.com>, 
+ Laxman Dewangan <ldewangan@nvidia.com>, Mark Brown <broonie@kernel.org>, 
+ Vishwaroop A <va@nvidia.com>
+Cc: Thierry Reding <treding@nvidia.com>, linux-tegra@vger.kernel.org, 
+ linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com, puranjay@kernel.org, 
+ usamaarif642@gmail.com
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2295; i=leitao@debian.org;
+ h=from:subject:message-id; bh=khagCyvCtlkZkLZ6tMgMbBbh4jk4K8LYJ0uHpPx08zA=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBpahXyAb/i58UaGRiL76BUEpdcuRkwVBGWYlv+W
+ lA7tLbrr6uJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaWoV8gAKCRA1o5Of/Hh3
+ bQofEACn9qUAZwrQbBKzcIOJAksw0DvoG4SxaSBDlerjG0lmRbJQSoQPYp2dMSizxEBY2shLfxm
+ pNp4M6LxXS4zcdnty36YkkL8Jh14lwjAQ2xgi7TtQQ/SjpnSaiR8cllpfIYstfsXQwXfJYy15sQ
+ ueGr+Roc8VzOCXPpfZT35HmBzzbmJTvAqcXcN25p/l/NkxTFTFtkVryEkX16w2ga2CRZwzgduhW
+ Zbunji5OdwIprunh/dtmgFa0iGhgUGhR0/5+m96RuzNmwPAyzOOAaN608h4mqRYRht/IUl2gBJZ
+ 75nX6BecBJ+JACOnkptjhcr4pa3qdMXeQhAuXJu7VAAJG2hZY8d0w8I9lvlE64gAjVMkevYG/DH
+ wPa8XmYchMxGkeeI/3aAMm/AYbwxsxf1YJrP0Gc2EeuAF7Lxq4xsL6UnYqbgkGJ/xyrekc/TjW2
+ DDP1g2PWWtiBS02Ub4KjGvYX1AdT5FMFlkNwvT4bRT8L3oHDuaMsin9bPXkK17z0Q+FIUT02e5B
+ SgFzNsW9+CQUNkLDpt5MEbwAwK9xqBDkf/pmgjl9Tc6eQyk/xqPoY8ZGFZypvzMHij+iH2TGWGq
+ OqDj+MJGbpKFrXkNsGHjxl04qhIY/EG7pNEPnT7igiFygbbQY1gziazmd0PMtZkvuBatarJUGu1
+ 5LxcHUZpR+D0VEg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 
-Hi Miquel,
+When the ISR thread wakes up late and finds that the timeout handler
+has already processed the transfer (curr_xfer is NULL), return
+IRQ_HANDLED instead of IRQ_NONE.
 
-On Fri, 16 Jan 2026 at 10:49, Miquel Raynal <miquel.raynal@bootlin.com> wrote:
-> >> +               qspi0: spi@40005000 {
-> >> +                       compatible = "renesas,r9a06g032-qspi", "renesas,rzn1-qspi", "cdns,qspi-nor";
-> >> +                       reg = <0x40005000 0x1000>, <0x10000000 0x10000000>;
-> >> +                       interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
-> >> +                       clocks = <&sysctrl R9A06G032_CLK_QSPI0>, <&sysctrl R9A06G032_HCLK_QSPI0>,
-> >> +                                <&sysctrl R9A06G032_HCLK_QSPI0>;
-> >> +                       clock-names = "ref", "ahb", "apb";
-> >> +                       #address-cells = <1>;
-> >> +                       #size-cells = <0>;
-> >> +                       cdns,fifo-width = <4>;
-> >
-> > <4> is the default, right?
->
-> It is the default in the bindings indeed, however the driver does not
-> imply that default and errors out if the property is missing. The
-> property is also marked required in the bindings, which is kind of
-> incorrect I guess. Also, all DTS explicitly set this value to 4.
+Use a similar approach to tegra_qspi_handle_timeout() by reading
+QSPI_TRANS_STATUS and checking the QSPI_RDY bit to determine if the
+hardware actually completed the transfer. If QSPI_RDY is set, the
+interrupt was legitimate and triggered by real hardware activity.
+The fact that the timeout path handled it first doesn't make it
+spurious. Returning IRQ_NONE incorrectly suggests the interrupt
+wasn't for this device, which can cause issues with shared interrupt
+lines and interrupt accounting.
 
-OK.
+Fixes: b4e002d8a7ce ("spi: tegra210-quad: Fix timeout handling")
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ drivers/spi/spi-tegra210-quad.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
->
-> However looking into the RM I found "Transmit and receive FIFOs are 16
-> bytes". I haven't tested that, I will.
-
-Oh, that bullet is not present in the docs on the CD I looked at.
-It is indeed documented in newer versions.
-
-There's also cdns,fifo-depth, which thus should be 4?
-
->
-> >> +                       cdns,trigger-address = <0>;
-> >
-> > Where in the RZ/N1 docs can I find if these two properties are
-> > correct?
->
-> This property is mandatory. Maybe I could just discard it for my
-> compatible, because it is only relevant for indirect modes, which are
-> unsupported.
-
-OK.
-
-> >> +                       status = "disabled";
-> >> +               };
-> >> +
-> >>                 rtc0: rtc@40006000 {
-> >>                         compatible = "renesas,r9a06g032-rtc", "renesas,rzn1-rtc";
-> >>                         reg = <0x40006000 0x1000>;
-> >
-> > The rest LGTM, ignoring my comments on the bindings:
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
->
-> Thanks for the review, but I guess if I end up changing the DTS snippet
-> I might drop it. Or would you like me to keep it anyway?
-
-Please keep it as long as you don't change the (SoC integration)
-things I typically focus on (address, interrupts, clocks), and don't make
-too wild changes ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+diff --git a/drivers/spi/spi-tegra210-quad.c b/drivers/spi/spi-tegra210-quad.c
+index cdc3cb7c01f9..f0408c0b4b98 100644
+--- a/drivers/spi/spi-tegra210-quad.c
++++ b/drivers/spi/spi-tegra210-quad.c
+@@ -1552,15 +1552,30 @@ static irqreturn_t handle_dma_based_xfer(struct tegra_qspi *tqspi)
+ static irqreturn_t tegra_qspi_isr_thread(int irq, void *context_data)
+ {
+ 	struct tegra_qspi *tqspi = context_data;
++	u32 status;
++
++	/*
++	 * Read transfer status to check if interrupt was triggered by transfer
++	 * completion
++	 */
++	status = tegra_qspi_readl(tqspi, QSPI_TRANS_STATUS);
+ 
+ 	/*
+ 	 * Occasionally the IRQ thread takes a long time to wake up (usually
+ 	 * when the CPU that it's running on is excessively busy) and we have
+ 	 * already reached the timeout before and cleaned up the timed out
+ 	 * transfer. Avoid any processing in that case and bail out early.
++	 *
++	 * If no transfer is in progress, check if this was a real interrupt
++	 * that the timeout handler already processed, or a spurious one.
+ 	 */
+-	if (!tqspi->curr_xfer)
+-		return IRQ_NONE;
++	if (!tqspi->curr_xfer) {
++		/* Spurious interrupt - transfer not ready */
++		if (!(status & QSPI_RDY))
++			return IRQ_NONE;
++		/* Real interrupt, already handled by timeout path */
++		return IRQ_HANDLED;
++	}
+ 
+ 	tqspi->status_reg = tegra_qspi_readl(tqspi, QSPI_FIFO_STATUS);
+ 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.47.3
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
