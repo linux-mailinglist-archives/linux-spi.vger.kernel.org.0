@@ -1,217 +1,111 @@
-Return-Path: <linux-spi+bounces-12442-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12444-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4BCBD30D9E
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 13:06:59 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33EB5D31C2D
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 14:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5C522304D87C
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 12:06:50 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 748D130069B0
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 13:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2279838757A;
-	Fri, 16 Jan 2026 12:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A882652B6;
+	Fri, 16 Jan 2026 13:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CqX9fna/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CR9VgakF"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D57A36C5BA
-	for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 12:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F1123C512;
+	Fri, 16 Jan 2026 13:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768565210; cv=none; b=JvDj3SUaU5AvBzhDnMQPH79SSIuWbjtg2CJrXXlxblJ0NicuRzSt4gafW14rNPc/dd734g4MClSWHDgjZWXASsJl0+rhw7wIQvpdCuDc3Ad2X5EEGp/Lm6z7pkUfVbwmsL4qTBuQtHJp9tM/rMfsfntM/mKcTpzuLkxz6RWkBtk=
+	t=1768569852; cv=none; b=AUdi5DLeKbfURpol6qQhHnYPQIktD4SIjB/J37NyOp3udKEhl4iFslkjxf4BtbtzixEirsILtOVFqNKUs07a6RmSvAQ8MusR5j9cEiwW1p61bIIRrLl5Y2IykH3pvUluINtqzVRZHQeKIe95/zY1K9gRrOpYCvcZ2s30k9EXPGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768565210; c=relaxed/simple;
-	bh=1Chm4qipOR1WWNJw+O37Qjdt4PyEzHqmBOZXUvxyCu0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UzrIxuQ5kr4Pfh5vA46Enj5lMSz2i7e0SoEaFthPPjYOmbjw7new65SoVvn8o83tNb+l2MryDdsLHQGQVcZ5T89lun8ZQMX92JTaSidinSh2Sg6LwNtElSg+E9GoxKBpTH+6w0j1Hd8Rl8AhERYv8W97VvbaNHfdojDHWxBZdhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CqX9fna/; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-430f57cd471so1108380f8f.0
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 04:06:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768565205; x=1769170005; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yXtJZmoS9jbqcWFLtnf9b41r+qZwCl52nnOgeevwdjw=;
-        b=CqX9fna/TkuMGLmGDXtgVyLkMJB+2uCg/6XgerpsBX5HGoDKQekvpAbp84rt+sV2xh
-         lnR1NRu1jo2g99apq0qGdFSa/DxZoNdAGjlcYA2Yah79Jt23GPaI38SqYjXcC/CaCqtu
-         zhiuDXT2/epR9sySJN05qWG+D3nqaXPHtBauEfF2CL502dZMXYjYMYjChDouJBtA1Uvl
-         KO7hfpbMRlHjkl19gGQCYR5D+TpByjoYZyOze+3qlXP2M2wYMb15sYBALUdDBjvRSb1B
-         dQfq9L2GPVoOVs4mYJfKbY5m5aToxnB13z95j4qHKBHp1jVSwgylreX51x+LuoJmYkif
-         dQoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768565205; x=1769170005;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yXtJZmoS9jbqcWFLtnf9b41r+qZwCl52nnOgeevwdjw=;
-        b=Dl5C6WYLMDIofzjhJxJVdnusQvJSnup85kRa9u1mAvzT72DykV2EbTc1W3v4MlTeXm
-         yo9P/86NEm0B37xuRM8/QnyfwfKzmrmALdotuKHhGOie44KO4ms3NsCeZK1sXkjMFZ12
-         KJmAJipMVD+p1slqGPza2C1rigAEGQKarb5X776RYtX5nSBhukZFqMBj/WQXvnI6l/3T
-         TAIu7xDiQYUV/aRdC/J0bnfYCs134TXS9Z72dIe5Qz6vbYzj+98C/4o+Rqw8ui5z4NyO
-         E5kqcBS2oAZnc5CR5Wzx7I2KfBmT8SgFtH4zy27I2Roxs2B06QFtd9J4wgHe082+XyAc
-         HTuw==
-X-Forwarded-Encrypted: i=1; AJvYcCXgS+i3LbMQz5tBvbVyWECzfyTrLlqEJKDSThicQq7qkG/AOrOBpTw8R0mfUAJmZSAbwdFjNbei7zk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZzq1lsNTpODH99d7SIf3A3PIENt7OxVGHCARRLoC+XC8XmNeQ
-	RKTcI//4gvpjnsWBFG+0GjTGBgwe+KtM+uxi+At6WDwGAkSWHQJo9KT9
-X-Gm-Gg: AY/fxX7BlYSUgBeqwCI6lo47MRpU9hOYjdE5hOC1iEZbxPRlLNqCIQPHX+d+e7A+1ud
-	NICcyh/MOu+DlJawSPozg6zBm1utFTKdk31K6BZXC4YBtD9usAkQ2S84SM+lvuWRpD6A4riqJxS
-	wrQ2Or/sZjtKZbqOBKsF0OUcj22/hZoV+9zlepjRWMXOjXJsAA8y+dgBF0YwyVNU3edcsz2LHP0
-	YQvrS1+b1hYfAZ8KLQv0eb4nLdhTVBlYWa6TMKo6uU5l6QdQ17k5RFJlGouFR33tvxvh+vc6SmW
-	nhoegRFTQXLEh3PaQHYqCV89QkFKELYZByaYCTo905rXcpmuvBXuxWhBXB2PT8rC7acCMiWVspU
-	pICBzIx/ato1IU3nkNh86lUBdN+8zGFUS9BGIVA5LkNRC4d++JXOgd1oeJ/J/QuCneEuEYxBqhX
-	g8HXV4n+cK5vUrjMNCtl/DmlwHcAhaY3PxdGlpMqJ4YoNzxZ8VeuHhHmVNqUCk6vKmHKPGlDpOD
-	A==
-X-Received: by 2002:a05:6000:2c0c:b0:42f:bc44:1908 with SMTP id ffacd0b85a97d-4356a0249b0mr3007911f8f.6.1768565205117;
-        Fri, 16 Jan 2026 04:06:45 -0800 (PST)
-Received: from orome (p200300e41f0ffa00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f0f:fa00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356997e6cdsm4980007f8f.31.2026.01.16.04.06.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 04:06:43 -0800 (PST)
-Date: Fri, 16 Jan 2026 13:06:42 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Usama Arif <usamaarif642@gmail.com>
-Cc: Breno Leitao <leitao@debian.org>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, Sowjanya Komatineni <skomatineni@nvidia.com>, 
-	Laxman Dewangan <ldewangan@nvidia.com>, Mark Brown <broonie@kernel.org>, Vishwaroop A <va@nvidia.com>, 
-	Thierry Reding <treding@nvidia.com>, linux-tegra@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com, puranjay@kernel.org
-Subject: Re: [PATCH 1/6] spi: tegra210-quad: Return IRQ_HANDLED when timeout
- already processed transfer
-Message-ID: <aWonUKplkzM2unQV@orome>
-References: <20260116-tegra_xfer-v1-0-02d96c790619@debian.org>
- <20260116-tegra_xfer-v1-1-02d96c790619@debian.org>
- <9d845244-bad0-4e7c-8f7c-bd3224cabac4@gmail.com>
+	s=arc-20240116; t=1768569852; c=relaxed/simple;
+	bh=n3iW2Tj+vCxQwVgYlwOE8woENlPxrgCzFts6M+ARsAM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WoldAbqitMYeBIoZ6ecCis5rhyn6/5mxLF30BsSSOhOGxsXgSQSbt0Q9miapantLYzNmkNb8lLjCBEgKQUN0LmSQ9N45oxpVrAzFJiis5hOwjY9i7BJXUBPfg31f1qEJTu63CVOnxA0e22TXg6zqrzSuWL+E/2IZaztSEpnlihA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CR9VgakF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C34C116C6;
+	Fri, 16 Jan 2026 13:24:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768569851;
+	bh=n3iW2Tj+vCxQwVgYlwOE8woENlPxrgCzFts6M+ARsAM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=CR9VgakFnZ32Tn4Bud5kKBJQ4vKOrem9l4rK6FPaU8V4Z/nrOVK+SyU62j9RBSSLq
+	 GnkLaJQC+VXQCK9ZLvUv8ic1ogM8vWNei4y1rGj6ZPHKOQklJulLkeUww+xRkKxJyh
+	 nAa34r76fRvltLMUZ3PBZVd4zIYkvH3JPwkLufsNiSnDxTO1LjBKTufVqH88qI/Epq
+	 bZuFfrAVmRXeBw0VrWSm/VSiDhl9zxN81B2Ntixuck/XcbyK7B7q6gtmFqewykIgmH
+	 Jo70tdHJSEYM6RgSSuPvCcbfERAbqDhA4NpcpHHcPbqykzKo4aieT2fwDtV6g72FhO
+	 afUONp8i4GoYQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Fri, 16 Jan 2026 13:23:40 +0000
+Subject: [PATCH] spi: rockchip: Use plain request_irq()
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4ag2pcqryjkcrfgu"
-Content-Disposition: inline
-In-Reply-To: <9d845244-bad0-4e7c-8f7c-bd3224cabac4@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260116-spi-rockchip-threaded-irq-v1-1-c45c3a5a38b1@kernel.org>
+X-B4-Tracking: v=1; b=H4sIANs7amkC/yXMQQ6CQAxA0auQrm0yRSXBqxgXMK1ONYGxBUNCu
+ DujLt/i/xVcTMXhUq1g8lHXcSigQwUxdcNDULkY6lA3geiMnhVtjK+YNOOUTDoWRrU39tSciAM
+ fW2qh9Nnkrsvvfb397XP/lDh9h7BtO5/Jyf99AAAA
+X-Change-ID: 20260115-spi-rockchip-threaded-irq-b1641d0d3919
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: Aishwarya TCV <Aishwarya.TCV@arm.com>, linux-spi@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1355; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=n3iW2Tj+vCxQwVgYlwOE8woENlPxrgCzFts6M+ARsAM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpajv5U/lesGnmB76mqSKLV43KjffKXBwaNmwv+
+ NzWMRlI02iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaWo7+QAKCRAk1otyXVSH
+ 0CwGB/9/rGyUTjSO6Hyo6yX5Kteocrj34723rjZQgoAAfZzMecwg9BstwYHILNZ7ja/h3JtyN8L
+ rmY7/4Vb4FuZPJGYS/62FJxRHpWHEP0GSfZTE+fr1D5RC49x8VkVWetwcgVz2sKJDv1tJJpKmL1
+ LSMk3LpP5fhkww3jsZC0STIpIcmqqnJbUKMQPesuXDb5uCiRP3njbLr3MZSr6LwbULqSVh98HVN
+ tOxbppgq9jJmXlUb+eB8h1tciMBgcri3899j2dqooCD4fd/kiGOSzmWAbsAKS6OJhdxNwYGtvlR
+ uJ7JKz6GHSiCFNH7gQ2z7qjOIR0DjxXBGz+7Wzo+bqrGCwlT
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
+The Rockchip driver has since interrupt support was added used
+request_threaded_irq() but not actually supplied a threaded handler,
+handling everything in the primary handler.  This is equivalent to just
+using a plain request_irq(), and since aef30c8d569c (genirq: Warn about
+using IRQF_ONESHOT without a threaded handler) the current behaviour has
+triggered a WARN_ON().  Convert to use request_irq().
 
---4ag2pcqryjkcrfgu
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/6] spi: tegra210-quad: Return IRQ_HANDLED when timeout
- already processed transfer
-MIME-Version: 1.0
+Reported-by: Aishwarya TCV <Aishwarya.TCV@arm.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ drivers/spi/spi-rockchip.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-On Fri, Jan 16, 2026 at 11:48:44AM +0000, Usama Arif wrote:
->=20
->=20
-> On 16/01/2026 10:41, Breno Leitao wrote:
-> > When the ISR thread wakes up late and finds that the timeout handler
-> > has already processed the transfer (curr_xfer is NULL), return
-> > IRQ_HANDLED instead of IRQ_NONE.
-> >=20
-> > Use a similar approach to tegra_qspi_handle_timeout() by reading
-> > QSPI_TRANS_STATUS and checking the QSPI_RDY bit to determine if the
-> > hardware actually completed the transfer. If QSPI_RDY is set, the
-> > interrupt was legitimate and triggered by real hardware activity.
-> > The fact that the timeout path handled it first doesn't make it
-> > spurious. Returning IRQ_NONE incorrectly suggests the interrupt
-> > wasn't for this device, which can cause issues with shared interrupt
-> > lines and interrupt accounting.
-> >=20
-> > Fixes: b4e002d8a7ce ("spi: tegra210-quad: Fix timeout handling")
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> >  drivers/spi/spi-tegra210-quad.c | 19 +++++++++++++++++--
-> >  1 file changed, 17 insertions(+), 2 deletions(-)
->=20
-> Hi,
->=20
-> I am not familiar with tegra SPI specifically, so I might be missing some=
-thing, but
-> I was wondering if its actually better to not handle the transfer in time=
-out at all.=20
->=20
-> We have 1000ms before timeout and I feel like that should have been enoug=
-h.
-> Looking at other spi drivers: imx, fsl,.. these dont handle transfers in =
-timeout
-> and are therefore lockless. tegra_qspi_handle_timeout also at the end che=
-cks
-> if for some reason the transfer fails (although it looks like handle_cpu/=
-dma_based_xfer
-> cant really fail?), and would just return failure.
->=20
-> Removing the attempt to transfer in timeout will get rid of the spinlock,=
- all the bugs,
-> make isr handling quicker as you dont need to acquire a spinlock (which m=
-ight lead to lesser
-> timeouts?) and makes the whole driver much more simpler. Or maybe I am mi=
-ssing something?
->=20
-> I have a potential untested patch below for how it would look like. We ca=
-n work on testing this
-> if it makes sense to the maintainers?
+diff --git a/drivers/spi/spi-rockchip.c b/drivers/spi/spi-rockchip.c
+index 1a6381de6f33..62e1bc08c940 100644
+--- a/drivers/spi/spi-rockchip.c
++++ b/drivers/spi/spi-rockchip.c
+@@ -805,8 +805,8 @@ static int rockchip_spi_probe(struct platform_device *pdev)
+ 	if (ret < 0)
+ 		goto err_put_ctlr;
+ 
+-	ret = devm_request_threaded_irq(&pdev->dev, ret, rockchip_spi_isr, NULL,
+-					IRQF_ONESHOT, dev_name(&pdev->dev), ctlr);
++	ret = devm_request_irq(&pdev->dev, ret, rockchip_spi_isr, 0,
++			       dev_name(&pdev->dev), ctlr);
+ 	if (ret)
+ 		goto err_put_ctlr;
+ 
 
-These issues on Tegra are subtle. The primary reason for these latest
-rounds of fixes is that under typical circumstances there are no issues
-because transfers complete normally.
+---
+base-commit: 0f61b1860cc3f52aef9036d7235ed1f017632193
+change-id: 20260115-spi-rockchip-threaded-irq-b1641d0d3919
 
-However, it turns out that if there's enough load on CPU 0, the threaded
-IRQ handler ends up running much too late (we've seen something on the
-order of several seconds and in extreme cases even 10s of seconds).
-Granted, these are extreme circumstances, such as when an erroneous
-driver blocks CPU 0 for prolonged amounts of time during boot (in this
-case it was a display driver reading EDID and using mdelay() in a loop)
-or high CPU load at runtime caused by things like NVMe I/O stress tests
-and such.
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
-I think the root problem is that we rely entirely on the threaded IRQ
-handler, which was fine for some of the more classic cases for this
-driver but it ends up breaking in these new cases. The problem is that
-most of these transfers actually do complete at a hardware level, i.e.
-the data ends up in the SPI client chip, it's just that we get
-notification too late. We've verified this by testing with a hard IRQ
-handler and that one is never late. The threaded IRQ is the problem, but
-we also need threading here because of all the DMA handling, etc.
-
-Given that the transfers at a hardware level complete, we cannot simply
-return failure on timeout. The recovery mechanism implemented is the
-simplest way to make sure software and hardware state remain consistent.
-Unfortunately it's riddled with bugs right now.
-
-So I don't think getting rid of the failure/timeout handling and the
-locking is the right move here. I think maybe a significant improvement
-would be to not rely on the threaded IRQ handler as much, but instead
-employ a combination of a hard IRQ handler and a work queue to defer the
-actual processing to. That might also be a bit overkill because the SPI
-transfers are already serialized by the core, so we're only ever going
-to have a single transfer in flight.
-
-Thierry
-
---4ag2pcqryjkcrfgu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmlqKc4ACgkQ3SOs138+
-s6GwrxAAgWHu55awBjpQju9YJhGtBP5RiCUQCnj2HHoB3LlOxFKrVPQywzrjYBKq
-EdcqF9k0dfxlcdCOLWU//Qt8bKN7yGig2CMTre7o/fWB1vvApp/WA016acNhyVFR
-pZDBKDXhppLtpQaue9y8OiZlE0b3w/gE5XVIF4p4qnECi2ee3qMDJx9mDS+3eRKv
-ZDel8nVd93iDJkGXo1eihPexLipPltAxNkG0otADmGajubcRmTeUKOqzyLMZZv1N
-YNn29UdOSYugL7JTfEfKakEAx7Z4+LBZKPcntU7lURsvYyoIWOuY1KXUy8qLU0JT
-hS4/xz9xqDFl4ya3pX3+r/MgWacU7/5d71SBY6BOGBEDScVQhHz66UDfpNnJ1RdA
-Mtr7GQl7RXBW1qyygZ7zV6fzlbysB1S7qyHud3L/phbUEly9yYd+jkhrpMFDcNks
-z+J9HNQXAA3DA+HMs7epuEF/WrWMH1RhLrilQbi1lVnZTGZ/ArgOzZzEiXht2DEx
-Tvt6MfrgH2GAGs8H+IZalCzX90NB6ty+PYbrrlavRya1vng1b1CqeNBi7OFQ70Lb
-hua/k5YweTSGb7DFcLvqfAPl+CFZMKkTVVVmQLMm9q+jrz/4UhV8C2KzwDZhutSK
-SlAljHnEnvJOIRwKGwRTNUUHVwCOf3bs15MfLuNcdS8KjmF5LLc=
-=/aIv
------END PGP SIGNATURE-----
-
---4ag2pcqryjkcrfgu--
 
