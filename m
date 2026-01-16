@@ -1,73 +1,75 @@
-Return-Path: <linux-spi+bounces-12457-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12458-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43224D38A4A
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 00:35:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51B88D38A4B
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 00:36:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 04B793003B1F
-	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 23:35:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B033230A28CE
+	for <lists+linux-spi@lfdr.de>; Fri, 16 Jan 2026 23:35:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD0421FF47;
-	Fri, 16 Jan 2026 23:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385B6287518;
+	Fri, 16 Jan 2026 23:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="iaN9jGWs"
+	dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b="gYpluw8d"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-dl1-f44.google.com (mail-dl1-f44.google.com [74.125.82.44])
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9621923B61E
-	for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 23:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D745621FF47
+	for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 23:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768606548; cv=none; b=G2jtUtokt+oyH3uAXFMEqrXtkHoLaYrdbw5zIbOmg22iIgZhmdX+7lr1i7u29eReu3C0P5MD28v2pITHRgWmitwXW79dixX76VQge1SH4AWjrKnkeCJzLCEmq33Zb+xXbMS/t6jy+mBwIAXFttnlnmBedVXsc1sWef0Lu2bu040=
+	t=1768606556; cv=none; b=j6j8SYQkoxfiUUE8hKpwc6VcCs4Hco+bI0EijGAjxB90itNRpozUGtO29RFJVuPMpvudd8numMX5cCG52Q/uT7ojj+YFwc116ulrgMEKPQWHn1s8NEeBsUsYlybljMLcdwcVbZA0G9a2KbNAt6nanzhbmWkGQFh5v22Ixqatmck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768606548; c=relaxed/simple;
-	bh=s8k8zl3WtMoed/26Y4g+hNYtY5GNt0CKKh6yKU0yxJk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gbJNjhIseAsux14ycImDFxwVoASczlKzxJONX59kqmHrNA2kKGRPat/ttufKUPq1E9q8pv4Af+zIwnhnRGWLLjvhfr/BRe1SvwpTnqMGXxrpXmP2Owwd/UIG/DMK7wpKWTJd3OhYFupRtTEq+VAqnTQh3mQcefkvJmcUHc84zOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=iaN9jGWs; arc=none smtp.client-ip=74.125.82.44
+	s=arc-20240116; t=1768606556; c=relaxed/simple;
+	bh=0pyDOxIYiyKtDO5zBoCSbr5io67a+YIq5Io/RWNHqM0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KlNCo+tD5AsWTTfMX8TnJOd22E4+sk2hv1rmiCljGXakMaUV9qnZJz7BG2ESAYreqWc/cah/ecysYskaIOka4Zz3qXU1mjDuDH8ofCxBUrt7S9CHVzA6cmnJYrmKpzKjaK488ttvYXHtNYutup6jcPmLodu2iMuEGFLUraoETy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai; spf=pass smtp.mailfrom=nexthop.ai; dkim=pass (2048-bit key) header.d=nexthop.ai header.i=@nexthop.ai header.b=gYpluw8d; arc=none smtp.client-ip=74.125.82.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nexthop.ai
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nexthop.ai
-Received: by mail-dl1-f44.google.com with SMTP id a92af1059eb24-12336f33098so2278954c88.0
-        for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 15:35:47 -0800 (PST)
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-121bf277922so3526712c88.0
+        for <linux-spi@vger.kernel.org>; Fri, 16 Jan 2026 15:35:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexthop.ai; s=google; t=1768606547; x=1769211347; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rr1twA4iZh+FcXu79e86gzYn/j7DQvtF/WDnxVBdvpQ=;
-        b=iaN9jGWs1Xx4kz/Vb9n8rfAv9j0BDYt/UhR9Zt7CllhvhQamkxZ9k6F61vL2gvBT2l
-         XMMaWvbIkv/yz1YN6vNLAMDunkjxevBkUjsXoA7Zh2Tb1RZz1bhHQAIEpAnvitNjBlMX
-         kn4R/mqp/CwYwZ/I11a6AgzPPxhJHW17Vwpi0Zt6YiM+U4BR2nt5cHorcz1BAis1g0Bo
-         JxjIVcknxEUrZIk/zV9CRe+xQ5g9wVr0Hiat3l0+SGMBqE2yUk7E6KLCI+E6P/XnxSwS
-         GmddEREgCtoY2tUiBM3mnN7zpl07BTla2eIjrnE6S4XLbky6t4E1lNEAdtcm1w0GJYHA
-         7K5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768606547; x=1769211347;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=nexthop.ai; s=google; t=1768606554; x=1769211354; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rr1twA4iZh+FcXu79e86gzYn/j7DQvtF/WDnxVBdvpQ=;
-        b=nIVNj2ebrnttKoy2o9ugLwJAZkEPdcSttZxxR1KJwbWiMlofhVRVtL/kA3RrL8f32f
-         zjCspY0rQvb9vyKxVw6fjsdchyd79ZG6TtwgP/jprwRXT9FOUjysDjOYiGqq1rSqTw3R
-         zoXrrLbrrii4kufHadiz8L3bVJnY0Mse/vwAU34aAMtFFe3ULuy9BNu+4rFh0n7mK3vw
-         MbJSUbqeLr7xF3rFzDAAVUbDn+nPLgL97JFU4dsyAxxKtZFR+tjRAjZyLRd79fJB5Eb3
-         uP7oOW2SCzvlvn8jCeKny9fpRNWN1uBuEAVKAyr94jGM/boTdjYGDa246BT9vYRZ8Lcx
-         E/lw==
-X-Gm-Message-State: AOJu0Yzey1NUNq0PHnqcdYXmYM/Jp2BVQcxdiIt3IQNV4loAk1S9qivZ
-	2eSmW0l9Dv1D2DhDDaWRJIdG5KIqPD0Bz5/9crpHUgFEgwcLrC+1dBJ8JucXo1qbw9k=
-X-Gm-Gg: AY/fxX4S4n8Tv7qbFlDH2mGN6y0YT62h+AL13NsmSysLOFXDaZIZ3QtKNohmlR8+yeo
-	TOwL0ollPUFvB0MGaeE5T9M94T1gMJh354xXIbZacpidGaIsUFBcJlQJI/xcwykci6bm8x7p/MB
-	bQZ60i3bVnKFMQ53s66mnjQNdSZsdQxmV9IxOsTnRBB+uv8tmwhzr4K/by/H07nUl8BZCn13/iZ
-	POvwBcenM1veg8Ch3/GYsp8nzQq8m7roUpKoNOo4h/FTChrlOwKK7W9a0RzWVYjhsSKvlLSxn6d
-	QDJAA8pu7DDuMBNtVOKC++lR9rms+gjylq2ec5EWHCBZHYKNZ9WCbGBuXSbHtUmPlGhGlmFsK59
-	e+Hkw4ymFcA+/zd310Ao0z26oIu3MWCvuazatDVlBY1WJ4dEZNCDH9J+5Rn5HrynVHSmFU+GXAf
-	x83BaFDptLF6s=
-X-Received: by 2002:a05:7022:6181:b0:11b:923d:7753 with SMTP id a92af1059eb24-1244b30817bmr3456497c88.3.1768606546673;
-        Fri, 16 Jan 2026 15:35:46 -0800 (PST)
+        bh=9Q0sRttI86mEpJh7BtqYPvvcOCP+5t2tb7f6cBrMGu8=;
+        b=gYpluw8d6VEwidfAYH3DbTFnfP0O7IOhsOGAbrh+wn7nZBLmpNuu/t8h1MXnUdEhcM
+         v9nDnG5BbII9MwmFFOVPTaQfmlCntcFTNkcxNq81UJ/DSR5B3Mw2J4f16+7dfsIcU567
+         y8pwmuTIFEOIA+x9emfc6zR22QEQzaGSeBqJpfZFd1wDaW7tApEySvmF2ptCwG+Ywham
+         +IaxVDp1sX89mCesmGm5Z6MLcRFDRiJUxHtza/gL9hN/v9eIVix5I51uaJ4xNPdSSBMH
+         d/NHY+WjORnx8lQwF1ALlj1usCzeXde5epHV43r90pa0xhFrKZO8/wzByr1n8ZVEaUJe
+         2BQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768606554; x=1769211354;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9Q0sRttI86mEpJh7BtqYPvvcOCP+5t2tb7f6cBrMGu8=;
+        b=eaHjSx3DS57JcJFEh1l75e48C5WNhec8JqFbDB1BpQGK9zzUTtkPvXJ4aHHGskk2Lg
+         gqZnlbvFusVqgeoTmPrZI+KUo+HEQMNBTPf9e0XV9P7E5/5b6y76XhkM0f2Bd5fQ2CM2
+         x/bjlhFd1Nnato2B0DPII8d4ifowC3HM0AuJGhK9dQWiALCujCulMETLxWiUbLgDHw/n
+         11ilD469tsn2TQ7vfsIbqsOz0JwdXg4kcfBif1ayxeNUbGdegsPbhacUds59w3GMn6vy
+         iI+GRF0aaQhpYUiKbSqGfmZhMhdPcEXkP5O+XXjfiO3M59aspLgZ5iyfsIFZDSWEIL1p
+         uFyA==
+X-Gm-Message-State: AOJu0Yxb9jDyXVGAxHu0Qv151KI8oMETnkrP5XwQY0QAXTwReaRwvrFc
+	WJdUQ8ubh5Ix7Ga3MXfh/ASSIAxYfxrlmy++2VJAlBLEy9HEM0J1XYuLWDW7QzhM7s4=
+X-Gm-Gg: AY/fxX5lrns4Cl9cOZqz/hvlO/+fgn9BIQe6GjRAGcn5QFWQmPm92xuNZMQKkavZLEi
+	9PSYb3CQHuxbI/okooX8jqX1uRADj9htsp9LCfeP+ffdLt3ebvnT3p5JoIWXx0ulcD14OPZLwop
+	OLI2Z1WGcz0Cxv/G7qR3S/ddzqu0cHop4s3L8u8JgVtmzl1LhaodVDiq4ZVbZnmIWNVfckl40iA
+	mE2+krDfLD5Wn7wbhNA/xXMN7CRC9l4VpysmDRxMNhIoZCGimUaWlGuXIfY6OIQPfLH7R98one0
+	SpgQnaVSOqauXO69/nzgi4PnE8TZDkUZiJjwlXinXJwa/BjyJzl98v3ir5S/i5JkEDutz6SZ9lR
+	oN2v1UjMykuXn9HrupvOvFgAqexnB/HdcEgCZVO47JE2jxDwr624iV3xueVCrpoBfbOkIb+jCyH
+	JIg+zbpOp346kTgFncUjjITA==
+X-Received: by 2002:a05:7022:221b:b0:11d:c04a:dc5b with SMTP id a92af1059eb24-1244b35b987mr3230415c88.30.1768606553966;
+        Fri, 16 Jan 2026 15:35:53 -0800 (PST)
 Received: from localhost ([50.145.100.178])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244af10e21sm4653570c88.16.2026.01.16.15.35.45
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244af22aaasm3877513c88.17.2026.01.16.15.35.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jan 2026 15:35:46 -0800 (PST)
+        Fri, 16 Jan 2026 15:35:53 -0800 (PST)
 From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 To: Mark Brown <broonie@kernel.org>,
 	Michal Simek <michal.simek@amd.com>,
@@ -76,10 +78,12 @@ Cc: linux-spi@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Subject: [PATCH 1/3] spi: xilinx: use device property accessors.
-Date: Fri, 16 Jan 2026 23:35:33 +0000
-Message-ID: <20260116233535.260114-1-abdurrahman@nexthop.ai>
+Subject: [PATCH 2/3] spi: xilinx: make irq optional
+Date: Fri, 16 Jan 2026 23:35:34 +0000
+Message-ID: <20260116233535.260114-2-abdurrahman@nexthop.ai>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260116233535.260114-1-abdurrahman@nexthop.ai>
+References: <20260116233535.260114-1-abdurrahman@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
@@ -88,34 +92,27 @@ List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This makes the driver work on non-OF platforms.
+The driver can work in polling mode in cases where interrupts are either
+not available or broken.
 
 Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 ---
- drivers/spi/spi-xilinx.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/spi/spi-xilinx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/spi/spi-xilinx.c b/drivers/spi/spi-xilinx.c
-index c86dc56f38b4..c4b70e95b695 100644
+index c4b70e95b695..9fb1da2fcce4 100644
 --- a/drivers/spi/spi-xilinx.c
 +++ b/drivers/spi/spi-xilinx.c
-@@ -405,11 +405,11 @@ static int xilinx_spi_probe(struct platform_device *pdev)
- 		bits_per_word = pdata->bits_per_word;
- 		force_irq = pdata->force_irq;
- 	} else {
--		of_property_read_u32(pdev->dev.of_node, "xlnx,num-ss-bits",
--					  &num_cs);
--		ret = of_property_read_u32(pdev->dev.of_node,
--					   "xlnx,num-transfer-bits",
--					   &bits_per_word);
-+		device_property_read_u32(&pdev->dev, "xlnx,num-ss-bits",
-+					 &num_cs);
-+		ret = device_property_read_u32(&pdev->dev,
-+					       "xlnx,num-transfer-bits",
-+					       &bits_per_word);
- 		if (ret)
- 			bits_per_word = 8;
- 	}
+@@ -471,7 +471,7 @@ static int xilinx_spi_probe(struct platform_device *pdev)
+ 	xspi->bytes_per_word = bits_per_word / 8;
+ 	xspi->buffer_size = xilinx_spi_find_buffer_size(xspi);
+ 
+-	xspi->irq = platform_get_irq(pdev, 0);
++	xspi->irq = platform_get_irq_optional(pdev, 0);
+ 	if (xspi->irq < 0 && xspi->irq != -ENXIO) {
+ 		return xspi->irq;
+ 	} else if (xspi->irq >= 0) {
 -- 
 2.52.0
 
