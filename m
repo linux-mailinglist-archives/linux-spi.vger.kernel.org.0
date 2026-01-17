@@ -1,68 +1,97 @@
-Return-Path: <linux-spi+bounces-12460-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12461-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F9FD38A71
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 01:00:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 351E5D38AD7
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 01:41:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0DD55302C4E5
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 00:00:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13EB530274EA
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 00:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755032F1FDA;
-	Sat, 17 Jan 2026 00:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0923570810;
+	Sat, 17 Jan 2026 00:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bXNWEKcD"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="IVr8PxaP"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5303A2D94A7
-	for <linux-spi@vger.kernel.org>; Sat, 17 Jan 2026 00:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E10A2AE77;
+	Sat, 17 Jan 2026 00:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768608001; cv=none; b=WskholR6CpjN5qgZAEHfbtRSEreJM/rBL1VZaz89CaP1fQlSsbKv15zHIERLq3XkOHcrHd8gJDcX2lg5Zer1VKgdFbf3GhvUgHa++vQC84b3/E3LTPvASxgxjHpxMfeNpKvmkhtK+QQQ4AvNJ0ZZyoQ7V51QOc0/7rfWEuUDBSo=
+	t=1768610488; cv=none; b=DtpaV2Is74Ukp9dxa5oBRbbTPFqWRXNcD4PPJaZpdcDKficCtVwdvHQQPu0cZyyqb3fBYs1qhmHbp72c6IpebauevouyvGtnrBB80Y3lwwEI+KjQlFmsmRWytasv/bJ+phDZuweBRBQBiRMCWSebOXMMBr40PK4HTso5EOVxhs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768608001; c=relaxed/simple;
-	bh=V9sK29g1p5L7gGT16/FNCt2O4Xzs9alkyoMDkJ74J9I=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:To; b=Tn13j7lTHRV4ZgFC8gHzdCtGD4UeMPS156CT+U3bIBaLIbEQ8kxm7OxDC7KXbqtg8KUWQNmfOaCvND/eLPbwgVtVHPGdbJlP4sLRr/sKIPUmyseRJccENPzM+qmFUb5u7R51AL6bGRGBA1sABcENl4vZKeLDUItRBiDk57S5+pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bXNWEKcD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 073EAC116C6;
-	Sat, 17 Jan 2026 00:00:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768608001;
-	bh=V9sK29g1p5L7gGT16/FNCt2O4Xzs9alkyoMDkJ74J9I=;
-	h=Subject:From:Date:To:From;
-	b=bXNWEKcDVIyE3drRro/VAhllPszAJHBoldrq0lLGjtAiMFmvJLKrkVRx2FkzEuc3U
-	 mxfTF1xGXTHvM1icbDZKg/Rj/EQKW9PKknnfKhgYyF6yOYsslhe35Zo3jWaa4HWr1S
-	 bLPhZQWb5lmJzUCvcLB6eiLGvXLuuNKwD2XPttOmiViqAW8eRMy8qTU7cTUE4AjUnS
-	 cp31OpgFeFfbE2RUhiifFn7IJZsh69x4cMTeFOJlE+H68SQ7PDseQDMKCFFqvgn+Yk
-	 QDT6XRF9RkxkF1dGfPnxUqnbTOmo/3WdBTcOunrayZuKGYXv0iDk4TjLw6XHZ+ZC+1
-	 l3xy+44/2Bo5Q==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 000BC380CECB;
-	Fri, 16 Jan 2026 23:56:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1768610488; c=relaxed/simple;
+	bh=8iUfIBxfO1eIJxUfuqZ8vYmze3rWa7sXVwTvt0yp4tA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fOE8+xJdiz9cwqLU93+XvdQyJn7WF+Vm9+giPKafBhIk61lTTK+N1EYPb7m0zHwf/H5uiv4ol0Ob1L5fZaSmtReTMbpChUW0H1A1B2X2o6x0ioz72LhJbscnYV18ru980bHEm1KAdU05JagQAvcE62zouFCpzXaEedvMwhWLsPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=IVr8PxaP; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=6uvymewojZryJCsLththt6b69bwDDih6ton1Gz+XXhM=; b=IVr8PxaPV0S8d/tCWJCIHIvCtL
+	z4nImASU68m5coDgg52WNKzv2WpuM4+tjujlJ+4ucL0/fz1sHQHBFQOH4EYHfmBTDuSYk52ATY2MR
+	MOFpt7YzNUGs/N2jWCfxHzBo9/6/zMCPkDkv+QnNOsUgPB7gfWn/S4JJbBKjH08zhDbs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vguNT-0038Gv-Gk; Sat, 17 Jan 2026 01:41:19 +0100
+Date: Sat, 17 Jan 2026 01:41:19 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Cc: Mark Brown <broonie@kernel.org>, Michal Simek <michal.simek@amd.com>,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] spi: dt-bindings: xilinx: make interrupts optional
+Message-ID: <0b4904fa-ae9f-44e0-96a8-f5f1ef57f36c@lunn.ch>
+References: <20260116233535.260114-1-abdurrahman@nexthop.ai>
+ <20260116233535.260114-3-abdurrahman@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Patchwork housekeeping for: spi-devel-general
-From: patchwork-bot+spi-devel-general@kernel.org
-Message-Id: 
- <176860779142.841133.2407003647584011366.git-patchwork-housekeeping@kernel.org>
-Date: Fri, 16 Jan 2026 23:56:31 +0000
-To: linux-spi@vger.kernel.org, broonie@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260116233535.260114-3-abdurrahman@nexthop.ai>
 
-Latest series: [v1] spi: xilinx: use device property accessors. (2026-01-16T23:35:33)
-  Superseding: [v1] spi: xilinx: use device property accessors. (2026-01-15T00:33:28):
-    spi: xilinx: use device property accessors.
+On Fri, Jan 16, 2026 at 11:35:35PM +0000, Abdurrahman Hussain wrote:
+> This makes the driver work on platforms where interrupts are either not
+> provided or broken.
+> 
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
+To get a Reviewed-by: for this patch you will need to Cc:the device
+tree Maintainers.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+https://docs.kernel.org/devicetree/bindings/submitting-patches.html
 
+This is also version 2 of the patch, so you should of marked this as v2.
+
+https://docs.kernel.org/process/submitting-patches.html
+
+> ---
+>  Documentation/devicetree/bindings/spi/spi-xilinx.yaml | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+> index 4beb3af0416d..8296edde61b0 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+> @@ -23,7 +23,7 @@ properties:
+>      maxItems: 1
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    maxItems: 1 # optional
+
+I suspect the DT Maintainer won't link this comment. All properties
+are optional unless they are listed in the required: section.
+
+	Andrew
 
