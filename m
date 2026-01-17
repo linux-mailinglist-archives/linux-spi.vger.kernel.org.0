@@ -1,210 +1,151 @@
-Return-Path: <linux-spi+bounces-12467-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12468-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6918D38C5B
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 05:48:31 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6C28D38DDA
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 11:48:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F2EC3300E8F6
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 04:48:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5B9893009D7D
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 10:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F81A35959;
-	Sat, 17 Jan 2026 04:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCAE30C630;
+	Sat, 17 Jan 2026 10:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b="loOlUdno"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYxt7quu"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11022139.outbound.protection.outlook.com [40.107.75.139])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C65C288B8;
-	Sat, 17 Jan 2026 04:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.139
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768625305; cv=fail; b=FQkVRQ+l/aXru/8i0MfCdEnXnmW4kiOZsRlWiDTx+CX/qTh1tX4Egn+KKi1VcISjVjE1dcGj4QkZFVMzipFKXZ0IfNOBCL1Sgk3+RuyCpzNnKrQsVKs+xtw5qr+YyoCrYxdtep4PWSA3jDo0I8ql7ukX56G/VcWl7lXcJoPAY4c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768625305; c=relaxed/simple;
-	bh=NOMWgjjTyeFRb3YNgQCcyU2jDAfULVws+iqDb8OPz+c=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=eECPx/yw4ua0V4DPC521ISA/YXzmJ9OR2tFsm6k6Vo9ahD++b7YBXzcsOdE67lGmkgl+tRPFe4ca6l1VgevW43K4fk6jueaZqTs7vdA+TW+oBVWv1b0T/ax7a6di79qUWfm+xiz2uwMKdUWR0ZwpQ+oTIvPWJdWweKgAkVIxp9s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; dkim=pass (2048-bit key) header.d=aspeedtech.com header.i=@aspeedtech.com header.b=loOlUdno; arc=fail smtp.client-ip=40.107.75.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YM3QPW/ptGjsBE+rj9e1L8PkhOu5Jt84JG+aEbdCaRXQZMO5O+LV/nz6HgB0lIvoLxidSCrnZ3WvReI6z2SnaiwYSxBnISrVIIMzKTqo2CXS8cYiPULp1HFmLAyvvWNrBRK6mOMy1G+mm56bizvPS3rYgrwe2Twe5vr9631gvH6WUtld9EC/a7ZCa17Q2YkhzcMofEPJhZdEIXC8+8AUi19mnYEygPKJAID4ZF7sG/CCccfqxJT9jn9/pp8VMHf8Evzdbg0QZGmwWuHX6NudIRlJTUfam5sviMsSMVyoDb/wolslQj5LY1n0kTzh/6rEzw9PHcM4fqZi9T0utKrDtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lUhLlSdAlz3YVdYZup0Q0JUHLW370MUlcaI2EaX//UE=;
- b=oBsAn43aCQptDjuYsnLJkMSdKU9yAUM7bXBBLAlJbYMPS09RROddV3KpAtaRPnfRZsQZ6ZZjMTcodhUN2UrLVXT/sN0A/aUGOwC5Cv1SQ8qltzn4YEK21JxR6lvuhGjtzaXHyRjwkY1duobbOicE0OFI2rspvmG8SEyEiWYdbqrGsn9W47YAdnnQ1l99uwqQrBy1t7XpVQpZIOfrTcwrLQ9LThoKi8uNID64bYWYi731NzclpyYfX1t3n5ZrPy06VrABlNRc5G8i3VTypR1W/pCFDJM30T9pF0VcOtTNVlzYjJtOe10FWAqmRjL+MTcilPz63QCOrfpmTOiiYWn4MA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lUhLlSdAlz3YVdYZup0Q0JUHLW370MUlcaI2EaX//UE=;
- b=loOlUdnoc95ww0AWzNWkWrRTDJBt1r0LwNOdBxG8y8LmeiyRu3WSQiU4uyVArZe5RmtYR0HQwm8v3ZINDd1G8YWIsv9kk2hfo3lkIc6EJvxN+ylwjSNs/TM7q9zE2S82Swt676OL2zG0TCCwGuFadwV1x1F6jJC9uZzw0rPK0xv8Spf8FjL35jcfdR2+Cak1oSkVuxjuctjuyoZ8eZr9I8GF3n5Z8iLpQM68dPmvrHFg2c2yZ7lJj4uUFf6OhWH/mZKxVSbEmET1p5gOMmf7+qrkZ1Oiudddsn4C3+5cueWgqcwj/Go4EWqLgqsTRnHXvn/WeTVT8VlWUGGHW5ttMg==
-Received: from TYZPR06MB5203.apcprd06.prod.outlook.com (2603:1096:400:1f9::9)
- by TYSPR06MB7068.apcprd06.prod.outlook.com (2603:1096:400:466::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.9; Sat, 17 Jan
- 2026 04:48:18 +0000
-Received: from TYZPR06MB5203.apcprd06.prod.outlook.com
- ([fe80::e25a:ec7b:633d:7489]) by TYZPR06MB5203.apcprd06.prod.outlook.com
- ([fe80::e25a:ec7b:633d:7489%3]) with mapi id 15.20.9520.006; Sat, 17 Jan 2026
- 04:48:18 +0000
-From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
-To: Mark Brown <broonie@kernel.org>
-CC: "clg@kaod.org" <clg@kaod.org>, "boris.brezillon@bootlin.com"
-	<boris.brezillon@bootlin.com>, "joel@jms.id.au" <joel@jms.id.au>,
-	"andrew@codeconstruct.com.au" <andrew@codeconstruct.com.au>,
-	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, BMC-SW <BMC-SW@aspeedtech.com>
-Subject: RE: [PATCH 2/2] spi: aspeed: Add support for non-spi-mem devices
-Thread-Topic: [PATCH 2/2] spi: aspeed: Add support for non-spi-mem devices
-Thread-Index: AQHchjBRO6Hlmfd2eU2DMR3RJEQgSrVThciAgAJGLiA=
-Date: Sat, 17 Jan 2026 04:48:18 +0000
-Message-ID:
- <TYZPR06MB5203DC69FD31B7550F86DE3FB28AA@TYZPR06MB5203.apcprd06.prod.outlook.com>
-References: <20260115150454.1575970-1-chin-ting_kuo@aspeedtech.com>
- <20260115150454.1575970-3-chin-ting_kuo@aspeedtech.com>
- <1adf54a9-56f5-4fc4-bba2-837a132fd123@sirena.org.uk>
-In-Reply-To: <1adf54a9-56f5-4fc4-bba2-837a132fd123@sirena.org.uk>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR06MB5203:EE_|TYSPR06MB7068:EE_
-x-ms-office365-filtering-correlation-id: 5ff7b775-e250-45f9-9c45-08de5583a266
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|1800799024|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?JomvGh8kcjn2CcheT3ZmTt4mAo6KPQzrXXAF9OzqsI/GN8KcFRDHEETqr8i5?=
- =?us-ascii?Q?5792Zhq7Vzu+249xysrLV5Yht+H3hegPIoNrWx4CQ3YtgrZY1NJnCwjobV4G?=
- =?us-ascii?Q?PzO48P5NxKQYf1cmV/0ojLpii04b/hS2lawcT0eYxu7gAVuEffdG61fUMV/u?=
- =?us-ascii?Q?RnuvpB0oNxRx+Q2kRLFUgmRMG8oX0pEdeV53Lrti/iPyxMzxNr4wBySgxMvO?=
- =?us-ascii?Q?E7dxhJFgBPLTqzJfMg863l63A9kIfl1wsbJ7dBiwxtHXfooL/T4CmQEy2IKj?=
- =?us-ascii?Q?9CWdfLsee+2GybdrrKhBJuMfRKlNIwEopGHChxAtJoueA6OwPgaPxqsXOCyQ?=
- =?us-ascii?Q?8A1Ok51hMoXn6TPrJ3P/J5d+hfyzM0EfqulGv0ZsnI6tTy/hp4w8Sp8EhEEr?=
- =?us-ascii?Q?TIA51BR+ugp1N/x8ML/COOoXzOh9O+LGQBB/zVzbYBunb3cGevsVujTejHlh?=
- =?us-ascii?Q?YFvmvrmCyTyfthC0mY8BqtH6R/SJcX8zCe/9ChcWbQzsfvvxyc8D/waYBxZT?=
- =?us-ascii?Q?11WwEWZle3rt663QJQFOC8Avi7QpraCMiCjGdojRpXwqxZEDmX0Hr30cQEye?=
- =?us-ascii?Q?BQCdSRRE7yjL2QNI0Q2MgH8dRX+ScvRaTPc4t/R6+IgIoqG2+bfU0XXkB4RR?=
- =?us-ascii?Q?wvr4Yl7HtIIoANWlvcDIVxoVQNzcLuaP3Md1291kZdOGYhwNRIhhzHO/bzMM?=
- =?us-ascii?Q?hI5Uy9xktk+RAc+ziOCCyvDc+iIINhWVKat/Lri2BMrIq7TMKdz7FnYqQjhX?=
- =?us-ascii?Q?3EpjrbX/8lyP7vXIqksYXJO/UwtzgN25yR46U1gvdoHy1X5ATcyw92HTEg9e?=
- =?us-ascii?Q?DzUcpfzznCn/ix91LNPxwxYhbUCradV1FRfrHXF7MzvubwM7K2nEFkd1uWdk?=
- =?us-ascii?Q?GWgOuAtry8hca/nnvZWzAvnt/cx0fQc7Oue7LLgyUNCKXIPHztUBaMXk4lVs?=
- =?us-ascii?Q?e6hwJ0DVAT2yYdybh8cJoPLQ6v56UueJLF/VgU+vKUiKsvvJdVvPYj4CGozF?=
- =?us-ascii?Q?9uVKBNFLOqXjd4fp9OU02MFCNi51lZyMerHsPpwlulbGpBCj5/4RFe92ykAN?=
- =?us-ascii?Q?cu/NUjne90liZLmK+HzTaiA6Dh4GRT6FnmflfmfGdmEfcV+6re6E/AQQSfXS?=
- =?us-ascii?Q?af1omOysvni2/TGbH8u1wENWDV/+WdirHIGO9EygdDxmuQsejOR7mzkt7Q0Z?=
- =?us-ascii?Q?RMs6X394sNG/G6sHmJZALMKEAFL5+sfl6DnjK7T0suPrk3b/T0mOgK4GRahY?=
- =?us-ascii?Q?/wllVHck6mPNvyjmBx+cLvyn+toMajpRnKJ5wA2IQsyU2DDWvRup8M1wNLPN?=
- =?us-ascii?Q?+2ogCVwzjbFZk19qbZYpfZ45T/sN7unzZbqglxUJC8v9xS5QTBwFcEqdBPap?=
- =?us-ascii?Q?+A4kYmEY1IBbX0xhIeb3+MtI6qzDhmALE0qyXfEm3Zbdxmsid9dXfNMBHSfP?=
- =?us-ascii?Q?F3VnqCtrfGEy7ymmDR6v+jCEaCHnK/wpmouad1Ieiy/JFWquH7pZluQIjGUf?=
- =?us-ascii?Q?cVEzfMr9JFQBwkb675w2xy33VJhz/T4yzMRUoYjUsQL6GT5mIvaAlqU7PqWV?=
- =?us-ascii?Q?lfM5uNMHTYK6xqJVeqOJ3FlM5TSSaUALEi2tciJwiwOORBQCiMxSpTKet3kj?=
- =?us-ascii?Q?LlTVznvdT8+Ph1DSM6Ws1K0=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5203.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?VcO1xeNHvvQ9rO/kTh2GppkIiABxqAXEcEYdkbQyRl7tRXQa9hjCbeVKwj5A?=
- =?us-ascii?Q?9imzd9mCcwsPSbSQRHzwZWnGty6FB3+xYMglATA5eUqRWleZ9aS8vrwTBtsa?=
- =?us-ascii?Q?vKDzq96+YNYkszegHigF0rBkfFbGuyC2Su+FjGCdsy4N+kjXpzOh/zq5sS7H?=
- =?us-ascii?Q?DyUdgaXXUB4nc0yzs2WPWXVmcR1Z9OoEYm3m1KDgKzWT72A8+STD4NTSvSnh?=
- =?us-ascii?Q?wS/bps6r3VY8yl0maaDdcf2GztDI/pmnT/AtKrKYQwUEN2ZyQ+3c4KSmI65l?=
- =?us-ascii?Q?BHGkOdihZOrY7bJeQjJP5BgY2+EIUczFbbLz1WaRgGHMD80qz4CyhAjovsiF?=
- =?us-ascii?Q?bV2RSb+aWBmpxxXWLW7WPQn1fdULmiOLF6hfDmaSLYS2k4lPUHW8dijxO5Zx?=
- =?us-ascii?Q?8gUd46bwRE36Hln5rpPCEmbfbKDaZGH8Jqb2xcZ5eOWRNhm/j+lDrBGzENzn?=
- =?us-ascii?Q?0/I/Sy+vFnmSMwNXbaIfgjKdlK90u/RBdqTP0u9Um2Fbb1r5HOMt/SyqZfcj?=
- =?us-ascii?Q?QXe8pQAmrrH7W/jiOQMv81MwRsHcPmEJmzNa/wvCZuL3uD/a2J22mcHqGi2A?=
- =?us-ascii?Q?hkNHcgySFF3n8l0ONhSuPyfYFh/e58FG8zFMxTr2XnEeOnA9GQw3xvhD1WgE?=
- =?us-ascii?Q?3fk3tKQgI55Y1qMNGAiJnFr0YJQqjQDE3wE2gDmrUk1IZHzSd9/79haA9NKD?=
- =?us-ascii?Q?QjwH50Ez/bM3XtG1ls+fBxLMCtqjDniVHhRbYyxo0elUj8UCNl7dKmlq7EQI?=
- =?us-ascii?Q?mtohSLvsSss1P6epbsrRLS34W2uHkGTgCvJ9RBQK/6iY73sN6wKdrNGFvtm+?=
- =?us-ascii?Q?iz1iwQ1hcy/5Lz0tR0QZHx7an5tGnLdqOiql+wV+57hL5jchPXKPePpbiwYf?=
- =?us-ascii?Q?A5XWyydq21i3BFpGqBb9NOgrR0zBUKyBF/pOIV3rZn8rGPmZaNmp8AY2Ujkf?=
- =?us-ascii?Q?AyPTvdifOYoqn0s7aiDW6QrHE3DAuwP4fs+syrAiaILjJDcy6uJ5rqZQR7CH?=
- =?us-ascii?Q?h11hfkvQPXNrzvcsC+CGOQKCS98BbK4t/wHl97i1xJTWUkfHR37JbJQgDpS7?=
- =?us-ascii?Q?W9NutxaxPQk+FIooOk8hCshL70C/XocxGpT61GC90zs0mNvTzxpmy7CqmqLv?=
- =?us-ascii?Q?W/rtynAww2oingHh+mtZLzVDsaOU/ETJiyRO5I+XaUDKi3ovWUvf2kUaEpMz?=
- =?us-ascii?Q?BedttfgOuS7kM6cLwzxE6rCzLcl7OD5sXjsj0FVwqe8+KFAsxMYFJTrOSmGo?=
- =?us-ascii?Q?l30Fj50SwR2tVwYybXXV1hZbFWGEoWW4M0cQgPt5HuNqOtSzLColMmna7jtw?=
- =?us-ascii?Q?vQtwE/cJao7mD4Twy/xj/JNhzl6+kdzZMc4HEqBPN9ZlrOSED08EzfWwnx45?=
- =?us-ascii?Q?jod+eFaAMvxFsVe/ufQ9O/chQcXEZYk+VsPpCzplMKdEB60GNeM06JQ77pJM?=
- =?us-ascii?Q?qQoCDTkxw3sI0sM18tGUF8Hh90uBdA7VujSHV3tADNRirqvctAutc9qVqjjK?=
- =?us-ascii?Q?fRXFXgg4AmnCQv7peedocrVdwyA+W/K3m0W3n6X5iBS8R/vNU+N0b6yGEFrX?=
- =?us-ascii?Q?AKs/nkZphA1CXgX9Ysi53hWLOm+f989hr8ZICbdGFnwZkKtxiTPSj3zdGAAR?=
- =?us-ascii?Q?b3VXPgaMyg7GwRsB5R8h1aKz/bMzcQHM+5FvTXhzjG4hOSNV85LMJGcrJOGE?=
- =?us-ascii?Q?2bfPTukDcW8Ibbg3esaeNOLhuqg2cWYIusuv16oD13Y12ZP1KrLul8JhzrWe?=
- =?us-ascii?Q?iKPQFgrHM6aDz8pkX9yfimyIz7NVFDU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B00D304BB3;
+	Sat, 17 Jan 2026 10:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768646922; cv=none; b=q0d0/iixd2Db2xqX9kkc4beA2QerIdWG14Dcacn0HsDKLpvRp/qWfdAvQtFc4lXoZjJgJmdvEb8RnZCDihmlYUnOtCGmZkRaGFo6dw48SbsREBgf26hhzxAi1ieHGT0fjbSxCFH95alPkM1Ijamg0cKQW/1YNJhQ6eVcStl2xMg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768646922; c=relaxed/simple;
+	bh=/JEQ/Rm8+TA1QKeSt73NmmEnt5QUIXGLCN+VdBynZrk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=J9MG6aqfXckxNfjwbJ11uS/Jv9FHGElr+PFdXFdMn3IZOlJlZXM3W30gMunm+3oPPgkFedsju3NxbP7wZzrkgoQbAEcw0dkNrvZ+pvAmHiOeZWrltx7gvVum9HjRmhE4YxEa+rT39BkAEfqbbjXU2btOGYvNMAVWC1j7/l+rkzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYxt7quu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79611C4CEF7;
+	Sat, 17 Jan 2026 10:48:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768646922;
+	bh=/JEQ/Rm8+TA1QKeSt73NmmEnt5QUIXGLCN+VdBynZrk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RYxt7quurFAgh7UU1R8GcbrWkzj6LrEm4NBX9XVpw7CbD25Tlzj4KZb6L7DFErtUa
+	 y2FWmJNlPgBuGpAAEHPppevs4VtLAn6pT+yn6AzPsVdZyG4AiVHlY8zjnuTLmXJMbf
+	 hLL0vB2KXVKrx2whY8a63JslGbLCaykrNs5mEBgwxVQwB5ZsTz3Ginhfm4aNBvfWvL
+	 tMAfG4RJcgK9UV5JRkODXn+qQzclhZ12XZim+7BlCnK7N4OgvsstiRRteIJSbdn0Lr
+	 ttYyw/0cPexh053IbLYhxCIfSXmOLU07pdGQn57FXmxsXCsBsaAUiThjc38cBMEVQe
+	 YUHoMAIBcBPkQ==
+Message-ID: <52a9988c-323c-4b2b-be75-896a2db27f94@kernel.org>
+Date: Sat, 17 Jan 2026 11:48:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5203.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ff7b775-e250-45f9-9c45-08de5583a266
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jan 2026 04:48:18.6800
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iBBGNkNXQhx90flawaPGVZwp7j9M+9jwZ8RAXrw2qyLzFrvI130prAeOGirwFyQzJcNECwFFPTCOZPa+cR/LUsUWSzhJgyKMsuvMYDPkD6M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYSPR06MB7068
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] spi: dt-bindings: xilinx: make interrupts optional
+To: Abdurrahman Hussain <abdurrahman@nexthop.ai>,
+ Mark Brown <broonie@kernel.org>, Michal Simek <michal.simek@amd.com>,
+ Andrew Lunn <andrew@lunn.ch>
+Cc: linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20260116233535.260114-1-abdurrahman@nexthop.ai>
+ <20260116233535.260114-3-abdurrahman@nexthop.ai>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <20260116233535.260114-3-abdurrahman@nexthop.ai>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Mark,
+On 17/01/2026 00:35, Abdurrahman Hussain wrote:
+> This makes the driver work on platforms where interrupts are either not
+> provided or broken.
 
-Thanks for the review.
+You need to describe the hardware instead. Why interrupts are optional
+in the hardware (or are they even?).
 
-> -----Original Message-----
-> From: Mark Brown <broonie@kernel.org>
-> Sent: Friday, January 16, 2026 2:02 AM
-> Subject: Re: [PATCH 2/2] spi: aspeed: Add support for non-spi-mem devices
->=20
-> On Thu, Jan 15, 2026 at 11:04:54PM +0800, Chin-Ting Kuo wrote:
->=20
-> > +static int aspeed_spi_user_transfer(struct spi_controller *ctlr,
-> > +				    struct spi_message *msg)
-> > +{
->=20
-> I'm not seeing anything here that won't work with transfer_one() rather t=
-han
-> transfer_one_message(), that would reduce open coding so if you can do it=
- it's
-> preferable.
->=20
+> 
+> Signed-off-by: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+> ---
+>  Documentation/devicetree/bindings/spi/spi-xilinx.yaml | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+> index 4beb3af0416d..8296edde61b0 100644
+> --- a/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+> +++ b/Documentation/devicetree/bindings/spi/spi-xilinx.yaml
+> @@ -23,7 +23,7 @@ properties:
+>      maxItems: 1
+>  
+>    interrupts:
+> -    maxItems: 1
+> +    maxItems: 1 # optional
 
-Okay, I will change the implementation to transfer_one() in the next patch =
-version.
+Drop comment, pointless. Schema defines that.
 
-> > +	ctrl_val =3D chip->ctl_val[ASPEED_SPI_BASE];
-> > +	ctrl_val &=3D ~CTRL_IO_MODE_MASK & data->hclk_mask;
-> > +	ctrl_val |=3D clk_div;
-> > +	chip->ctl_val[ASPEED_SPI_BASE] =3D ctrl_val;
->=20
-> This should fit with the prepare_message() callback.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC (and consider --no-git-fallback argument, so you will
+not CC people just because they made one commit years ago). It might
+happen, that command when run on an older kernel, gives you outdated
+entries. Therefore please be sure you base your patches on recent Linux
+kernel.
 
-Okay, prepare_message() and unprepare_message() callback functions will be =
-created in the next patch version.
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
 
 
-Chin-Ting
+Best regards,
+Krzysztof
 
