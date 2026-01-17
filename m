@@ -1,79 +1,79 @@
-Return-Path: <linux-spi+bounces-12469-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12470-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B01D38E4A
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 12:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC5CCD38EBA
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 14:42:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0801530092BC
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 11:41:40 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D47733003FF4
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 13:42:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4093128A3;
-	Sat, 17 Jan 2026 11:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fvUx9qF3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443801DE3AD;
+	Sat, 17 Jan 2026 13:42:21 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from TWMBX01.aspeed.com (mail.aspeedtech.com [211.20.114.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A79271457;
-	Sat, 17 Jan 2026 11:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC88C72622;
+	Sat, 17 Jan 2026 13:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=211.20.114.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768650096; cv=none; b=REBqS/3cIsBa3dtWhzNA67ejn/pRYOzdagHU3O4JnYH7SYz/TC6m/01jJIl+nX+5J2auxHwEmLDQ9uPj7zP5DkTA0VqVpaejCX4LLZ1NIbi+nkP4KXkbAJLdGmHiAnZ0nMVngmITUTJw1mkJ4LtTXhOjyHuKMws/WOmewwcLg80=
+	t=1768657341; cv=none; b=USKtAqfKn2pRHpXTguHC2S5BXlHYiaVa87VS/sWdlvLOEcir28wr0AgxqdFgXLHe19VV1hQnwaDkxddncIsXs/8OfCNHug17rDerDGgo79HTbiSX2ddPnUNXbGhO9xHCLa8V9czH6EiDZLYL7du1aYUWGwfhqnyxyd4hOOzAgH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768650096; c=relaxed/simple;
-	bh=EN4w6fHkkzoF8VBfe/UUIVNrkadCi2VHk54LmzRusYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dt/ar1DUr/BknUB9gfpSrjuMQ0I6efjFNYaiIomtsvFQ8Mjv0/tqx0GAwCYVcWuGyu8us7fD6U83MFmgwjmQFFO0sMmUWba4qLDCBOo8PeSgqYMAJQk/HeidQOkykSTLgX34iu0Hc9HQk0A9KYg/xoo8mCHd6N0RQNtq6NyJZwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fvUx9qF3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B106AC4CEF7;
-	Sat, 17 Jan 2026 11:41:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768650096;
-	bh=EN4w6fHkkzoF8VBfe/UUIVNrkadCi2VHk54LmzRusYk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fvUx9qF3hvnb3/Q/mfpJM59biZ7WYrRxHlItmeM8adSbMfxNjwKfQH0Z9OmyX8k9i
-	 tFDqAEeJRZANJD3LqIE9PRvwJcewc+ebK+uvXJt+xRD6Q8af1dsZHxg85oDSqB7wbC
-	 8l/dMevV3LrzEtjE/VTnvHAmCG0Kwnw0rz+fuPH4As4bdKl+yCjGEd1I68n/OaEgeP
-	 +tEQOrg71A9AXaF4GjTdyhJguKIrdnOtz0TFlAAKQgG7vIThJY9Ld3Xhtcz5vJTQSR
-	 JZOWKDOQD810chHMstzwskLLBmKrZZ3MkrAqTivKUrR0MYCSyaJ79xpqkU0TablI1N
-	 Uh5qFKXP4+b1A==
-Date: Sat, 17 Jan 2026 12:41:33 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Mark Brown <broonie@kernel.org>, Michal Simek <michal.simek@amd.com>, 
-	Andrew Lunn <andrew@lunn.ch>, linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] spi: dt-bindings: xilinx: make interrupts optional
-Message-ID: <20260117-polar-rat-of-current-adce4f@quoll>
-References: <20260117012136.265220-1-abdurrahman@nexthop.ai>
- <20260117012136.265220-4-abdurrahman@nexthop.ai>
+	s=arc-20240116; t=1768657341; c=relaxed/simple;
+	bh=Xt1yZwnuULu2DkCQQsx1Vhg6E3KzgfpvnKunlOH6si0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bRM2hRWBfxSws7Ka1na/FqJVJMUTU6GESO8ZO1lvvsnss7BpZIf7syAF/buaNReaOu9q+eEvN+Z2R5pvQ2QZ2vlfA48ZFkH/KqhQ9nuuaiMcRaEVVG+WmE1IbfVLaXtQBmzzZAVcV9UynbK6ZHQ1eKCE8DfN7B1VW4nJ0ngZfw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com; spf=pass smtp.mailfrom=aspeedtech.com; arc=none smtp.client-ip=211.20.114.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=aspeedtech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aspeedtech.com
+Received: from TWMBX01.aspeed.com (192.168.0.62) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1748.10; Sat, 17 Jan
+ 2026 21:42:16 +0800
+Received: from aspeedtech.com (192.168.10.13) by TWMBX01.aspeed.com
+ (192.168.0.62) with Microsoft SMTP Server id 15.2.1748.10 via Frontend
+ Transport; Sat, 17 Jan 2026 21:42:16 +0800
+From: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+To: <clg@kaod.org>, <broonie@kernel.org>, <boris.brezillon@bootlin.com>,
+	<joel@jms.id.au>, <andrew@codeconstruct.com.au>,
+	<linux-aspeed@lists.ozlabs.org>, <openbmc@lists.ozlabs.org>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <BMC-SW@aspeedtech.com>
+Subject: [PATCH v2 0/2] spi: aspeed: Improve handling of shared SPI controllers
+Date: Sat, 17 Jan 2026 21:42:14 +0800
+Message-ID: <20260117134216.595436-1-chin-ting_kuo@aspeedtech.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260117012136.265220-4-abdurrahman@nexthop.ai>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On Sat, Jan 17, 2026 at 01:21:36AM +0000, Abdurrahman Hussain wrote:
-> This makes the driver work on platforms where interrupts are either not
-> provided or broken.
+This patch series improves handling of SPI controllers that are
+shared by spi-mem devices and other SPI peripherals.
 
-Please slow down with your patchset. One patchset per 24h so you will
-actually give people chance to review them. I just posted comments for
-your v1.
+The primary goal of this series is to support non-spi-mem devices in
+the ASPEED FMC/SPI controller driver. It also addresses an issue in
+the spi-mem framework observed when different types of SPI devices
+operate concurrently on the same controller, ensuring that spi-mem
+operations are properly serialized.
 
-Also one more note (please address v1 comments first):
-Please do not use "This commit/patch/change", but imperative mood. See
-longer explanation here:
-https://elixir.bootlin.com/linux/v6.16/source/Documentation/process/submitting-patches.rst#L94
+Changes in v2:
+  - Separate transfer_one_message() function implementation into
+    transfer_one() and prepare_message() in controller driver.
 
-Best regards,
-Krzysztof
+Chin-Ting Kuo (2):
+  spi: spi-mem: Protect dirmap_create() with spi_mem_access_start/end
+  spi: aspeed: Add support for non-spi-mem devices
+
+ drivers/spi/spi-aspeed-smc.c | 134 +++++++++++++++++++++++++++++++++--
+ drivers/spi/spi-mem.c        |  11 ++-
+ 2 files changed, 138 insertions(+), 7 deletions(-)
+
+-- 
+2.34.1
 
 
