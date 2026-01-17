@@ -1,87 +1,115 @@
-Return-Path: <linux-spi+bounces-12474-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12475-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D7CDD38F50
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 16:23:47 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACDB3D391C0
+	for <lists+linux-spi@lfdr.de>; Sun, 18 Jan 2026 00:48:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E8023014BD7
-	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 15:23:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6415C300500E
+	for <lists+linux-spi@lfdr.de>; Sat, 17 Jan 2026 23:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B35D20C477;
-	Sat, 17 Jan 2026 15:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ah4ykgAd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85EE223339;
+	Sat, 17 Jan 2026 23:48:36 +0000 (UTC)
 X-Original-To: linux-spi@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62D5B67E;
-	Sat, 17 Jan 2026 15:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE9D264602;
+	Sat, 17 Jan 2026 23:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768663425; cv=none; b=b5W/DZyaAz9/x2bbER06lEZ4GblngGHbDiIfv2FpShr6rhUxRvnoLxieDPoasjeUPQZJEYXZWovJLdu9BA5syI4uqCD2uIMZXGBI1SY5WAH6W3xNulZb4VnZJwbJa3j4zlZZV3OZRCmrGx28cU+EY/3pdn3OjEmwGAf7grgOdA8=
+	t=1768693716; cv=none; b=Pj6KW+6xNtlTcubj5BGk1viZXCEfkf3BYGxX9mOEkaZQV/Sjf980mrrTUG9kU4owQ6PBdG0iBtP6C753LDwwY7mQ20XXrxo6o1BjGoI6F2M0aMYa7Xz3iSlAgDSlB1sXqy73lBbGFqkZHojUCyzxQyj5tF6cKgu57Iss/kTYuqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768663425; c=relaxed/simple;
-	bh=5KwaYynedZX2hmAgLdQ4q8bgxOY9EVpgGEoC/w/5Nn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j7FjicS0PqOZLY3VM+0uYpbKBz2cG2KwIiIB47SVreBFDRE/+lPDLKChZC7NJ3jCi2fS2e4xqCMFHR0AahpxQNFQOrfxNOqKzjVFx5/OkIJza+Io1+C8vq8NRLJ/4T2ptbIgmoJ8IJ7G6Rhi7rDUPZlnBxQs6yJk7kTCEbvFE3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ah4ykgAd; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=0mBxI9aIz+3R0JRKzaZEq+nxJIFr2t+OaDEqZ+gvIxk=; b=ah4ykgAdIIK79zCcIQJbdM2aOJ
-	tePiTgFGApdW0Nsy3G2R6mcTarWqh90tpWya2uswpGJVS/7YJz17ku6vGZgB3UZLSW/J/IWwulgiz
-	hVbDlGW2qzyGeSCn8kmC287xaP1is0utSdnbz+Dvg6uNckRApwIGJ1Rcj4zEbqXmPhgI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1vh89D-003DWR-KH; Sat, 17 Jan 2026 16:23:31 +0100
-Date: Sat, 17 Jan 2026 16:23:31 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Abdurrahman Hussain <abdurrahman@nexthop.ai>
-Cc: Mark Brown <broonie@kernel.org>, Michal Simek <michal.simek@amd.com>,
-	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] spi: dt-bindings: xilinx: make interrupts optional
-Message-ID: <f48aea5e-b600-4546-9bc6-82751cf4fe97@lunn.ch>
-References: <20260117012136.265220-1-abdurrahman@nexthop.ai>
- <20260117012136.265220-4-abdurrahman@nexthop.ai>
+	s=arc-20240116; t=1768693716; c=relaxed/simple;
+	bh=+3XM+SZuxRFfVw8pqqU9rmBMD0i2wEZYG6QVsMGfg5k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=N9tcBqdQY0Be09BrGmXaDCsrsCWa8swsPC2DmgOa6QWDTwCDk4ktTXZxSOhMGQFqFOG1mEyLczS8zV3IyJJraQ//hVEOsocv18gstglJzRsTjWa1IHsip9vYHpwyNWguWnVeIIhTA2Lbs8OrDV04PP3b0hQK17mSPPfba+03KCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [10.0.57.151] (unknown [62.214.191.67])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 30E864C4430066;
+	Sun, 18 Jan 2026 00:47:01 +0100 (CET)
+Message-ID: <ccb6b5b3-84cd-4197-a770-7e626c1ddcf3@molgen.mpg.de>
+Date: Sun, 18 Jan 2026 00:46:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260117012136.265220-4-abdurrahman@nexthop.ai>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] spi: spi-mem: Protect dirmap_create() with
+ spi_mem_access_start/end
+To: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+References: <20260117134216.595436-1-chin-ting_kuo@aspeedtech.com>
+ <20260117134216.595436-2-chin-ting_kuo@aspeedtech.com>
+Content-Language: en-US
+Cc: clg@kaod.org, broonie@kernel.org, boris.brezillon@bootlin.com,
+ joel@jms.id.au, andrew@codeconstruct.com.au, linux-aspeed@lists.ozlabs.org,
+ openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ BMC-SW@aspeedtech.com
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20260117134216.595436-2-chin-ting_kuo@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jan 17, 2026 at 01:21:36AM +0000, Abdurrahman Hussain wrote:
-> This makes the driver work on platforms where interrupts are either not
-> provided or broken.
+Dear Chin-Ting,
 
-In addition to Krzysztof comment, please do try to read all the links
-to documents i sent you.
 
-Point 5 of the binding document says:
+Thank you for your patch.
 
-    The Documentation/ portion of the patch should come in the series
-    before the code implementing the binding.
+Am 17.01.26 um 14:42 schrieb Chin-Ting Kuo:
+> spi_mem_dirmap_create() may reconfigure controller-wide settings,
+> which can interfere with concurrent transfers to other devices
+> sharing the same SPI controller but using different chip selects.
+> 
+> Wrap the ->dirmap_create() callback with spi_mem_access_start() and
+> spi_mem_access_end() to serialize access and prevent cross-CS
+> interference during dirmap creation.
 
-This might sound nit picky, but there is a huge volume of patches
-which need reviewing, and in order to make that possible we have
-processes to make it simpler to do. Please keep to the processes,
-particularly if you plan to stick around and become a regular
-contributor.
+Do you have a reproducer for this issue to test your patch? If yes, it’d 
+be great, if you documented it.
 
-    Andrew
+> Signed-off-by: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>
+> ---
+>   drivers/spi/spi-mem.c | 11 ++++++++++-
+>   1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/spi/spi-mem.c b/drivers/spi/spi-mem.c
+> index c8b2add2640e..85702a77b3c8 100644
+> --- a/drivers/spi/spi-mem.c
+> +++ b/drivers/spi/spi-mem.c
+> @@ -708,9 +708,18 @@ spi_mem_dirmap_create(struct spi_mem *mem,
+>   
+>   	desc->mem = mem;
+>   	desc->info = *info;
+> -	if (ctlr->mem_ops && ctlr->mem_ops->dirmap_create)
+> +	if (ctlr->mem_ops && ctlr->mem_ops->dirmap_create) {
+> +		ret = spi_mem_access_start(mem);
+> +		if (ret) {
+> +			kfree(desc);
+> +			return ERR_PTR(ret);
+> +		}
+> +
+>   		ret = ctlr->mem_ops->dirmap_create(desc);
+>   
+> +		spi_mem_access_end(mem);
+> +	}
+> +
+>   	if (ret) {
+>   		desc->nodirmap = true;
+>   		if (!spi_mem_supports_op(desc->mem, &desc->info.op_tmpl))
 
----
-pw-bot: cr
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+
+
+Kind regards,
+
+Paul
 
