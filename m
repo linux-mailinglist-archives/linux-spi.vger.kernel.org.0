@@ -1,212 +1,105 @@
-Return-Path: <linux-spi+bounces-12485-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12486-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56008D3A485
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jan 2026 11:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EBE21D3AA7D
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jan 2026 14:38:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A8C1A30051A1
-	for <lists+linux-spi@lfdr.de>; Mon, 19 Jan 2026 10:11:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 083943083FB3
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jan 2026 13:37:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF88352945;
-	Mon, 19 Jan 2026 10:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BE9368298;
+	Mon, 19 Jan 2026 13:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A0Yy+O9m"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2385E20C463;
-	Mon, 19 Jan 2026 10:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8D73659F3;
+	Mon, 19 Jan 2026 13:37:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768817490; cv=none; b=sjrqCinJMGu4VxGCwZO8q1DiOrJ0QCSlJCE50k90FhNK9QLwpqXLJTbxMx0TSmInUY2yfUz5i6jk8ssW5/JV4t/5RO1QkH19RZ+GZDVBBR+d/vM69YiQI6/d379ZY8ttrqo+rY8W/rvRsbrFTFsMdQkjo6Zgrab+yoGt48V3Z0A=
+	t=1768829833; cv=none; b=SnedwP7hZS+/NHbBhFpLGBRUOMGUV7Br5LSjeVReqie+z8x3ZI4Zbc/hP8YQcrKp3q3H00bJFEKf2fbMALTV/VObf4LVTsX/0ppLsl3JCWkWfIsG/h1KXX/U1jAAZLNrPGyvcMD5CsRUmhhaKZNrEykCod1DU95AGZQu+9DxTZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768817490; c=relaxed/simple;
-	bh=57lEC4dXUpUv773+WZ6rBaiLlekOcOl648c/iA8uT6c=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UgHUjGwCyreFjVwryrsxj6KExoOy0zH2bLDCiewEUFhCLnLF/5vVuvZ0clQTuTLOYOo6BYy9m8IjLb1SZ/OEA+WTy263HpBvSVSAGAtANS/u384MAjsJKA34SbVhs40AKws2BQAPGn8J4SlESdfeOIgrcPMftiulZ2D6EpT4BF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.224.107])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dvmS91KXtzHnHDj;
-	Mon, 19 Jan 2026 18:10:49 +0800 (CST)
-Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id BB5BA40571;
-	Mon, 19 Jan 2026 18:11:18 +0800 (CST)
-Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
- (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 19 Jan
- 2026 10:11:17 +0000
-Date: Mon, 19 Jan 2026 10:11:16 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: David Lechner <dlechner@baylibre.com>
-CC: Jonathan Cameron <jic23@kernel.org>, Mark Brown <broonie@kernel.org>, Rob
- Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor
- Dooley <conor+dt@kernel.org>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
-	Michael Hennerich <michael.hennerich@analog.com>, Nuno =?ISO-8859-1?Q?S=E1?=
-	<nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Sean Anderson
-	<sean.anderson@linux.dev>, <linux-spi@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v5 5/9] spi: Documentation: add page on multi-lane
- support
-Message-ID: <20260119101116.00002664@huawei.com>
-In-Reply-To: <ad688ba9-7771-4b64-a9d7-ec5100345460@baylibre.com>
-References: <20260112-spi-add-multi-bus-support-v5-0-295f4f09f6ba@baylibre.com>
-	<20260112-spi-add-multi-bus-support-v5-5-295f4f09f6ba@baylibre.com>
-	<20260114091024.390432c0@jic23-huawei>
-	<ad688ba9-7771-4b64-a9d7-ec5100345460@baylibre.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1768829833; c=relaxed/simple;
+	bh=NQhlNmakp9XzCvOKm+K/DiXWdOuvD8Ykc7UWybaRfrA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sftnlAYGefWLTQB6js8nPNHePn7cKu2sqJ/WswQpAOTupGmseomJxn1yxE53Rc6VDbv3sVF6Lh7km5ccSgYK8lujiwjjBbuX6HAEKLRBPR3wdVJB8OG2e1c2uheaD3ToUjpR5zLRu3N7HHM/l6zZF2sBjsxRRy8oqL6TqqrgQuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A0Yy+O9m; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09E63C116C6;
+	Mon, 19 Jan 2026 13:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768829833;
+	bh=NQhlNmakp9XzCvOKm+K/DiXWdOuvD8Ykc7UWybaRfrA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A0Yy+O9m3bpEWejSb8AZVey2Vkiwx0Eax1Yq7MFX+zQfpIW9vXJjBQavwlH/TErRH
+	 qW66JhnYseJiJfY2MKbXCI54CthEcjVWyI6bb/ms2w53GHTvZLz6J3jazd5/uSl2Ps
+	 FTn7n87f/C1RBrwV1i6bt5ETR8tzAWb0QlnyYbPPk0g6AQe4B1dYCGNXRpxzsRjpvG
+	 O/O1cX7wCx42r0asHpVNvtwg9Az048pE37WW7oOey/+uBFiI33P8bnOHzVHf9i0y12
+	 XwB/K0dlvP1LZpCmhHgmmT6v5qbWg3jaahCpW3/N9FB90ik68JPzCM7hNszYr4JJ4q
+	 hXVNgNbeGbjXQ==
+Date: Mon, 19 Jan 2026 13:37:08 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: Chin-Ting Kuo <chin-ting_kuo@aspeedtech.com>, clg@kaod.org,
+	boris.brezillon@bootlin.com, joel@jms.id.au,
+	andrew@codeconstruct.com.au, linux-aspeed@lists.ozlabs.org,
+	openbmc@lists.ozlabs.org, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v2 2/2] spi: aspeed: Add support for non-spi-mem devices
+Message-ID: <e4f133db-928e-49ae-9ee8-99e119d14708@sirena.org.uk>
+References: <20260117134216.595436-1-chin-ting_kuo@aspeedtech.com>
+ <20260117134216.595436-3-chin-ting_kuo@aspeedtech.com>
+ <3153512e-8325-4d0b-a869-a2a5062abefd@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100011.china.huawei.com (7.191.174.247) To
- dubpeml500005.china.huawei.com (7.214.145.207)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="gk42q0GFzUogNGdb"
+Content-Disposition: inline
+In-Reply-To: <3153512e-8325-4d0b-a869-a2a5062abefd@molgen.mpg.de>
+X-Cookie: Does not include installation.
 
-On Fri, 16 Jan 2026 16:35:13 -0600
-David Lechner <dlechner@baylibre.com> wrote:
 
-> On 1/14/26 3:10 AM, Jonathan Cameron wrote:
-> > On Mon, 12 Jan 2026 11:45:23 -0600
-> > David Lechner <dlechner@baylibre.com> wrote:
-> >   
-> >> Add a new page to Documentation/spi/ describing how multi-lane SPI
-> >> support works. This is uncommon functionality so it deserves its own
-> >> documentation page.
-> >>  
-> 
-> ...
-> 
-> >> +
-> >> +For example, a dual-simultaneous-sampling ADC with two 4-bit lanes might be
-> >> +wired up like this::
-> >> +
-> >> +    +--------------+    +----------+
-> >> +    | SPI          |    | AD4630   |
-> >> +    | Controller   |    | ADC      |
-> >> +    |              |    |          |
-> >> +    |          CS0 |--->| CS       |
-> >> +    |          SCK |--->| SCK      |
-> >> +    |          SDO |--->| SDI      |
-> >> +    |              |    |          |
-> >> +    |        SDIA0 |<---| SDOA0    |
-> >> +    |        SDIA1 |<---| SDOA1    |
-> >> +    |        SDIA2 |<---| SDOA2    |
-> >> +    |        SDIA3 |<---| SDOA3    |
-> >> +    |              |    |          |
-> >> +    |        SDIB0 |<---| SDOB0    |
-> >> +    |        SDIB1 |<---| SDOB1    |
-> >> +    |        SDIB2 |<---| SDOB2    |
-> >> +    |        SDIB3 |<---| SDOB3    |
-> >> +    |              |    |          |
-> >> +    +--------------+    +----------+
-> >> +
-> >> +It is described in a devicetree like this::
-> >> +
-> >> +    spi {
-> >> +        compatible = "my,spi-controller";
-> >> +
-> >> +        ...
-> >> +
-> >> +        adc@0 {
-> >> +            compatible = "adi,ad4630";
-> >> +            reg = <0>;
-> >> +            ...
-> >> +            spi-rx-bus-width = <4>, <4>; /* 2 lanes of 4 bits each */
-> >> +            ...
-> >> +        };
-> >> +    };  
-> 
-> 
-> ...
-> 
-> >> +properties are needed to provide a mapping between controller lanes and the
-> >> +physical lane wires.
-> >> +
-> >> +Here is an example where a multi-lane SPI controller has each lane wired to
-> >> +separate single-lane peripherals::
-> >> +
-> >> +    +--------------+    +----------+
-> >> +    | SPI          |    | Thing 1  |
-> >> +    | Controller   |    |          |
-> >> +    |              |    |          |
-> >> +    |          CS0 |--->| CS       |
-> >> +    |         SDO0 |--->| SDI      |
-> >> +    |         SDI0 |<---| SDO      |
-> >> +    |        SCLK0 |--->| SCLK     |
-> >> +    |              |    |          |
-> >> +    |              |    +----------+
-> >> +    |              |
-> >> +    |              |    +----------+
-> >> +    |              |    | Thing 2  |
-> >> +    |              |    |          |
-> >> +    |          CS1 |--->| CS       |
-> >> +    |         SDO1 |--->| SDI      |
-> >> +    |         SDI1 |<---| SDO      |
-> >> +    |        SCLK1 |--->| SCLK     |
-> >> +    |              |    |          |
-> >> +    +--------------+    +----------+
-> >> +
-> >> +This is described in a devicetree like this::
-> >> +
-> >> +    spi {
-> >> +        compatible = "my,spi-controller";
-> >> +
-> >> +        ...
-> >> +
-> >> +        thing1@0 {
-> >> +            compatible = "my,thing1";
-> >> +            reg = <0>;
-> >> +            ...
-> >> +        };
-> >> +
-> >> +        thing2@1 {
-> >> +            compatible = "my,thing2";
-> >> +            reg = <1>;
-> >> +            ...
-> >> +            spi-tx-lane-map = <1>; /* lane 0 is not used, lane 1 is used for tx wire */
-> >> +            spi-rx-lane-map = <1>; /* lane 0 is not used, lane 1 is used for rx wire */  
-> > 
-> > Whilst simple I'd kind of expect a multi lane case as the example, or this and
-> > the multilane one? For me the comment that follows is sufficient for the 1 lane
-> > offset case you have here.  
-> 
-> I thought that is what I did. I have one example that shows multiple lanes (ADC)
-> and one example that shows the map (Thing 1/2).
-> 
-> But I guess you mean that you want a 3rd example that show both the map and
-> multiple lanes at the same time?
-Oops. No. I was arguing....
-> 
-> I chose these two examples because they came from real-world use cases that
-> drove adding this feature. We didn't have a real-world case yet that used
-> both the map and multiple lanes at the same time so I didn't include that.
-> 
-> >   
-> >> +            ...
-> >> +        };
-> >> +    };
-> >> +
-> >> +
-> >> +The default values of ``spi-rx-bus-width`` and ``spi-tx-bus-width`` are ``<1>``,
-> >> +so these properties can still be omitted even when ``spi-rx-lane-map`` and
-> >> +``spi-tx-lane-map`` are used.  
+--gk42q0GFzUogNGdb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This comment is enough to allow you to drop the first example entirely and
-just have the 2nd.
+On Sun, Jan 18, 2026 at 12:48:37AM +0100, Paul Menzel wrote:
+> Am 17.01.26 um 14:42 schrieb Chin-Ting Kuo:
+> > The ASPEED FMC/SPI controller may be shared by spi-mem devices and
+> > other SPI peripherals that do not use the spi-mem framework.
+> >=20
+> > The driver currently assumes spi-mem semantics for all devices,
+> > while the controller also supports direct user mode access commonly
+> > used by non-spi-mem devices. This mismatch can result in incorrect
+> > behavior when different types of devices share the same controller.
 
-Jonathan
+Please delete unneeded context from mails when replying.  Doing this
+makes it much easier to find your reply in the message, helping ensure
+it won't be missed by people scrolling through the irrelevant quoted
+material.
 
-> > 
-> > 
-> >   
-> 
-> 
-> 
+--gk42q0GFzUogNGdb
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmluM4MACgkQJNaLcl1U
+h9AOpAf+KY6H92cdg3gOoQqgQu7crH6a+7XIW9D8d4DUyutJ3AVxvUSJHgxNAl3c
+V4ilv0msLOJJ6HpX/r5PQwBxtXyJ8B+4awixyqucFxMc5rOTbOhTUfSQs5CEk0Ye
+ZA0i4zbi0ugsYRl329wp62zOsYNbdZu0zDZmaAwIGUnZhuyarMsk3xfSkg8i7oor
+/uQhG8Z+bw1Y9rW5+WBFPLHsEiOhsf/o7pIIKUtTkaJkrE8hvfvszgIzObDQwKPM
+EXIlzMbd2tlKgIHfwIRcRK+NzbpvC/BIHEBZmiYPR/Ura1meOTlsrD9UR0rpd5Gg
+RrZG1vxcsH4KwCDJfTCUxBBlMfcFlg==
+=Arfl
+-----END PGP SIGNATURE-----
+
+--gk42q0GFzUogNGdb--
 
