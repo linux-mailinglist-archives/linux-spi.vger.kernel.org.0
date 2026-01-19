@@ -1,118 +1,117 @@
-Return-Path: <linux-spi+bounces-12479-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12482-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14564D39666
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Jan 2026 15:05:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08163D39F58
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jan 2026 08:07:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 347F33002163
-	for <lists+linux-spi@lfdr.de>; Sun, 18 Jan 2026 14:05:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4CBBB303D153
+	for <lists+linux-spi@lfdr.de>; Mon, 19 Jan 2026 07:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E589633508B;
-	Sun, 18 Jan 2026 14:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A863A2DAFA4;
+	Mon, 19 Jan 2026 07:06:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="AU1u6WOt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n3dFhBK4"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03E633506F
-	for <linux-spi@vger.kernel.org>; Sun, 18 Jan 2026 14:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801032C326F;
+	Mon, 19 Jan 2026 07:06:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768744994; cv=none; b=DZkY2UWR8RMB91k/9A7OKG4aEXzJ+U8zLcOfqvbrzHpN0CVKZPr1X3dpMRfVLlt3ZuAX7w+0VQhYEFaiBIWFkzW6VMkbPpp78oXAsBgGkB1qHDW/IdIP3l1zsH0+pWrTvXiedWwmlB9kJXDeeGNtvOrHCgxm28APbWaHgt+6E2E=
+	t=1768806394; cv=none; b=DIbHU3pQPcPUD6TvJvnjCiqpzCIOzHHcTi4IwCojxfZQL/T7KN1I8VMlKQfA4FyaBsXUS/7jmecXFDM02zTmqIFGJ4RkdrHWkFM/36BHr0fh2vAaaHSETbo5QZWTcu6vV6whUvDBlZcBZ5BY/cP/UAWbJ5kNJR4jHwhykvAjUXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768744994; c=relaxed/simple;
-	bh=/GsF+Uwls1Cn2yinM71Z8W+ioXcZeW9vpkl4szRkNjI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=htw3GyPksbeFhRNpvNM4hAz4UJhkqtwI7AfxqxfS/Q1zteByDGhVuF/C+DDG3k8u6fZVSWtzutYTpDRxh+iFjMQ5ZCSQm+4p1U13avDB//FA6JOX2E9i5/+sQx1mPkE0p/6+sufKbEgXvgPwcjM5Sdbwi2kit1jKcjGsiYx3XvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=AU1u6WOt; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47ee937ecf2so24775485e9.0
-        for <linux-spi@vger.kernel.org>; Sun, 18 Jan 2026 06:03:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1768744991; x=1769349791; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IMK1YqKVaUf0IoyRsQOMCKJ4gS01F7A0JEX5JckEMXs=;
-        b=AU1u6WOtLoi8xhtxE3eZH2de7tMEOJBbWbxjQ3yhiZkjPT2U+TxzYsQSeFKocZiPFp
-         AfUR8WeygLNHXiE9Viiw1RtzFAsj1KyVxaWitGd2d8N3ANyj+Y7kO43+hm5JZhbBq+Lb
-         lPvGKm4ZddOA32TKUnbLjuE3F06FWBpu3jNeWG8PxL6W7eEJcdrnLaI8SrtPWsd/V4W6
-         +EAvlq2BKqQ/VvftFp9V9f78dx1EN5wahowO2gdSHzutwK6Z8mTGZRreowFvAg6oCWZ7
-         I8ZU60NADPdABqce0/chNtZRxbKpG3J3sqT37gvVSYI6RT6C+EjRstJOaUfYQFkChaEz
-         m0SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768744991; x=1769349791;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IMK1YqKVaUf0IoyRsQOMCKJ4gS01F7A0JEX5JckEMXs=;
-        b=muT8/hWW/+xSKByP7aBZEOYPVe1Jqu1klmbOG4oBU8KYSIvgi2wdw7owuAZzsiKEnx
-         qjHd8EK+vfEicQejJ/+YbzO95O7Q/6V3ymX4RY1U8lm45CXPhWNN9OX1lEkoYposrm/N
-         mp0iUb7wbs4tLKoGW2z3JsS7bQ7t7iG6cfPEyvBfhdtBaCXxYhoDLIlvTnGpn5sF33I/
-         jjXwvzRwClTBgB1ABIZM73zqTctb1ttUQ7q3aD/Gcob/QKeDzPQ9o2MtwnqW0Utq/8Fx
-         Fa5M3mRxVz1R8ae9Q40U16U6rh8uBGA7RXsmB6y63f9u3tUIKdZDm9qNY6hSfS6f6HKw
-         OBVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWHe1FfrK8jpUsWj6F6WkUo3imPtJALs5jqEO1lgbyWHa1ZowkpXXQu3q5EVl02TQx3Rr8hvp1P2VI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxiGbqJmf+nruwANXEZ5I5KicjOuyrAt2wc+kCr/P0A0cWYLPNS
-	Cvh+RScdkzLXx8lOgQpESbTJse9RtM/llMM8wyApC/D5Q5q4WcosqUTwywLr84zvcMo=
-X-Gm-Gg: AY/fxX6cHNHdzXcfVkIL9AME9qT+PwdRG5zwCKmWBCUvZ59QGzzPPhhdk8101peRwAR
-	VrQ0Hfs6+e9kBbEx0aR7leBJWFIB3mh55z0hozZKKt7+GnD6h1pEsmZbuuB2kYYqQXpjqrP/VfL
-	D+MbROOKNDSLZBhRsc5T/w2YPJqaSJ75GeOUbdL9mWumlY5qJTaFER98Ums2Y3mF969QvkSFvOn
-	GZ7+xOqdP3eXnYqRzBinG6Y6Om8OyqaWy1zWMVmJrGniz93/afbXRuN22iXqkYeGlW00lNt7k0/
-	r66pM337DHIlkQP94ZQXp3tbfCcGMes1/Ptt6/3gKk5lx8Lr1wgAXgbj0Rr4e8noNSfHZj4aA0a
-	4OWWnRrzSbvoEmfwQfg/pNwSNOS62e+VptMZp871l6/PyjteA+2Fpii8MFZFn+uyvXhdknfp2la
-	niAbzCq88wYAhhis6hzA==
-X-Received: by 2002:a05:600c:4da3:b0:47d:7004:f488 with SMTP id 5b1f17b1804b1-47f428f5e9amr84049025e9.10.1768744990847;
-        Sun, 18 Jan 2026 06:03:10 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43569921df9sm17725892f8f.3.2026.01.18.06.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 18 Jan 2026 06:03:10 -0800 (PST)
-Message-ID: <9c34b805-8c6f-4711-9718-6c39a141d451@tuxon.dev>
-Date: Sun, 18 Jan 2026 16:03:07 +0200
+	s=arc-20240116; t=1768806394; c=relaxed/simple;
+	bh=tpnfYEEUGGCcAt473upHUWl8HqVkQmGsCrvb4CiklBI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BRf6aY/URhxWzdU2udoiPjL5bgbXmmFnk3eBLrQykTZSEJuUVxg09D+V3BJO09NIQsCEScc3TbhSGw3Ev/E59DIRDtpDNxXzJqx7c7eSkX3+vctKh5QQWXJ0Cs9RYnJ47o9OeRGzak/jbLVqt8/w5S2heT3skiCerQ1aqOaUC6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n3dFhBK4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2180DC16AAE;
+	Mon, 19 Jan 2026 07:06:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768806394;
+	bh=tpnfYEEUGGCcAt473upHUWl8HqVkQmGsCrvb4CiklBI=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=n3dFhBK4rAnsMU8QW5/B1/mluc329pUD+nH+7GdZqz5Bui/GG3sMWdYUeC/qjNeUA
+	 ASF3jbcDrA8aLy010xZuZz2fED+ieZuVq2OLIomiC444VWqk73VZ4+SMWFUxzsQYf+
+	 1uzxsLCe+7v+eUXaL6qatYn4WjHPg7FnG4DoOMTpCfdfGcBLJTjaMfDlOoRsJzYrFb
+	 LEqTeYTzgW99xrRqgMYWqEi9gaRcoKSTztqRTVlrNJewdeEa3MOfYh2x0V1h4FTCt9
+	 jHh0yOY4L5UwnkDCRZHI4/oHRGeDOAT5zLnzXbDHbBYO8ByC+0GiJ5Fb2M36UkhR/G
+	 1Q7t3KBiwMVhw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11B81CA5FE4;
+	Mon, 19 Jan 2026 07:06:34 +0000 (UTC)
+From: Abdurrahman Hussain via B4 Relay <devnull+abdurrahman.nexthop.ai@kernel.org>
+Subject: [PATCH v3 0/3] spi: xilinx: switch to device properties and make
+ IRQs optional
+Date: Mon, 19 Jan 2026 07:06:21 +0000
+Message-Id: <20260119-spi-xilinx-v3-0-4566c33bac0d@nexthop.ai>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 11/11] arm64: dts: microchip: add EV23X71A board
-To: Robert Marko <robert.marko@sartura.hr>, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, nicolas.ferre@microchip.com,
- alexandre.belloni@bootlin.com, herbert@gondor.apana.org.au,
- davem@davemloft.net, lee@kernel.org, andrew+netdev@lunn.ch,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
- UNGLinuxDriver@microchip.com, linusw@kernel.org, olivia@selenic.com,
- richard.genoud@bootlin.com, radu_nicolae.pirea@upb.ro,
- gregkh@linuxfoundation.org, richardcochran@gmail.com,
- horatiu.vultur@microchip.com, Ryan.Wanner@microchip.com,
- tudor.ambarus@linaro.org, kavyasree.kotagiri@microchip.com,
- lars.povlsen@microchip.com, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-serial@vger.kernel.org
-Cc: luka.perkov@sartura.hr
-References: <20260115114021.111324-1-robert.marko@sartura.hr>
- <20260115114021.111324-12-robert.marko@sartura.hr>
-Content-Language: en-US
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20260115114021.111324-12-robert.marko@sartura.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO3XbWkC/03MQQ6CMBBA0auQWTukU6SiK+9hXBQZ7CRSyBRNE
+ 8LdbVy5fIv/N0iswgku1QbKH0kyx4LmUMEj+PhklKEYrLHOEHWYFsEsL4kZqe+649D2rqUzlGB
+ RHiX/Zrd78ajzhGtQ9v+LkyFLjauta601SOj74a3qw+TjNXJew7zUXmDfv27egTSdAAAA
+X-Change-ID: 20260118-spi-xilinx-1b884d5b6519
+To: Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Michal Simek <michal.simek@amd.com>
+Cc: linux-spi@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Abdurrahman Hussain <abdurrahman@nexthop.ai>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768806393; l=1190;
+ i=abdurrahman@nexthop.ai; s=20260119; h=from:subject:message-id;
+ bh=tpnfYEEUGGCcAt473upHUWl8HqVkQmGsCrvb4CiklBI=;
+ b=YHnrC+P6MuDz85zvTkEdBwOIu0gWm/BLsiWVugyfCbkuGtF2+tNjvrjF4b2AXibOgorGlYwPo
+ CCRNsI8TXKmBOhUslCDbZIkLbruGmnpr1r+tXRbtA+X0vDTpRR7CdX/
+X-Developer-Key: i=abdurrahman@nexthop.ai; a=ed25519;
+ pk=S+ysnf+NwMcBdHBlyKIUEAtaFGSIhQwcJcgcXhq0osg=
+X-Endpoint-Received: by B4 Relay for abdurrahman@nexthop.ai/20260119 with
+ auth_id=608
+X-Original-From: Abdurrahman Hussain <abdurrahman@nexthop.ai>
+Reply-To: abdurrahman@nexthop.ai
+
+Transition the driver to use the generic device property API.
+
+Additionally, make interrupts optional to allow the driver to fall back
+to its existing polling mode on systems where interrupts are either missing
+or broken.
+
+Abdurrahman Hussain (3):
+  spi: xilinx: use device property accessors.
+  spi: xilinx: make irq optional
+  spi: dt-bindings: xilinx: make interrupts optional
+
+ .../devicetree/bindings/spi/spi-xilinx.yaml          |  1 -
+ drivers/spi/spi-xilinx.c                             | 12 ++++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+--
+2.52.0
+
+base-commit: 944aacb68baf7624ab8d277d0ebf07f025ca137c
+---
+Abdurrahman Hussain (3):
+      spi: dt-bindings: xilinx: make interrupts optional
+      spi: xilinx: make irq optional
+      spi: xilinx: use device property accessors.
+
+ Documentation/devicetree/bindings/spi/spi-xilinx.yaml |  1 -
+ drivers/spi/spi-xilinx.c                              | 12 ++++++------
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+---
+base-commit: 944aacb68baf7624ab8d277d0ebf07f025ca137c
+change-id: 20260118-spi-xilinx-1b884d5b6519
+
+Best regards,
+-- 
+Abdurrahman Hussain <abdurrahman@nexthop.ai>
 
 
-
-On 1/15/26 13:37, Robert Marko wrote:
-> Microchip EV23X71A is an LAN9696 based evaluation board.
-> 
-> Signed-off-by: Robert Marko<robert.marko@sartura.hr>
-
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 
