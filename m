@@ -1,249 +1,203 @@
-Return-Path: <linux-spi+bounces-12506-lists+linux-spi=lfdr.de@vger.kernel.org>
+Return-Path: <linux-spi+bounces-12507-lists+linux-spi=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-spi@lfdr.de
 Delivered-To: lists+linux-spi@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F32B9D3C3AB
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Jan 2026 10:35:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB613D3C3B0
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Jan 2026 10:35:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 928CB56A107
-	for <lists+linux-spi@lfdr.de>; Tue, 20 Jan 2026 09:26:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3A0E16A7032
+	for <lists+linux-spi@lfdr.de>; Tue, 20 Jan 2026 09:28:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3D63D2FF0;
-	Tue, 20 Jan 2026 09:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80923D3CF3;
+	Tue, 20 Jan 2026 09:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="fofYft7q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MGTZ/Uwi"
 X-Original-To: linux-spi@vger.kernel.org
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012029.outbound.protection.outlook.com [52.101.48.29])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB053D6466;
-	Tue, 20 Jan 2026 09:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768900972; cv=fail; b=NAmwFWDnPyu7cW4L9K1CEGDTcdKcQrYCgmYVUdeZ4OxZyLx7akitq8ZKY90vRqxjVg9Xrpb0fQ5ZQaqwAR1MYeB21xzNrGOXARWN9jNN0wGdAOSEAX90xAwUT8WxwUuaUprrMs1GR/uB2doru6rTILHApwgaxiqAj5DRM5wgGHA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768900972; c=relaxed/simple;
-	bh=jRrgVPM9lFT6/laLRA+nEMZt+EmsiIN1hR/exxXaXxo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=MMvFEIe9bdSgloeDlaeNPc9E3GhIGZCUNGm7IFWSQi1siS+G2rGEvcih0Ard9ZPFeGB5Ac6ulbfmaQVaxoQ2CKMyFeQm51UiLSWGY6BLPVTIeypLsS0sMUt8ivacSB/zKcf9RpLGyduw4QxsDq3wbnJXpf/jXUVV3/bbsOGUiz8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=fofYft7q; arc=fail smtp.client-ip=52.101.48.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dO0NZo/XPXtXnCa5EwDdbMcNnoe4vSQnCMVDD5re4d2CF9nwIglCJNkExT8IvAon3oCRkXfS9Ny5JZsrOhtLvucFPa026/VXEupDUqHtojcbmd9fzyPoUhvwQ5dk9Xm98R7vXtddCiT2FOQq1E4rg8GunAeUVRK+Veqs3/xvRoXAUueovReTVDfYCmjvFTUxi87XL+gPyC/YmAFJDML82wUClyk6qtitwRmaGCVko25rD4Cf+fo0O9FqS5tl037GNt2SuFv+JAyBenqaqgufU3FYF4yrfkffWAytNwha+iSzs2MDbM+XIJ62fvwGd8Z3mZdTCSvsfoWGDB3vCC8cIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=64uXVn3C7QEFViuztSbuaquwA+MXTDoJolrecgzOywo=;
- b=M9FowJo4qMU5H51TXMGqAq4q9a82uaU2uhriGLv/LwhVg79amIvtjjf5aRbpwetBH9GPAPiS4TPMBWzRIGCSAvR0HI9C3zdlChFMgekEFwPFnure9t2pJ8hpC0TjtW5dk8fZkfBuZC6xfHqHhLCipxFiJgEf0kGanKIC3hFKY6rujOswP9Kr8mExOGOjRJFKkffvxElRb9unQKHn4EZMD6vaY5tOUseqdsauM48DCbw4PCR+GU1KpFLgevNeEMsU4abzheYDzYnIZL+ZRGaod1L6NNNsi09Z8fqz7ZvYA6I9T6iY9OWYVXFi/azJVqPEmf7s9Jm2fYx6V4tGQOqvVg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=64uXVn3C7QEFViuztSbuaquwA+MXTDoJolrecgzOywo=;
- b=fofYft7qjjOU61e6Z/rDBzBP0rY2MZRZvrEhirtbbSTp7wyX93B4/auXjJ9Zsbmb0F1gRHQCmqN0cUfH/HmCtLcTiW0+6Z60z1Zs1mfs4jFtRbRx1fpevlAsPm5UQwuXyS2bF4HSMxavvFYGpMFTWZaSmZPJO93cnTi0AqBNuKI=
-Received: from DS7PR06CA0041.namprd06.prod.outlook.com (2603:10b6:8:54::10) by
- SJ0PR10MB6424.namprd10.prod.outlook.com (2603:10b6:a03:44e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Tue, 20 Jan
- 2026 09:22:48 +0000
-Received: from CY4PEPF0000EDD3.namprd03.prod.outlook.com
- (2603:10b6:8:54:cafe::28) by DS7PR06CA0041.outlook.office365.com
- (2603:10b6:8:54::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.12 via Frontend Transport; Tue,
- 20 Jan 2026 09:22:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.195)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.195; helo=flwvzet201.ext.ti.com; pr=C
-Received: from flwvzet201.ext.ti.com (198.47.21.195) by
- CY4PEPF0000EDD3.mail.protection.outlook.com (10.167.241.199) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9542.4 via Frontend Transport; Tue, 20 Jan 2026 09:22:46 +0000
-Received: from DFLE204.ent.ti.com (10.64.6.62) by flwvzet201.ext.ti.com
- (10.248.192.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 20 Jan
- 2026 03:22:46 -0600
-Received: from DFLE201.ent.ti.com (10.64.6.59) by DFLE204.ent.ti.com
- (10.64.6.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 20 Jan
- 2026 03:22:44 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE201.ent.ti.com
- (10.64.6.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Tue, 20 Jan 2026 03:22:44 -0600
-Received: from [172.24.233.254] (santhoshkumark.dhcp.ti.com [172.24.233.254])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 60K9McbT973005;
-	Tue, 20 Jan 2026 03:22:39 -0600
-Message-ID: <80e7a578-4636-48bd-b92b-54fa33cc076d@ti.com>
-Date: Tue, 20 Jan 2026 14:52:38 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43AB3D3308;
+	Tue, 20 Jan 2026 09:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768901008; cv=none; b=RsNRxmVDCIO+ThOOyGxVidTECR/bw/bWzw9X8x25O8eoHGRH2h94G80VM01ZJ9Dg8SRdMnz+hRbmlxX2vFN9efXCtXASOfK8kJBpXlbJ677Q7weiOMPKEQ+EYyiRDujG9KNqnZ8I4V5HvjpyWgAwP9pLbX4UnzrIMalxgVHsjag=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768901008; c=relaxed/simple;
+	bh=S9gyRhn0+B7afxQAp1s8FGxNuqTvrrlOvLDrNuhP94M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aP/SeoaLm+yZvBOv5ZyfDJsBSNK/0eOdJI5miPy1jfuxaJXP3LOM0n3OAipo6WqRegiJ334dYN4o5JqQucUh1Se7rHeAoNtyaMwpjMz1zngpH1yQm1Y86Itbw6LshNSCnNSJIaiDjJHeGrM6ol3WbEyJvK9Sn/6REdrWdd1vO3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MGTZ/Uwi; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768901007; x=1800437007;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S9gyRhn0+B7afxQAp1s8FGxNuqTvrrlOvLDrNuhP94M=;
+  b=MGTZ/Uwi+Rzhn81mTOsF9a2Az/OkxWAnKRj7tB4C4/Uk7S0guzgW0BCI
+   8KA+ofNm1rqRSBHuTye8udsxiMOBfpabG7K66fgHB24UYy8dAIM/JuXi8
+   5NYomW6VhqJDpxofI99NLYoBZvlWUvXsW9Bg5tO4oZ6gvYjNtXSRn3rF1
+   bukc3XuXQ1CPe5za4TJ8NkxpELlhtf+wNKZVK/XVMD3Ayv9A0FXdB75IK
+   g1An+rQ9azJpjt7RPklHwqPpDBHjttnaMihMU+0lByrtAvchRfJgdexPs
+   L+rbe9Febkd63SA2ikkg2ULG+OMcnq8oHaOhjHveF+betINsq8CDYWj6g
+   A==;
+X-CSE-ConnectionGUID: O99rcTcKRj62ebh+hqXPbg==
+X-CSE-MsgGUID: OkGOlj3MQgWWQn1HSLjUgQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="57662229"
+X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
+   d="scan'208";a="57662229"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 01:23:26 -0800
+X-CSE-ConnectionGUID: 4hHYjA+dQHa+/uSIVxbELA==
+X-CSE-MsgGUID: LIYIcTO5TFKeZnFVP0EBtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
+   d="scan'208";a="211084970"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by orviesa005.jf.intel.com with ESMTP; 20 Jan 2026 01:23:23 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 73F1A99; Tue, 20 Jan 2026 10:23:22 +0100 (CET)
+Date: Tue, 20 Jan 2026 10:23:22 +0100
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Michal Simek <michal.simek@amd.com>,
+	Abdurrahman Hussain <abdurrahman@nexthop.ai>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] spi: xilinx: use device property accessors.
+Message-ID: <aW9JihlsjnJ-uBul@black.igk.intel.com>
+References: <69F83558-4675-4FC2-8656-BC6E3481AD65@nexthop.ai>
+ <9e559e33-4f2f-40d4-a15f-584548bd6057@sirena.org.uk>
+ <05D2CC15-DD6B-40F0-BFF0-3264D4FF96ED@nexthop.ai>
+ <b1b79de0-a078-486d-b3e9-96899354407c@sirena.org.uk>
+ <3D1B59A7-6E57-4C8C-AA95-EA7AA115264F@nexthop.ai>
+ <b9ad8ab8-7985-4c89-a82b-c7f31d32c167@sirena.org.uk>
+ <a6d57890-89c1-445e-836c-d8239d20c621@amd.com>
+ <b03307f7-93f6-4680-9241-cf28b5456fd0@sirena.org.uk>
+ <a3fcef3a-d1e9-4b46-b114-3a82575e052e@amd.com>
+ <980ad372-a2c7-417c-91f9-4958d3d1aaca@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-spi@vger.kernel.org
 List-Id: <linux-spi.vger.kernel.org>
 List-Subscribe: <mailto:linux-spi+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-spi+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/13] spi: cadence-qspi: Add Renesas RZ/N1 support
-To: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, "Mark
- Brown" <broonie@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Geert
- Uytterhoeven" <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>,
-	Vaishnav Achath <vaishnav.a@ti.com>
-CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	=?UTF-8?Q?Herv=C3=A9_Codina?= <herve.codina@bootlin.com>, Wolfram Sang
-	<wsa+renesas@sang-engineering.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Pratyush Yadav <pratyush@kernel.org>, Pascal Eberhard
-	<pascal.eberhard@se.com>, <linux-spi@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-renesas-soc@vger.kernel.org>, <s-k6@ti.com>
-References: <20260115-schneider-6-19-rc1-qspi-v2-0-7e6a06e1e17b@bootlin.com>
-Content-Language: en-US
-From: Santhosh Kumar K <s-k6@ti.com>
-In-Reply-To: <20260115-schneider-6-19-rc1-qspi-v2-0-7e6a06e1e17b@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD3:EE_|SJ0PR10MB6424:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa71e4b6-5626-40d6-e5f8-08de58057948
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?K3FYMEFBK3hZc1NsL0hTeG9ramJBc2VFSmNTYWVLeDhQNDIzOGp0ODVYRnNZ?=
- =?utf-8?B?b1R6UWxCa3ZxTzlGNXRaQXp1MGh4RVpPWnpaRHA0UjYzQlVUQVVNQVlnVnpU?=
- =?utf-8?B?NG1PRHllcVJBNFUxUFAwK1VTUnBQSldlUHR0M1Z3emI5TkNrSXVqeDhpZE1C?=
- =?utf-8?B?c2JTbU5aRC9SVlFXVXhpaFEyeXJkNkorVmVqa1djaHRSeFhVRW82cGk1a3VQ?=
- =?utf-8?B?OWdzT214U2xzMVJVaFErUHhkOVJvdUVoQXUwVzZUK2hJN0lpeFZSSHhnRm1u?=
- =?utf-8?B?Ny9mODQ1eTlQdmNodEh5N2sxeUFydWtrTG45d0xyRVFBSTRDc0pHdXBrMkkz?=
- =?utf-8?B?WHJEYWtMdUdUa2FmelNPeVZBcEh1UmdiZHRCMnVJV3lHbXVSbTlHNW1SOCsw?=
- =?utf-8?B?bkhlWVFFT29JamtSblRuMTRoRnNVY3ZWT0g3RVhFV3RmSWJFVlhqOVllVjlx?=
- =?utf-8?B?VU84eDdXVmNuQVRyWjNSSCtDNW5mbTZWMzR2K0tKdmI5ZWd4ckh2Y1hISXhI?=
- =?utf-8?B?bTlkWi9ONGhVbkRuUnhPc01halQ0WkV2OXUvbVN3djFqWGN0RHJtOVpsWlQ4?=
- =?utf-8?B?K1c5VTVYWjhDM0tJa3FSbWErbWpheERzNnRxZWxPUG4rdXE1S0FVYzVGNzFV?=
- =?utf-8?B?WE93dDFiZ2J0Z1Jxb3ZrK3JnMklrYU9VZDhLWVczeVZNWjIzSDR4OVVaVVlI?=
- =?utf-8?B?d3FkTlNSRm1ZZ0JBcXZlcUpDcGk4OGxJMzN5clYrdXVleUFLRWpHdFVqVkNn?=
- =?utf-8?B?M0VIMS90U010VGJ1QndWdUVZUGJqVjM3bjk3ZzlNQUoxNUliR1pQNitJNGtz?=
- =?utf-8?B?TWRmYnh1alNDTlBhZ1BWMGo1UllTM0t6M0J1UHBDRmd3U3Rkd2pMYjlvM3U5?=
- =?utf-8?B?ZkJOR1E2cDB5SWxta0dHTnZuZDAxNkhESk4vU2N0cmkvaXhyakgzNzlLeWVs?=
- =?utf-8?B?anUwS1U2K1ZkSTF1UGFDRFdscG1KNDErNnRnN25BSlFKbzhkQ2hOR2p3MXpQ?=
- =?utf-8?B?SjJDcmJQbGEwQzUwanZkYldKdDRoTFZCN2R3aVczT3M3eWlGNndDb3lqR3VO?=
- =?utf-8?B?TlU1Y21jTG1zV2JvNk9mYms2amJRUElKbmFDcU5CNTFWb2dEOFBaSlJoMWpP?=
- =?utf-8?B?QUZMaXIwOTBYL29NQ3pKbTdhd0RtcnFMWmQ0Q1lmVlY0bUFwRTcxTHVFalRz?=
- =?utf-8?B?MWRCdW1iZTVHc3hmOWxUbVdmUTBwV0FuREVtVS8xQjlrVlkxVER0cDlYT3lZ?=
- =?utf-8?B?ZUFKUVRoakRYaGFLd0NsS01GV0VTQzhJYlUvdlNndjVNdk00bFlZMzM1QVBU?=
- =?utf-8?B?dmVlaXhaODJrZjJGdDUrajlzODRoa3B1Z0czK2RmUEdDUUZjTUltVHhRdnNF?=
- =?utf-8?B?TVc1NS9qdkU2Y3BYeHRyZW1Fb1RXWXVuQjVXcFVaaUtVV0ZGOFhIMUV4c3Z1?=
- =?utf-8?B?YXhqbkhHTkRaQkJyejJVZjdFempwMmdZR3hlMEk2MU5yVU03R0Z6ZjQ4NllU?=
- =?utf-8?B?bkE3eERZdGtRclNHT2s0ZTZUTGppTUx1bHpHVklrZ25GY1NHZHNNSEEvb0Np?=
- =?utf-8?B?d2gyRVF2a2dzM2p0UmNWNTA4WGhQT2F3SmdPUk9GS0tUOEtBMStqZXZtZEFP?=
- =?utf-8?B?dnhkLzk1M21wWmlISStMNko5MFBrSmMvVldmRkljY09sZ1RFQkQwZkg4S0di?=
- =?utf-8?B?Q1B2SmV6aUlzVUpaMmp2M0w1UmhNUmhKY1UwWEVCY0lUM0ZZODdYaXJHVFE2?=
- =?utf-8?B?R2k0T212RFo0UHhmcTc0bGtqaFBBRzhSWWxmZVdGd2ZXVFAwbmhYSGNoUXUr?=
- =?utf-8?B?SzBLbi96dG5Tb3ZqSVJSR0M3K1RDUU5xeC9pbkVZd3FaakM5L1BTMzZ0aXJT?=
- =?utf-8?B?QlQ4K0xZUUI2MHhZOFFLT3JCSTF2aWhsVExNOXU4RllHNEZWeG53VVFPbkxK?=
- =?utf-8?B?YVV6aU5qZDY3aVdwOThSNHkrWGVSQWY2MEZMS1M4NXJmdUFDSDF3NGNzT3Bp?=
- =?utf-8?B?SW1wSUhaanI0RkluWXgwZTcxUGMydkdYK0ZBNldWUkIxVlFpQkxSWGV3M3A5?=
- =?utf-8?B?Szc0Vm5FbzhuYXdVYVROaEtoU1FWTkp1QTIzNS92dXpvMjhSSUpSRzhuVmtD?=
- =?utf-8?B?MmxsV2JTSHdJY3lHUXY4NE9KTlE1b0ZZMDdtZmxIVmk1djR2V0p2UTZtRVMw?=
- =?utf-8?B?TjgxamZvczdHcGFHNlpEaVJEUXU5aWNidElkRmFzWnFqdnhDYXVlejhJRTRr?=
- =?utf-8?B?bEZ0MkJRQkM3NEpDdEFDeGYyM1dBPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet201.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2026 09:22:46.5178
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa71e4b6-5626-40d6-e5f8-08de58057948
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.195];Helo=[flwvzet201.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD3.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB6424
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <980ad372-a2c7-417c-91f9-4958d3d1aaca@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Hello Miquel,
+On Mon, Jan 19, 2026 at 07:56:57PM +0000, Mark Brown wrote:
+> On Mon, Jan 19, 2026 at 08:17:46PM +0100, Michal Simek wrote:
+> > On 1/19/26 20:01, Mark Brown wrote:
+> > > On Mon, Jan 19, 2026 at 07:52:35PM +0100, Michal Simek wrote:
 
-On 15/01/26 14:54, Miquel Raynal (Schneider Electric) wrote:
-> Hello,
+> > > > Is it a better way to use auxiliary bus as was recommended by Greg in past
+> > > > on drivers/misc/keba/cp500.c review?
+> > > > https://lore.kernel.org/linux-i2c/2024060203-impeding-curing-e6cd@gregkh/
 > 
-> This series adds support for the QSPI controller available on Renesas
-> RZ/N1S and RZ/N1D SoC. It has been tested with a custom board (see last
-> SPI patch for details).
+> > > The driver there appears to be doing runtime enumeration based on some
+> > > EEPROMs on the system and creating platform devices based on what it
+> > > finds there so it's a bit of a different thing, the aux bus suggestion
+> > > is about what the code that does with the data it got from the EEPROM.
+> > > This patch is for something described directly by firmware so there's no
+> > > way we'd create an aux device, that's purely in kernel.
 > 
-> Adding support for this SoC required a few adaptations in the Cadence
-> QSPI driver. The bulk of the work is in the few last patches. Everything
-> else is just misc style fixes and improvements which bothered me while I
-> was wandering.
+> > I don't thing it is actually eeprom because in fpga you can place at certain
+> > location just memory (or RO memory) to describe what it is inside.
 > 
-> In order to support all constraints, I sometimes used a new quirk (for
-> the write protection feature and the "no indirect mode"), and sometimes
-> used the compatible directly. The ones I thought might not be RZ/N1
-> specific have been implemented under the form of a quirk, in order to
-> ease their reuse. The other adaptations, which I believe are more
-> Renesas specific, have been handled using the compatible. This is all
-> very arbitrary, and can be discussed.
+> The table of per module I2C EEPROM devices (there's a whole pile flagged
+> as optional) sure does look like it, and it's a very standard way to
+> implement hardware enumeration of non-enumerable systems.
 > 
-> Thanks,
-> Miquèl
+> > If you know it I think you have multiple options how to wire existing drivers.
 > 
-> Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+> > 1. ACPI - which is what this series is trying to do
+> 
+> Is it?  It just looks like random cleanups.  We've got a change to make
+> interrupts optional and this change to device properties - the cover
+> letter just says it's a transition to device property but there's no
+> indiciation why it's being done.  The cover letter for the series just
+> says it's switching to device properties with no further explanation.
+> It looks like a "that's the newer API" thing than something that's been
+> thought through.
+> 
+> None of this looks like something intended to add ACPI bindings,
+> it's not clear to me how we'd even get the device instantiated on a
+> normal ACPI system.  There's no ACPI IDs defined (and there aren't any
+> existing ones), just a conversion of the property parsing code.
 
-Thank you for the series! Tested it on TI's AM62A SK with
-OSPI NAND (Winbond's W35N01JW).
+For the matter of this change, the only thing that can be preferred in ACPI is
+to have the real ID, id est ACPI _HID (allocated by the vendor, namely Xilix).
+So, ideally at the end it should be enumerated by ACPI ID table with properly
+allocated HID and not with the compatible line.
 
-Controller fails to probe with the following message:
+The compatible line is for prototyping and DIY (discrete components, like
+small temperature sensors, when allocating proper ACPI ID is a big deal
+for a vendor).
 
-[    1.868863] cadence-qspi fc40000.spi: Cannot claim mandatory QSPI ref 
-clock.
+The set of _DSD properties is okay to be shared even in that case.
 
-Regards,
-Santhosh.
+TL;DR: We prefer ACPI HID to be properly allocated and used, or explained
+why it can't be feasible (which I don't believe the case for Xilinx).
 
-> ---
-> Changes in v2:
-> - Fix commit log of DT binding patch, following Krzysztof's comment.
-> - Fix properties order in DTSI.
-> - Rebase on top of spi/for-next and fix all conflicts.
-> - Simplify even further the code in the cleanup patches following
->    Pratyush's advices.
-> - Link to v1: https://lore.kernel.org/r/20251219-schneider-6-19-rc1-qspi-v1-0-8ad505173e44@bootlin.com
+> > 2. DT - on x86 not sure if feasible
 > 
-> ---
-> Miquel Raynal (1):
->        spi: cadence-qspi: Make sure we filter out unsupported ops
+> No, x86 decided not to use DT and shoehorn everything into APCI (and the
+> x86 SoCs put their platform devices behind fake PCI that looks like PCI
+> to the OS).
+
+There are three platforms in the past that used DT on x86.
+Latest one was dated ca. 2017 (SpreadTrum SoC with x86 core in it).
+
+DT on x86 is a real thing, but very niche.
+
+> > 3. platform drivers - as described above by Greg not an option on PCIe
+> > 4. aux bus - for example keba drivers
+> > 5. dfl - drivers/fpga/dfl* - used for accelerators.
 > 
-> Miquel Raynal (Schneider Electric) (12):
->        spi: dt-bindings: cdns,qspi-nor: Add Renesas RZ/N1D400 to the list
->        spi: cadence-qspi: Align definitions
->        spi: cadence-qspi: Fix style and improve readability
->        spi: cadence-qspi: Fix ORing style and alignments
->        spi: cadence-qspi: Remove an useless operation
->        spi: cadence-qspi: Fix probe error path and remove
->        spi: cadence-qspi: Try hard to disable the clocks
->        spi: cadence-qspi: Kill cqspi_jh7110_clk_init
->        spi: cadence-qspi: Add a flag for controllers without indirect access support
->        spi: cadence-qspi: Make sure write protection is disabled
->        spi: cadence-qspi: Add support for the Renesas RZ/N1 controller
->        ARM: dts: r9a06g032: Describe the QSPI controller
+> These are orthogonal to the above, they're Linux internal things not a
+> concept the firmware has.  You have firmware descriptions of things that
+> can be mapped onto platform devices but that's a separate thing.
 > 
->   .../devicetree/bindings/spi/cdns,qspi-nor.yaml     |   4 +
->   arch/arm/boot/dts/renesas/r9a06g032.dtsi           |  14 ++
->   drivers/spi/spi-cadence-quadspi.c                  | 260 ++++++++++-----------
->   3 files changed, 144 insertions(+), 134 deletions(-)
-> ---
-> base-commit: 0afb3ab76ffb521700af678ea931d31192f93260
-> change-id: 20251219-schneider-6-19-rc1-qspi-7c3e1547af6d
+> > Pretty much all current Xilinx drivers for soft IPs (spi, i2c, uarts,
+> > watchdogs, etc) are platform drivers (more OF drivers because platform data
+> > are mostly not used).
 > 
-> Best regards,
+> > It means I think would be good to get any recommendation which way to go.
+> 
+> You should use whatever firmware interface is sensible for the platform,
+> if that's x86 that's always ACPI.  For other architectures there's a
+> split with servers using ACPI and more embedded platforms using DT.
+> 
+> > > I have no idea what the hardware this series targets is (other than that
+> > > it's using a FPGA) or if there's even a motivation for the change other
+> > > than code inspection.
+> 
+> > I think all these cases are very similar. You have x86 with pcie root port
+> > which is connected directly (or via pcie slot) to fpga. In fpga you have
+> > pcie endpoint HW which connects other IPs sitting on AXI.
+> 
+> What are "all these cases"?  For something connected via PCI I would
+> expect a PCI driver that knows via some mechanism what's connected to it
+> and then instantiates the IPs, probably as aux devices.  I would not
+> expect to see the contents of the PCI device described in firmware at
+> all, that's a big goal with using PCI.  If something is not connected
+> via PCI that's obviously not going to fly but it sounds like you're only
+> interested in PCI cases here.
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
